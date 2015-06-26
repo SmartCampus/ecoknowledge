@@ -1,5 +1,5 @@
 # ecoknowledge 
-![Build Status](https://travis-ci.org/SmartCampus/ecoknowledge.svg?branch=master)](https://travis-ci.org/SmartCampus/ecoknowledge)
+![Build Status](https://travis-ci.org/SmartCampus/ecoknowledge.svg?branch=master)
 
 
 This project aims to make people aware of their `consumption`. You can create `new goals` that people will have to achieve.
@@ -14,7 +14,7 @@ It's the subject of a summer internship involving Benjamin Benni and Tom Dall'ag
 This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
 version 0.11.1.
 
-Run `grunt` for building and `grunt serve` for preview.
+Run `npm install`, `grunt` and `bower install` for building and `grunt serve` for preview.
 
 ## Testing
 
