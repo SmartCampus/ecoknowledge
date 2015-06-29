@@ -10,20 +10,18 @@
       this.addGoal = function () {
         console.log(self.goal);
 
-        //  TODO delete next token => get for test purpose
-        $http.get('http://localhost:3000/helloworld').
-            success(function(data, status, headers, config) {
-              // this callback will be called asynchronously
-              // when the response is available
-              self.goal.debugGet = data;
-            }).
-            error(function(data, status, headers, config) {
-              // called asynchronously if an error occurs
-              // or server returns response with an error status.
-            });
-
         // TODO Do post request
         // ...
+        $http.post('http://localhost:3000/addgoal', this.goal).
+          success(function(data, status, headers, config) {
+          // this callback will be called asynchronously
+          // when the response is available
+          self.goal.debugGet = data;
+        }).
+          error(function(data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+          });
 
         // TODO redirection on success
         // $location.path('/about');
