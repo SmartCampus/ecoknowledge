@@ -92,7 +92,7 @@ app.post('/addbadge', jsonParser, function (req, res) {
 
   var badgeName:string = actionData.name;
   var badgeDescription:string = actionData.description;
-  var badgeObjective:string = actionData.objective;
+  var badgeObjective:string = actionData.goal;
   var badgePoints:number = actionData.points;
 
   var goal = currentUser.retrieveGoal(badgeObjective);
