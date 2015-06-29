@@ -1,5 +1,6 @@
+all:	grunt test
 test:
-       @./node_modules/.bin/mocha -u tdd --reporter spec
+	@./node_modules/.bin/mocha @./test/spec/server/*.js
 grunt:
-      grunt test
+	grunt test
 .PHONY: test grunt
