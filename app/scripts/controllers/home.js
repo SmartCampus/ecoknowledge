@@ -14,6 +14,9 @@ angular.module('ecoknowledgeApp')
         self.goals = [];
         self.badges = [];
 
+        //TODO remove this badge
+        self.badge = { name: "Mon Nom", description: "Ma description fortement jolie", point: "53", objective: "goal n°1" };
+        self.badges.push(self.badge);
         //TODO remove this goal
         self.goal ={};
         self.goal.name="Goal n°1";
@@ -22,9 +25,7 @@ angular.module('ecoknowledgeApp')
          * Add a goal the the array goals
          */
         self.addGoal = function(g){
-            console.log(g);
             self.goals.push(g);
-            console.log(self.goals);
         };
 
         /*

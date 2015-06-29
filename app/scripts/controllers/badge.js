@@ -18,6 +18,7 @@ angular.module('ecoknowledgeApp')
             console.log(self.badge);
         };
 
+        //TODO link au serveur
         self.getGoals = function(){
             self.goals = [];
 
