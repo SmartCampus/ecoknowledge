@@ -9,21 +9,37 @@
  * the objectives and the badges we have.
  */
 angular.module('ecoknowledgeApp')
-    .controller('HomeCtrl', function ($scope) {
+    .controller('HomeCtrl', ['$http', function ($http) {
         var self = this;
         self.goals = [];
         self.badges = [];
 
-        //TODO remove this badge
-        self.badge = { name: "Mon Nom", description: "Ma description fortement jolie", point: "53", objective: "goal n°1" };
-        self.badges.push(self.badge);
         //TODO remove this goal
         self.goal ={};
-        self.goal.name="Goal n°1";
+        self.goal.name='Goal n°1';
 
         /*
          * Add a goal the the array goals
          */
+
+    self.getGoals = function() {
+      $http.get('http://localhost:3000/goals').
+        success(function(data) {
+          self.goals =  data;
+        }).
+        error(function() {
+        });
+    };
+
+    self.getBadges = function() {
+      $http.get('http://localhost:3000/badges').
+        success(function(data) {
+          self.badges =  data;
+        }).
+        error(function() {
+        });
+    };
+
         self.addGoal = function(g){
             self.goals.push(g);
         };
@@ -37,6 +53,6 @@ angular.module('ecoknowledgeApp')
             console.log(self.badges);
         };
 
-        self.addGoal(this.goal);
-
-    });
+    self.getGoals();
+    self.getBadges();
+    }]);
