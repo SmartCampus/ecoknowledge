@@ -32,6 +32,11 @@ angular
         templateUrl: 'views/create-goal.html',
         controller: 'GoalCtrl'
       })
+      .when('/create-badge', {
+        templateUrl: 'views/create-badge.html',
+        controller: 'BadgeCtrl',
+        controllerAs: 'badgeCreateCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
