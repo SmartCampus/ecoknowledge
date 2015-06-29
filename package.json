@@ -1,7 +1,10 @@
 {
   "name": "ecoknowledge",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "body-parser": "^1.13.1",
+    "express": "^4.13.0"
+  },
   "repository": {},
   "devDependencies": {
     "grunt": "^0.4.5",
