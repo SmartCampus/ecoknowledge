@@ -70,6 +70,7 @@ class User {
 
     var badge = this.retrieveBadge(badgeName);
     if(!badge) {
+      console.log("Badge", badgeName, " non trouvé");
       return false;
     }
 
@@ -78,9 +79,9 @@ class User {
     return res;
   }
 
-  public retrieveBadge(badgeName:string):Goal {
+  public retrieveBadge(badgeName:string):Badge {
     for(var i in this.badges) {
-      var currentBadge = this.goals[i];
+      var currentBadge = this.badges[i];
       if(currentBadge.getName() === badgeName) {
         return currentBadge;
       }

@@ -53,6 +53,15 @@ angular.module('ecoknowledgeApp')
             console.log(self.badges);
         };
 
+    self.check = function(badgeName) {
+      $http.post('http://localhost:3000/evaluatebadge', {"name":badgeName, "value":self.nombre}).
+        success(function(data) {
+          console.debug(data);
+        }).
+        error(function() {
+        });
+    };
+
     self.getGoals();
     self.getBadges();
     }]);

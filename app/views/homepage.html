@@ -18,6 +18,7 @@
                         <li>Objectif : {{badge.objective.name}}</li>
                         <li>Rapporte {{badge.points}} points!</li>
                     </ul>
+                  <input type="button" class="btn btn-default" value="Vérifier obtention" ng-click="homeCtrl.check(badge.name)"><input type="text" required ng-model="homeCtrl.nombre">
                 </li>
             </ul>
             <div ng-show="homeCtrl.badges.length==0">No Badges yet!</div>
