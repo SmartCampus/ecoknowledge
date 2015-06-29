@@ -7,6 +7,18 @@
   "installed": {
     "body-parser/body-parser.d.ts": {
       "commit": "6f04d25ad38982d372cc3cda62fa4c0eef9e24d7"
+    },
+    "serve-static/serve-static.d.ts": {
+      "commit": "6f04d25ad38982d372cc3cda62fa4c0eef9e24d7"
+    },
+    "mime/mime.d.ts": {
+      "commit": "6f04d25ad38982d372cc3cda62fa4c0eef9e24d7"
+    },
+    "express/express.d.ts": {
+      "commit": "6f04d25ad38982d372cc3cda62fa4c0eef9e24d7"
+    },
+    "node/node.d.ts": {
+      "commit": "6f04d25ad38982d372cc3cda62fa4c0eef9e24d7"
     }
   }
 }
