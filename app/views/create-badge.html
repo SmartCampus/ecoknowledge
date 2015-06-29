@@ -27,7 +27,7 @@
         <div class="input-group">
             <span class="btn-primary input-group-addon">Goals : </span>
             <select name="objective" class="selectpicker form-control"
-                    ng-model="badgeCreateCtrl.badge.objective" required>
+                    ng-model="badgeCreateCtrl.badge.goal" required>
                 <option value="" disabled selected>Select a goal</option>
                 <option ng-repeat="goal in badgeCreateCtrl.goals" value="{{goal.name}}">{{goal.name}} : x {{goal.comparaison+' '+goal.value}}</option>
             </select>

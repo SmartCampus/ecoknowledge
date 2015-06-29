@@ -15,7 +15,14 @@ angular.module('ecoknowledgeApp')
         self.goals = [];
 
         self.addBadge = function(){
-            console.log(self.badge);
+            if(self.badge.hasOwnProperty("name")
+                && self.badge.hasOwnProperty("description")
+                && self.badge.hasOwnProperty("point")
+                && self.badge.hasOwnProperty("goal")){
+                console.log(self.badge);
+            }else{
+                console.log('lol');
+            }
         };
 
         //TODO link au serveur
