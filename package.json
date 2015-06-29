@@ -3,7 +3,12 @@
   "version": "0.0.0",
   "dependencies": {
     "body-parser": "^1.13.1",
-    "express": "^4.13.0"
+    "chai": "^3.0.0",
+    "express": "^4.13.0",
+    "jasmine": "^2.3.1",
+    "jasmine-node": "^1.14.5",
+    "mocha": "^2.2.5",
+    "sinon": "^1.15.4"
   },
   "repository": {},
   "devDependencies": {
