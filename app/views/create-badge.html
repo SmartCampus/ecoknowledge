@@ -2,6 +2,7 @@
     <div class="page-header text-center">
         <h1>Créer un badge</h1>
     </div>
+
     <form name="badgeCreateForm" class="form" ng-submit="badgeCreateForm.$valid && badgeCreateCtrl.addBadge()" novalidate>
         <div class="form-group text-left">
             <label for="badge-name">Nom</label>
@@ -16,12 +17,24 @@
         </div>
 
         <div class="input-group">
+            <span for="badge-point" class="btn-primary input-group-addon">Points à gagner</span>
+            <input name="badgePoint" id="badge-point" type="range" ng-model="badgeCreateCtrl.badge.point" required>
+            <span class="btn-primary input-group-addon">{{badgeCreateCtrl.badge.point}}</span>
+        </div>
+
+        <br/>
+
+        <div class="input-group">
             <span class="btn-primary input-group-addon">Goals : </span>
             <select name="objective" class="selectpicker form-control"
                     ng-model="badgeCreateCtrl.badge.objective" required>
+                <option value="" disabled selected>Select a goal</option>
                 <option ng-repeat="goal in badgeCreateCtrl.goals" value="{{goal.name}}">{{goal.name}} : x {{goal.comparaison+' '+goal.value}}</option>
             </select>
         </div>
+
+        <br/>
+        <br/>
 
         <div class=" text-center">
             <input type="submit" class="btn btn-default" ng-disabled="!badgeCreateForm.$valid" value="Créer le badge"/>

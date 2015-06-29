@@ -2,20 +2,25 @@
 
 <ul>
     <div class="row">
-        <div class="col-md-8"><h2>Goals</h2>
+        <div class="col-md-6"><h2>Goals</h2>
             <ul>
                 <li class="list-group-item" ng-repeat="goal in homeCtrl.goals">{{goal.name}}</li>
             </ul>
             <div ng-show="homeCtrl.goals.length==0">No Goals yet!</div>
-            <div><a ng-href="#/create-goal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Create goal</a></div>
         </div>
 
-        <div class="col-md-4"><h2>Badges</h2>
+        <div class="col-md-6"><h2>Badges</h2>
             <ul>
-                <li class="list-group-item" ng-repeat="badge in homeCtrl.badges"></li>
+                <li class="list-group-item" ng-repeat="badge in homeCtrl.badges">
+                    <ul>
+                        <li>{{badge.name}}</li>
+                        <li>{{badge.description}}</li>
+                        <li>Objectif : {{badge.objective}}</li>
+                        <li>Rapporte {{badge.point}} points!</li>
+                    </ul>
+                </li>
             </ul>
             <div ng-show="homeCtrl.badges.length==0">No Badges yet!</div>
-            <div><a ng-href="#/create-badge"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Create badge</a></div>
         </div>
     </div>
 </ul>
