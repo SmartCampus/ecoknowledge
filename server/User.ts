@@ -9,6 +9,14 @@ class User {
     this.name = name;
   }
 
+  public getName():string {
+    return this.name;
+  }
+
+  public getGoals():Goal[] {
+    return this.goals;
+  }
+
   public addGoal(newGoal:Goal):boolean {
     if (!newGoal) {
       throw new Error('Can not add a new goal to user ' + this.name + ' given goal is null');
@@ -20,14 +28,27 @@ class User {
   }
 
   public evaluateGoal(goalName:string, goalValue:number):boolean {
+
+    var goal = this.retrieveGoal(goalName);
+    if(!goal) {
+      return false;
+    }
+
+    var res =  goal.evaluate(goalValue);
+    console.log("goal is", res);
+    return res;
+  }
+
+  private retrieveGoal(goalName:string):Goal {
     for(var i in this.goals) {
       var currentGoal = this.goals[i];
       if(currentGoal.getName() === goalName) {
-        return currentGoal.evaluate(goalValue);
+        return currentGoal;
       }
     }
-    return false;
+    return null;
   }
+
 }
 
 export = User;
