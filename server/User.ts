@@ -75,7 +75,10 @@ class User {
       return false;
     }
 
-    var res =  badge.evaluate(goalValue);
+    var tmp = [];
+    tmp.push(goalValue);
+
+    var res =  badge.evaluate(tmp);
     console.log("goal is", res);
     return res;
   }
