@@ -13,17 +13,30 @@ describe("Build a goal", function () {
   var goal:Goal;
 
   it("should throw an error when name given is null", () => {
-   // chai.expect(() => goal = new Goal(null, "", 0)).to.throw(Error);
-  });
-  it("should throw an error when typeOfComparison given is null", () => {
-  //  chai.expect(() => goal = new Goal("", null, 0)).to.throw(Error);
+    chai.expect(() => goal = new Goal(null)).to.throw(Error);
   });
 
   it("should have given name", () => {
-  //  goal = new Goal("aName", "aTypeOfComparison", 0);
-   // assert.equal(goal.getName(), "aName");
+    goal = new Goal("aName");
+    assert.equal(goal.getName(), "aName");
   });
 });
 
+describe("Add a condition to a goal", () => {
+  var goal:Goal;
+
+  beforeEach(() => {
+    goal = new Goal("aGoal");
+  });
+
+  it("should throw an error when typeOfComparison given is null", () => {
+    chai.expect(() => goal.addCondition("", null, 0)).to.throw(Error);
+  });
+
+  it("should add it to the goal conditions", () => {
+    goal.addCondition("Température", 'sup', 0);
+    chai.expect(() => goal.evaluate([5])).not.to.throw(Error);
+  });
+});
 
 

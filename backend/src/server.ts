@@ -142,9 +142,14 @@ app.post('/evaluategoal', jsonParser, function (req, res) {
   console.log(actionData);
 
   var goalName:string = actionData.name;
-  var goalValues:(number|boolean)[] = actionData.values;
+  var goalValues:any[] = actionData.values;
 
-  var result = currentUser.evaluateGoal(goalName, goalValues);
+  var values = [];
+  for(var i = 0 ; i < goalValues.length ; i++) {
+    values.push(goalValues[i].value);
+  }
+
+  var result = currentUser.evaluateGoal(goalName, values);
   res.send(result);
 
 });

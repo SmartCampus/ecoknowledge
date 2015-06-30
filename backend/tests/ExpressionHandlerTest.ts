@@ -69,11 +69,8 @@ describe("ExpressionHandler test", () => {
     var valueComparison:ValueComparison = new ValueComparison("Température", 'sup', 0);
     expressionHandler.addExpression(valueComparison);
 
-    var values = [];
-    values.push(3);
-
-
-    //TODO chai.expect(expressionHandler.evaluate(values)).to.be.true;
+    var values = [3];
+    chai.expect(expressionHandler.evaluate(values)).to.be.true;
   });
 
   it("Evaluate correctly expressions to true", () => {
@@ -86,13 +83,8 @@ describe("ExpressionHandler test", () => {
     expressionHandler.addExpression(booleanComparison);
     expressionHandler.addExpression(valueComparison3);
 
-    var values = [];
-    values.push(3);
-    values.push(2);
-    values.push(true);
-    values.push(4);
-
-    //TODO chai.expect(expressionHandler.evaluate(values)).to.be.true;
+    var values = [3,2,true,4];
+    chai.expect(expressionHandler.evaluate(values)).to.be.true;
   });
 
   it("Evaluate correctly expressions to false", () => {
@@ -105,12 +97,7 @@ describe("ExpressionHandler test", () => {
     expressionHandler.addExpression(booleanComparison);
     expressionHandler.addExpression(valueComparison3);
 
-    var values = [];
-    values.push(3);
-    values.push(2);
-    values.push(true);
-    values.push(4);
-
+    var values = [3,2,true,4];
     chai.expect(expressionHandler.evaluate(values)).to.be.false;
   });
 
