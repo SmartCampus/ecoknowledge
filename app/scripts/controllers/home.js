@@ -13,7 +13,6 @@ var app = angular.module('ecoknowledgeApp')
         var self = this;
         self.goals = [];
         self.badges = [];
-        self.nombre = 0;
 
         /*
          * Add a goal the the array goals

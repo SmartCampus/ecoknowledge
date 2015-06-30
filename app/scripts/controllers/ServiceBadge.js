@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * File with all the services associated to Badge (GET, POST)
  */
