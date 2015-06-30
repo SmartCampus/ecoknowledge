@@ -23,16 +23,6 @@ describe("Build a goal", function () {
     goal = new Goal("aName", "aTypeOfComparison", 0);
     assert.equal(goal.getName(), "aName");
   });
-
-  it("should have given typeOfComparison", () => {
-    goal = new Goal("aName", "aTypeOfComparison", 0);
-    assert.equal(goal.getTypeOfComparison(), "aTypeOfComparison");
-  });
-
-  it("should have given value", () => {
-    goal = new Goal("aName", "aTypeOfComparison", 0);
-    assert.equal(goal.getValue(),  0);
-  });
 });
 
 
