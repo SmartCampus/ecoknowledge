@@ -4,5 +4,10 @@ node_js:
   - '0.12'
 before_script:
   - 'npm install -g bower grunt-cli'
+  - 'cd backend'
+  - 'npm install'
+  - 'grunt test'
+  - 'cd ../frontend'
+  - 'npm install'
   - 'bower install'
   - 'grunt test'

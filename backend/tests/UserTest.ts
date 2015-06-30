@@ -1,14 +1,14 @@
-/// <reference path="../../../typings/mocha/mocha.d.ts" />
-/// <reference path="../../../typings/chai/chai.d.ts" />
-/// <reference path="../../../typings/sinon/sinon.d.ts" />
+/// <reference path="../typings/mocha/mocha.d.ts" />
+/// <reference path="../typings/chai/chai.d.ts" />
+/// <reference path="../typings/sinon/sinon.d.ts" />
 
 import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
 
-import User = require('../../../server/User');
-import Goal = require('../../../server/Goal');
+import User = require('../src/User');
+import Goal = require('../src/Goal');
 
 describe("Build a User", function () {
   var user:User;

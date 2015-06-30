@@ -1,4 +1,5 @@
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../typings/node/node.d.ts" />
+/// <reference path="../typings/express/express.d.ts" />
 
 import express = require("express");
 var bodyParser = require('body-parser');

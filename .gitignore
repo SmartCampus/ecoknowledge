@@ -1,12 +1,2 @@
-node_modules
-dist
-.tmp
-.sass-cache
-bower_components
 .idea
 .editorconfig
-typings
-server/*.js.map
-server/*.js
-test/spec/server/*.js
-test/spec/server/*.js.map
