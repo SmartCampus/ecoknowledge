@@ -28,6 +28,7 @@ var app = angular.module('ecoknowledgeApp')
 
     self.getBadges = function() {
       ServiceBadge.get('',function(data) {
+          console.log('badges : ',data);
           self.badges =  data;
         },function(data) {
           console.debug('Fail to get the badges',data);
