@@ -2,26 +2,8 @@
 
 <ul>
     <div class="row">
-        <div class="col-md-6 text-center"><h2>Goals</h2>
-            <ul>
-                <li class="list-group-item" ng-repeat="goal in homeCtrl.goals">{{goal.name}}</li>
-            </ul>
-            <div ng-show="homeCtrl.goals.length==0">No Goals yet!</div>
-        </div>
+        <list-goal></list-goal>
 
-        <div class="col-md-6 text-center"><h2>Badges</h2>
-            <ul>
-                <li class="list-group-item " ng-repeat="badge in homeCtrl.badges">
-                    <ul>
-                        <li>{{badge.name}}</li>
-                        <li>{{badge.description}}</li>
-                        <li>Objectif : {{badge.objective.name}}</li>
-                        <li>Rapporte {{badge.points}} points!</li>
-                    </ul>
-                  <input type="button" class="btn btn-default" value="Vérifier obtention" ng-click="homeCtrl.check(badge.name)"><input type="text" required ng-model="homeCtrl.nombre">
-                </li>
-            </ul>
-            <div ng-show="homeCtrl.badges.length==0">No Badges yet!</div>
-        </div>
+        <list-badge></list-badge>
     </div>
 </ul>

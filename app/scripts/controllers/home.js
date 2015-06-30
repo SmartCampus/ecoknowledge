@@ -8,7 +8,7 @@
  * Controller of the ecoknowledgeApp for the firstpage which display
  * the objectives and the badges we have.
  */
-angular.module('ecoknowledgeApp')
+var app = angular.module('ecoknowledgeApp')
     .controller('HomeCtrl', ['ServiceBadge', 'ServiceGoal',function (ServiceBadge, ServiceGoal) {
         var self = this;
         self.goals = [];
@@ -59,3 +59,23 @@ angular.module('ecoknowledgeApp')
     self.getGoals();
     self.getBadges();
     }]);
+
+app.directive("listGoal", function() {
+    return {
+        restrict: "E",
+        templateUrl: "views/list-goal.html",
+        controller: 'HomeCtrl',
+        controllerAs: "homeCtrl"
+    }});
+
+app.directive("listBadge", function() {
+    return {
+        restrict: "E",
+        templateUrl: "views/list-badge.html"
+    }});
+
+app.directive("homepageBadge", function() {
+    return {
+        restrict: "E",
+        templateUrl: "views/homepage-badge.html"
+    }});

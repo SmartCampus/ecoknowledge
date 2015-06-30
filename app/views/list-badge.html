@@ -1,0 +1,8 @@
+<div class="col-md-6 text-center"><h2>Badges</h2>
+    <ul>
+        <li class="list-group-item " ng-repeat="badge in homeCtrl.badges">
+            <homepage-badge></homepage-badge>
+        </li>
+    </ul>
+    <div ng-show="homeCtrl.badges.length==0">No Badges yet!</div>
+</div>

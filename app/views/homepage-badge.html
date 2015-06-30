@@ -1,0 +1,8 @@
+<ul>
+    <li>{{badge.name}}</li>
+    <li>{{badge.description}}</li>
+    <li>Objectif : {{badge.objective.name}}</li>
+    <li>Rapporte {{badge.points}} points!</li>
+</ul>
+<input type="text" required ng-model="homeCtrl.nombre">
+<input type="button" class="btn btn-default" value="Vérifier obtention" ng-click="homeCtrl.check(badge.name)">
