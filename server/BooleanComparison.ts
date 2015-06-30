@@ -22,6 +22,8 @@ class BooleanComparison implements Expression {
   }
 
   public evaluate(newValue:boolean):boolean {
+    console.log("Evaluation de", newValue, this.typeOfComparison, this.thresholdValue);
+
     return (this.typeOfComparison == 'eq') ? newValue == this.thresholdValue : newValue != this.thresholdValue;
   }
 }

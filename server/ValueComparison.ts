@@ -22,6 +22,8 @@ class ValueComparison implements Expression {
   }
 
   public evaluate(newValue:number):boolean {
+    console.log("Evaluation de", newValue, this.typeOfComparison, this.thresholdValue);
+
     switch (this.typeOfComparison) {
       case 'inf':
         return newValue <= this.thresholdValue;
