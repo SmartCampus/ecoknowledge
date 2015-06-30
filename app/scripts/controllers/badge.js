@@ -9,7 +9,7 @@
  */
 
 angular.module('ecoknowledgeApp')
-  .controller('BadgeCtrl',['$http', function ($http) {
+  .controller('BadgeCtrl',['$http','ServiceGoal', function ($http,ServiceGoal) {
     var self = this;
     self.badge = {};
     self.goals = [];
@@ -28,18 +28,12 @@ angular.module('ecoknowledgeApp')
     //TODO link au serveur
     self.getGoals = function () {
       self.goals = [];
-
-      $http.get('http://localhost:3000/goals', this.goal).
-        success(function (data) {
-          for(var i in data) {
-            var currentGoalDescr = data[i];
-            self.goals.push(currentGoalDescr);
-          }
-
-        }).
-        error(function () {
-        });
-
+      ServiceGoal.get('', function(data){
+        console.log("achieve to get the goals");
+        self.goals = data;
+      },function(data){
+        console.log('fail when trying to get the goals', data);
+      });
       // TODO redirection on success
       // $location.path('/about');
     };

@@ -9,25 +9,21 @@
  * the objectives and the badges we have.
  */
 angular.module('ecoknowledgeApp')
-    .controller('HomeCtrl', ['$http', function ($http) {
+    .controller('HomeCtrl', ['$http', 'ServiceGoal',function ($http, ServiceGoal) {
         var self = this;
         self.goals = [];
         self.badges = [];
-
-        //TODO remove this goal
-        self.goal ={};
-        self.goal.name='Goal n°1';
+        self.nombre = 0;
 
         /*
          * Add a goal the the array goals
          */
 
     self.getGoals = function() {
-      $http.get('http://localhost:3000/goals').
-        success(function(data) {
+      ServiceGoal.get('',function(data) {
           self.goals =  data;
-        }).
-        error(function() {
+        },function() {
+          console.log('fail to get the goals');
         });
     };
 

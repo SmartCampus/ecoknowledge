@@ -29,7 +29,7 @@
             <select name="objective" class="selectpicker form-control"
                     ng-model="badgeCreateCtrl.badge.goal" required>
                 <option value="" disabled selected>Select a goal</option>
-                <option ng-repeat="goal in badgeCreateCtrl.goals" value="{{goal.name}}">{{goal.name}} : x {{goal.comparaison+' '+goal.value}}</option>
+                <option ng-repeat="goal in badgeCreateCtrl.goals" value="{{goal.name}}">{{goal.name}} : x {{goal.typeOfComparison+' '+goal.value}}</option>
             </select>
         </div>
 
