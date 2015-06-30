@@ -1,8 +1,7 @@
 <div class="container jumbotron" ng-controller="GoalCtrl as goalCtrl">
     <div class="page-header text-center">
-        <h1>Créer un objectif</h1>
+        <h1>Create a goal</h1>
     </div>
-
     <form name="goalCreateForm" class="form" ng-submit="goalCreateForm.$valid && goalCtrl.addGoal()" novalidate>
 
         <div class="form-group text-left">
@@ -11,25 +10,35 @@
                    ng-model="goalCtrl.goal.name" required>
         </div>
 
-        <div class="input-group">
-            <span class="btn-primary input-group-addon">Température</span>
-            <select name="comparaison" class="selectpicker form-control"
-                    ng-model="goalCtrl.goal.comparaison" required>
-                <option value="inf">Inférieur à</option>
-                <option value="eq">Égale à</option>
-                <option value="sup">Supérieur à</option>
-                <option value="dif">Différent de</option>
-            </select>
-            <span class="btn-primary input-group-addon">à</span>
+        <ul>
+            <li class="list-group-item" ng-repeat="iteration in goalCtrl.goal.conditions">
+                <div class="input-group">
+                    <span class="btn-primary input-group-addon">Température</span>
+                    <select name="comparaison" class="selectpicker form-control"
+                            ng-model="iteration.comparison" required>
+                        <option value="inf">Inférieur à</option>
+                        <option value="eq">Égale à</option>
+                        <option value="sup">Supérieur à</option>
+                        <option value="dif">Différent de</option>
+                    </select>
+                    <span class="btn-primary input-group-addon">à</span>
 
-            <input type="number" name="tempInput" class="form-control" id="goal-value" placeholder="Valeur"
-                   ng-model="goalCtrl.goal.value"
-                   required>
-        </div>
-        <br/><br/>
-        <div class=" text-center">
-            <input type="submit" class="btn btn-default" ng-disabled="!goalCreateForm.$valid" value="Créer l'objectif"/>
-        </div>
+                    <input type="number" name="tempInput" class="form-control" id="goal-value" placeholder="Valeur"
+                           ng-model="iteration.value"
+                           required>
+                </div>
+                <br/><br/>
+            </li>
+            <li class="list-group-item">
+                <div class="input-group">
+                    <input type="button" ng-click="goalCtrl.addComparison()" value="Add a comparator">
+                </div>
+
+                <div class=" text-center">
+                    <input type="submit" class="btn btn-default" ng-disabled="!goalCreateForm.$valid" value="Créer l'objectif"/>
+                </div>
+            </li>
+            {{goalCtrl.goal.conditions}}
+        </ul>
     </form>
 </div>
-
