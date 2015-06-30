@@ -13,7 +13,7 @@ var app = angular.module('ecoknowledgeApp')
         var self = this;
         self.goals = [];
         self.badges = [];
-
+        self.obtentionValue = {};
         /*
          * Add a goal the the array goals
          */
@@ -48,7 +48,7 @@ var app = angular.module('ecoknowledgeApp')
         };
 
     self.check = function(badgeName) {
-      ServiceBadge.evaluate(badgeName,self.nombre,function(data){
+      ServiceBadge.evaluate(badgeName,self.obtentionValue[badgeName],function(data){
           console.debug(data);
       },function(data){
           console.debug(data);
