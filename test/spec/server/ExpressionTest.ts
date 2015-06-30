@@ -10,6 +10,11 @@ var assert = chai.assert;
 import ValueComparison = require('../../../server/ValueComparison');
 
 describe("Evaluate an 'value' expression like X < 20", () => {
+  describe("Build an expression with a unknown comparison type", () => {
+    var expression:ValueComparison;
+    chai.expect(() => expression = new ValueComparison("Température", "anUnknownComparisonType", 2)).to.throw(Error);
+  });
+
   describe("Evaluate an expression with inf", () => {
     var expression:ValueComparison;
 
@@ -87,6 +92,11 @@ describe("Evaluate an 'value' expression like X < 20", () => {
 import BooleanComparison = require('../../../server/BooleanComparison');
 
 describe("Evaluate a boolean check like door == false", () => {
+  describe("Build an expression with a unknown comparison type", () => {
+    var expression:BooleanComparison;
+    chai.expect(() => expression = new BooleanComparison("Door", "anUnknownComparisonType", false)).to.throw(Error);
+  });
+
   describe("Evaluate a check with eq", () => {
     var goal:BooleanComparison;
 
