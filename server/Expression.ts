@@ -1,7 +1,7 @@
 
 interface Expression {
   getRequired():string;
-  evaluate(newValue:string|boolean):boolean;
+  evaluate(newValue:number|boolean):boolean;
 }
 
 export = Expression;
