@@ -9,7 +9,7 @@
  * the objectives and the badges we have.
  */
 angular.module('ecoknowledgeApp')
-    .controller('HomeCtrl', ['$http', 'ServiceGoal',function ($http, ServiceGoal) {
+    .controller('HomeCtrl', ['ServiceBadge', 'ServiceGoal',function (ServiceBadge, ServiceGoal) {
         var self = this;
         self.goals = [];
         self.badges = [];
@@ -28,11 +28,10 @@ angular.module('ecoknowledgeApp')
     };
 
     self.getBadges = function() {
-      $http.get('http://localhost:3000/badges').
-        success(function(data) {
+      ServiceBadge.get('',function(data) {
           self.badges =  data;
-        }).
-        error(function() {
+        },function(data) {
+          console.debug('Fail to get the badges',data);
         });
     };
 
@@ -50,12 +49,11 @@ angular.module('ecoknowledgeApp')
         };
 
     self.check = function(badgeName) {
-      $http.post('http://localhost:3000/evaluatebadge', {"name":badgeName, "value":self.nombre}).
-        success(function(data) {
+      ServiceBadge.evaluate(badgeName,self.nombre,function(data){
           console.debug(data);
-        }).
-        error(function() {
-        });
+      },function(data){
+          console.debug(data);
+      });
     };
 
     self.getGoals();
