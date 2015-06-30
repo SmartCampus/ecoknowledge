@@ -26,7 +26,7 @@ angular.module('ecoknowledgeApp')
     self.getGoals = function () {
       self.goals = [];
       ServiceGoal.get('', function(data){
-        console.log("achieve to get the goals");
+        console.log('achieve to get the goals');
         self.goals = data;
       },function(data){
         console.log('fail when trying to get the goals', data);

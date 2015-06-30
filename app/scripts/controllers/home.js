@@ -59,28 +59,32 @@ var app = angular.module('ecoknowledgeApp')
     self.getBadges();
     }]);
 
-app.directive("listGoal", function() {
+app.directive('listGoal', function() {
     return {
-        restrict: "E",
-        templateUrl: "../../views/homepage/list-goal.html",
+        restrict: 'E',
+        templateUrl: '../../views/homepage/list-goal.html',
         controller: 'HomeCtrl',
-        controllerAs: "homeCtrl"
-    }});
+        controllerAs: 'homeCtrl'
+    };
+});
 
-app.directive("listBadge", function() {
+app.directive('listBadge', function() {
     return {
-        restrict: "E",
-        templateUrl: "../../views/homepage/list-badge.html"
-    }});
+        restrict: 'E',
+        templateUrl: '../../views/homepage/list-badge.html'
+    };
+});
 
-app.directive("homepageBadge", function() {
+app.directive('homepageBadge', function() {
     return {
-        restrict: "E",
-        templateUrl: "../../views/homepage/homepage-badge.html"
-    }});
+        restrict: 'E',
+        templateUrl: '../../views/homepage/homepage-badge.html'
+    };
+});
 
-app.directive("homepageGoal", function() {
+app.directive('homepageGoal', function() {
     return {
-        restrict: "E",
-        templateUrl: "../../views/homepage/homepage-goal.html"
-    }});
+        restrict: 'E',
+        templateUrl: '../../views/homepage/homepage-goal.html'
+    };
+});

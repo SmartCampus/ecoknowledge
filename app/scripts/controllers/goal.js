@@ -13,7 +13,7 @@
             console.log('Achieve to add a goal', self.goal);
           },function(){
             console.log('Fail when trying to add a goal', self.goal);
-        })
+        });
       };
     }]);
 })();

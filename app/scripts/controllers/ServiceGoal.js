@@ -23,5 +23,5 @@ app.service('ServiceGoal',['$http', function ServiceGoal($http){
             .error(function() {
                 failFunc();
             });
-    }
+    };
 }]);
