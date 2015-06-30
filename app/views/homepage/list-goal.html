@@ -1,6 +1,8 @@
 <div class="col-md-6 text-center"><h2>Goals</h2>
     <ul>
-        <li class="list-group-item" ng-repeat="goal in homeCtrl.goals">{{goal.name}}</li>
+        <li class="list-group-item" ng-repeat="goal in homeCtrl.goals">
+            <homepage-goal></homepage-goal>
+        </li>
     </ul>
     <div ng-show="homeCtrl.goals.length==0">No Goals yet!</div>
 </div>

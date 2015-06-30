@@ -63,7 +63,7 @@ var app = angular.module('ecoknowledgeApp')
 app.directive("listGoal", function() {
     return {
         restrict: "E",
-        templateUrl: "views/list-goal.html",
+        templateUrl: "../../views/homepage/list-goal.html",
         controller: 'HomeCtrl',
         controllerAs: "homeCtrl"
     }});
@@ -71,11 +71,17 @@ app.directive("listGoal", function() {
 app.directive("listBadge", function() {
     return {
         restrict: "E",
-        templateUrl: "views/list-badge.html"
+        templateUrl: "../../views/homepage/list-badge.html"
     }});
 
 app.directive("homepageBadge", function() {
     return {
         restrict: "E",
-        templateUrl: "views/homepage-badge.html"
+        templateUrl: "../../views/homepage/homepage-badge.html"
+    }});
+
+app.directive("homepageGoal", function() {
+    return {
+        restrict: "E",
+        templateUrl: "../../views/homepage/homepage-goal.html"
     }});
