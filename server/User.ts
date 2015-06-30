@@ -43,10 +43,11 @@ class User {
     return true;
   }
 
-  public evaluateGoal(goalName:string, goalValue:number):boolean {
+  public evaluateGoal(goalName:string, goalValue:(number|boolean)[]):boolean {
 
     var goal = this.retrieveGoal(goalName);
     if(!goal) {
+      console.warn("Can not find goal", goalName);
       return false;
     }
 
