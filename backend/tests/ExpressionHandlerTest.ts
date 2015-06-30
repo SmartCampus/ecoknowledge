@@ -101,4 +101,15 @@ describe("ExpressionHandler test", () => {
     chai.expect(expressionHandler.evaluate(values)).to.be.false;
   });
 
+  it("Should throw an error", () => {
+    var valueComparison1:ValueComparison = new ValueComparison("Température", 'inf', 0);
+    var valueComparison2:ValueComparison = new ValueComparison("Température", 'inf', 10);
+    expressionHandler.addExpression(valueComparison1);
+    expressionHandler.addExpression(valueComparison2);
+
+    var values = [3];
+
+    chai.expect(() => expressionHandler.evaluate(values)).to.throw(Error);
+  });
+
 });
