@@ -1,5 +1,7 @@
 
-import Expression = require('Expression');
+import Expression = require('./Expression');
+import ValueComparison = require('./ValueComparison');
+import BooleanComparison = require('./BooleanComparison');
 
 class ExpressionHandler {
 
@@ -13,6 +15,16 @@ class ExpressionHandler {
     this.expressions.push(expression);
   }
 
+  public addExpressionByDescription(required:string, typeOfComparison:string, value:number|boolean) {
+
+    if(typeof(value) === "number") {
+      this.addExpression(new ValueComparison(required, typeOfComparison, <number>value));
+    }
+    else {
+      this.addExpression(new BooleanComparison(required, typeOfComparison, <boolean>value));
+    }
+  }
+
   public getRequired():string[] {
     var result = [];
 
@@ -23,16 +35,18 @@ class ExpressionHandler {
     return result;
   }
 
-  public evaluate(values:(number|boolean)[]):boolean {
+  public evaluate(values:any[]):boolean {
 
     if(this.expressions.length != values.length) {
       throw new Error('Can not evaluate expressions ! There are ' + this.expressions.length + ' expressions and ' + values.length + ' values to bind.');
     }
 
+    console.log("Evaluation de", this.getRequired(), "avec", values);
+
     var result:boolean = true;
 
     for(var i = 0 ; i < this.expressions.length ; i++) {
-      result = result && this.expressions[i].evaluate(values[i]);
+      result = result && this.expressions[i].evaluate(values[i].value);
 
       //  AND optimization
       if(!result) {
