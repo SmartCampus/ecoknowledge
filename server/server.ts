@@ -48,11 +48,11 @@ app.get('/goals', jsonParser, function (req, res, next) {
   var goals = currentUser.getGoals();
 
   var result = [];
-  for(var i in goals) {
+  for (var i in goals) {
     var currentGoalDesc = goals[i];
     result.push(currentGoalDesc);
   }
-console.log("Sending", result);
+  console.log("Sending", result);
   res.send(result);
 });
 
@@ -61,7 +61,7 @@ app.get('/badges', jsonParser, function (req, res, next) {
   var badges = currentUser.getBadges();
 
   var result = [];
-  for(var i in badges) {
+  for (var i in badges) {
     var currentBadgeDesc = badges[i];
     result.push(currentBadgeDesc);
   }
@@ -76,10 +76,26 @@ app.post('/addgoal', jsonParser, function (req, res) {
   console.log(actionData);
 
   var goalName:string = actionData.name;
-  var goalComparaisonType:string = actionData.comparaison;
-  var goalValue:number = actionData.value;
+  var newGoal:Goal = new Goal(goalName);
 
-  var newGoal:Goal = new Goal(goalName, goalComparaisonType, goalValue);
+  console.log("Construction de l'objectif ", newGoal.getName());
+
+  var goalConditions:any[] = actionData.conditions;
+
+  console.log("\tConstruction des conditions de succès ...");
+  for (var i = 0; i < goalConditions.length; i++) {
+    var currentCondition = goalConditions[i];
+
+    console.log("\t\tCondition courante", currentCondition);
+
+    var required:string = currentCondition.required;
+    var comparison:string = currentCondition.comparison;
+    var thresholdValue:boolean|number = currentCondition.value;
+
+    console.log("\t\t\tCréation de la condition avec", required, comparison, thresholdValue);
+
+    newGoal.addCondition(required,comparison,thresholdValue);
+  }
 
   var result = currentUser.addGoal(newGoal);
 
@@ -107,7 +123,7 @@ app.post('/addbadge', jsonParser, function (req, res) {
 });
 
 
-app.post('/evaluatebadge',jsonParser, function(req, res) {
+app.post('/evaluatebadge', jsonParser, function (req, res) {
   var actionData = req.body;
   console.log(actionData);
 
@@ -120,13 +136,14 @@ app.post('/evaluatebadge',jsonParser, function(req, res) {
 
 
 //  For debug only
-app.post('/evaluategoal',jsonParser, function(req, res) {
+app.post('/evaluategoal', jsonParser, function (req, res) {
   var actionData = req.body;
   console.log(actionData);
 
   var goalName:string = actionData.name;
-  var goalValue:number = actionData.value;
-  var result = currentUser.evaluateGoal(goalName, goalValue);
+  var goalValues:(number|boolean)[] = actionData.values;
+
+  var result = currentUser.evaluateGoal(goalName, goalValues);
   res.send(result);
 
 });

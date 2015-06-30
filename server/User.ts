@@ -43,10 +43,11 @@ class User {
     return true;
   }
 
-  public evaluateGoal(goalName:string, goalValue:number):boolean {
+  public evaluateGoal(goalName:string, goalValue:(number|boolean)[]):boolean {
 
     var goal = this.retrieveGoal(goalName);
     if(!goal) {
+      console.warn("Can not find goal", goalName);
       return false;
     }
 
@@ -74,7 +75,10 @@ class User {
       return false;
     }
 
-    var res =  badge.evaluate(goalValue);
+    var tmp = [];
+    tmp.push(goalValue);
+
+    var res =  badge.evaluate(tmp);
     console.log("goal is", res);
     return res;
   }

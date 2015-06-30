@@ -18,8 +18,8 @@ class Badge {
     return this.name;
   }
 
-  public evaluate(newValue:number):boolean {
-    return this.objective.evaluate(newValue);
+  public evaluate(values:(number|boolean)[]):boolean {
+    return this.objective.evaluate(values);
   }
 
 }
