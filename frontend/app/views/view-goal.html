@@ -1,6 +1,6 @@
-<h1>{{viewGoalCtrl.goal.goal.name}}</h1>
+<h1>{{viewGoalCtrl.goal.name}}</h1>
 <ul>
-    <li ng-repeat="expression in viewGoalCtrl.goal.goal.expressions.expressions">
+    <li ng-repeat="expression in viewGoalCtrl.goal.expressions.expressions">
         {{expression.required+' '+expression.typeOfComparison+' '+expression.thresholdValue}}
     </li>
 </ul>

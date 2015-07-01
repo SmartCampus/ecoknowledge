@@ -46,15 +46,18 @@ app.get('/helloworld/:slug', jsonParser, function (req, res, next) {
 app.get('/goals/:id', jsonParser, function (req, res, next) {
   console.log('\n++ Get : /goal asked ....');
   if(!req.params.id){
-    console.log('yolo');
     next();
   }
   var result:any = {};
   var idGoal:string = req.params.id;
   console.log('id goal : ',idGoal);
   var goal:Goal = currentUser.retrieveGoal(idGoal);
-  console.log('goal name : ',goal.getName);
-  result.goal = goal;
+  if(goal!=null){
+    result.data = goal;
+    result.success = true;
+    console.log('goal name : ',goal.getName);
+  }
+
   console.log("++ Sending", result);
   res.send(result);
 });
@@ -63,12 +66,15 @@ app.get('/goals', jsonParser, function (req, res, next) {
   console.log('\nNo slug');
 
   var goals:Goal[] = currentUser.getGoals();
-  var result:any[] = [];
+  var result:any = {};
+  var data:any[] = [];
 
   for (var i in goals) {
-    result.push(goals[i].getName());
+    data.push(goals[i].getName());
   }
 
+  result.data = data;
+  result.success = true;
   console.log("++ Sending", result);
   res.send(result);
 });

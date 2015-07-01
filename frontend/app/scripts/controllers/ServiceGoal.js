@@ -11,7 +11,13 @@ app.service('ServiceGoal',['$http', function ServiceGoal($http){
         console.log('http://localhost:3000/goals/' + id);
       $http.get('http://localhost:3000/goals/'+id)
         .success(function (data) {
-          successFunc(data);
+              if(!data.success){
+                  console.log('fail');
+                  failFunc(data);
+              }else{
+                  console.log('success');
+                  successFunc(data.data);
+              }
         })
         .error(function (data) {
           failFunc(data);
