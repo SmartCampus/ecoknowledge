@@ -5,6 +5,7 @@
  */
 
 var app = angular.module('ecoknowledgeApp');
+
 app.service('ServiceGoal',['$http', function ServiceGoal($http){
     this.get = function(id, successFunc, failFunc) {
       $http.get('http://localhost:3000/goals/' + id)
@@ -14,6 +15,7 @@ app.service('ServiceGoal',['$http', function ServiceGoal($http){
         .error(function (data) {
           failFunc(data);
         });
+
     };
 
      this.getRequired= function(id, successFunc, failFunc) {
