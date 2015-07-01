@@ -27,28 +27,32 @@
         <div class="input-group">
             <span class="btn-primary input-group-addon" disabled>Goals : </span>
             <select name="objective" class="selectpicker form-control"
-                    ng-model="badgeCreateCtrl.currentGoal" ng-options="goal for goal in badgeCreateCtrl.goals" ng-change="badgeCreateCtrl.change(badgeCreateCtrl.currentGoal)">
+                    ng-model="badgeCreateCtrl.badge.currentGoal.name" ng-options="goal for goal in badgeCreateCtrl.goals"
+                    ng-change="badgeCreateCtrl.change(badgeCreateCtrl.badge.currentGoal.name)">
                 <option value="" disabled selected>Select a goal</option>
             </select>
 
         </div>
+
+
       <table id="conditions-required">
         <tbody>
-
-        <tr ng-repeat="r in badgeCreateCtrl.currentGoal.required">
-          <td>{{r.required}}</td>
-          <td>{{r.comparison}}</td>
-          <td>{{r.value}}</td>
-          <td> <select name="objective" class="selectpicker form-control"
-                  ng-model="" ng-options="s">
+        <tr ng-repeat="currentCondition in badgeCreateCtrl.badge.currentGoal.conditions">
+          <td>{{currentCondition.required}}</td>
+          <td>{{currentCondition.comparison}}</td>
+          <td>{{currentCondition.value}}</td>
+          <td>
+            <select name="objective" class="selectpicker form-control"
+                  ng-model="currentCondition.sensor" ng-options="sensors.id for sensors in badgeCreateCtrl.sensors[currentCondition.required]">
             <option value="" disabled selected>Select a sensor</option>
-          </select></td>
+          </select>
+          </td>
         </tr>
         </tbody>
       </table>
         <br/>
         <br/>
-
+  <blockquote>{{badgeCreateCtrl.currentGoalConditions}}</blockquote>
         <div class=" text-center">
             <input type="submit" class="btn btn-default" ng-disabled="!badgeCreateForm.$valid" value="Créer le badge"/>
         </div>

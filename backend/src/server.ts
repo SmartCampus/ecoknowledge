@@ -93,14 +93,15 @@ app.get('/required', jsonParser, function(req,res,next) {
   var goal:Goal = currentUser.retrieveGoal(goalName);
 
   var result:any = {};
-
-  result['conditions'] = goal.getData();
+  result['conditions'] = goal.getData().conditions;
 
   var elementsRequiredForGivenGoal:string[] = goal.getRequired();
+  var sensors:any = {};
   for(var i = 0 ; i < elementsRequiredForGivenGoal.length; i ++) {
     var currentElementRequired:string = "" + elementsRequiredForGivenGoal[i];
-    result[""+currentElementRequired] = tempSensors;
+    sensors[currentElementRequired] = tempSensors;
   }
+  result['sensors'] = sensors;
 
   res.send(result);
 });
