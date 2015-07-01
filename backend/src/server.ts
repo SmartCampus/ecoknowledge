@@ -4,7 +4,6 @@
 import express = require("express");
 var bodyParser = require('body-parser');
 import path = require('path');
-
 var app = express();
 
 var jsonParser = bodyParser.json();
@@ -45,19 +44,20 @@ app.get('/helloworld', jsonParser, function (req, res, next) {
 });
 
 app.get('/goals', jsonParser, function (req, res, next) {
-  console.log('++ Get : /goals asked ....');
+  console.log('\n++ Get : /goals asked ....');
   var goals:Goal[] = currentUser.getGoals();
-
   var result:any[] = [];
+
   for (var i in goals) {
-    result.push(goals[i].getData());
+    result.push(goals[i].getName());
   }
+
   console.log("++ Sending", result);
   res.send(result);
 });
 
 app.get('/badges', jsonParser, function (req, res, next) {
-  console.log('getbadges');
+  console.log('\n++ Get : /badges asked ....');
   var badges = currentUser.getBadges();
 
   var result = [];
@@ -65,7 +65,26 @@ app.get('/badges', jsonParser, function (req, res, next) {
     var currentBadgeDesc = badges[i];
     result.push(currentBadgeDesc);
   }
-  console.log("Sending", result);
+  console.log("++ Sending", result);
+
+  res.send(result);
+});
+
+var tempSensors = [{"id":"AC_443"},{"id":"TEMP_442"}];
+
+app.get('/required', jsonParser, function(req,res,next) {
+  var goalName:string = req.query.goalName;
+  var goal:Goal = currentUser.retrieveGoal(goalName);
+
+  var result:any = {};
+
+  result['conditions'] = goal.getData();
+
+  var elementsRequiredForGivenGoal:string[] = goal.getRequired();
+  for(var i = 0 ; i < elementsRequiredForGivenGoal.length; i ++) {
+    var currentElementRequired:string = "" + elementsRequiredForGivenGoal[i];
+    result[""+currentElementRequired] = tempSensors;
+  }
 
   res.send(result);
 });
@@ -156,7 +175,7 @@ app.post('/evaluategoal', jsonParser, function (req, res) {
 
 app.listen(port);
 
-var goal:Goal = new Goal("Objectif de debug");
+var goal:Goal = new Goal("ObjectifDebug");
 goal.addCondition("Température", 'inf', 20);
 goal.addCondition("Température", 'sup', 0);
 
