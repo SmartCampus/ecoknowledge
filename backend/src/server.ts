@@ -38,13 +38,30 @@ var args = process.argv;
 var port = args[2] || 3000;
 
 
-app.get('/helloworld', jsonParser, function (req, res, next) {
+app.get('/helloworld/:slug', jsonParser, function (req, res, next) {
   console.log("HELLOWORLD");
   res.send("Hello  world!");
 });
 
+app.get('/goals/:id', jsonParser, function (req, res, next) {
+  console.log('\n++ Get : /goal asked ....');
+  if(!req.params.id){
+    console.log('yolo');
+    next();
+  }
+  var result:any = {};
+  var idGoal:string = req.params.id;
+  console.log('id goal : ',idGoal);
+  var goal:Goal = currentUser.retrieveGoal(idGoal);
+  console.log('goal name : ',goal.getName);
+  result.goal = goal;
+  console.log("++ Sending", result);
+  res.send(result);
+});
+
 app.get('/goals', jsonParser, function (req, res, next) {
-  console.log('\n++ Get : /goals asked ....');
+  console.log('\nNo slug');
+
   var goals:Goal[] = currentUser.getGoals();
   var result:any[] = [];
 
@@ -57,7 +74,6 @@ app.get('/goals', jsonParser, function (req, res, next) {
 });
 
 app.get('/badges', jsonParser, function (req, res, next) {
-  console.log('\n++ Get : /badges asked ....');
   var badges = currentUser.getBadges();
 
   var result = [];

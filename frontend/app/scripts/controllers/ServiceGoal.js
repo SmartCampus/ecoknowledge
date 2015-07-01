@@ -8,7 +8,8 @@ var app = angular.module('ecoknowledgeApp');
 
 app.service('ServiceGoal',['$http', function ServiceGoal($http){
     this.get = function(id, successFunc, failFunc) {
-      $http.get('http://localhost:3000/goals/' + id)
+        console.log('http://localhost:3000/goals/' + id);
+      $http.get('http://localhost:3000/goals/'+id)
         .success(function (data) {
           successFunc(data);
         })
