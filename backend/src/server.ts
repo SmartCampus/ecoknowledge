@@ -45,15 +45,14 @@ app.get('/helloworld', jsonParser, function (req, res, next) {
 });
 
 app.get('/goals', jsonParser, function (req, res, next) {
-  console.log('getgoals');
-  var goals = currentUser.getGoals();
+  console.log('++ Get : /goals asked ....');
+  var goals:Goal[] = currentUser.getGoals();
 
-  var result = [];
+  var result:any[] = [];
   for (var i in goals) {
-    var currentGoalDesc = goals[i];
-    result.push(currentGoalDesc);
+    result.push(goals[i].getData());
   }
-  console.log("Sending", result);
+  console.log("++ Sending", result);
   res.send(result);
 });
 
@@ -115,10 +114,11 @@ app.post('/addbadge', jsonParser, function (req, res) {
   var goal = currentUser.retrieveGoal(badgeObjective);
   console.log("Log pour le badge en cours .. ", goal);
 
+  /*
+TODO
   var badge:Badge = new Badge(badgeName, badgeDescription, badgePoints, goal);
-
   currentUser.addBadge(badge);
-
+*/
 
   res.send("OK");
 });
@@ -155,4 +155,12 @@ app.post('/evaluategoal', jsonParser, function (req, res) {
 });
 
 app.listen(port);
+
+var goal:Goal = new Goal("Objectif de debug");
+goal.addCondition("Température", 'inf', 20);
+goal.addCondition("Température", 'sup', 0);
+
+currentUser.addGoal(goal);
+console.log("Ajout d'un objectif de debug");
+
 console.log("Server started");
