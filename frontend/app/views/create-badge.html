@@ -17,22 +17,36 @@
         </div>
 
         <div class="input-group">
-            <span for="badge-point" class="btn-primary input-group-addon">Points à gagner</span>
+            <span for="badge-point" class="btn-primary input-group-addon" disabled>Points à gagner</span>
             <input name="badgePoint" id="badge-point" type="range" ng-model="badgeCreateCtrl.badge.points" required>
-            <span class="btn-primary input-group-addon">{{badgeCreateCtrl.badge.points}}</span>
+            <span class="btn-primary input-group-addon" disabled>{{badgeCreateCtrl.badge.points}}</span>
         </div>
 
         <br/>
 
         <div class="input-group">
-            <span class="btn-primary input-group-addon">Goals : </span>
+            <span class="btn-primary input-group-addon" disabled>Goals : </span>
             <select name="objective" class="selectpicker form-control"
-                    ng-model="badgeCreateCtrl.badge.goal" required>
+                    ng-model="badgeCreateCtrl.currentGoal" ng-options="goal.name for goal in badgeCreateCtrl.goals">
                 <option value="" disabled selected>Select a goal</option>
-                <option ng-repeat="goal in badgeCreateCtrl.goals" value="{{goal.name}}">{{goal.name}} : x {{goal.typeOfComparison+' '+goal.value}}</option>
             </select>
+
         </div>
 
+      <table id="conditions-required">
+        <tbody>
+
+        <tr ng-repeat="r in badgeCreateCtrl.currentGoal.required">
+          <td>{{r.required}}</td>
+          <td>{{r.comparison}}</td>
+          <td>{{r.value}}</td>
+          <td> <select name="objective" class="selectpicker form-control"
+                  ng-model="" ng-options="s">
+            <option value="" disabled selected>Select a sensor</option>
+          </select></td>
+        </tr>
+        </tbody>
+      </table>
         <br/>
         <br/>
 

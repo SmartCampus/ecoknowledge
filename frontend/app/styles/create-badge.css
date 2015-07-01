@@ -1,0 +1,12 @@
+#conditions-required {
+  border:1px solid white;
+  margin-left:auto;
+  margin-right:auto;
+
+  margin-top:50px;
+  background-color:#E6E6E6;
+}
+
+#conditions-required td {
+  padding:10px;
+}
