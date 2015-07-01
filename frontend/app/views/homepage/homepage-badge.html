@@ -4,7 +4,8 @@
     <li>Objectif : {{badge.objective.name}}</li>
     <li>Rapporte {{badge.points}} points!</li>
 </ul>
-<form name="badgeValidateForm" class="form" ng-submit="badgeValidateForm.$valid && homeCtrl.check(badge.name)" novalidate>
-    <input type="text" ng-model="homeCtrl.obtentionValue[badge.name]" placeholder="Value to test" required>
-    <input type="submit" class="btn btn-default" ng-disabled="!badgeValidateForm.$valid" value="Vérifier obtention">
+<form name="badgeValidateForm" class="form" ng-submit="badgeValidateForm.$valid && homeCtrl.check(badge)" novalidate>
+    <input type="submit" class="btn btn-default" value="Vérifier obtention">
 </form>
+<p ng-if="badge.yes">BADGE OBTENU !!!</p>
+<p ng-if="badge.fail">Pas encore obtenu ! DOMMAGE ! HAHA !</p>

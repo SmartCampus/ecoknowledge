@@ -24,8 +24,8 @@ app.service('ServiceBadge',['$http', function ServiceBadge($http){
                 failFunc(data);
             });
     };
-    this.evaluate = function(badgeName, value, successFunc, failFunc) {
-            $http.post('http://localhost:3000/evaluatebadge', {'name':badgeName, 'value':value})
+    this.evaluate = function(badgeName, successFunc, failFunc) {
+            $http.get('http://localhost:3000/evaluatebadge?badgeName=' + badgeName)
                 .success(function(data){
                     successFunc(data);
                 })

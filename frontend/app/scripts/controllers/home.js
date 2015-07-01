@@ -48,8 +48,14 @@ var app = angular.module('ecoknowledgeApp')
             console.log(self.badges);
         };
 
-    self.check = function(badgeName) {
-      ServiceBadge.evaluate(badgeName,self.obtentionValue[badgeName],function(data){
+    self.check = function(badge) {
+      ServiceBadge.evaluate(badge.name,function(data){
+        if(data) {
+          badge.yes = true;
+        }
+        else {
+          badge.fail = true;
+        }
           console.debug(data);
       },function(data){
           console.debug(data);
