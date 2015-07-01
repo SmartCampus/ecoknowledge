@@ -5,24 +5,22 @@
     <form name="goalCreateForm" class="form" ng-submit="goalCreateForm.$valid && goalCtrl.addGoal()" novalidate>
 
         <div class="form-group text-left">
-            <label for="goal-name">Nom</label>
-            <input name="goalName" type="text" class="form-control " id="goal-name" placeholder="Nom de l'objectif"
+            <label for="goal-name">Name</label>
+            <input name="goalName" type="text" class="form-control " id="goal-name" placeholder="Name of the goal"
                    ng-model="goalCtrl.goal.name" required>
         </div>
 
         <ul>
             <li class="list-group-item" ng-repeat="iteration in goalCtrl.goal.conditions">
                 <div class="input-group">
-                    <span class="btn-primary input-group-addon">Température</span>
+                    <span class="btn-primary input-group-addon">Temperature</span>
                     <select name="comparaison" class="selectpicker form-control"
                             ng-model="iteration.comparison" required>
-                        <option value="inf">Inférieur à</option>
-                        <option value="eq">Égale à</option>
-                        <option value="sup">Supérieur à</option>
-                        <option value="dif">Différent de</option>
+                        <option value="inf">Less than</option>
+                        <option value="eq">Equal to</option>
+                        <option value="sup">Greater than</option>
+                        <option value="dif">Not equal to</option>
                     </select>
-                    <span class="btn-primary input-group-addon">à</span>
-
                     <input type="number" name="tempInput" class="form-control" id="goal-value" placeholder="Valeur"
                            ng-model="iteration.value"
                            required>
