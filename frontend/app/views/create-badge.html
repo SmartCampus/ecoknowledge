@@ -27,12 +27,11 @@
         <div class="input-group">
             <span class="btn-primary input-group-addon" disabled>Goals : </span>
             <select name="objective" class="selectpicker form-control"
-                    ng-model="badgeCreateCtrl.currentGoal" ng-options="goal.name for goal in badgeCreateCtrl.goals">
+                    ng-model="badgeCreateCtrl.currentGoal" ng-options="goal for goal in badgeCreateCtrl.goals" ng-change="badgeCreateCtrl.change(badgeCreateCtrl.currentGoal)">
                 <option value="" disabled selected>Select a goal</option>
             </select>
 
         </div>
-
       <table id="conditions-required">
         <tbody>
 
