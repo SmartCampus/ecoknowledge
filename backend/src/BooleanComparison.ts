@@ -26,6 +26,14 @@ class BooleanComparison implements Expression {
 
     return (this.typeOfComparison == 'eq') ? newValue == this.thresholdValue : newValue != this.thresholdValue;
   }
+
+  public getData():any {
+    return  {
+      "required":this.required,
+      "comparison":this.typeOfComparison,
+      "value":this.thresholdValue
+    }
+  }
 }
 
 export = BooleanComparison;

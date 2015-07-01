@@ -27,6 +27,13 @@ class Goal {
   public evaluate(values:(number|boolean)[]):boolean {
     return this.expressions.evaluate(values);
   }
+
+  public getData():any {
+    return {
+      "name":this.name,
+      "required":this.expressions.getData()
+    }
+  }
 }
 
 export = Goal;
