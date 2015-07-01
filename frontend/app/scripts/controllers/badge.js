@@ -33,5 +33,17 @@ angular.module('ecoknowledgeApp')
       });
     };
 
+    self.change = function(selectedGoal) {
+      ServiceGoal.getRequired(selectedGoal, function(data) {
+        // success
+        console.log(data);
+      }, function(data) {
+        //error
+        console.log(data);
+      });
+      console.log('loool');
+      console.log(selectedGoal);
+    };
+
     self.getGoals();
   }]);
