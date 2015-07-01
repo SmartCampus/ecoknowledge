@@ -28,10 +28,14 @@ class Goal {
     return this.expressions.evaluate(values);
   }
 
+  public getRequired():any {
+    return this.expressions.getRequired();
+  }
+
   public getData():any {
     return {
       "name":this.name,
-      "required":this.expressions.getData()
+      "conditions":this.expressions.getData()
     }
   }
 }

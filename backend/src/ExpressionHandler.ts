@@ -29,7 +29,9 @@ class ExpressionHandler {
     var result = [];
 
     for(var i in this.expressions) {
-      result.push(this.expressions[i].getRequired());
+      if(result.indexOf(this.expressions[i].getRequired()) == -1) {
+        result.push(this.expressions[i].getRequired());
+      }
     }
 
     return result;
