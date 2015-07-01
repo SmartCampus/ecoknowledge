@@ -13,6 +13,7 @@ angular.module('ecoknowledgeApp')
     var self = this;
     self.badge = {};
     self.goals = [];
+    self.mappingSensors = {};
 
     self.addBadge = function () {
       console.log(self.badge);
@@ -36,13 +37,14 @@ angular.module('ecoknowledgeApp')
     self.change = function(selectedGoal) {
       ServiceGoal.getRequired(selectedGoal, function(data) {
         // success
-        console.log(data);
+        console.log(data.conditions.conditions);
+        self.currentGoalConditions = {};
+        self.currentGoalConditions.required = data.conditions.conditions;
+        self.sensors = data;
       }, function(data) {
         //error
         console.log(data);
       });
-      console.log('loool');
-      console.log(selectedGoal);
     };
 
     self.getGoals();

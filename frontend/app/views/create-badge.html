@@ -32,23 +32,26 @@
             </select>
 
         </div>
+
+
       <table id="conditions-required">
         <tbody>
-
-        <tr ng-repeat="r in badgeCreateCtrl.currentGoal.required">
-          <td>{{r.required}}</td>
-          <td>{{r.comparison}}</td>
-          <td>{{r.value}}</td>
-          <td> <select name="objective" class="selectpicker form-control"
-                  ng-model="" ng-options="s">
+        <tr ng-repeat="currentCondition in badgeCreateCtrl.currentGoalConditions.required">
+          <td>{{currentCondition.required}}</td>
+          <td>{{currentCondition.comparison}}</td>
+          <td>{{currentCondition.value}}</td>
+          <td>
+            <select name="objective" class="selectpicker form-control"
+                  ng-model="currentCondition.sensor" ng-options="sensors.id for sensors in badgeCreateCtrl.sensors[currentCondition.required]">
             <option value="" disabled selected>Select a sensor</option>
-          </select></td>
+          </select>
+          </td>
         </tr>
         </tbody>
       </table>
         <br/>
         <br/>
-
+  <blockquote>{{badgeCreateCtrl.currentGoalConditions}}</blockquote>
         <div class=" text-center">
             <input type="submit" class="btn btn-default" ng-disabled="!badgeCreateForm.$valid" value="Créer le badge"/>
         </div>
