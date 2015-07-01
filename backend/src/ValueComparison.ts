@@ -35,6 +35,14 @@ class ValueComparison implements Expression {
         return newValue != this.thresholdValue;
     }
   }
+
+  public getData():any {
+    return  {
+      "required":this.required,
+      "comparison":this.typeOfComparison,
+      "value":this.thresholdValue
+    }
+  }
 }
 
 export = ValueComparison;
