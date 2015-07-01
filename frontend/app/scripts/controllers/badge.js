@@ -13,11 +13,11 @@ angular.module('ecoknowledgeApp')
     var self = this;
     self.badge = {};
     self.goals = [];
-    self.mappingSensors = {};
+    self.badge.currentGoal = {};
 
     self.addBadge = function () {
-      console.log(self.badge);
-      ServiceBadge.post(self.badge, function(data) {
+      var toSend = angular.toJson(self.badge);
+      ServiceBadge.post(toSend, function(data) {
           console.log('Achieve to send the badge', data);
         },function(data) {
           console.log('Fail to send the badge', data);
@@ -37,10 +37,11 @@ angular.module('ecoknowledgeApp')
     self.change = function(selectedGoal) {
       ServiceGoal.getRequired(selectedGoal, function(data) {
         // success
-        console.log(data.conditions.conditions);
-        self.currentGoalConditions = {};
-        self.currentGoalConditions.required = data.conditions.conditions;
-        self.sensors = data;
+        console.log(data.conditions);
+        self.badge.currentGoal.conditions = {};
+        self.badge.currentGoal.conditions = data.conditions;
+        self.sensors = {};
+        self.sensors = data.sensors;
       }, function(data) {
         //error
         console.log(data);

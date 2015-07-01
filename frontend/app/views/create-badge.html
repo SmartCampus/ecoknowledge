@@ -27,7 +27,8 @@
         <div class="input-group">
             <span class="btn-primary input-group-addon" disabled>Goals : </span>
             <select name="objective" class="selectpicker form-control"
-                    ng-model="badgeCreateCtrl.currentGoal" ng-options="goal for goal in badgeCreateCtrl.goals" ng-change="badgeCreateCtrl.change(badgeCreateCtrl.currentGoal)">
+                    ng-model="badgeCreateCtrl.badge.currentGoal.name" ng-options="goal for goal in badgeCreateCtrl.goals"
+                    ng-change="badgeCreateCtrl.change(badgeCreateCtrl.badge.currentGoal.name)">
                 <option value="" disabled selected>Select a goal</option>
             </select>
 
@@ -36,7 +37,7 @@
 
       <table id="conditions-required">
         <tbody>
-        <tr ng-repeat="currentCondition in badgeCreateCtrl.currentGoalConditions.required">
+        <tr ng-repeat="currentCondition in badgeCreateCtrl.badge.currentGoal.conditions">
           <td>{{currentCondition.required}}</td>
           <td>{{currentCondition.comparison}}</td>
           <td>{{currentCondition.value}}</td>
