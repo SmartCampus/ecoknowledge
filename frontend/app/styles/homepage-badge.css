@@ -1,0 +1,32 @@
+.badge-list {
+  background-color:#F5F6F6;
+  margin-bottom : 35px;
+}
+
+.badge-container .badge-name {
+  margin-bottom:30px;
+  text-align:center;
+  padding-left:15px;
+}
+
+.badge-container .badge-desc {
+}
+
+.badge-container .badge-goal {
+
+}
+
+.badge-container .badge-points {
+
+}
+
+.badge-container .badge-status-success, .badge-container .badge-status-fail {
+  padding:8px;
+  text-align:center;
+}
+
+.badge-container .badge-check {
+  margin-top :45px;
+  margin-bottom :25px;
+  text-align:center;
+}

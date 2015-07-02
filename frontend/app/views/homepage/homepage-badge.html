@@ -1,12 +1,13 @@
-<ul>
-    <li>{{badge.name}}</li>
-    <li>{{badge.description}}</li>
-    <li>Objectif : {{badge.objective.name}}</li>
-    <li>Rapporte {{badge.points}} points!</li>
-</ul>
-<form name="badgeValidateForm" class="form" ng-submit="badgeValidateForm.$valid && homeCtrl.check(badge)" novalidate>
+<span class="badge-container">
+    <h3 class="badge-name">{{badge.name}}</h3>
+    <p class="badge-desc">{{badge.description}}</p>
+    <p class="badge-goal">Goal : {{badge.objectives[0].name}}</p>
+    <p class="badge-points">Badge value : {{badge.points}} points!</p>
+
+<form name="badgeValidateForm" class="form badge-check" ng-submit="badgeValidateForm.$valid && homeCtrl.check(badge)" novalidate>
     <input type="submit" class="btn btn-default" value="Vérifier obtention">
 </form>
-<p ng-if="badge.yes">BADGE OBTENU !!!</p>
-<p ng-if="badge.fail">Pas encore obtenu ! DOMMAGE ! HAHA !</p>
+<p ng-if="badge.yes" class="bg-success badge-status-success">Badge Unlocked !!!</p>
+<p ng-if="badge.fail" class="bg-fail badge-status-fail">TRY AGAIN !</p>
 
+  </span>
