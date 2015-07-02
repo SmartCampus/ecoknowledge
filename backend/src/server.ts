@@ -1,7 +1,10 @@
 /// <reference path="../typings/node/node.d.ts" />
 /// <reference path="../typings/express/express.d.ts" />
+/// <reference path="../typings/async/async.d.ts" />
 
 import express = require("express");
+import http = require("http");
+import async = require("async");
 var bodyParser = require('body-parser');
 import path = require('path');
 var app = express();
@@ -150,32 +153,57 @@ app.post('/addbadge', jsonParser, function (req, res) {
 
   var badgeName:string = actionData.name;
   var badgeDescription:string = actionData.description;
-  var badgeObjective:string = actionData.goal;
+  var badgeGoal:string = actionData.currentGoal.name;
   var badgePoints:number = actionData.points;
+  var badgeSensors:any[] = actionData.currentGoal.conditions;
 
-  var goal = currentUser.retrieveGoal(badgeObjective);
+  var sensors:string[] = [];
+  for(var i = 0 ; i < badgeSensors.length ; i ++) {
+    sensors.push(badgeSensors[i].sensor.id);
+  }
+
+  var goal = currentUser.retrieveGoal(badgeGoal);
   console.log("Log pour le badge en cours .. ", goal);
 
-  /*
-TODO
-  var badge:Badge = new Badge(badgeName, badgeDescription, badgePoints, goal);
+  var badge:Badge = new Badge(badgeName, badgeDescription, badgePoints, [goal], sensors);
   currentUser.addBadge(badge);
-*/
 
   res.send("OK");
 });
 
+app.get('/evaluatebadge', jsonParser, function (req, res) {
+  var badgeName:string = req.query.badgeName;
+  var badge:Badge = currentUser.retrieveBadge(badgeName);
 
-app.post('/evaluatebadge', jsonParser, function (req, res) {
-  var actionData = req.body;
-  console.log(actionData);
+  var required:string[] = badge.getRequired();
+  var sensorsValues:any = {};
 
-  var badgeName:string = actionData.name;
-  var badgeValue:number = actionData.value;
-  var result = currentUser.evaluateBadge(badgeName, badgeValue);
-  res.send(result);
+  async.times(required.length, function(n, next) {
+    var path = 'http://smartcampus.unice.fr/sensors/' + required[n] + '/data/last';
 
+    http.get(path, function(res) {
+      res.on("data", function(chunk) {
+        console.log("BODY: ", chunk.toString());
+        var jsonObject = JSON.parse(chunk.toString());
+        var value = jsonObject.values[0].value;
+
+        var a = required[n];
+
+        sensorsValues[a] = value;
+        next(null, null);
+      });
+    }).on('error', function(e) {
+        console.log("Got error: " + e.message);
+    });
+  },
+      function(err) {
+        var result = badge.evaluate([sensorsValues]);
+        res.send(result);
+      }
+  );
 });
+
+
 
 
 //  For debug only
