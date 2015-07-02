@@ -24,9 +24,7 @@ class Goal {
   }
 
   public hasUUID(aUUID:string):boolean {
-    console.log("HAS ID : ", aUUID, this.id, uuid.parse(aUUID), this.id === uuid.parse(aUUID));
-
-    return (this.id) === aUUID;
+    return this.id === aUUID;
   }
 
   public getName():string {
