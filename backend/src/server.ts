@@ -20,9 +20,14 @@ var currentUser:User = new User("Jackie");
 
 import GoalProvider = require('./GoalProvider');
 import BadgeProvider = require('./BadgeProvider');
+import UserProvider = require('./UserProvider');
 
 import EcoKnowledge = require('./Ecoknowledge');
-var ecoknowledge:EcoKnowledge = new EcoKnowledge(new GoalProvider(),new BadgeProvider());
+
+var userProvider:UserProvider = new UserProvider();
+var ecoknowledge:EcoKnowledge = new EcoKnowledge(new GoalProvider(),new BadgeProvider(), userProvider);
+userProvider.addUser(currentUser);
+console.log(currentUser.getUUID());
 
 // Enable JSON data for requests
 //app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -118,28 +123,15 @@ app.post('/addbadge', jsonParser, function (req, res) {
   var actionData = req.body;
   console.log(actionData);
 
-  var badgeName:string = actionData.name;
-  var badgeDescription:string = actionData.description;
-  var badgeGoal:string = actionData.currentGoal.name;
-  var badgePoints:number = actionData.points;
-  var badgeSensors:any[] = actionData.currentGoal.conditions;
-
-  var sensors:string[] = [];
-  for(var i = 0 ; i < badgeSensors.length ; i ++) {
-    sensors.push(badgeSensors[i].sensor.id);
-  }
-
-  var goal = currentUser.retrieveGoal(badgeGoal);
-  console.log("Log pour le badge en cours .. ", goal);
-
-  var badge:Badge = new Badge(badgeName, badgeDescription, badgePoints, [goal], sensors);
-  currentUser.addBadge(badge);
+  //TODO : need to add a userUUID in request
+  var result = ecoknowledge.addBadge(actionData);
 
   res.send("OK");
 });
 
 app.get('/evaluatebadge', jsonParser, function (req, res) {
-  var badgeName:string = req.query.badgeName;
+  var badgeID:string = req.query.badgeID;
+  /*
   var badge:Badge = currentUser.retrieveBadge(badgeName);
 
   var required:string[] = badge.getRequired();
@@ -168,6 +160,8 @@ app.get('/evaluatebadge', jsonParser, function (req, res) {
         res.send(result);
       }
   );
+  */
+  res.send("OK");
 });
 
 

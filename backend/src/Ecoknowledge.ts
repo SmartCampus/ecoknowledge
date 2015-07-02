@@ -1,13 +1,16 @@
 import GoalProvider = require('./GoalProvider');
 import BadgeProvider = require('./BadgeProvider');
+import UserProvider = require('./UserProvider');
 
 class Ecoknowledge {
     private goalProvider:GoalProvider;
     private badgeProvider:BadgeProvider;
+    private userProvider:UserProvider;
 
-    constructor(goalProvider:GoalProvider, badgeProvider:BadgeProvider) {
+    constructor(goalProvider:GoalProvider, badgeProvider:BadgeProvider, userProvider:UserProvider) {
         this.goalProvider = goalProvider;
         this.badgeProvider = badgeProvider;
+        this.userProvider = userProvider;
     }
 
     public getGoalDescription(goalUUID:string):any {
@@ -23,7 +26,7 @@ class Ecoknowledge {
     }
 
     public addBadge(data:any) {
-        this.badgeProvider.addBadge(data, this.goalProvider);
+        this.badgeProvider.addBadge(data, this.goalProvider, this.userProvider);
     }
 
     // debug only

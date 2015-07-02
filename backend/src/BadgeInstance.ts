@@ -1,7 +1,7 @@
 import Goal = require('Goal');
 import User = require('User');
-import BadgeStatus = require('BadgeStatus');
-import BadgeDefinition = require('BadgeDefinition');
+import BadgeStatus = require('./BadgeStatus');
+import BadgeDefinition = require('./BadgeDefinition');
 import UUID = require('node-uuid');
 
 class BadgeInstance {
