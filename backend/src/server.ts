@@ -56,17 +56,10 @@ app.get('/goals/:id', jsonParser, function (req, res, next) {
     next();
   }
 
-  var goalUUID:string = req.params.id;
-  ecoknowledge.getGoalDescription(goalUUID);
+  console.log("ID :", req.params.id);
 
-  var result:any = {};
-  console.log('id goal : ',goalUUID);
-  var goal:Goal = currentUser.retrieveGoal(goalUUID);
-  if(goal!=null){
-    result.data = goal;
-    result.success = true;
-    console.log('goal name : ',goal.getName);
-  }
+  var goalUUID:string = req.params.id;
+  var result:any = ecoknowledge.getGoalDescription(goalUUID);
 
   console.log("++ Sending", result);
   res.send(result);
@@ -126,8 +119,8 @@ app.get('/required', jsonParser, function(req,res,next) {
 app.post('/addgoal', jsonParser, function (req, res) {
   var actionData = req.body;
   console.log("Received",actionData);
-  ecoknowledge.addGoal(actionData);
-  res.send("OK");
+  var result = ecoknowledge.addGoal(actionData);
+  res.send(result);
 });
 
 app.post('/addbadge', jsonParser, function (req, res) {

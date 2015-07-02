@@ -11,8 +11,8 @@ class Ecoknowledge {
         return this.goalProvider.getGoal(goalUUID).getData();
     }
 
-    public addGoal(data:any) {
-        this.goalProvider.addGoal(data);
+    public addGoal(data:any):string {
+        return this.goalProvider.addGoal(data);
     }
 }
 

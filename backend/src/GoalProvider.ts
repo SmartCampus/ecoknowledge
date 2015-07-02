@@ -3,7 +3,7 @@ import GoalFactory = require('./GoalFactory');
 
 class GoalProvider {
 
-    private goal:Goal[] = [];
+    private goals:Goal[] = [];
 
     private factory:GoalFactory;
 
@@ -11,12 +11,20 @@ class GoalProvider {
         this.factory = new GoalFactory();
     }
 
-    public addGoal(data:any) {
+    public addGoal(data:any):string {
         var newGoal:Goal = this.factory.createGoal(data);
-        this.goal.push(newGoal);
+        this.goals.push(newGoal);
+        return newGoal.getUUID().toString();
     }
 
     public getGoal(goalUUID:string):Goal {
+        for(var i in this.goals) {
+            var currentGoal = this.goals[i];
+            if(currentGoal.hasUUID(goalUUID)) {
+                return currentGoal;
+            }
+        }
+
         return null;
     }
 }

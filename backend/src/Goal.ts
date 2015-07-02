@@ -1,7 +1,12 @@
+/// <reference path="../typings/node-uuid/node-uuid.d.ts" />
+
+
 import ExpressionHandler = require('./ExpressionHandler');
 import Expression = require('./Expression');
+import uuid = require('node-uuid');
 
 class Goal {
+  private id;
   private name:string;
   private expressions:ExpressionHandler = new ExpressionHandler();
 
@@ -11,6 +16,17 @@ class Goal {
     }
 
     this.name = name;
+    this.id = uuid.v4();
+  }
+
+  public getUUID() {
+    return this.id;
+  }
+
+  public hasUUID(aUUID:string):boolean {
+    console.log("HAS ID : ", aUUID, this.id, uuid.parse(aUUID), this.id === uuid.parse(aUUID));
+
+    return (this.id) === aUUID;
   }
 
   public getName():string {
