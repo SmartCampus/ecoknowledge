@@ -28,7 +28,7 @@
             <span class="btn-primary input-group-addon" disabled>Goals : </span>
             <select name="objective" class="selectpicker form-control"
                     ng-model="badgeCreateCtrl.badge.currentGoal.name" ng-options="goal for goal in badgeCreateCtrl.goals"
-                    ng-change="badgeCreateCtrl.change(badgeCreateCtrl.badge.currentGoal.name)">
+                    ng-change="badgeCreateCtrl.change(badgeCreateCtrl.badge.currentGoal.name)" required>
                 <option value="" disabled selected>Select a goal</option>
             </select>
 
@@ -43,7 +43,7 @@
           <td>{{currentCondition.value}}</td>
           <td>
             <select name="objective" class="selectpicker form-control"
-                  ng-model="currentCondition.sensor" ng-options="sensors.id for sensors in badgeCreateCtrl.sensors[currentCondition.required]">
+                  ng-model="currentCondition.sensor" ng-options="sensors.id for sensors in badgeCreateCtrl.sensors[currentCondition.required]" required>
             <option value="" disabled selected>Select a sensor</option>
           </select>
           </td>
