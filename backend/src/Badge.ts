@@ -28,6 +28,7 @@ class Badge {
   public evaluate(values:any[]):boolean {
     var result = true;
 
+    
     if(this.objectives.length != values.length) {
       throw new Error("Can not evaluate badge " + this.name + "! There are " + this.objectives + " objectives to evaluate" +
           "and only " + values.length + " values");
