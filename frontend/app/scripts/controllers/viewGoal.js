@@ -21,6 +21,22 @@ angular.module('ecoknowledgeApp')
                 console.log('FAIL data in GET goal/idGoal',data);
             });
         };
+
+        self.getSign = function(signe){
+            switch(signe){
+                case 'inf':
+                    return '<';
+                case 'sup':
+                    return '>';
+                case 'eq':
+                    return '=';
+                case 'dif':
+                    return '≠';
+                default:
+                    return null;
+            }
+        };
+
         self.getGoal();
     }
 ]);
