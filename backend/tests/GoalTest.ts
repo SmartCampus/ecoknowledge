@@ -30,11 +30,11 @@ describe("Add a condition to a goal", () => {
   });
 
   it("should throw an error when typeOfComparison given is null", () => {
-    chai.expect(() => goal.addCondition("", null, 0)).to.throw(Error);
+    chai.expect(() => goal.addConditionByDescription("", null, 0)).to.throw(Error);
   });
 
   it("should add it to the goal conditions", () => {
-    goal.addCondition("Température", 'sup', 0);
+    goal.addConditionByDescription("Température", 'sup', 0);
     chai.expect(() => goal.evaluate([5])).not.to.throw(Error);
   });
 });

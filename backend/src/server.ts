@@ -18,6 +18,11 @@ import Badge = require('./Badge');
 
 var currentUser:User = new User("Jackie");
 
+import GoalProvider = require('./GoalProvider');
+
+import EcoKnowledge = require('./Ecoknowledge');
+var ecoknowledge:EcoKnowledge = new EcoKnowledge(new GoalProvider());
+
 // Enable JSON data for requests
 //app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
@@ -40,7 +45,6 @@ app.use(function (req, res, next) {
 var args = process.argv;
 var port = args[2] || 3000;
 
-
 app.get('/helloworld/:slug', jsonParser, function (req, res, next) {
   console.log("HELLOWORLD");
   res.send("Hello  world!");
@@ -51,10 +55,13 @@ app.get('/goals/:id', jsonParser, function (req, res, next) {
   if(!req.params.id){
     next();
   }
+
+  var goalUUID:string = req.params.id;
+  ecoknowledge.getGoalDescription(goalUUID);
+
   var result:any = {};
-  var idGoal:string = req.params.id;
-  console.log('id goal : ',idGoal);
-  var goal:Goal = currentUser.retrieveGoal(idGoal);
+  console.log('id goal : ',goalUUID);
+  var goal:Goal = currentUser.retrieveGoal(goalUUID);
   if(goal!=null){
     result.data = goal;
     result.success = true;
@@ -118,33 +125,9 @@ app.get('/required', jsonParser, function(req,res,next) {
 
 app.post('/addgoal', jsonParser, function (req, res) {
   var actionData = req.body;
-  console.log(actionData);
-
-  var goalName:string = actionData.name;
-  var newGoal:Goal = new Goal(goalName);
-
-  console.log("Construction de l'objectif ", newGoal.getName());
-
-  var goalConditions:any[] = actionData.conditions;
-
-  console.log("\tConstruction des conditions de succès ...");
-  for (var i = 0; i < goalConditions.length; i++) {
-    var currentCondition = goalConditions[i];
-
-    console.log("\t\tCondition courante", currentCondition);
-
-    var required:string = currentCondition.required;
-    var comparison:string = currentCondition.comparison;
-    var thresholdValue:boolean|number = currentCondition.value;
-
-    console.log("\t\t\tCréation de la condition avec", required, comparison, thresholdValue);
-
-    newGoal.addCondition(required,comparison,thresholdValue);
-  }
-
-  var result = currentUser.addGoal(newGoal);
-
-  res.send(result);
+  console.log("Received",actionData);
+  ecoknowledge.addGoal(actionData);
+  res.send("OK");
 });
 
 app.post('/addbadge', jsonParser, function (req, res) {
@@ -227,8 +210,8 @@ app.post('/evaluategoal', jsonParser, function (req, res) {
 app.listen(port);
 
 var goal:Goal = new Goal("ObjectifDebug");
-goal.addCondition("Température", 'inf', 20);
-goal.addCondition("Température", 'sup', 0);
+goal.addConditionByDescription("Température", 'inf', 20);
+goal.addConditionByDescription("Température", 'sup', 0);
 
 currentUser.addGoal(goal);
 console.log("Ajout d'un objectif de debug");

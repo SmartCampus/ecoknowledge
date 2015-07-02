@@ -18,8 +18,8 @@ describe("Badge test", () => {
 
     beforeEach(() => {
         goal1  = new Goal("goal1");
-        goal1.addCondition("Température", 'inf', 40);
-        goal1.addCondition("Température", 'sup', 25);
+        goal1.addConditionByDescription("Température", 'inf', 40);
+        goal1.addConditionByDescription("Température", 'sup', 25);
 
         goals = [goal1];
 

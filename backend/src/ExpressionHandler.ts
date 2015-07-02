@@ -15,6 +15,7 @@ class ExpressionHandler {
     this.expressions.push(expression);
   }
 
+  // TODO : DELETE THIS TOKEN
   public addExpressionByDescription(required:string, typeOfComparison:string, value:number|boolean) {
 
     if(typeof(value) === "number") {

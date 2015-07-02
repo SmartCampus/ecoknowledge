@@ -1,4 +1,5 @@
 import ExpressionHandler = require('./ExpressionHandler');
+import Expression = require('./Expression');
 
 class Goal {
   private name:string;
@@ -16,7 +17,7 @@ class Goal {
     return this.name;
   }
 
-  public addCondition(required:string, typeOfComparison:string, value:number|boolean) {
+  public addConditionByDescription(required:string, typeOfComparison:string, value:number|boolean) {
     if (!typeOfComparison) {
       throw new Error('Bad argument : typeOfComparison given is null');
     }
@@ -24,6 +25,10 @@ class Goal {
     this.expressions.addExpressionByDescription(required, typeOfComparison, value);
   }
 
+  public addCondition(expression:Expression) {
+    this.expressions.addExpression(expression);
+  }
+  
   public evaluate(values:(number|boolean)[]):boolean {
     return this.expressions.evaluate(values);
   }
