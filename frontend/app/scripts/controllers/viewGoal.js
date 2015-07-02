@@ -8,8 +8,8 @@
  * Controller of the ecoknowledgeApp for the view of a goal
  */
 
-angular.module('ecoknowledgeApp')
-    .controller('ViewGoalCtrl',['ServiceGoal','$route', function (ServiceGoal, $route) {
+var app = angular.module('ecoknowledgeApp')
+    .controller('ViewGoalCtrl',['ServiceGoal','$route', 'Sign', function (ServiceGoal, $route, Sign) {
         var self = this;
         self.goal = {};
         console.log('route : ',$route.current.params.goalId);
@@ -22,8 +22,16 @@ angular.module('ecoknowledgeApp')
             });
         };
 
-        self.getSign = function(signe){
-            switch(signe){
+        self.sign = Sign;
+
+        self.getGoal();
+    }
+]);
+
+app.factory('Sign', function getSignFactory(){
+    return {
+        get: function(sign){
+            switch (sign) {
                 case 'inf':
                     return '<';
                 case 'sup':
@@ -35,8 +43,6 @@ angular.module('ecoknowledgeApp')
                 default:
                     return null;
             }
-        };
-
-        self.getGoal();
-    }
-]);
+        }
+    };
+});

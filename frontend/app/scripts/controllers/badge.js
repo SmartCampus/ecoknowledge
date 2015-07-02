@@ -9,12 +9,12 @@
  */
 
 angular.module('ecoknowledgeApp')
-  .controller('BadgeCtrl',['ServiceGoal','ServiceBadge', function (ServiceGoal, ServiceBadge) {
+  .controller('BadgeCtrl',['ServiceGoal','ServiceBadge','Sign', function (ServiceGoal, ServiceBadge, Sign) {
     var self = this;
     self.badge = {};
     self.goals = [];
     self.badge.currentGoal = {};
-
+    self.sign = Sign;
     self.addBadge = function () {
       var toSend = angular.toJson(self.badge);
       ServiceBadge.post(toSend, function(data) {

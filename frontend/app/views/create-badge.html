@@ -39,7 +39,7 @@
         <tbody>
         <tr ng-repeat="currentCondition in badgeCreateCtrl.badge.currentGoal.conditions">
           <td>{{currentCondition.required}}</td>
-          <td>{{currentCondition.comparison}}</td>
+          <td>{{badgeCreateCtrl.sign.get(currentCondition.comparison)}}</td>
           <td>{{currentCondition.value}}</td>
           <td>
             <select name="objective" class="selectpicker form-control"
