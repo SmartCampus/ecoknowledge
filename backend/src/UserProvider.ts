@@ -16,7 +16,8 @@ class UserProvider {
             }
         }
 
-        return null;    }
+        return null;
+    }
 }
 
 export = UserProvider;

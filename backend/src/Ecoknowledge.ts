@@ -34,6 +34,7 @@ class Ecoknowledge {
         return this.goalProvider.evaluateGoal(data);
     }
 
+
 }
 
 export = Ecoknowledge;

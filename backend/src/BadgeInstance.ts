@@ -46,6 +46,10 @@ class BadgeInstance {
         return this.id;
     }
 
+    public hasUUID(aUUID:string):boolean {
+        return this.id === aUUID;
+    }
+
     public getProgress():number{
         return this.progress;
     }

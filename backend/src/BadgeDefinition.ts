@@ -58,7 +58,7 @@ class BadgeDefinition {
     }
 
     console.log("Sorted values", sortedSensorValues);
-
+    console.log("OBJECTIFS : ", JSON.stringify(this.objectives,null,3));
     for(var i = 0 ; i < this.objectives.length ; i ++) {
       result = result && this.objectives[i].evaluate(sortedSensorValues);
       console.log("Goal : ", result);

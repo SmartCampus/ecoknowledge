@@ -15,11 +15,19 @@ class BadgeProvider {
 
     public addBadge(data:any,goalProvider:GoalProvider, userProvider:UserProvider) {
         var newBadge:BadgeInstance = this.factory.createBadge(data,goalProvider, userProvider);
+        console.log("BADGE ID : ", newBadge.getId());
         this.badges.push(newBadge);
     }
 
-    public getBadge(badgeUUID:string, goalProvider:GoalProvider):BadgeInstance {
-       return null
+    public getBadge(badgeUUID:string):BadgeInstance {
+        for(var i in this.badges) {
+            var currentBadge = this.badges[i];
+            if (currentBadge.hasUUID(badgeUUID)) {
+                return currentBadge;
+            }
+        }
+
+        return null;
     }
 }
 

@@ -25,7 +25,9 @@ import UserProvider = require('./UserProvider');
 import EcoKnowledge = require('./Ecoknowledge');
 
 var userProvider:UserProvider = new UserProvider();
-var ecoknowledge:EcoKnowledge = new EcoKnowledge(new GoalProvider(),new BadgeProvider(), userProvider);
+var badgeProvider:BadgeProvider = new BadgeProvider();
+
+var ecoknowledge:EcoKnowledge = new EcoKnowledge(new GoalProvider(),badgeProvider, userProvider);
 userProvider.addUser(currentUser);
 console.log(currentUser.getUUID());
 
@@ -114,7 +116,6 @@ app.get('/required', jsonParser, function(req,res,next) {
 
 app.post('/addgoal', jsonParser, function (req, res) {
   var actionData = req.body;
-  console.log("Received",actionData);
   var result = ecoknowledge.addGoal(actionData);
   res.send(result);
 });
@@ -129,13 +130,21 @@ app.post('/addbadge', jsonParser, function (req, res) {
   res.send("OK");
 });
 
+
+//TODO move async calls
+import BadgeInstance = require('./BadgeInstance');
+
+//TODO need a badgeID in request
 app.get('/evaluatebadge', jsonParser, function (req, res) {
   var badgeID:string = req.query.badgeID;
-  /*
-  var badge:Badge = currentUser.retrieveBadge(badgeName);
 
-  var required:string[] = badge.getRequired();
+  var badge:BadgeInstance = badgeProvider.getBadge(badgeID);
+
+  //TODO move what follow
+  var required:string[] = badge.getSensors();
   var sensorsValues:any = {};
+
+  console.log("SENSORS TO GET : ", required);
 
   async.times(required.length, function(n, next) {
     var path = 'http://smartcampus.unice.fr/sensors/' + required[n] + '/data/last';
@@ -160,8 +169,6 @@ app.get('/evaluatebadge', jsonParser, function (req, res) {
         res.send(result);
       }
   );
-  */
-  res.send("OK");
 });
 
 
