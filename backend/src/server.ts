@@ -19,9 +19,10 @@ import Badge = require('./Badge');
 var currentUser:User = new User("Jackie");
 
 import GoalProvider = require('./GoalProvider');
+import BadgeProvider = require('./BadgeProvider');
 
 import EcoKnowledge = require('./Ecoknowledge');
-var ecoknowledge:EcoKnowledge = new EcoKnowledge(new GoalProvider());
+var ecoknowledge:EcoKnowledge = new EcoKnowledge(new GoalProvider(),new BadgeProvider());
 
 // Enable JSON data for requests
 //app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -67,17 +68,7 @@ app.get('/goals/:id', jsonParser, function (req, res, next) {
 
 app.get('/goals', jsonParser, function (req, res, next) {
   console.log('\nNo slug');
-
-  var goals:Goal[] = currentUser.getGoals();
-  var result:any = {};
-  var data:any[] = [];
-
-  for (var i in goals) {
-    data.push(goals[i].getName());
-  }
-
-  result.data = data;
-  result.success = true;
+  var result = ecoknowledge.getListOfGoals();
   console.log("++ Sending", result);
   res.send(result);
 });
@@ -186,16 +177,7 @@ app.get('/evaluatebadge', jsonParser, function (req, res) {
 app.post('/evaluategoal', jsonParser, function (req, res) {
   var actionData = req.body;
   console.log(actionData);
-
-  var goalName:string = actionData.name;
-  var goalValues:any[] = actionData.values;
-
-  var values = [];
-  for(var i = 0 ; i < goalValues.length ; i++) {
-    values.push(goalValues[i].value);
-  }
-
-  var result = currentUser.evaluateGoal(goalName, values);
+  var result = ecoknowledge.evaluateGoal(actionData);
   res.send(result);
 
 });
