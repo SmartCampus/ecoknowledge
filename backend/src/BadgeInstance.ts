@@ -21,8 +21,25 @@ class BadgeInstance {
         this.sensors = sensors;
     }
 
-    public getBadgeDefinition():BadgeDefinition{
-        return this.badgeDef;
+    //name:string, description:string, points:number, goals:Goal[], user:User, sensors:string[]
+    public getSensorsTypeRequired():String[]{
+        return this.badgeDef.getSensorsTypeRequired();
+    }
+
+    public getObjectives():Goal[]{
+        return this.badgeDef.getObjectives();
+    }
+
+    public getPoints():number{
+        return this.badgeDef.getPoints();
+    }
+
+    public getDescription():string{
+        return this.badgeDef.getDescription();
+    }
+
+    public getName():string{
+        return this.badgeDef.getName();
     }
 
     public getId():string{
@@ -44,36 +61,10 @@ class BadgeInstance {
     public getSensors():string[]{
         return this.sensors;
     }
-/*
+    
     public evaluate(values:any[]):boolean {
-        var result = true;
-
-        if(this.objectives.length != values.length) {
-            throw new Error("Can not evaluate badge " + this.name + "! There are " + this.objectives + " objectives to evaluate" +
-                "and only " + values.length + " values");
-        }
-
-        var sortedSensorValues:(number|boolean)[] = [];
-        console.log("VALUES : ", values);
-        for(var j = 0 ; j < this.sensors.length ; j ++) {
-            console.log("SENSORS/KEY", this.sensors[j]);
-            console.log("BASE", values[0]);
-            console.log(values[0][this.sensors[j]]);
-
-            sortedSensorValues.push(values[0][this.sensors[j]]);
-        }
-
-        console.log("Sorted values", sortedSensorValues);
-
-        for(var i = 0 ; i < this.objectives.length ; i ++) {
-            result = result && this.objectives[i].evaluate(sortedSensorValues);
-            console.log("Goal : ", result);
-            if(!result) {
-                return false;
-            }
-        }
-        return result;
-    }*/
+        return this.badgeDef.evaluate(values, this.sensors);
+    }
 };
 
 export = BadgeInstance;
