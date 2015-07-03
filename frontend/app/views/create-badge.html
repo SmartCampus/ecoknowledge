@@ -18,7 +18,7 @@
 
         <div class="input-group">
             <span for="badge-point" class="btn-primary input-group-addon" disabled>Points à gagner</span>
-            <input name="badgePoint" id="badge-point" type="range" ng-model="badgeCreateCtrl.badge.points" required>
+            <input name="badgePoint" id="badge-point" type="range" min="-100" max="100" ng-model="badgeCreateCtrl.badge.points" required>
             <span class="btn-primary input-group-addon" disabled>{{badgeCreateCtrl.badge.points}}</span>
         </div>
 
