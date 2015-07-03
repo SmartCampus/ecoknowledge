@@ -1,12 +1,12 @@
 <div class="container jumbotron" ng-controller="GoalCtrl as goalCtrl">
     <div class="page-header text-center">
-        <h1>Create a goal</h1>
+        <h1>Créer un objectif</h1>
     </div>
     <form name="goalCreateForm" class="form" ng-submit="goalCreateForm.$valid && goalCtrl.addGoal()" novalidate>
 
         <div class="form-group text-left">
-            <label for="goal-name">Name</label>
-            <input name="goalName" type="text" class="form-control " id="goal-name" placeholder="Name of the goal"
+            <label for="goal-name">Nom</label>
+            <input name="goalName" type="text" class="form-control " id="goal-name" placeholder="Nom de l'objectif"
                    ng-model="goalCtrl.goal.name" required>
         </div>
 
@@ -16,10 +16,10 @@
                     <span class="btn-primary input-group-addon">Temperature</span>
                     <select name="comparaison" class="selectpicker form-control"
                             ng-model="iteration.comparison" required>
-                        <option value="inf">Less than</option>
-                        <option value="eq">Equal to</option>
-                        <option value="sup">Greater than</option>
-                        <option value="dif">Not equal to</option>
+                        <option value="inf">Inférieur à</option>
+                        <option value="eq">Égal à</option>
+                        <option value="sup">Supérieur à</option>
+                        <option value="dif">Différent de</option>
                     </select>
                     <input type="number" name="tempInput" class="form-control" id="goal-value" placeholder="Valeur"
                            ng-model="iteration.value"
@@ -29,7 +29,7 @@
             </li>
             <li class="list-group-item">
                 <div class="input-group">
-                    <input type="button" ng-click="goalCtrl.addComparison()" value="Add a comparator">
+                    <input type="button" ng-click="goalCtrl.addComparison()" value="Ajouter une condition">
                 </div>
 
                 <div class=" text-center">
