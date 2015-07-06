@@ -1,7 +1,6 @@
 'use strict';
 
-(function () {
-  angular.module('ecoknowledgeApp')
+var app = angular.module('ecoknowledgeApp')
     .controller('GoalCtrl', ['ServiceGoal', function (ServiceGoal) {
 
       var self = this;
@@ -21,12 +20,39 @@
         });
       };
 
+      this.changeComparison = function(iteration,change){
+        iteration.type = change;
+        iteration.value = null;
+        iteration.comparison = null;
+        if(change==='boolean'){
+          iteration.comparison = 'boolean';
+        }
+      };
+
       self.addComparison = function(){
-          this.obj = {};
-          this.obj.required=self.type[0];
-          self.goal.conditions[self.goal.conditions.length] = this.obj;
+          self.goal.conditions[self.goal.conditions.length] = {};
       };
 
       self.addComparison();
     }]);
-})();
+
+app.directive('stringForm', function(){
+  return{
+    retrict:'E',
+    templateUrl:'../../views/create goal/string-form.html'
+  };
+});
+
+app.directive('booleanForm', function(){
+  return{
+    retrict:'E',
+    templateUrl:'../../views/create goal/boolean-form.html'
+  };
+});
+
+app.directive('numberForm', function(){
+  return{
+    retrict:'E',
+    templateUrl:'../../views/create goal/number-form.html'
+  };
+});

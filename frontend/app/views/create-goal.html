@@ -13,17 +13,18 @@
         <ul>
             <li class="list-group-item" ng-repeat="iteration in goalCtrl.goal.conditions">
                 <div class="input-group">
-                    <span class="btn-primary input-group-addon">Temperature</span>
-                    <select name="comparaison" class="selectpicker form-control"
-                            ng-model="iteration.comparison" required>
-                        <option value="inf">Inférieur à</option>
-                        <option value="eq">Égal à</option>
-                        <option value="sup">Supérieur à</option>
-                        <option value="dif">Différent de</option>
+                    <input type="text" placeholder="Nom de la variable" ng-model="iteration.required" required>
+                    <select ng-change="goalCtrl.changeComparison(iteration, typeValeurComparaison)" name="typeDeValeurDeComparaison" class = "selectpick form-control"
+                            ng-model="typeValeurComparaison" required>
+                        <option value="" disabled selected>Sélectionnez un type de valeur à comparer</option>
+                        <option value="string">Texte</option>
+                        <option value="number">Nombre</option>
+                        <option value="boolean">Booléen</option>
                     </select>
-                    <input type="number" name="tempInput" class="form-control" id="goal-value" placeholder="Valeur"
-                           ng-model="iteration.value"
-                           required>
+
+                    <number-form></number-form>
+                    <boolean-form></boolean-form>
+                    <string-form></string-form>
                 </div>
                 <br/><br/>
             </li>

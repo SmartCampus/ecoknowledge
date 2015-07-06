@@ -1,0 +1,10 @@
+<div ng-if="typeValeurComparaison=='string'">
+    <select name="comparaison" class="selectpicker form-control"
+            ng-model="iteration.comparison" ng-required="typeValeurComparaison=='string'">
+        <option value="" disabled selected>Sélectionnez un moyen de comparaison</option>
+        <option value="eq">Egal à</option>
+        <option value="contains">Contient</option>
+    </select>
+    <input type="text" name="tempInput" class="form-control" placeholder="Texte attendu"
+           ng-model="iteration.value" ng-required="typeValeurComparaison=='string'">
+</div>
