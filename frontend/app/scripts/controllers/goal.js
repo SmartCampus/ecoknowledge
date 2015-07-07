@@ -8,7 +8,6 @@ var app = angular.module('ecoknowledgeApp')
       self.goal.conditions = [];
       self.goal.name = '';
 
-
       self.type = ['Température', 'Porte'];
 
       this.addGoal = function () {
@@ -22,11 +21,20 @@ var app = angular.module('ecoknowledgeApp')
 
       this.changeComparison = function(iteration,change){
         iteration.type = change;
-        iteration.value = null;
+        iteration.valueLeft = {};
+        iteration.valueRight = {};
         iteration.comparison = null;
         if(change==='boolean'){
-          iteration.comparison = 'boolean';
+          iteration.comparison = '===';
         }
+      };
+
+      this.changeType = function(iteration, type){
+          if(type==='sensor'){
+            iteration.sensor=true;
+          }else{
+            iteration.sensor=false;
+          }
       };
 
       self.addComparison = function(){
@@ -45,14 +53,14 @@ app.directive('stringForm', function(){
 
 app.directive('booleanForm', function(){
   return{
-    retrict:'E',
+    restrict:'E',
     templateUrl:'../../views/create goal/boolean-form.html'
   };
 });
 
 app.directive('numberForm', function(){
   return{
-    retrict:'E',
+    restrict:'E',
     templateUrl:'../../views/create goal/number-form.html'
   };
 });
