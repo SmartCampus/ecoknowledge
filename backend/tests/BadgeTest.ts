@@ -9,6 +9,7 @@ var assert = chai.assert;
 
 import Badge = require('../src/Badge');
 import Goal = require('../src/Goal');
+import ValueComparison = require('../src/ValueComparison');
 
 describe("Badge test", () => {
 
@@ -18,12 +19,16 @@ describe("Badge test", () => {
 
     beforeEach(() => {
         goal1  = new Goal("goal1");
+
+       /*
+
         goal1.addConditionByDescription("Température", 'inf', 40);
         goal1.addConditionByDescription("Température", 'sup', 25);
 
         goals = [goal1];
 
         badge = new Badge("aName", "the badge for noobs", 42,goals, ['']);
+        */
     });
 
     /*
