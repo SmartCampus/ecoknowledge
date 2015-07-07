@@ -5,9 +5,9 @@ dist
 .idea
 .editorconfig
 typings
-src/*.js.map
-src/*.js
-tests/*.js
-tests/*.js.map
+src/**/*.js.map
+src/**/*.js
+tests/**/*.js
+tests/**/*.js.map
 build
 buildTests

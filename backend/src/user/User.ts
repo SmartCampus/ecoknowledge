@@ -1,14 +1,28 @@
-import Goal = require('./Goal');
-import Badge = require('./Badge');
+/// <reference path="../../typings/node-uuid/node-uuid.d.ts" />
+
+import Goal = require('../goal/Goal');
+import BadgeInstance = require('../badge/BadgeInstance');
+
+import uuid = require('node-uuid');
 
 class User {
 
   private name:string;
   private goals:Goal[] = [];
-  private badges:Badge[] = [];
+  private badges:BadgeInstance[] = [];
+
+  private id;
 
   constructor(name:string) {
     this.name = name;
+    this.id = uuid.v4();
+  }
+  public getUUID() {
+    return this.id;
+  }
+
+  public hasUUID(aUUID:string):boolean {
+    return this.id === aUUID;
   }
 
   public getName():string {
@@ -19,7 +33,7 @@ class User {
     return this.goals;
   }
 
-  public getBadges():Badge[] {
+  public getBadges():BadgeInstance[] {
     return this.badges;
   }
 
@@ -33,7 +47,7 @@ class User {
     return true;
   }
 
-  public addBadge(newBadge:Badge):boolean {
+  public addBadge(newBadge:BadgeInstance):boolean {
     if (!newBadge) {
       throw new Error('Can not add a new newBadge to user ' + this.name + ' given newBadge is null');
     }
@@ -51,7 +65,8 @@ class User {
       return false;
     }
 
-    var res =  goal.evaluate(goalValue);
+    var res = null;
+    // FIXME var res =  goal.evaluate(goalValue);
     console.log("goal is", res);
     return res;
   }
@@ -83,7 +98,7 @@ class User {
     return res;
   }
 
-  public retrieveBadge(badgeName:string):Badge {
+  public retrieveBadge(badgeName:string):BadgeInstance {
     for(var i in this.badges) {
       var currentBadge = this.badges[i];
       if(currentBadge.getName() === badgeName) {
