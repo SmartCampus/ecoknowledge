@@ -35,7 +35,7 @@ class Goal {
     this.expressions.addExpression(expression);
   }
   
-  public evaluate(values:(number|boolean)[]):boolean {
+  public evaluate(values:string[][]):boolean {
     return this.expressions.evaluate(values);
   }
 

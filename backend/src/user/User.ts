@@ -65,7 +65,8 @@ class User {
       return false;
     }
 
-    var res =  goal.evaluate(goalValue);
+    var res = null;
+    // FIXME var res =  goal.evaluate(goalValue);
     console.log("goal is", res);
     return res;
   }

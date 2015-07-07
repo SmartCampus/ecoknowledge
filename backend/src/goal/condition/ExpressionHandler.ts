@@ -27,7 +27,7 @@ class ExpressionHandler {
   }
 
   // TODO
-  public evaluate(values:(number|boolean)[]):boolean {
+  public evaluate(values:string[][]):boolean {
 
     if(this.expressions.length != values.length) {
       throw new Error('Can not evaluate expressions ! There are ' + this.expressions.length + ' expressions and ' + values.length + ' values to bind.');
@@ -38,8 +38,8 @@ class ExpressionHandler {
     var result:boolean = true;
 
     for(var i = 0 ; i < this.expressions.length ; i++) {
-      // FIXME result = result && this.expressions[i].evaluate(values[i]);
-
+      result = result && this.expressions[i].evaluate(values[i]);
+      console.log("RESULT TMP", result);
       //  AND optimization
       if(!result) {
         return false;

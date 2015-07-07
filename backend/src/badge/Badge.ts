@@ -46,6 +46,9 @@ class Badge {
 
     console.log("Sorted values", sortedSensorValues);
 
+    /*
+    FIXME
+
     for(var i = 0 ; i < this.objectives.length ; i ++) {
       result = result && this.objectives[i].evaluate(sortedSensorValues);
       console.log("Goal : ", result);
@@ -53,6 +56,7 @@ class Badge {
         return false;
       }
     }
+     */
     return result;
   }
 

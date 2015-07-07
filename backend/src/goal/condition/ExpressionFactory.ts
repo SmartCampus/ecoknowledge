@@ -22,7 +22,7 @@ class ExpressionFactory {
 
         var rightOperandName = expression.valueRight.value;
         var rightOperandRequired = expression.valueRight.sensor;
-        var rightOperand:Operand = new Operand(leftOperandName, leftOperandRequired);
+        var rightOperand:Operand = new Operand(rightOperandName, rightOperandRequired);
 
         var typeOfComparison:string = expression.comparison;
         var description:string = expression.description;
