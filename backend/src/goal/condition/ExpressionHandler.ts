@@ -1,7 +1,6 @@
 
 import Expression = require('./Expression');
-import ValueComparison = require('./ValueComparison');
-import BooleanComparison = require('./BooleanComparison');
+import GoalCondition = require('./GoalCondition');
 
 class ExpressionHandler {
 
@@ -27,6 +26,7 @@ class ExpressionHandler {
     return result;
   }
 
+  // TODO
   public evaluate(values:(number|boolean)[]):boolean {
 
     if(this.expressions.length != values.length) {
@@ -38,7 +38,7 @@ class ExpressionHandler {
     var result:boolean = true;
 
     for(var i = 0 ; i < this.expressions.length ; i++) {
-      result = result && this.expressions[i].evaluate(values[i]);
+      // FIXME result = result && this.expressions[i].evaluate(values[i]);
 
       //  AND optimization
       if(!result) {

@@ -1,7 +1,8 @@
 import Operand = require('./Operand');
 import TimeBox = require('../TimeBox');
+import Expression = require('./Expression');
 
-class GoalCondition {
+class GoalCondition implements Expression{
     private leftOperand:Operand;
     private rightOperand:Operand;
 
@@ -89,6 +90,11 @@ class GoalCondition {
 
     public getDescription():string {
         return this.leftOperand.getStringDescription() + this.typeOfComparison + this.rightOperand.getStringDescription();
+    }
+
+    //TODO
+    public getData():any {
+
     }
 }
 

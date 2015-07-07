@@ -1,6 +1,6 @@
 import Expression = require('./Expression');
-import ValueComparison = require('./ValueComparison');
-import BooleanComparison = require('./BooleanComparison');
+import GoalCondition = require('./GoalCondition');
+import Operand = require('./Operand');
 
 class ExpressionFactory {
 
@@ -16,17 +16,19 @@ class ExpressionFactory {
             }
         }
 
-        var required:string = expression.name;
+        var leftOperandName = expression.valueLeft.value;
+        var leftOperandRequired = expression.valueLeft.sensor;
+        var leftOperand:Operand = new Operand(leftOperandName, leftOperandRequired);
+
+        var rightOperandName = expression.valueRight.value;
+        var rightOperandRequired = expression.valueRight.sensor;
+        var rightOperand:Operand = new Operand(leftOperandName, leftOperandRequired);
+
         var typeOfComparison:string = expression.comparison;
-        var value:boolean|number = expression.value;
         var description:string = expression.description;
 
-        if (typeof(value) === "number") {
-            return new ValueComparison(required, typeOfComparison, <number>value, description);
-        }
-        else {
-            return new BooleanComparison(required, typeOfComparison, <boolean>value, description);
-        }
+        var newGoalCondition:GoalCondition = new GoalCondition(leftOperand,typeOfComparison,rightOperand,description);
+        return newGoalCondition;
     }
 }
 
