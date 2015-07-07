@@ -39,7 +39,7 @@ class Goal {
     return this.expressions.evaluate(values);
   }
 
-  public getRequired():any {
+  public getRequired():string[][] {
     return this.expressions.getRequired();
   }
 

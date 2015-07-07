@@ -14,19 +14,16 @@ class ExpressionHandler {
     this.expressions.push(expression);
   }
 
-  public getRequired():string[] {
-    var result = [];
+  public getRequired():string[][] {
+    var result:string[][] = [];
 
     for(var i in this.expressions) {
-      if(result.indexOf(this.expressions[i].getRequired()) == -1) {
         result.push(this.expressions[i].getRequired());
-      }
     }
 
     return result;
   }
 
-  // TODO
   public evaluate(values:string[][]):boolean {
 
     if(this.expressions.length != values.length) {
@@ -39,7 +36,7 @@ class ExpressionHandler {
 
     for(var i = 0 ; i < this.expressions.length ; i++) {
       result = result && this.expressions[i].evaluate(values[i]);
-      console.log("RESULT TMP", result);
+
       //  AND optimization
       if(!result) {
         return false;

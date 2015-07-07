@@ -55,6 +55,7 @@ describe("ExpressionHandler test", () => {
         expected.push(basicBooleanComparison.getRequired());
 
         chai.expect(expressionHandler.getRequired()).to.be.eql(expected);
+        console.log("LOL", expressionHandler.getRequired());
     });
 
     it("Evaluate correctly an expression to false", () => {

@@ -1,30 +1,44 @@
 import BadgeInstance = require('./BadgeInstance');
+import Goal = require('../goal/Goal');
 import GoalProvider = require('../goal/GoalProvider');
 import UserProvider = require('../user/UserProvider');
 
 class BadgeFactory {
 
-    //TODO can only handle a badge with ONE goal
     public createBadge(data:any, goalProvider:GoalProvider, userProvider:UserProvider):BadgeInstance {
         var badgeName:string = data.name;
         var badgeDescription:string = data.description;
         var badgePoints:number = data.points;
-        var badgeSensors:any[] = data.currentGoal.conditions;
 
-        var sensors:string[] = [];
-        for(var i = 0 ; i < badgeSensors.length ; i ++) {
-            sensors.push(badgeSensors[i].sensor.id);
+        var goalsDesc:any[] = data.goals;
+
+        var mapGoalsToConditionAndSensors:any = {};
+        var goals:Goal[] = [];
+
+        for(var currentGoalIndex in goalsDesc) {
+            var currentGoalDesc = goalsDesc[currentGoalIndex];
+
+            var currentGoalID = currentGoalDesc.id;
+            var currentGoal:Goal = goalProvider.getGoal(currentGoalID);
+            goals.push(currentGoal);
+
+            for(var conditionsDescIndex in currentGoalDesc.conditions) {
+                var currentConditionDesc = currentGoalDesc[conditionsDescIndex];
+                var conditionBoundToSensor:any[] = [];
+
+                if(mapGoalsToConditionAndSensors[currentGoalID]) {
+                    conditionBoundToSensor = mapGoalsToConditionAndSensors[currentGoalID];
+                }
+                conditionBoundToSensor.push(currentConditionDesc);
+                mapGoalsToConditionAndSensors[currentGoalID] = conditionBoundToSensor;
+            }
         }
 
-        var badgeGoalID:string = data.currentGoal.id;
-        var goal = goalProvider.getGoal(badgeGoalID);
+        var badge:BadgeInstance = new BadgeInstance(badgeName, badgeDescription,
+            badgePoints, goals,null, mapGoalsToConditionAndSensors);
 
-        var userID:string = data.userID;
-        var user = userProvider.getUser(userID);
-
-        var badge:BadgeInstance = new BadgeInstance(badgeName, badgeDescription, badgePoints, [goal],user, sensors);
-
-        user.addBadge(badge);
+        // TODO attach badge to user
+        // user.addBadge(badge);
 
         return badge;
     }

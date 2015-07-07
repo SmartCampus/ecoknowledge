@@ -14,7 +14,6 @@ var xmlParser = bodyParser.text({type: "application/xml"});
 
 import Goal = require('./goal/Goal');
 import User = require('./user/User');
-import Badge = require('./badge/Badge');
 
 var currentUser:User = new User("Jackie");
 
@@ -99,6 +98,8 @@ app.get('/required', jsonParser, function(req,res,next) {
   var result:any = {};
   result['conditions'] = goal.getData().conditions;
 
+  /*
+  FIXME
   var elementsRequiredForGivenGoal:string[] = goal.getRequired();
   var sensors:any = {};
   for(var i = 0 ; i < elementsRequiredForGivenGoal.length; i ++) {
@@ -106,6 +107,7 @@ app.get('/required', jsonParser, function(req,res,next) {
     sensors[currentElementRequired] = tempSensors;
   }
   result['sensors'] = sensors;
+*/
 
   res.send(result);
 });

@@ -19,6 +19,18 @@ class GoalCondition implements Expression{
         this.timeBox = timeBox;
     }
 
+    public getComparisonType():string {
+        return this.typeOfComparison;
+    }
+
+    public hasLeftOperand(name:string):boolean {
+        return this.leftOperand.getStringDescription() == name;
+    }
+
+    public hasRightOperand(name:string):boolean {
+        return this.rightOperand.getStringDescription() == name;
+    }
+
     public setLeftOperand(newLeftOperand:Operand) {
         this.leftOperand = newLeftOperand;
     }
