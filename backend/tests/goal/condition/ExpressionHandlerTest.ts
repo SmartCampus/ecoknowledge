@@ -7,107 +7,109 @@ import sinon = require('sinon');
 var assert = chai.assert;
 
 
-import ValueComparison = require('../../../src/goal/condition/ValueComparison');
-import BooleanComparison = require('../../../src/goal/condition/BooleanComparison');
+import Operand = require('../../../src/goal/condition/Operand');
+import GoalCondition = require('../../../src/goal/condition/GoalCondition');
 import ExpressionHandler = require('../../../src/goal/condition/ExpressionHandler');
 
 describe("ExpressionHandler test", () => {
 
-  var expressionHandler:ExpressionHandler;
+    var expressionHandler:ExpressionHandler;
 
-  var basicValueComparison:ValueComparison = new ValueComparison("Température", 'inf', 0, 'desc');
-  var basicBooleanComparison:BooleanComparison = new BooleanComparison("Door", 'eq', true, 'desc');
+    var basicValueComparison:GoalCondition;
+    var basicBooleanComparison:GoalCondition;
 
-  beforeEach(() => {
-    expressionHandler = new ExpressionHandler();
-  });
+    beforeEach(() => {
+        expressionHandler = new ExpressionHandler();
+        basicValueComparison = new GoalCondition(new Operand("Température", true), '<', new Operand('0', false), 'desc');
+        basicBooleanComparison = new GoalCondition(new Operand("Door", true), '==', new Operand('true', false), 'desc');
+    });
 
-  it("Can add an expression", () => {
-    expressionHandler.addExpression(basicValueComparison);
-    chai.expect(expressionHandler.getExpressions().length).to.be.equals(1);
-  });
+    it("Can add an expression", () => {
+        expressionHandler.addExpression(basicValueComparison);
+        chai.expect(expressionHandler.getExpressions().length).to.be.equals(1);
+    });
 
-  it("Can add expressions", () => {
-    var i;
-    for(i = 0 ; i < 10 ; i ++) {
-      expressionHandler.addExpression(basicValueComparison);
-    }
-    chai.expect(expressionHandler.getExpressions().length).to.be.equals(i);
-  });
+    it("Can add expressions", () => {
+        var i;
+        for (i = 0; i < 10; i++) {
+            expressionHandler.addExpression(basicValueComparison);
+        }
+        chai.expect(expressionHandler.getExpressions().length).to.be.equals(i);
+    });
 
-  it("Return expected required", () => {
-    expressionHandler.addExpression(basicValueComparison);
+    it("Return expected required", () => {
+        expressionHandler.addExpression(basicValueComparison);
 
-    var expected = [];
-    expected.push(basicValueComparison.getRequired());
+        var expected = [];
+        expected.push(basicValueComparison.getRequired());
 
-    chai.expect(expressionHandler.getRequired()).to.be.eql(expected);
-  });
+        chai.expect(expressionHandler.getRequired()).to.be.eql(expected);
+    });
 
-  it("Return expected required", () => {
-    expressionHandler.addExpression(basicValueComparison);
-    expressionHandler.addExpression(basicBooleanComparison);
+    it("Return expected required", () => {
+        expressionHandler.addExpression(basicValueComparison);
+        expressionHandler.addExpression(basicBooleanComparison);
 
-    var expected = [];
-    expected.push(basicValueComparison.getRequired());
-    expected.push(basicBooleanComparison.getRequired());
+        var expected = [];
+        expected.push(basicValueComparison.getRequired());
+        expected.push(basicBooleanComparison.getRequired());
 
-    chai.expect(expressionHandler.getRequired()).to.be.eql(expected);
-  });
+        chai.expect(expressionHandler.getRequired()).to.be.eql(expected);
+        console.log("LOL", expressionHandler.getRequired());
+    });
 
-  it("Evaluate correctly an expression to false", () => {
-    expressionHandler.addExpression(basicValueComparison);
+    it("Evaluate correctly an expression to false", () => {
+        expressionHandler.addExpression(basicValueComparison);
+        var values = [['3']];
+        chai.expect(expressionHandler.evaluate(values)).to.be.false;
+    });
 
-    var values = [];
-    values.push(3);
+    it("Evaluate correctly an expression to true", () => {
+        expressionHandler.addExpression(basicValueComparison);
+        var values = [['-2']];
+        chai.expect(expressionHandler.evaluate(values)).to.be.true;
+    });
 
-    chai.expect(expressionHandler.evaluate(values)).to.be.false;
-  });
+    it("Evaluate correctly expressions to true", () => {
+        var valueComparison1:GoalCondition = new GoalCondition(new Operand("Température", true), '>', new Operand('0', false), 'desc');
+        var valueComparison2:GoalCondition = new GoalCondition(new Operand("Température", true), '<', new Operand('10', false), 'desc');
+        var valueComparison3:GoalCondition = new GoalCondition(new Operand("Température", true), '==', new Operand('4', false), 'desc');
+        var booleanComparison:GoalCondition = new GoalCondition(new Operand("Door", true), '==', new Operand('true', false), 'desc');
 
-  it("Evaluate correctly an expression to true", () => {
-    expressionHandler.addExpression(basicValueComparison);
+        expressionHandler.addExpression(valueComparison1);
+        expressionHandler.addExpression(valueComparison2);
+        expressionHandler.addExpression(booleanComparison);
+        expressionHandler.addExpression(valueComparison3);
 
-    var values = [-2];
-    chai.expect(expressionHandler.evaluate(values)).to.be.true;
-  });
+        var values:string[][] = [['3'], ['2'], ['true'], ['4']];
+        chai.expect(expressionHandler.evaluate(values)).to.be.true;
+    });
 
-  it("Evaluate correctly expressions to true", () => {
-    var valueComparison1:ValueComparison = new ValueComparison("Température", 'sup', 0,'desc');
-    var valueComparison2:ValueComparison = new ValueComparison("Température", 'inf', 10,'desc');
-    var valueComparison3:ValueComparison = new ValueComparison("Température", 'eq', 4,'desc');
-    var booleanComparison:BooleanComparison = new BooleanComparison("Door", 'eq', true,'desc');
-    expressionHandler.addExpression(valueComparison1);
-    expressionHandler.addExpression(valueComparison2);
-    expressionHandler.addExpression(booleanComparison);
-    expressionHandler.addExpression(valueComparison3);
+    it("Evaluate correctly expressions to false", () => {
+        var valueComparison1:GoalCondition = new GoalCondition(new Operand("Température", true), '<', new Operand('0', false), 'desc');
+        var valueComparison2:GoalCondition = new GoalCondition(new Operand("Température", true), '<', new Operand('10', false), 'desc');
+        var valueComparison3:GoalCondition = new GoalCondition(new Operand("Température", true), '==', new Operand('4', false), 'desc');
+        var booleanComparison:GoalCondition = new GoalCondition(new Operand("Door", true), '==', new Operand('true', false), 'desc');
 
-    var values = [3,2,true,4];
-    chai.expect(expressionHandler.evaluate(values)).to.be.true;
-  });
+        expressionHandler.addExpression(valueComparison1);
+        expressionHandler.addExpression(valueComparison2);
+        expressionHandler.addExpression(booleanComparison);
+        expressionHandler.addExpression(valueComparison3);
 
-  it("Evaluate correctly expressions to false", () => {
-    var valueComparison1:ValueComparison = new ValueComparison("Température", 'inf', 0,'desc');
-    var valueComparison2:ValueComparison = new ValueComparison("Température", 'inf', 10,'desc');
-    var valueComparison3:ValueComparison = new ValueComparison("Température", 'eq', 4,'desc');
-    var booleanComparison:BooleanComparison = new BooleanComparison("Door", 'eq', true,'desc');
-    expressionHandler.addExpression(valueComparison1);
-    expressionHandler.addExpression(valueComparison2);
-    expressionHandler.addExpression(booleanComparison);
-    expressionHandler.addExpression(valueComparison3);
+        var values:string[][] = [['3'], ['2'], ['true'], ['4']];
+        chai.expect(expressionHandler.evaluate(values)).to.be.false;
+    });
 
-    var values = [3,2,true,4];
-    chai.expect(expressionHandler.evaluate(values)).to.be.false;
-  });
+    it("Should throw an error", () => {
+        var valueComparison1:GoalCondition = new GoalCondition(new Operand("Température", true), '<', new Operand('0', false), 'desc');
+        var valueComparison2:GoalCondition = new GoalCondition(new Operand("Température", true), '<', new Operand('10', false), 'desc');
 
-  it("Should throw an error", () => {
-    var valueComparison1:ValueComparison = new ValueComparison("Température", 'inf', 0, 'desc');
-    var valueComparison2:ValueComparison = new ValueComparison("Température", 'inf', 10,'desc');
-    expressionHandler.addExpression(valueComparison1);
-    expressionHandler.addExpression(valueComparison2);
+        expressionHandler.addExpression(valueComparison1);
+        expressionHandler.addExpression(valueComparison2);
 
-    var values = [3];
+        var values:string[][] = [['3']];
 
-    chai.expect(() => expressionHandler.evaluate(values)).to.throw(Error);
-  });
+        chai.expect(() => expressionHandler.evaluate(values)).to.throw(Error);
+    });
 
 });

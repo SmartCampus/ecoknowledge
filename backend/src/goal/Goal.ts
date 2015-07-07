@@ -35,11 +35,11 @@ class Goal {
     this.expressions.addExpression(expression);
   }
   
-  public evaluate(values:(number|boolean)[]):boolean {
+  public evaluate(values:string[][]):boolean {
     return this.expressions.evaluate(values);
   }
 
-  public getRequired():any {
+  public getRequired():string[][] {
     return this.expressions.getRequired();
   }
 

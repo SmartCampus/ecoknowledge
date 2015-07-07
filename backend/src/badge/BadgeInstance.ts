@@ -10,15 +10,18 @@ class BadgeInstance {
     private progress:number;
     private user:User;
     private status:BadgeStatus;
-    private sensors:string[];
 
-    constructor(name:string, description:string, points:number, goals:Goal[], user:User, sensors:string[]){
+    //  mapGoalToConditionAndSensor.goalID -> [ {'name':'ac_443'}, ...]
+    private mapGoalToConditionAndSensor:any={};
+
+    constructor(name:string, description:string, points:number,
+                goals:Goal[], user:User, mapGoalToConditionAndSensor:any){
         this.badgeDef = new BadgeDefinition(name, description, points, goals);
         this.progress = 0;
         this.id = UUID.v4();
         this.user = user;
         this.status = BadgeStatus.WAIT;
-        this.sensors = sensors;
+        this.mapGoalToConditionAndSensor = mapGoalToConditionAndSensor;
     }
 
     //name:string, description:string, points:number, goals:Goal[], user:User, sensors:string[]
@@ -63,11 +66,11 @@ class BadgeInstance {
     }
 
     public getSensors():string[]{
-        return this.sensors;
+        return this.mapGoalToConditionAndSensor;
     }
     
-    public evaluate(values:any[]):boolean {
-        return this.badgeDef.evaluate(values, this.sensors);
+    public evaluate(values:any):boolean {
+        return this.badgeDef.evaluate(values, this.mapGoalToConditionAndSensor);
     }
 };
 

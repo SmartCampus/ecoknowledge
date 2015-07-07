@@ -1,7 +1,6 @@
 
 import Expression = require('./Expression');
-import ValueComparison = require('./ValueComparison');
-import BooleanComparison = require('./BooleanComparison');
+import GoalCondition = require('./GoalCondition');
 
 class ExpressionHandler {
 
@@ -15,19 +14,17 @@ class ExpressionHandler {
     this.expressions.push(expression);
   }
 
-  public getRequired():string[] {
-    var result = [];
+  public getRequired():string[][] {
+    var result:string[][] = [];
 
     for(var i in this.expressions) {
-      if(result.indexOf(this.expressions[i].getRequired()) == -1) {
         result.push(this.expressions[i].getRequired());
-      }
     }
 
     return result;
   }
 
-  public evaluate(values:(number|boolean)[]):boolean {
+  public evaluate(values:string[][]):boolean {
 
     if(this.expressions.length != values.length) {
       throw new Error('Can not evaluate expressions ! There are ' + this.expressions.length + ' expressions and ' + values.length + ' values to bind.');

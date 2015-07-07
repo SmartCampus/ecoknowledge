@@ -45,6 +45,20 @@ describe('Test GoalCondition', () => {
             chai.expect(condition.getRequired()).to.be.eqls(expected);
         });
 
+        it('should have proper left operand', () => {
+            condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
+            chai.expect(condition.hasLeftOperand('TMP_Cli')).to.be.true;
+        });
+
+        it('should have proper right operand', () => {
+            condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
+            chai.expect(condition.hasRightOperand('10')).to.be.true;
+        });
+
+        it('should have proper type of comparison', () => {
+            condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
+            chai.expect(condition.getComparisonType()).to.be.eq(typeOfComparison);
+        });
 
     });
 
