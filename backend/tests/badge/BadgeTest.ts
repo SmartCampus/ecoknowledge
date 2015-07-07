@@ -9,7 +9,7 @@ var assert = chai.assert;
 
 import Badge = require('../../src/badge/Badge');
 import Goal = require('../../src/goal/Goal');
-import ValueComparison = require('../../src/goal/condition/ValueComparison');
+import GoalCondition = require('../../src/goal/condition/GoalCondition');
 
 describe("Badge test", () => {
 

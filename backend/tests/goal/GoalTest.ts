@@ -9,7 +9,8 @@ var assert = chai.assert;
 
 import Goal = require('../../src/goal/Goal');
 import ExpressionHandler = require('../../src/goal/condition/ExpressionHandler');
-import ValueComparison = require('../../src/goal/condition/ValueComparison');
+import GoalCondition = require('../../src/goal/condition/GoalCondition');
+import Operand = require('../../src/goal/condition/Operand');
 
 describe("Build a goal", function () {
   var goal:Goal;
@@ -36,7 +37,7 @@ describe("Add a condition to a goal", () => {
   });
 
   it('should be possible to add an expression', () => {
-   var comparison:ValueComparison = new ValueComparison('Temp','inf',10,'desc');
+    var comparison:GoalCondition = new GoalCondition(new Operand("Température",true), 'inf', new Operand('10',false), 'desc');
     chai.expect(goal.addCondition(comparison)).not.to.throw;
   });
 });
