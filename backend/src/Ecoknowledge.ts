@@ -1,6 +1,6 @@
-import GoalProvider = require('./GoalProvider');
-import BadgeProvider = require('./BadgeProvider');
-import UserProvider = require('./UserProvider');
+import GoalProvider = require('./goal/GoalProvider');
+import BadgeProvider = require('./badge/BadgeProvider');
+import UserProvider = require('./user/UserProvider');
 
 class Ecoknowledge {
     private goalProvider:GoalProvider;

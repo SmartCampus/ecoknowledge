@@ -1,7 +1,7 @@
 import BadgeInstance = require('./BadgeInstance');
 import BadgeFactory = require('./BadgeFactory');
-import GoalProvider = require('./GoalProvider');
-import UserProvider = require('./UserProvider');
+import GoalProvider = require('../goal/GoalProvider');
+import UserProvider = require('../user/UserProvider');
 
 class BadgeProvider {
 

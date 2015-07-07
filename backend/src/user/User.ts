@@ -1,7 +1,7 @@
-/// <reference path="../typings/node-uuid/node-uuid.d.ts" />
+/// <reference path="../../typings/node-uuid/node-uuid.d.ts" />
 
-import Goal = require('./Goal');
-import BadgeInstance = require('./BadgeInstance');
+import Goal = require('../goal/Goal');
+import BadgeInstance = require('../badge/BadgeInstance');
 
 import uuid = require('node-uuid');
 

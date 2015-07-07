@@ -1,8 +1,8 @@
-/// <reference path="../typings/node-uuid/node-uuid.d.ts" />
+/// <reference path="../../typings/node-uuid/node-uuid.d.ts" />
 
 
-import ExpressionHandler = require('./ExpressionHandler');
-import Expression = require('./Expression');
+import ExpressionHandler = require('./condition/ExpressionHandler');
+import Expression = require('./condition/Expression');
 import uuid = require('node-uuid');
 
 class Goal {

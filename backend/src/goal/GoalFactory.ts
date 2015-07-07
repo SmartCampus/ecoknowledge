@@ -1,5 +1,5 @@
 import Goal = require('./Goal');
-import ExpressionFactory = require('./ExpressionFactory');
+import ExpressionFactory = require('./condition/ExpressionFactory');
 
 class GoalFactory {
 

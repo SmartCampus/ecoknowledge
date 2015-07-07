@@ -1,13 +1,13 @@
-/// <reference path="../typings/mocha/mocha.d.ts" />
-/// <reference path="../typings/chai/chai.d.ts" />
-/// <reference path="../typings/sinon/sinon.d.ts" />
+/// <reference path="../../../typings/mocha/mocha.d.ts" />
+/// <reference path="../../../typings/chai/chai.d.ts" />
+/// <reference path="../../../typings/sinon/sinon.d.ts" />
 
 import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
 
-import ValueComparison = require('../src/ValueComparison');
+import ValueComparison = require('../../../src/goal/condition/ValueComparison');
 
 describe("Evaluate an 'value' expression like X < 20", () => {
   describe("Build an expression with a unknown comparison type", () => {
@@ -89,7 +89,7 @@ describe("Evaluate an 'value' expression like X < 20", () => {
 });
 
 
-import BooleanComparison = require('../src/BooleanComparison');
+import BooleanComparison = require('../../../src/goal/condition/BooleanComparison');
 
 describe("Evaluate a boolean check like door == false", () => {
   describe("Build an expression with a unknown comparison type", () => {
