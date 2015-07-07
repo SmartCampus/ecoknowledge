@@ -29,6 +29,18 @@ class BadgeProvider {
 
         return null;
     }
+
+    public getListOfBadgesInJsonFormat():any[] {
+        var result = [];
+        for (var i in this.badges) {
+            var currentBadgeDesc:any = {};
+            currentBadgeDesc.name = this.badges[i].getName();
+            currentBadgeDesc.id = this.badges[i].getId();
+            result.push(currentBadgeDesc);
+        }
+
+        return result;
+    }
 }
 
 export = BadgeProvider;

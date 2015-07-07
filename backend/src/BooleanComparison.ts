@@ -6,8 +6,9 @@ class BooleanComparison implements Expression {
   protected required:string;
   protected typeOfComparison:string;
   protected thresholdValue:boolean;
+  protected description:string;
 
-  constructor(required:string, comparison:string, thresholdValue:boolean) {
+  constructor(required:string, comparison:string, thresholdValue:boolean, description:string) {
     if (this.allowedComparison.indexOf(comparison) == -1) {
       throw new Error("Can not apply comparison " + comparison + " on a boolean expression. Only " + this.allowedComparison.toString() + " allowed.");
     }
@@ -15,6 +16,7 @@ class BooleanComparison implements Expression {
     this.required = required;
     this.typeOfComparison = comparison;
     this.thresholdValue = thresholdValue;
+    this.description = description;
   }
 
   public getRequired():string {
@@ -31,7 +33,8 @@ class BooleanComparison implements Expression {
     return  {
       "required":this.required,
       "comparison":this.typeOfComparison,
-      "value":this.thresholdValue
+      "value":this.thresholdValue,
+      "description":this.description
     }
   }
 }

@@ -21,6 +21,10 @@ class Ecoknowledge {
         return this.goalProvider.getListOfGoalsInJsonFormat();
     }
 
+    public getListOfBadges():any[] {
+        return this.badgeProvider.getListOfBadgesInJsonFormat();
+    }
+
     public addGoal(data:any):string {
         return this.goalProvider.addGoal(data);
     }

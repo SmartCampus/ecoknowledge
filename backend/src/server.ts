@@ -26,8 +26,9 @@ import EcoKnowledge = require('./Ecoknowledge');
 
 var userProvider:UserProvider = new UserProvider();
 var badgeProvider:BadgeProvider = new BadgeProvider();
+var goalProvider:GoalProvider = new GoalProvider();
 
-var ecoknowledge:EcoKnowledge = new EcoKnowledge(new GoalProvider(),badgeProvider, userProvider);
+var ecoknowledge:EcoKnowledge = new EcoKnowledge(goalProvider,badgeProvider, userProvider);
 userProvider.addUser(currentUser);
 console.log(currentUser.getUUID());
 
@@ -58,6 +59,7 @@ app.get('/helloworld/:slug', jsonParser, function (req, res, next) {
   res.send("Hello  world!");
 });
 
+// http://localhost:3000/goals/779d6640-e489-4af3-9727-8eed7860cba8
 app.get('/goals/:id', jsonParser, function (req, res, next) {
   console.log('\n++ Get : /goal asked ....');
   if(!req.params.id){
@@ -74,20 +76,15 @@ app.get('/goals/:id', jsonParser, function (req, res, next) {
 });
 
 app.get('/goals', jsonParser, function (req, res, next) {
-  console.log('\nNo slug');
+    console.log('\nNo slug');
   var result = ecoknowledge.getListOfGoals();
   console.log("++ Sending", result);
   res.send(result);
 });
 
 app.get('/badges', jsonParser, function (req, res, next) {
-  var badges = currentUser.getBadges();
 
-  var result = [];
-  for (var i in badges) {
-    var currentBadgeDesc = badges[i];
-    result.push(currentBadgeDesc);
-  }
+  var result = ecoknowledge.getListOfBadges();
   console.log("++ Sending", result);
 
   res.send(result);
@@ -184,12 +181,5 @@ app.post('/evaluategoal', jsonParser, function (req, res) {
 });
 
 app.listen(port);
-
-var goal:Goal = new Goal("ObjectifDebug");
-goal.addConditionByDescription("Température", 'inf', 20);
-goal.addConditionByDescription("Température", 'sup', 0);
-
-currentUser.addGoal(goal);
-console.log("Ajout d'un objectif de debug");
 
 console.log("Server started");

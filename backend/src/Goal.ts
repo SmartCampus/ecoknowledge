@@ -31,14 +31,6 @@ class Goal {
     return this.name;
   }
 
-  public addConditionByDescription(required:string, typeOfComparison:string, value:number|boolean) {
-    if (!typeOfComparison) {
-      throw new Error('Bad argument : typeOfComparison given is null');
-    }
-
-    this.expressions.addExpressionByDescription(required, typeOfComparison, value);
-  }
-
   public addCondition(expression:Expression) {
     this.expressions.addExpression(expression);
   }
