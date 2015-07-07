@@ -8,6 +8,8 @@ var assert = chai.assert;
 
 
 import Goal = require('../src/Goal');
+import ExpressionHandler = require('../src/ExpressionHandler');
+import ValueComparison = require('../src/ValueComparison');
 
 describe("Build a goal", function () {
   var goal:Goal;
@@ -29,13 +31,13 @@ describe("Add a condition to a goal", () => {
     goal = new Goal("aGoal");
   });
 
-  it("should throw an error when typeOfComparison given is null", () => {
-    chai.expect(() => goal.addCondition("", null, 0)).to.throw(Error);
+  it('should have its own uuid', () => {
+    chai.expect(goal.hasUUID(goal.getUUID())).to.be.true;
   });
 
-  it("should add it to the goal conditions", () => {
-    goal.addCondition("Température", 'sup', 0);
-    chai.expect(() => goal.evaluate([5])).not.to.throw(Error);
+  it('should be possible to add an expression', () => {
+   var comparison:ValueComparison = new ValueComparison('Temp','inf',10,'desc');
+    chai.expect(goal.addCondition(comparison)).not.to.throw;
   });
 });
 

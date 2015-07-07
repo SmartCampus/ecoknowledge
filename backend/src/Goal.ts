@@ -1,6 +1,12 @@
+/// <reference path="../typings/node-uuid/node-uuid.d.ts" />
+
+
 import ExpressionHandler = require('./ExpressionHandler');
+import Expression = require('./Expression');
+import uuid = require('node-uuid');
 
 class Goal {
+  private id;
   private name:string;
   private expressions:ExpressionHandler = new ExpressionHandler();
 
@@ -10,20 +16,25 @@ class Goal {
     }
 
     this.name = name;
+    this.id = uuid.v4();
+  }
+
+  public getUUID() {
+    return this.id;
+  }
+
+  public hasUUID(aUUID:string):boolean {
+    return this.id === aUUID;
   }
 
   public getName():string {
     return this.name;
   }
 
-  public addCondition(required:string, typeOfComparison:string, value:number|boolean) {
-    if (!typeOfComparison) {
-      throw new Error('Bad argument : typeOfComparison given is null');
-    }
-
-    this.expressions.addExpressionByDescription(required, typeOfComparison, value);
+  public addCondition(expression:Expression) {
+    this.expressions.addExpression(expression);
   }
-
+  
   public evaluate(values:(number|boolean)[]):boolean {
     return this.expressions.evaluate(values);
   }

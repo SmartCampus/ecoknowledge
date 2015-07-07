@@ -12,14 +12,14 @@ import ValueComparison = require('../src/ValueComparison');
 describe("Evaluate an 'value' expression like X < 20", () => {
   describe("Build an expression with a unknown comparison type", () => {
     var expression:ValueComparison;
-    chai.expect(() => expression = new ValueComparison("Température", "anUnknownComparisonType", 2)).to.throw(Error);
+    chai.expect(() => expression = new ValueComparison("Température", "anUnknownComparisonType", 2,'desc')).to.throw(Error);
   });
 
   describe("Evaluate an expression with inf", () => {
     var expression:ValueComparison;
 
     beforeEach(() => {
-      expression = new ValueComparison("Température", "inf", 10);
+      expression = new ValueComparison("Température", "inf", 10,'desc');
     });
 
     it("should return true if given parameter value is lower than the goalValue", () => {
@@ -37,7 +37,7 @@ describe("Evaluate an 'value' expression like X < 20", () => {
     var goal:ValueComparison;
 
     beforeEach(() => {
-      goal = new ValueComparison("Température", "sup", 10);
+      goal = new ValueComparison("Température", "sup", 10,'desc');
     });
 
     it("should return true if given parameter value is greater than the goalValue", () => {
@@ -55,7 +55,7 @@ describe("Evaluate an 'value' expression like X < 20", () => {
     var goal:ValueComparison;
 
     beforeEach(() => {
-      goal = new ValueComparison("Température", "eq", 10);
+      goal = new ValueComparison("Température", "eq", 10,'desc');
     });
 
     it("should return false if given parameter value is greater than the goalValue", () => {
@@ -73,7 +73,7 @@ describe("Evaluate an 'value' expression like X < 20", () => {
     var goal:ValueComparison;
 
     beforeEach(() => {
-      goal = new ValueComparison("Température", "dif", 10);
+      goal = new ValueComparison("Température", "dif", 10,'desc');
     });
 
     it("should return true if given parameter value is greater than the goalValue", () => {
@@ -94,14 +94,14 @@ import BooleanComparison = require('../src/BooleanComparison');
 describe("Evaluate a boolean check like door == false", () => {
   describe("Build an expression with a unknown comparison type", () => {
     var expression:BooleanComparison;
-    chai.expect(() => expression = new BooleanComparison("Door", "anUnknownComparisonType", false)).to.throw(Error);
+    chai.expect(() => expression = new BooleanComparison("Door", "anUnknownComparisonType", false,'desc')).to.throw(Error);
   });
 
   describe("Evaluate a check with eq", () => {
     var goal:BooleanComparison;
 
     beforeEach(() => {
-      goal = new BooleanComparison("Porte", "eq", true);
+      goal = new BooleanComparison("Porte", "eq", true,'desc');
     });
 
     it("should return true if given parameter value is true", () => {
@@ -116,7 +116,7 @@ describe("Evaluate a boolean check like door == false", () => {
     var goal:BooleanComparison;
 
     beforeEach(() => {
-      goal = new BooleanComparison("Porte", "dif", false);
+      goal = new BooleanComparison("Porte", "dif", false,'desc');
     });
 
     it("should return true if given parameter value is true", () => {

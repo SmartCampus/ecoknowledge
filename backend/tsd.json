@@ -34,6 +34,9 @@
     },
     "async/async.d.ts": {
       "commit": "c7b1128cc9a8f5797bade826e7632b36b06a856c"
+    },
+    "node-uuid/node-uuid.d.ts": {
+      "commit": "d73cbcb405788eb85cc4a4167b963ef4dd630cdc"
     }
   }
 }

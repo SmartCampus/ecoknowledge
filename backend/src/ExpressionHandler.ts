@@ -15,16 +15,6 @@ class ExpressionHandler {
     this.expressions.push(expression);
   }
 
-  public addExpressionByDescription(required:string, typeOfComparison:string, value:number|boolean) {
-
-    if(typeof(value) === "number") {
-      this.addExpression(new ValueComparison(required, typeOfComparison, <number>value));
-    }
-    else {
-      this.addExpression(new BooleanComparison(required, typeOfComparison, <boolean>value));
-    }
-  }
-
   public getRequired():string[] {
     var result = [];
 

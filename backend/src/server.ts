@@ -18,6 +18,20 @@ import Badge = require('./Badge');
 
 var currentUser:User = new User("Jackie");
 
+import GoalProvider = require('./GoalProvider');
+import BadgeProvider = require('./BadgeProvider');
+import UserProvider = require('./UserProvider');
+
+import EcoKnowledge = require('./Ecoknowledge');
+
+var userProvider:UserProvider = new UserProvider();
+var badgeProvider:BadgeProvider = new BadgeProvider();
+var goalProvider:GoalProvider = new GoalProvider();
+
+var ecoknowledge:EcoKnowledge = new EcoKnowledge(goalProvider,badgeProvider, userProvider);
+userProvider.addUser(currentUser);
+console.log(currentUser.getUUID());
+
 // Enable JSON data for requests
 //app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
@@ -40,56 +54,37 @@ app.use(function (req, res, next) {
 var args = process.argv;
 var port = args[2] || 3000;
 
-
 app.get('/helloworld/:slug', jsonParser, function (req, res, next) {
   console.log("HELLOWORLD");
   res.send("Hello  world!");
 });
 
+// http://localhost:3000/goals/779d6640-e489-4af3-9727-8eed7860cba8
 app.get('/goals/:id', jsonParser, function (req, res, next) {
   console.log('\n++ Get : /goal asked ....');
   if(!req.params.id){
     next();
   }
-  var result:any = {};
-  var idGoal:string = req.params.id;
-  console.log('id goal : ',idGoal);
-  var goal:Goal = currentUser.retrieveGoal(idGoal);
-  if(goal!=null){
-    result.data = goal;
-    result.success = true;
-    console.log('goal name : ',goal.getName);
-  }
+
+  console.log("ID :", req.params.id);
+
+  var goalUUID:string = req.params.id;
+  var result:any = ecoknowledge.getGoalDescription(goalUUID);
 
   console.log("++ Sending", result);
   res.send(result);
 });
 
 app.get('/goals', jsonParser, function (req, res, next) {
-  console.log('\nNo slug');
-
-  var goals:Goal[] = currentUser.getGoals();
-  var result:any = {};
-  var data:any[] = [];
-
-  for (var i in goals) {
-    data.push(goals[i].getName());
-  }
-
-  result.data = data;
-  result.success = true;
+    console.log('\nNo slug');
+  var result = ecoknowledge.getListOfGoals();
   console.log("++ Sending", result);
   res.send(result);
 });
 
 app.get('/badges', jsonParser, function (req, res, next) {
-  var badges = currentUser.getBadges();
 
-  var result = [];
-  for (var i in badges) {
-    var currentBadgeDesc = badges[i];
-    result.push(currentBadgeDesc);
-  }
+  var result = ecoknowledge.getListOfBadges();
   console.log("++ Sending", result);
 
   res.send(result);
@@ -118,32 +113,7 @@ app.get('/required', jsonParser, function(req,res,next) {
 
 app.post('/addgoal', jsonParser, function (req, res) {
   var actionData = req.body;
-  console.log(actionData);
-
-  var goalName:string = actionData.name;
-  var newGoal:Goal = new Goal(goalName);
-
-  console.log("Construction de l'objectif ", newGoal.getName());
-
-  var goalConditions:any[] = actionData.conditions;
-
-  console.log("\tConstruction des conditions de succès ...");
-  for (var i = 0; i < goalConditions.length; i++) {
-    var currentCondition = goalConditions[i];
-
-    console.log("\t\tCondition courante", currentCondition);
-
-    var required:string = currentCondition.required;
-    var comparison:string = currentCondition.comparison;
-    var thresholdValue:boolean|number = currentCondition.value;
-
-    console.log("\t\t\tCréation de la condition avec", required, comparison, thresholdValue);
-
-    newGoal.addCondition(required,comparison,thresholdValue);
-  }
-
-  var result = currentUser.addGoal(newGoal);
-
+  var result = ecoknowledge.addGoal(actionData);
   res.send(result);
 });
 
@@ -151,32 +121,27 @@ app.post('/addbadge', jsonParser, function (req, res) {
   var actionData = req.body;
   console.log(actionData);
 
-  var badgeName:string = actionData.name;
-  var badgeDescription:string = actionData.description;
-  var badgeGoal:string = actionData.currentGoal.name;
-  var badgePoints:number = actionData.points;
-  var badgeSensors:any[] = actionData.currentGoal.conditions;
-
-  var sensors:string[] = [];
-  for(var i = 0 ; i < badgeSensors.length ; i ++) {
-    sensors.push(badgeSensors[i].sensor.id);
-  }
-
-  var goal = currentUser.retrieveGoal(badgeGoal);
-  console.log("Log pour le badge en cours .. ", goal);
-
-  var badge:Badge = new Badge(badgeName, badgeDescription, badgePoints, [goal], sensors);
-  currentUser.addBadge(badge);
+  //TODO : need to add a userUUID in request
+  var result = ecoknowledge.addBadge(actionData);
 
   res.send("OK");
 });
 
-app.get('/evaluatebadge', jsonParser, function (req, res) {
-  var badgeName:string = req.query.badgeName;
-  var badge:Badge = currentUser.retrieveBadge(badgeName);
 
-  var required:string[] = badge.getRequired();
+//TODO move async calls
+import BadgeInstance = require('./BadgeInstance');
+
+//TODO need a badgeID in request
+app.get('/evaluatebadge', jsonParser, function (req, res) {
+  var badgeID:string = req.query.badgeID;
+
+  var badge:BadgeInstance = badgeProvider.getBadge(badgeID);
+
+  //TODO move what follow
+  var required:string[] = badge.getSensors();
   var sensorsValues:any = {};
+
+  console.log("SENSORS TO GET : ", required);
 
   async.times(required.length, function(n, next) {
     var path = 'http://smartcampus.unice.fr/sensors/' + required[n] + '/data/last';
@@ -210,27 +175,11 @@ app.get('/evaluatebadge', jsonParser, function (req, res) {
 app.post('/evaluategoal', jsonParser, function (req, res) {
   var actionData = req.body;
   console.log(actionData);
-
-  var goalName:string = actionData.name;
-  var goalValues:any[] = actionData.values;
-
-  var values = [];
-  for(var i = 0 ; i < goalValues.length ; i++) {
-    values.push(goalValues[i].value);
-  }
-
-  var result = currentUser.evaluateGoal(goalName, values);
+  var result = ecoknowledge.evaluateGoal(actionData);
   res.send(result);
 
 });
 
 app.listen(port);
-
-var goal:Goal = new Goal("ObjectifDebug");
-goal.addCondition("Température", 'inf', 20);
-goal.addCondition("Température", 'sup', 0);
-
-currentUser.addGoal(goal);
-console.log("Ajout d'un objectif de debug");
 
 console.log("Server started");
