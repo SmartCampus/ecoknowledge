@@ -1,15 +1,15 @@
-/// <reference path="../typings/mocha/mocha.d.ts" />
-/// <reference path="../typings/chai/chai.d.ts" />
-/// <reference path="../typings/sinon/sinon.d.ts" />
+/// <reference path="../../../typings/mocha/mocha.d.ts" />
+/// <reference path="../../../typings/chai/chai.d.ts" />
+/// <reference path="../../../typings/sinon/sinon.d.ts" />
 
 import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
 
-import ValueComparison = require('../src/ValueComparison');
-import BooleanComparison = require('../src/BooleanComparison');
-import ExpressionHandler = require('../src/ExpressionHandler');
+import ValueComparison = require('../../../src/goal/condition/ValueComparison');
+import BooleanComparison = require('../../../src/goal/condition/BooleanComparison');
+import ExpressionHandler = require('../../../src/goal/condition/ExpressionHandler');
 
 describe("ExpressionHandler test", () => {
 

@@ -1,15 +1,15 @@
-/// <reference path="../typings/mocha/mocha.d.ts" />
-/// <reference path="../typings/chai/chai.d.ts" />
-/// <reference path="../typings/sinon/sinon.d.ts" />
+/// <reference path="../../typings/mocha/mocha.d.ts" />
+/// <reference path="../../typings/chai/chai.d.ts" />
+/// <reference path="../../typings/sinon/sinon.d.ts" />
 
 import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
 
-import Badge = require('../src/Badge');
-import Goal = require('../src/Goal');
-import ValueComparison = require('../src/ValueComparison');
+import Badge = require('../../src/badge/Badge');
+import Goal = require('../../src/goal/Goal');
+import ValueComparison = require('../../src/goal/condition/ValueComparison');
 
 describe("Badge test", () => {
 

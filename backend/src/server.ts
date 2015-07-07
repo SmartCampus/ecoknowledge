@@ -12,15 +12,15 @@ var app = express();
 var jsonParser = bodyParser.json();
 var xmlParser = bodyParser.text({type: "application/xml"});
 
-import Goal = require('./Goal');
-import User = require('./User');
-import Badge = require('./Badge');
+import Goal = require('./goal/Goal');
+import User = require('./user/User');
+import Badge = require('./badge/Badge');
 
 var currentUser:User = new User("Jackie");
 
-import GoalProvider = require('./GoalProvider');
-import BadgeProvider = require('./BadgeProvider');
-import UserProvider = require('./UserProvider');
+import GoalProvider = require('./goal/GoalProvider');
+import BadgeProvider = require('./badge/BadgeProvider');
+import UserProvider = require('./user/UserProvider');
 
 import EcoKnowledge = require('./Ecoknowledge');
 
@@ -129,7 +129,7 @@ app.post('/addbadge', jsonParser, function (req, res) {
 
 
 //TODO move async calls
-import BadgeInstance = require('./BadgeInstance');
+import BadgeInstance = require('./badge/BadgeInstance');
 
 //TODO need a badgeID in request
 app.get('/evaluatebadge', jsonParser, function (req, res) {
