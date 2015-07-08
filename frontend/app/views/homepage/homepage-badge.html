@@ -1,13 +1,27 @@
-<span class="badge-container">
-    <h3 class="badge-name">{{badge.name}}</h3>
-    <p class="badge-desc">{{badge.description}}</p>
-    <p class="badge-goal">Objectif : {{badge.objectives[0].name}}</p>
-    <p class="badge-points">Valeur du badge : {{badge.points}} points!</p>
+<div class="badge-container">
+  <table>
+    <tr>
+      <td>
+        <h3 class="badge-name">{{badge.name}}</h3>
+      </td>
+      <td>
+        <p class="badge-points">{{badge.points}} points!</p>
+      </td>
+      <td>
+        <p>Sparks</p>
+      </td>
+    </tr>
 
-<form name="badgeValidateForm" class="form badge-check" ng-submit="badgeValidateForm.$valid && homeCtrl.check(badge)" novalidate>
-    <input type="submit" class="btn btn-default" value="Vérifier obtention">
-</form>
-<p ng-if="badge.yes" class="bg-success badge-status-success">Badge Obtenu !!!</p>
-<p ng-if="badge.fail" class="bg-danger badge-status-fail">TRY AGAIN !</p>
+    <tr>
+      <td colspan="3">
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="{{badge.progress}}"
+               aria-valuemin="0" aria-valuemax="100" style="width:{{badge.progress}}%">
+            {{badge.progress}}% Complete
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
 
-  </span>
+</div>

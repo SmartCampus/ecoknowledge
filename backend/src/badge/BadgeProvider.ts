@@ -54,7 +54,19 @@ class BadgeProvider {
             currentBadgeDesc.id = this.badges[i].getId();
             currentBadgeDesc.points = this.badges[i].getPoints();
             currentBadgeDesc.desc = this.badges[i].getDescription();
-            currentBadgeDesc.status = this.badges[i].getStatus();
+
+            var statusDesc:string = '';
+            var badgeStatus:number = this.badges[i].getStatus();
+
+            switch(badgeStatus) {
+                case 0:statusDesc = 'WAIT';break;
+                case 1:statusDesc = 'RUNNING';break;
+                case 2:statusDesc = 'SUCCESS';break;
+                case 3:statusDesc = 'FAIL';break;
+                default: statusDesc = 'UNKNOWN';break;
+            }
+
+            currentBadgeDesc.status = statusDesc;
             result.push(currentBadgeDesc);
         }
 
