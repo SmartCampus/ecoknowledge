@@ -104,9 +104,8 @@ class GoalCondition implements Expression{
         return this.leftOperand.getStringDescription() + this.typeOfComparison + this.rightOperand.getStringDescription();
     }
 
-    //TODO
     public getData():any {
-
+        return this.leftOperand.getStringDescription() + this.typeOfComparison + this.rightOperand.getStringDescription();
     }
 }
 

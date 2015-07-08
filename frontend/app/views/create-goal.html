@@ -46,13 +46,19 @@
                             <option ng-if="typeValeurComparaison=='boolean'" value="boolean">Booléen</option>
                         </select>
 
-                        <input ng-if="typeRight=='number'" type="number" name="tempInput" class="form-control" placeholder="Valeur"
-                               ng-model="iteration.value" ng-required="typeValeurComparaison == 'number'">
-                        <input ng-if="typeRight=='sensor'" type="text" placeholder="Valeur de la variable" ng-model="iteration.valueRight.value" required>
-                        <input ng-if="typeRight=='string'" type="text" name="tempInput" class="form-control" placeholder="Texte attendu"
-                               ng-model="iteration.value" ng-required="typeValeurComparaison=='string'">
+                        <input ng-if="typeRight=='number'" type="number" name="tempInput" class="form-control"
+                               placeholder="Valeur" ng-model="iteration.valueRight.value"
+                               ng-required="typeValeurComparaison == 'number'">
+                        <input ng-if="typeRight=='sensor'" type="text" placeholder="Valeur de la variable"
+                               ng-model="iteration.valueRight.value" required>
+                        <input ng-if="typeRight=='string'" type="text" name="tempInput" class="form-control"
+                               placeholder="Texte attendu" ng-model="iteration.valueRight.value"
+                               ng-required="typeValeurComparaison=='string'">
 
                         <boolean-form></boolean-form>
+
+                        <input type="text" name="descriptionCondition" class="form-control" placeholder="Description de la condition"
+                               ng-model="iteration.description" required>
                     </div>
                 </div>
                 <br/><br/>

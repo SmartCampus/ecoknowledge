@@ -44,7 +44,7 @@ describe('Service: ServiceGoal', function() {
                     {'required': 'Temperature', 'comparison': 'inf', 'value': 25}
                 ]
             };
-            var mockResult = {'success':true, 'data':[mockClim, mockPatrick]};
+            var mockResult = mockClim, mockPatrick;
             //backend definition returns a mock user
             httpBackend.when('GET',path +'goals/').respond(mockResult);
             httpBackend.expectGET(path+'goals/');
@@ -54,7 +54,7 @@ describe('Service: ServiceGoal', function() {
 
             expect(callbacks.success).toHaveBeenCalled();
             expect(callbacks.error).not.toHaveBeenCalled();
-            expect(callbacks.success.calls.argsFor(0)).toEqual([mockResult.data]);
+            expect(callbacks.success.calls.argsFor(0)).toEqual([mockResult]);
         });
     });
 
