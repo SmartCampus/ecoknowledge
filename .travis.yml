@@ -6,6 +6,7 @@ before_script:
   - 'npm install -g bower grunt-cli tsd'
   - 'cd backend'
   - 'npm install'
+  - 'tsd rate'
   - 'tsd install'
   - 'grunt test'
   - 'cd ../frontend'
