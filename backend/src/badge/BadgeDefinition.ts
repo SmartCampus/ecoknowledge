@@ -5,13 +5,13 @@ class BadgeDefinition {
   private name:string;
   private description:string;
   private points:number;
-  private objectives:Goal[];
+  private goals:Goal[];
 
   constructor(name:string, description:string, points:number, goal:Goal[]) {
     this.name = name;
     this.description = description;
     this.points = points;
-    this.objectives = goal;
+    this.goals = goal;
   }
 
   public getName():string {
@@ -27,7 +27,18 @@ class BadgeDefinition {
   }
 
   public getObjectives():Goal[] {
-    return this.objectives;
+    return this.goals;
+  }
+
+  private retrieveGoal(goalUUID:string):Goal {
+    for(var i in this.goals) {
+      var currentGoal = this.goals[i];
+      if(currentGoal.hasUUID(goalUUID)) {
+        return currentGoal;
+      }
+    }
+
+    return null;
   }
 
   public getSensorsTypeRequired():string[] {
@@ -42,37 +53,53 @@ class BadgeDefinition {
     return null;
   }
 
-  public evaluate(values:string[][], sensorsValues:string[]):boolean {
+
+  /**
+   *
+   * @param values
+   *
+   * {
+   *      '<goalID>' :
+   *
+   *          - array describing all goal conditions of goal goalID
+   *          [
+   *
+   *              - each condition can have multiple required field
+   *              [
+   *
+   *                      -describing a required of a condition
+   *                      {
+   *                          'name' : <string>           - symbolic name of the required field, eg : 'Temp_cli',
+   *                          'sensor' : 'sensor_id ',    - sensor id bound to achieve current goal condition, eg : 'AC_443',
+   *                          'value' : <number>          - current value of specified sensor
+   *                       }
+   *              ]
+   *
+   *          ]
+   * }
+   *
+   * @returns {boolean}
+   */
+  public evaluate(values:any):boolean {
+
+    var numberOfGoals = Object.keys(values).length;
     var result = true;
 
-     if(this.objectives.length != values.length) {
-      throw new Error("Can not evaluate badge " + this.name + "! There are " + this.objectives + " objectives to evaluate" +
-          "and only " + values.length + " values");
+     if(this.goals.length != numberOfGoals) {
+      throw new Error("Can not evaluate badge " + this.name + "! There are " + this.goals
+          + " objectives to evaluate and only " + numberOfGoals + " values");
     }
 
-    var sortedSensorValues:(number|boolean)[] = [];
-    console.log("VALUES : ", values);
-    for(var j = 0 ; j < sensorsValues.length ; j ++) {
-      console.log("SENSORS/KEY", sensorsValues[j]);
-      console.log("BASE", values[0]);
-      console.log(values[0][sensorsValues[j]]);
-
-      sortedSensorValues.push(values[0][sensorsValues[j]]);
+    for(var currentGoalUUID in values) {
+      var currentGoal:Goal = this.retrieveGoal(currentGoalUUID);
+      var currentConditionsDesc:any = values[currentGoalUUID];
+      result = result && currentGoal.evaluate(currentConditionsDesc);
     }
-
-    console.log("Sorted values", sortedSensorValues);
-    console.log("OBJECTIFS : ", JSON.stringify(this.objectives,null,3));
-    for(var i = 0 ; i < this.objectives.length ; i ++) {
-      // result = result && this.objectives[i].evaluate(sortedSensorValues);
-      console.log("Goal : ", result);
-      if(!result) {
-        return false;
-      }
-    }
-
 
     return result;
   }
+
+
 }
 
 export = BadgeDefinition;

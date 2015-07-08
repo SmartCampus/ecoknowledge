@@ -1,5 +1,5 @@
 import Operand = require('./Operand');
-import TimeBox = require('../TimeBox');
+import TimeBox = require('../../TimeBox');
 import Expression = require('./Expression');
 
 class GoalCondition implements Expression{
@@ -64,31 +64,24 @@ class GoalCondition implements Expression{
         return this.timeBox.isInTimeBox(currentDateInMillis);
     }
 
-    public evaluate(values:string[]):boolean {
+    public evaluate(values:any):boolean {
         if(!this.checkTimeBox(Date.now())) {
             console.log("Condition ", this.getDescription(), ": timeBox not reach");
             return false;
         }
 
-        var numberOfVarRequired = this.getRequired().length;
-
-        if (values.length != numberOfVarRequired) {
-            throw new Error('Can not evaluate condition ' + this.description
-                + '. Only ' + values.length + ' values passed and '
-                + numberOfVarRequired + ' needed');
-        }
         var evalString:string = '';
 
         if (this.leftOperand.hasToBeDefined() && this.rightOperand.hasToBeDefined()) {
-            evalString += values[0] + this.typeOfComparison + values[1];
+            evalString += values[this.leftOperand.getStringDescription()] + this.typeOfComparison + values[this.rightOperand.getStringDescription()];
         }
 
         else if (this.leftOperand.hasToBeDefined() && !this.rightOperand.hasToBeDefined()) {
-            evalString += values[0] + this.typeOfComparison + this.rightOperand.getStringDescription();
+            evalString += values[this.leftOperand.getStringDescription()] + this.typeOfComparison + this.rightOperand.getStringDescription();
         }
 
         else if (this.rightOperand.hasToBeDefined() && !this.leftOperand.hasToBeDefined()) {
-            evalString += this.leftOperand.getStringDescription() + this.typeOfComparison + values[0];
+            evalString += this.leftOperand.getStringDescription() + this.typeOfComparison + values[this.rightOperand.getStringDescription()];
         }
 
         else {

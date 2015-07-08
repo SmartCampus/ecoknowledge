@@ -39,7 +39,7 @@ class Goal {
     this.expressions.addExpression(expression);
   }
   
-  public evaluate(values:string[][]):boolean {
+  public evaluate(values:any):boolean {
     return this.expressions.evaluate(values);
   }
 

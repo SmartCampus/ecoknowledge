@@ -2,6 +2,9 @@ import Goal = require('../goal/Goal');
 import User = require('../user/User');
 import BadgeStatus = require('./BadgeStatus');
 import BadgeDefinition = require('./BadgeDefinition');
+
+import TimeBox = require('../TimeBox');
+
 import UUID = require('node-uuid');
 
 class BadgeInstance {
@@ -11,17 +14,26 @@ class BadgeInstance {
     private user:User;
     private status:BadgeStatus;
 
-    //  mapGoalToConditionAndSensor.goalID -> [ {'name':'ac_443'}, ...]
+    private timeBox:TimeBox;
+
+    //  mapGoalToConditionAndSensor.goalID -> { 'tmp_cli':'ac_443', 'tmp_ext':'TEMP_444', 'door_o':'D_55', ... }
     private mapGoalToConditionAndSensor:any={};
 
     constructor(name:string, description:string, points:number,
-                goals:Goal[], user:User, mapGoalToConditionAndSensor:any){
+                goals:Goal[], user:User, mapGoalToConditionAndSensor:any, timebox:TimeBox=null){
         this.badgeDef = new BadgeDefinition(name, description, points, goals);
+        this.mapGoalToConditionAndSensor = mapGoalToConditionAndSensor;
+
         this.progress = 0;
         this.id = UUID.v4();
         this.user = user;
         this.status = BadgeStatus.WAIT;
-        this.mapGoalToConditionAndSensor = mapGoalToConditionAndSensor;
+
+        this.timeBox = timebox;
+
+        if(timebox && timebox.isInTimeBox(Date.now())) {
+            this.status = BadgeStatus.RUN;
+        }
     }
 
     //name:string, description:string, points:number, goals:Goal[], user:User, sensors:string[]
@@ -65,12 +77,69 @@ class BadgeInstance {
         return this.status;
     }
 
-    public getSensors():string[]{
-        return this.mapGoalToConditionAndSensor;
+    public hasStatus(badgeStatus:BadgeStatus):boolean {
+        return this.status === badgeStatus;
     }
-    
-    public evaluate(values:any):boolean {
-        return this.badgeDef.evaluate(values, this.mapGoalToConditionAndSensor);
+
+    public getSensors():any{
+        var result:any = {};
+
+        for(var currentGoalIndex in this.mapGoalToConditionAndSensor) {
+            var currentGoalDescription = this.mapGoalToConditionAndSensor[currentGoalIndex];
+
+            var sensorsRequiredDescription:any = {};
+            for(var currentSensorIndex in currentGoalDescription) {
+                var currentSensor = currentGoalDescription[currentSensorIndex];
+                sensorsRequiredDescription[currentSensor] = null;
+            }
+
+            result[currentGoalIndex] = sensorsRequiredDescription;
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param newMapGoalToConditionAndSensor
+     *
+     * {
+     *      '<goalID>' :
+     *          {
+     *              '<name of sensor:string>' : '<value of sensor:number>'
+     *           }
+     * }
+     *
+     * @returns {boolean}
+     */
+    public evaluate(newMapGoalToConditionAndSensor:any):boolean {
+        var convertedMap:any = this.bindConditionNameToValue(newMapGoalToConditionAndSensor);
+
+        console.log("EVALUATE RES",JSON.stringify(convertedMap));
+
+        return this.badgeDef.evaluate(convertedMap);
+    }
+
+
+    private bindConditionNameToValue(newMapGoalToConditionAndSensor:any) {
+        var result:any = {};
+
+        for(var currentGoalIndex in this.mapGoalToConditionAndSensor) {
+            var currentSymbolicNameToSensorDescription = this.mapGoalToConditionAndSensor[currentGoalIndex];
+            var currentSensorToValueDescription = newMapGoalToConditionAndSensor[currentGoalIndex];
+
+            var currentSymbolicNameToValueDescription:any = {};
+
+            for(var currentSymbolicName in currentSymbolicNameToSensorDescription) {
+                var currentSensorName = currentSymbolicNameToSensorDescription[currentSymbolicName];
+                var currentSensorValue = currentSensorToValueDescription[currentSensorName];
+
+                currentSymbolicNameToValueDescription[currentSymbolicName] = currentSensorValue;
+            }
+            result[currentGoalIndex] = currentSymbolicNameToValueDescription;
+        }
+
+        return result;
     }
 };
 
