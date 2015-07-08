@@ -31,7 +31,7 @@ describe("Badge test", () => {
 
         goals = [goal1];
 
-        var mapGoalToConditionAndSensor:any  = {};
+        var mapGoalToConditionAndSensor:any = {};
 
         var conditionDescription:any = {};
         conditionDescription[aSymbolicName] = aSensorName;
