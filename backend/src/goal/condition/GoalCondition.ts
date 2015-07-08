@@ -105,7 +105,10 @@ class GoalCondition implements Expression{
     }
 
     public getData():any {
-        return this.leftOperand.getStringDescription() + this.typeOfComparison + this.rightOperand.getStringDescription();
+        return {"leftValue":{"name":this.leftOperand.getStringDescription(),"sensor":this.leftOperand.hasToBeDefined()},
+            "rightValue":{"name":this.rightOperand.getStringDescription(),"sensor":this.rightOperand.hasToBeDefined()},
+            "comparison":this.typeOfComparison
+        };
     }
 }
 

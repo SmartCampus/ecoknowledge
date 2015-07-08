@@ -7,9 +7,10 @@
 var app = angular.module('ecoknowledgeApp');
 
 app.service('ServiceGoal',['$http', function ServiceGoal($http){
+    var path = 'http://localhost:3000/';
     this.get = function(id, successFunc, failFunc) {
-        console.log('http://localhost:3000/goals/' + id);
-      $http.get('http://localhost:3000/goals/'+id)
+        console.log(path+'goals/' + id);
+      $http.get(path+'goals/'+id)
         .success(function (data) {
               successFunc(data);
         })
@@ -20,7 +21,7 @@ app.service('ServiceGoal',['$http', function ServiceGoal($http){
     };
 
      this.getRequired= function(id, successFunc, failFunc) {
-       $http.get('http://localhost:3000/required/?goalName=' + id)
+       $http.get(path+'required/?goalName=' + id)
          .success(function (data) {
            successFunc(data);
          })
@@ -30,7 +31,7 @@ app.service('ServiceGoal',['$http', function ServiceGoal($http){
      };
 
     this.post = function(goal, successFunc, failFunc){
-        $http.post('http://localhost:3000/addgoal', goal)
+        $http.post(path+'addgoal', goal)
             .success(function(){
                 successFunc();
             })

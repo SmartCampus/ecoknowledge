@@ -9,7 +9,8 @@
  */
 
 angular.module('ecoknowledgeApp')
-  .controller('BadgeCtrl',['ServiceGoal','ServiceBadge','Sign', function (ServiceGoal, ServiceBadge, Sign) {
+  .controller('BadgeCtrl',['ServiceGoal','ServiceBadge','ServiceSensor','Sign',
+      function (ServiceGoal, ServiceBadge, ServiceSensor, Sign) {
     var self = this;
     self.badge = {};
     self.goals = [];
@@ -27,26 +28,34 @@ angular.module('ecoknowledgeApp')
     self.getGoals = function () {
       self.goals = [];
       ServiceGoal.get('', function(data){
-        console.log('achieve to get the goals');
+        console.log('achieve to get the goals', data);
         self.goals = data;
       },function(data){
         console.log('fail when trying to get the goals', data);
       });
     };
 
+    self.getSensors = function(){
+      self.sensors = [];
+      ServiceSensor.get('',function(data){
+        console.log('achieve to get the sensors', data);
+        self.sensors = data;
+      },function(data){
+        console.log('fail when trying to get the sensors',data);
+      });
+    };
+
     self.change = function(selectedGoal) {
+      console.log('select : ',selectedGoal);
       ServiceGoal.getRequired(selectedGoal, function(data) {
         // success
-        console.log(data.conditions);
-        self.badge.currentGoal.conditions = {};
-        self.badge.currentGoal.conditions = data.conditions;
-        self.sensors = {};
-        self.sensors = data.sensors;
+        self.badge.currentGoal.comparisons = data;
+        console.log(data);
       }, function(data) {
         //error
         console.log(data);
       });
     };
-
+    self.getSensors();
     self.getGoals();
   }]);
