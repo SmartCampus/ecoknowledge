@@ -38,7 +38,7 @@ class BadgeFactory {
             badgePoints, goals,null, mapGoalsToConditionAndSensors);
 
         // TODO attach badge to user
-        // user.addBadge(badge);
+        // user.addBadgeByDescription(badge);
 
         return badge;
     }

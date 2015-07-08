@@ -23,6 +23,10 @@ class Goal {
     return this.id;
   }
 
+  public setUUID(aUUID) {
+    this.id = aUUID;
+  }
+
   public hasUUID(aUUID:string):boolean {
     return this.id === aUUID;
   }

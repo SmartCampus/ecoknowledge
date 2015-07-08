@@ -13,10 +13,14 @@ class BadgeProvider {
         this.factory = new BadgeFactory();
     }
 
-    public addBadge(data:any,goalProvider:GoalProvider, userProvider:UserProvider) {
+    public addBadgeByDescription(data:any,goalProvider:GoalProvider, userProvider:UserProvider) {
         var newBadge:BadgeInstance = this.factory.createBadge(data,goalProvider, userProvider);
         console.log("BADGE ID : ", newBadge.getId());
         this.badges.push(newBadge);
+    }
+
+    public addBadge(aBadge:BadgeInstance) {
+        this.badges.push(aBadge);
     }
 
     public getBadge(badgeUUID:string):BadgeInstance {
@@ -36,6 +40,21 @@ class BadgeProvider {
             var currentBadgeDesc:any = {};
             currentBadgeDesc.name = this.badges[i].getName();
             currentBadgeDesc.id = this.badges[i].getId();
+            result.push(currentBadgeDesc);
+        }
+
+        return result;
+    }
+
+    public getBadgesDescriptionInJsonFormat():any[] {
+        var result = [];
+        for (var i in this.badges) {
+            var currentBadgeDesc:any = {};
+            currentBadgeDesc.name = this.badges[i].getName();
+            currentBadgeDesc.id = this.badges[i].getId();
+            currentBadgeDesc.points = this.badges[i].getPoints();
+            currentBadgeDesc.desc = this.badges[i].getDescription();
+            currentBadgeDesc.status = this.badges[i].getStatus();
             result.push(currentBadgeDesc);
         }
 
