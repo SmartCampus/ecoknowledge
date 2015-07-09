@@ -27,25 +27,36 @@
         <div class="input-group">
             <span class="btn-primary input-group-addon" disabled>Objectif : </span>
             <select name="objective" class="selectpicker form-control"
-                    ng-model="badgeCreateCtrl.badge.currentGoal.name" ng-options="goal.name for goal in badgeCreateCtrl.goals"
-                    ng-change="badgeCreateCtrl.change(badgeCreateCtrl.badge.currentGoal.name)" required>
+                    ng-model="badgeCreateCtrl.badge.currentGoal" ng-options="goal.name for goal in badgeCreateCtrl.goals"
+                    ng-change="badgeCreateCtrl.change(badgeCreateCtrl.badge.currentGoal.id)" required>
                 <option value="" disabled selected>Sélectionnez un objectif</option>
             </select>
 
         </div>
-
-
+        {{badgeCreateCtrl.badge.currentGoal}}
       <table id="conditions-required">
         <tbody>
-        <tr ng-repeat="currentCondition in badgeCreateCtrl.badge.currentGoal.conditions">
-          <td>{{currentCondition.required}}</td>
-          <td>{{badgeCreateCtrl.sign.get(currentCondition.comparison)}}</td>
-          <td>{{currentCondition.value}}</td>
-          <td>
-            <select name="objective" class="selectpicker form-control"
-                  ng-model="currentCondition.sensor" ng-options="sensors.id for sensors in badgeCreateCtrl.sensors[currentCondition.required]" required>
-            <option value="" disabled selected>Sélectionnez un capteur</option>
-          </select>
+        <tr ng-repeat="currentCondition in badgeCreateCtrl.currentGoal.conditions">
+            <td>
+                <select ng-if="currentCondition.leftValue.sensor" name="objective" class="selectpicker form-control"
+                        ng-model="badgeCreateCtrl.badge.currentGoal.conditions[currentCondition.leftValue.name]"
+                        ng-options="sensor for sensor in badgeCreateCtrl.sensors" required>
+
+                    <option value="" disabled selected>Sélectionnez un capteur</option>
+
+                </select>
+            </td>
+            <td>{{currentCondition.leftValue.name}}</td>
+            <td>{{currentCondition.comparison}}</td>
+            <td>{{currentCondition.rightValue.name}}</td>
+            <td>
+                <select ng-if="currentCondition.rightValue.sensor" name="objective" class="selectpicker form-control"
+                        ng-model="badgeCreateCtrl.badge.currentGoal.conditions[currentCondition.rightValue.name]"
+                        ng-options="sensor for sensor in badgeCreateCtrl.sensors" required>
+
+                    <option value="" disabled selected>Sélectionnez un capteur</option>
+
+                </select>
           </td>
         </tr>
         </tbody>

@@ -93,29 +93,20 @@ app.get('/badges', jsonParser, function (req, res, next) {
   res.send(result);
 });
 
-var tempSensors = [{"id":"AC_443"},{"id":"TEMP_442"}];
+var sensors = [{"name":"AC_443"},{"name":"TEMP_442"}];
 
 app.get('/required', jsonParser, function(req,res,next) {
   var goalName:string = req.query.goalName;
-  var goal:GoalDefinition = currentUser.retrieveGoal(goalName);
 
-  var result:any = {};
-  result['conditions'] = goal.getData().conditions;
-
-  /*
-  FIXME
-  var elementsRequiredForGivenGoal:string[] = goal.getRequired();
-  var sensors:any = {};
-  for(var i = 0 ; i < elementsRequiredForGivenGoal.length; i ++) {
-    var currentElementRequired:string = "" + elementsRequiredForGivenGoal[i];
-    sensors[currentElementRequired] = tempSensors;
-  }
-  result['sensors'] = sensors;
-*/
-
-  res.send(result);
+  console.log('goal name : ',goalName);
+  var goal:GoalDefinition = goalRepository.getGoal(goalName);
+  res.send(goal.getData());
 });
 
+app.get('/sensors', jsonParser, function(req, res, next) {
+  //TODO : link with smartcampus
+  res.send(sensors);
+});
 
 app.post('/addgoal', jsonParser, function (req, res) {
   var actionData = req.body;
