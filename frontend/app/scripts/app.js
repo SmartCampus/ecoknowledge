@@ -42,6 +42,10 @@ angular
           controller: 'ViewGoalCtrl',
           controllerAs: 'viewGoalCtrl'
         })
+      .when('/create-badge-perso', {
+          templateUrl: 'views/create-badge-perso.html',
+          controller: 'BadgeCtrlV2'
+        })
       .otherwise({
         redirectTo: '/'
       });
