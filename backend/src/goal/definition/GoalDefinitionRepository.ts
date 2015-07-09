@@ -1,27 +1,27 @@
-import Goal = require('./Goal');
-import GoalFactory = require('./GoalFactory');
+import GoalDefinition = require('./GoalDefinition');
+import GoalDefinitionFactory = require('./GoalDefinitionFactory');
 
-class GoalProvider {
+class GoalDefinitionRepository {
 
-    private goals:Goal[] = [];
+    private goals:GoalDefinition[] = [];
 
-    private factory:GoalFactory;
+    private factory:GoalDefinitionFactory;
 
     constructor() {
-        this.factory = new GoalFactory();
+        this.factory = new GoalDefinitionFactory();
     }
 
     public addGoalByDescription(data:any):string {
-        var newGoal:Goal = this.factory.createGoal(data);
+        var newGoal:GoalDefinition = this.factory.createGoal(data);
         this.goals.push(newGoal);
         return newGoal.getUUID().toString();
     }
 
-    public addGoal(aGoal:Goal) {
+    public addGoal(aGoal:GoalDefinition) {
         this.goals.push(aGoal);
     }
 
-    public getGoal(goalUUID:string):Goal {
+    public getGoal(goalUUID:string):GoalDefinition {
         for(var i in this.goals) {
             var currentGoal = this.goals[i];
             if(currentGoal.hasUUID(goalUUID)) {
@@ -51,7 +51,7 @@ class GoalProvider {
     public evaluateGoal(data:any):boolean {
         var goalID:string = data.id;
         console.log("ID", data.id);
-        var goal:Goal = this.getGoal(goalID);
+        var goal:GoalDefinition = this.getGoal(goalID);
 
         var goalValues:any[] = data.values;
         var values = [];
@@ -63,4 +63,4 @@ class GoalProvider {
     }
 }
 
-export = GoalProvider;
+export = GoalDefinitionRepository;

@@ -1,6 +1,6 @@
 import User = require('./User');
 
-class UserProvider {
+class UserRepository {
 
     private users:User[] = []
 
@@ -20,4 +20,4 @@ class UserProvider {
     }
 }
 
-export = UserProvider;
+export = UserRepository;

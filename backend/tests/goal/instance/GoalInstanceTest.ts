@@ -1,22 +1,22 @@
-/// <reference path="../../typings/mocha/mocha.d.ts" />
-/// <reference path="../../typings/chai/chai.d.ts" />
-/// <reference path="../../typings/sinon/sinon.d.ts" />
+/// <reference path="../../../typings/mocha/mocha.d.ts" />
+/// <reference path="../../../typings/chai/chai.d.ts" />
+/// <reference path="../../../typings/sinon/sinon.d.ts" />
 
 import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
 
-import BadgeInstance = require('../../src/badge/BadgeInstance');
-import Goal = require('../../src/goal/Goal');
-import GoalCondition = require('../../src/goal/condition/GoalCondition');
-import Operand = require('../../src/goal/condition/Operand');
+import GoalInstance = require('../../../src/goal/instance/GoalInstance');
+import GoalDefinition = require('../../../src/goal/definition/GoalDefinition');
+import GoalCondition = require('../../../src/goal/condition/GoalCondition');
+import Operand = require('../../../src/goal/condition/Operand');
 
-describe("Badge test", () => {
+describe("GoalInstance test", () => {
 
-    var badge:BadgeInstance;
-    var goal1:Goal, goal2:Goal;
-    var goals:Goal[];
+    var badge:GoalInstance;
+    var goal1:GoalDefinition, goal2:GoalDefinition;
+    var goals:GoalDefinition[];
 
     var aSymbolicName:string = 'Temperature_cli';
     var anotherSymbolicName:string = 'Temperature_ext';
@@ -25,7 +25,7 @@ describe("Badge test", () => {
     var anotherSensorName:string = 'TEMP_444';
 
     beforeEach(() => {
-        goal1 = new Goal("goal1");
+        goal1 = new GoalDefinition("goal1");
         goal1.addCondition(new GoalCondition(new Operand(aSymbolicName, true), '<', new Operand('40', false), 'desc'));
         goal1.addCondition(new GoalCondition(new Operand(anotherSymbolicName, true), '>', new Operand('25', false), 'desc'));
 
@@ -39,9 +39,12 @@ describe("Badge test", () => {
 
         mapGoalToConditionAndSensor[goal1.getUUID()] = conditionDescription;
 
-        badge = new BadgeInstance("aName", "the badge for noobs", 42, goals, null,
+        /*
+        FIXME
+        badge = new GoalInstance("aName", "the badge for noobs", 42, goals, null,
             mapGoalToConditionAndSensor);
 
+        */
     });
 
 

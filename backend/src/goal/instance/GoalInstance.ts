@@ -1,14 +1,15 @@
-import Goal = require('../goal/Goal');
-import User = require('../user/User');
-import BadgeStatus = require('./BadgeStatus');
-import BadgeDefinition = require('./BadgeDefinition');
-
-import TimeBox = require('../TimeBox');
+import GoalDefinition = require('../definition/GoalDefinition');
+import User = require('../../user/User');
+import BadgeStatus = require('../../Status');
+import TimeBox = require('../../TimeBox');
 
 import UUID = require('node-uuid');
 
 class BadgeInstance {
-    private badgeDef:BadgeDefinition;
+    private description:string;
+
+    private goalDefinition:GoalDefinition;
+
     private id:string;
     private progress:number;
     private user:User;
@@ -20,8 +21,10 @@ class BadgeInstance {
     private mapGoalToConditionAndSensor:any = {};
 
     constructor(name:string, description:string, points:number,
-                goals:Goal[], user:User, mapGoalToConditionAndSensor:any, timebox:TimeBox = null) {
-        this.badgeDef = new BadgeDefinition(name, description, points, goals);
+                goal:GoalDefinition, user:User, mapGoalToConditionAndSensor:any, timebox:TimeBox = null) {
+        this.goalDefinition = new GoalDefinition(name);
+        //, description, points);
+
         this.mapGoalToConditionAndSensor = mapGoalToConditionAndSensor;
 
         this.progress = 0;
@@ -36,20 +39,12 @@ class BadgeInstance {
         }
     }
 
-    public getObjectives():Goal[] {
-        return this.badgeDef.getObjectives();
-    }
-
-    public getPoints():number {
-        return this.badgeDef.getPoints();
-    }
-
     public getDescription():string {
-        return this.badgeDef.getDescription();
+        return this.description;
     }
 
     public getName():string {
-        return this.badgeDef.getName();
+        return this.goalDefinition.getName();
     }
 
     public getId():string {
@@ -94,27 +89,45 @@ class BadgeInstance {
         return result;
     }
 
+
     /**
      *
-     * @param newMapGoalToConditionAndSensor
+     * @param values
      *
      * {
-     *      '<goalID>' :
-     *          {
-     *              '<name of sensor:string>' : '<value of sensor:number>'
-     *           }
-     * }
+   *      '<goalID>' :
+
+   *
+   *                      -describing a required of a condition
+   *                      {
+   *                          'name' : <string>           - symbolic name of the required field, eg : 'Temp_cli',
+   *                          'sensor' : 'sensor_id ',    - sensor id bound to achieve current goal condition, eg : 'AC_443',
+   *                          'value' : <number>          - current value of specified sensor
+   *                       }
+   * }
      *
      * @returns {boolean}
      */
-    public evaluate(newMapGoalToConditionAndSensor:any):boolean {
-        var convertedMap:any = this.bindConditionNameToValue(newMapGoalToConditionAndSensor);
+    public evaluate(values:any):boolean {
 
-        console.log("EVALUATE RES", JSON.stringify(convertedMap));
+        var numberOfGoals = Object.keys(values).length;
+        var result = true;
 
-        return this.badgeDef.evaluate(convertedMap);
+        /*
+        if (this.goalDefinition.length != numberOfGoals) {
+            throw new Error("Can not evaluate badge " + this.name + "! There are " + this.goalDefinition
+                + " objectives to evaluate and only " + numberOfGoals + " values");
+        }
+
+        for (var currentGoalUUID in values) {
+            var currentGoal:Goal = this.retrieveGoal(currentGoalUUID);
+            var currentConditionsDesc:any = values[currentGoalUUID];
+            result = result && currentGoal.evaluate(currentConditionsDesc);
+        }
+        */
+
+        return result;
     }
-
 
     private bindConditionNameToValue(newMapGoalToConditionAndSensor:any) {
         var result:any = {};
@@ -137,6 +150,5 @@ class BadgeInstance {
         return result;
     }
 }
-;
 
 export = BadgeInstance;

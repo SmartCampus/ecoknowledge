@@ -1,13 +1,13 @@
-/// <reference path="../../typings/mocha/mocha.d.ts" />
-/// <reference path="../../typings/chai/chai.d.ts" />
-/// <reference path="../../typings/sinon/sinon.d.ts" />
+/// <reference path="../../../typings/mocha/mocha.d.ts" />
+/// <reference path="../../../typings/chai/chai.d.ts" />
+/// <reference path="../../../typings/sinon/sinon.d.ts" />
 
 import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
-import GoalFactory = require('../../src/goal/GoalFactory');
-import Goal = require('../../src/goal/Goal');
+import GoalFactory = require('../../../src/goal/definition/GoalDefinitionFactory');
+import Goal = require('../../../src/goal/definition/GoalDefinition');
 
 describe("ExpressionFactory test", () => {
 

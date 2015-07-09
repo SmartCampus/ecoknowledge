@@ -12,27 +12,27 @@ var app = express();
 var jsonParser = bodyParser.json();
 var xmlParser = bodyParser.text({type: "application/xml"});
 
-import Goal = require('./goal/Goal');
+import GoalDefinition = require('./goal/definition/GoalDefinition');
 import User = require('./user/User');
 
 var currentUser:User = new User("Jackie");
 
-import GoalProvider = require('./goal/GoalProvider');
-import BadgeProvider = require('./badge/BadgeProvider');
-import UserProvider = require('./user/UserProvider');
+import GoalDefinitionRepository = require('./goal/definition/GoalDefinitionRepository');
+import GoalInstanceRepository = require('./goal/instance/GoalInstanceRepository');
+import UserRepository = require('./user/UserRepository');
 
 import EcoKnowledge = require('./Ecoknowledge');
 import Context = require('./Context');
 import DemoContext = require('./context/DemoContext');
 
-var userProvider:UserProvider = new UserProvider();
-var badgeProvider:BadgeProvider = new BadgeProvider();
-var goalProvider:GoalProvider = new GoalProvider();
+var userProvider:UserRepository = new UserRepository();
+var badgeRepository:GoalInstanceRepository = new GoalInstanceRepository();
+var goalRepository:GoalDefinitionRepository = new GoalDefinitionRepository();
 
-var ecoknowledge:EcoKnowledge = new EcoKnowledge(goalProvider,badgeProvider, userProvider);
+var ecoknowledge:EcoKnowledge = new EcoKnowledge(goalRepository,badgeRepository, userProvider);
 
 var context:Context = new DemoContext();
-context.fill(goalProvider, badgeProvider, userProvider);
+context.fill(goalRepository, badgeRepository, userProvider);
 
 // Enable JSON data for requests
 //app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -97,7 +97,7 @@ var tempSensors = [{"id":"AC_443"},{"id":"TEMP_442"}];
 
 app.get('/required', jsonParser, function(req,res,next) {
   var goalName:string = req.query.goalName;
-  var goal:Goal = currentUser.retrieveGoal(goalName);
+  var goal:GoalDefinition = currentUser.retrieveGoal(goalName);
 
   var result:any = {};
   result['conditions'] = goal.getData().conditions;
@@ -135,13 +135,13 @@ app.post('/addbadge', jsonParser, function (req, res) {
 
 
 //TODO move async calls
-import BadgeInstance = require('./badge/BadgeInstance');
+import GoalInstance = require('./goal/instance/GoalInstance');
 
 //TODO need a badgeID in request
 app.get('/evaluatebadge', jsonParser, function (req, res) {
   var badgeID:string = req.query.badgeID;
 
-  var badge:BadgeInstance = badgeProvider.getBadge(badgeID);
+  var badge:GoalInstance = badgeRepository.getBadge(badgeID);
 
   //TODO move what follow
   var required:string[] = badge.getSensors();

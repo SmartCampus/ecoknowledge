@@ -1,29 +1,29 @@
-import BadgeInstance = require('./BadgeInstance');
-import BadgeFactory = require('./BadgeFactory');
-import GoalProvider = require('../goal/GoalProvider');
-import UserProvider = require('../user/UserProvider');
+import GoalInstance = require('./GoalInstance');
+import GoalInstanceFactory = require('./GoalInstanceFactory');
+import GoalDefinitionRepository = require('../definition/GoalDefinitionRepository');
+import UserProvider = require('../../user/UserProvider');
 
 class BadgeProvider {
 
-    private badges:BadgeInstance[] = [];
+    private badges:GoalInstance[] = [];
 
-    private factory:BadgeFactory;
+    private factory:GoalInstanceFactory;
 
     constructor() {
-        this.factory = new BadgeFactory();
+        this.factory = new GoalInstanceFactory();
     }
 
-    public addBadgeByDescription(data:any,goalProvider:GoalProvider, userProvider:UserProvider) {
-        var newBadge:BadgeInstance = this.factory.createBadge(data,goalProvider, userProvider);
+    public addBadgeByDescription(data:any,goalProvider:GoalDefinitionRepository, userProvider:UserProvider) {
+        var newBadge:GoalInstance = this.factory.createBadge(data,goalProvider, userProvider);
         console.log("BADGE ID : ", newBadge.getId());
         this.badges.push(newBadge);
     }
 
-    public addBadge(aBadge:BadgeInstance) {
+    public addBadge(aBadge:GoalInstance) {
         this.badges.push(aBadge);
     }
 
-    public getBadge(badgeUUID:string):BadgeInstance {
+    public getBadge(badgeUUID:string):GoalInstance {
         for(var i in this.badges) {
             var currentBadge = this.badges[i];
             if (currentBadge.hasUUID(badgeUUID)) {
@@ -48,7 +48,9 @@ class BadgeProvider {
 
     public getBadgesDescriptionInJsonFormat():any[] {
         var result = [];
+        /*FIXME
         for (var i in this.badges) {
+
             var currentBadgeDesc:any = {};
             currentBadgeDesc.name = this.badges[i].getName();
             currentBadgeDesc.id = this.badges[i].getId();
@@ -69,7 +71,7 @@ class BadgeProvider {
             currentBadgeDesc.status = statusDesc;
             result.push(currentBadgeDesc);
         }
-
+         */
         return result;
     }
 }

@@ -8,7 +8,6 @@ var assert = chai.assert;
 
 
 import User = require('../src/user/User');
-import Goal = require('../src/goal/Goal');
 
 describe("Build a User", function () {
   var user:User;
