@@ -99,7 +99,7 @@ app.get('/required', jsonParser, function(req,res,next) {
   var goalName:string = req.query.goalName;
 
   console.log('goal name : ',goalName);
-  var goal:GoalDefinition = goalRepository.getGoal(goalName);
+  var goal:Goal = goalProvider.getGoal(goalName);
   res.send(goal.getData());
 });
 
