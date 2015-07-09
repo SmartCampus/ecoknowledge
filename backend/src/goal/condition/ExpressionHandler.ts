@@ -1,3 +1,6 @@
+/// <reference path="../../../typings/node-uuid/node-uuid.d.ts" />
+
+var merge:any = require('merge');
 
 import Expression = require('./Expression');
 import GoalCondition = require('./GoalCondition');
@@ -15,13 +18,13 @@ class ExpressionHandler {
   }
 
   public getRequired():string[][] {
-    var result:string[][] = [];
+    var tmp:any = {};
 
     for(var i in this.expressions) {
-        result.push(this.expressions[i].getRequired());
+        tmp = merge(tmp, this.expressions[i].getRequired());
     }
 
-    return result;
+    return tmp;
   }
 
   /**
@@ -48,17 +51,7 @@ class ExpressionHandler {
 
   public evaluate(values:any):boolean {
 
-    var numberOfConditions = Object.keys(values).length;
 
-      /*
-      FIXME : test doesn't work => if there is Temp>1 AND Temp<10 it will fail
-      */
-      /*
-    if(this.expressions.length != numberOfConditions) {
-      throw new Error('Can not evaluate expressions ! There are ' + this.expressions.length
-          + ' expressions and ' + numberOfConditions + ' values to bind.');
-    }
-*/
     console.log("Evaluation de", this.getRequired(), "avec", values);
 
     var result:boolean = true;

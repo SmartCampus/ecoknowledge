@@ -7,57 +7,31 @@ import TimeBox = require('../../TimeBox');
 
 class BadgeFactory {
 
-    public createBadge(data:any, goalProvider:GoalDefinitionRepository, userProvider:UserRepository):GoalInstance {
-        /*
-        FIXME
-        var badgeName:string = data.name;
-        var badgeDescription:string = data.description;
-        var badgePoints:number = data.points;
+    public createBadge(data:any, goalRepository:GoalDefinitionRepository, userProvider:UserRepository):GoalInstance {
 
-        var goalsDesc:any[] = data.goals;
+        var goalInstanceDescription:string = data.description;
 
-        var mapGoalsToConditionAndSensors:any = {};
-        var goals:GoalDefinition[] = [];
+        var goalDesc:any = data.goal;
 
-        for(var currentGoalIndex in goalsDesc) {
-            var currentGoalDesc = goalsDesc[currentGoalIndex];
+        var currentGoalID = goalDesc.id;
+        var currentGoal:GoalDefinition = goalRepository.getGoal(currentGoalID);
 
-            var currentGoalID = currentGoalDesc.id;
-            var currentGoal:GoalDefinition = goalRepository.getGoal(currentGoalID);
-            goals.push(currentGoal);
-
-            for(var conditionsDescIndex in currentGoalDesc.conditions) {
-                var currentConditionDesc = currentGoalDesc[conditionsDescIndex];
-                console.log(currentConditionDesc);
-
-                var conditionBoundToSensor:any[] = [];
-
-                if(mapGoalsToConditionAndSensors[currentGoalID]) {
-                    conditionBoundToSensor = mapGoalsToConditionAndSensors[currentGoalID];
-                }
-                conditionBoundToSensor.push(currentConditionDesc);
-                mapGoalsToConditionAndSensors[currentGoalID] = conditionBoundToSensor;
-            }
-        }
-        console.log("MAPGTCS", mapGoalsToConditionAndSensors);
+        var mapGoalsToConditionAndSensors:any = goalDesc.conditions;
 
         var timeBoxDesc:any = data.timebox;
-        if(timeBoxDesc) {
+        var timeBox:TimeBox = null;
+        if (timeBoxDesc) {
             var timeBoxFactory:TimeBoxFactory = new TimeBoxFactory();
-            var timeBox:TimeBox = timeBoxFactory.createTimeBox(timeBoxDesc);
+            timeBox = timeBoxFactory.createTimeBox(timeBoxDesc);
         }
 
-        var badge:GoalInstance = new GoalInstance(badgeName, badgeDescription,
-            badgePoints, goals,null, mapGoalsToConditionAndSensors, timeBox);
+        var goalInstance:GoalInstance = new GoalInstance(goalInstanceDescription, currentGoal, mapGoalsToConditionAndSensors, timeBox);
 
         // TODO attach badge to user
         // user.addBadgeByDescription(badge);
 
-        return badge;
-        */
-        return null;
+        return goalInstance;
     }
-
 }
 
 export = BadgeFactory;

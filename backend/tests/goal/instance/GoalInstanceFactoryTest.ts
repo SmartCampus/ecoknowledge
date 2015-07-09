@@ -12,10 +12,10 @@ import GoalDefinition = require('../../../src/goal/definition/GoalDefinition');
 import GoalCondition = require('../../../src/goal/condition/GoalCondition');
 import Operand = require('../../../src/goal/condition/Operand');
 
-describe("BadgeFactory test", () => {
+describe("GoalInstanceFactory test", () => {
 
     var factory:GoalInstanceFactory = new GoalInstanceFactory();
-    var goalProvider:GoalDefinitionRepository = new GoalDefinitionRepository();
+    var goalDefinitionRepository:GoalDefinitionRepository = new GoalDefinitionRepository();
 
     var aGoal:GoalDefinition;
     var aGoalName:string = "goal 1";
@@ -24,9 +24,8 @@ describe("BadgeFactory test", () => {
 
     var aGoalID:string = "5d34ae6e-e9ca-4352-9a67-3fdf205cce26";
 
-    var aBadgeName:string = 'badge 1';
-    var aBadgeDescription:string = 'a desc';
-    var badgePoints:number = 50;
+    var aGoalName:string = 'badge 1';
+    var aGoalDescription:string = 'a desc';
 
     var aConditionName:string = 'Temp_cli';
     var aSensorName:string = 'AC_443';
@@ -34,63 +33,50 @@ describe("BadgeFactory test", () => {
     var anotherConditionName:string = 'Temp_ext';
     var anotherSensorName:string = 'TEMP_443';
 
-
+    var conditions:any = {};
     beforeEach(() => {
         aGoal = new GoalDefinition(aGoalName);
         aGoal.setUUID(aGoalID);
         aGoal.addCondition(new GoalCondition(new Operand(aConditionName, true), '<',
-            new Operand(anotherConditionName, true), aBadgeDescription));
+            new Operand(anotherConditionName, true), aGoalDescription));
 
-        goalProvider.addGoal(aGoal);
+        goalDefinitionRepository.addGoal(aGoal);
 
         data = {};
-        data.name = aBadgeName;
-        data.description = aBadgeDescription;
-        data.points = badgePoints;
 
-        var conditions:any[] = [
-            {"name": aConditionName, "sensor": aSensorName},
-            {"name": anotherConditionName, "sensor": anotherSensorName}
-        ];
+        data.id = aGoal.getUUID();
+        data.description = aGoalDescription;
 
-        var goals:any[] = [
-            {"id": aGoalID, "conditions": conditions}
-        ];
+        conditions[aConditionName] = aSensorName;
+        conditions[anotherConditionName] = anotherSensorName;
 
-        data.goals = goals;
+        data.goal = {};
+
+        data.goal.id = aGoal.getUUID();
+        data.goal.conditions = conditions;
     });
 
     it("should have proper name when built", () => {
-        var badge = factory.createBadge(data, goalProvider, null);
-        chai.expect(badge.getName()).to.be.equal(aBadgeName);
+        var goalInstance = factory.createBadge(data, goalDefinitionRepository, null);
+        chai.expect(goalInstance.getName()).to.be.equal(aGoalName);
     });
 
     it("should have proper description when built", () => {
-        var badge = factory.createBadge(data, goalProvider, null);
-        chai.expect(badge.getDescription()).to.be.equal(aBadgeDescription);
-    });
-
-    /*
-    FIXME
-    it("should have proper points when built", () => {
-        var badge = factory.createBadge(data, goalProvider, null);
-        chai.expect(badge.getPoints()).to.be.equal(badgePoints);
+        var goalInstance = factory.createBadge(data, goalDefinitionRepository, null);
+        chai.expect(goalInstance.getDescription()).to.be.equal(aGoalDescription);
     });
 
     it("should have proper goal when build", () => {
-        var badge = factory.createBadge(data, goalProvider, null);
-        chai.expect(badge.getObjectives()).to.be.eqls([aGoal]);
+        var goalInstance = factory.createBadge(data, goalDefinitionRepository, null);
+        chai.expect(goalInstance.getGoalDefinition()).to.be.eqls(aGoal);
     });
-
-    it("should have proper goal when build", () => {
-        var badge = factory.createBadge(data, goalProvider, null);
-        chai.expect(badge.getObjectives()).to.be.eqls([aGoal]);
-    });
-    */
 
     it("should have proper sensors when build", () => {
-        var badge = factory.createBadge(data, goalProvider, null);
-        console.log(JSON.stringify(badge.getSensors()));
-        //FIXME chai.expect(badge.getSensors()).to.be.eqls([aGoal]);
+        var goalInstance = factory.createBadge(data, goalDefinitionRepository, null);
+        var expectedConditionsDescription = {};
+        expectedConditionsDescription[aSensorName] = null;
+        expectedConditionsDescription[anotherSensorName] = null;
+
+        chai.expect(goalInstance.getSensors()).to.be.eqls(expectedConditionsDescription);
     });
 });

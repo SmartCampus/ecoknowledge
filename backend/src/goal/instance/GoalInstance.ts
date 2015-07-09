@@ -6,30 +6,28 @@ import TimeBox = require('../../TimeBox');
 import UUID = require('node-uuid');
 
 class BadgeInstance {
-    private description:string;
-
+    private id:string;
     private goalDefinition:GoalDefinition;
 
-    private id:string;
-    private progress:number;
-    private user:User;
+    private description:string;
     private status:BadgeStatus;
 
+    private progress:number;
     private timeBox:TimeBox;
 
-    //  mapGoalToConditionAndSensor.goalID -> { 'tmp_cli':'ac_443', 'tmp_ext':'TEMP_444', 'door_o':'D_55', ... }
-    private mapGoalToConditionAndSensor:any = {};
+    //  { 'tmp_cli':'ac_443', 'tmp_ext':'TEMP_444', 'door_o':'D_55', ... }
+    private mapSymbolicNameToSensor:any = {};
 
-    constructor(name:string, description:string, points:number,
-                goal:GoalDefinition, user:User, mapGoalToConditionAndSensor:any, timebox:TimeBox = null) {
-        this.goalDefinition = new GoalDefinition(name);
-        //, description, points);
+    constructor(description:string, goal:GoalDefinition,
+                mapGoalToConditionAndSensor:any, timebox:TimeBox = null) {
 
-        this.mapGoalToConditionAndSensor = mapGoalToConditionAndSensor;
+        this.id = UUID.v4();
+
+        this.description = description;
+        this.goalDefinition = goal;
+        this.mapSymbolicNameToSensor = mapGoalToConditionAndSensor;
 
         this.progress = 0;
-        this.id = UUID.v4();
-        this.user = user;
         this.status = BadgeStatus.WAIT;
 
         this.timeBox = timebox;
@@ -41,6 +39,10 @@ class BadgeInstance {
 
     public getDescription():string {
         return this.description;
+    }
+
+    public getGoalDefinition():GoalDefinition {
+        return this.goalDefinition;
     }
 
     public getName():string {
@@ -59,10 +61,6 @@ class BadgeInstance {
         return this.progress;
     }
 
-    public getUser():User {
-        return this.user;
-    }
-
     public getStatus():BadgeStatus {
         return this.status;
     }
@@ -72,18 +70,12 @@ class BadgeInstance {
     }
 
     public getSensors():any {
+
         var result:any = {};
 
-        for (var currentGoalIndex in this.mapGoalToConditionAndSensor) {
-            var currentGoalDescription = this.mapGoalToConditionAndSensor[currentGoalIndex];
-
-            var sensorsRequiredDescription:any = {};
-            for (var currentSensorIndex in currentGoalDescription) {
-                var currentSensor = currentGoalDescription[currentSensorIndex];
-                sensorsRequiredDescription[currentSensor] = null;
-            }
-
-            result[currentGoalIndex] = sensorsRequiredDescription;
+        for (var currentSensorIndex in this.mapSymbolicNameToSensor) {
+            var currentSensor = this.mapSymbolicNameToSensor[currentSensorIndex];
+            result[currentSensor] = null;
         }
 
         return result;
@@ -94,57 +86,39 @@ class BadgeInstance {
      *
      * @param values
      *
-     * {
-   *      '<goalID>' :
-
-   *
-   *                      -describing a required of a condition
-   *                      {
-   *                          'name' : <string>           - symbolic name of the required field, eg : 'Temp_cli',
-   *                          'sensor' : 'sensor_id ',    - sensor id bound to achieve current goal condition, eg : 'AC_443',
-   *                          'value' : <number>          - current value of specified sensor
-   *                       }
-   * }
-     *
+     *  - describing a required of a condition
+     *  {
+     *      'name' : <string>           - symbolic name of the required field, eg : 'Temp_cli',
+     *      'sensor' : 'sensor_id ',    - sensor id bound to achieve current goal condition, eg : 'AC_443',
+     *      'value' : <number>          - current value of specified sensor
+     *  }
      * @returns {boolean}
      */
     public evaluate(values:any):boolean {
 
-        var numberOfGoals = Object.keys(values).length;
-        var result = true;
+        var numberOfValues = Object.keys(values).length;
+        var numberOfValuesNeeded = Object.keys(this.mapSymbolicNameToSensor).length;
 
-        /*
-        if (this.goalDefinition.length != numberOfGoals) {
-            throw new Error("Can not evaluate badge " + this.name + "! There are " + this.goalDefinition
-                + " objectives to evaluate and only " + numberOfGoals + " values");
+        if (numberOfValues < numberOfValuesNeeded) {
+            throw new Error("Can not evaluate goal " + this.goalDefinition.getName()
+                + "! There are " + numberOfValuesNeeded + " symbolic names needed and only "
+                + numberOfValues + " values given");
         }
 
-        for (var currentGoalUUID in values) {
-            var currentGoal:Goal = this.retrieveGoal(currentGoalUUID);
-            var currentConditionsDesc:any = values[currentGoalUUID];
-            result = result && currentGoal.evaluate(currentConditionsDesc);
-        }
-        */
+        var mapSymbolicNameToValue = this.bindSymbolicNameToValue(values);
 
+        var result = this.goalDefinition.evaluate(mapSymbolicNameToValue);
         return result;
     }
 
-    private bindConditionNameToValue(newMapGoalToConditionAndSensor:any) {
+    private bindSymbolicNameToValue(mapSensorToValue:any) {
         var result:any = {};
 
-        for (var currentGoalIndex in this.mapGoalToConditionAndSensor) {
-            var currentSymbolicNameToSensorDescription = this.mapGoalToConditionAndSensor[currentGoalIndex];
-            var currentSensorToValueDescription = newMapGoalToConditionAndSensor[currentGoalIndex];
+        for (var currentSymbolicName in this.mapSymbolicNameToSensor) {
+            var currentSensorName = this.mapSymbolicNameToSensor[currentSymbolicName];
+            var currentSensorToValue = mapSensorToValue[currentSensorName];
 
-            var currentSymbolicNameToValueDescription:any = {};
-
-            for (var currentSymbolicName in currentSymbolicNameToSensorDescription) {
-                var currentSensorName = currentSymbolicNameToSensorDescription[currentSymbolicName];
-                var currentSensorValue = currentSensorToValueDescription[currentSensorName];
-
-                currentSymbolicNameToValueDescription[currentSymbolicName] = currentSensorValue;
-            }
-            result[currentGoalIndex] = currentSymbolicNameToValueDescription;
+            result[currentSymbolicName] = currentSensorToValue;
         }
 
         return result;

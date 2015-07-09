@@ -23,25 +23,31 @@ describe('Test GoalCondition', () => {
 
         it('should not have required', () => {
             condition = new GoalCondition(leftOperandNotRequired, typeOfComparison, rightOperandNotRequired, description);
-            var expected:string[] = [];
+            var expected:any = {};
             chai.expect(condition.getRequired()).to.be.eqls(expected);
         });
 
         it('should have proper required on left operand', () => {
             condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandNotRequired, description);
-            var expected:string[] = ['TMP_Cli'];
+            var expected:any = {};
+            expected['TMP_Cli'] = null;
             chai.expect(condition.getRequired()).to.be.eqls(expected);
         });
 
         it('should have proper required on right operand', () => {
             condition = new GoalCondition(leftOperandNotRequired, typeOfComparison, rightOperandRequired, description);
-            var expected:string[] = ['10'];
+            var expected:any = {};
+            expected['10'] = null;
+
             chai.expect(condition.getRequired()).to.be.eqls(expected);
         });
 
         it('should have proper required on both operand', () => {
             condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
-            var expected:string[] = ['TMP_Cli', '10'];
+            var expected:any = {};
+            expected['TMP_Cli'] = null;
+            expected['10'] = null;
+
             chai.expect(condition.getRequired()).to.be.eqls(expected);
         });
 

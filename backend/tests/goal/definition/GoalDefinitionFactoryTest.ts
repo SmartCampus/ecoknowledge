@@ -9,7 +9,7 @@ var assert = chai.assert;
 import GoalFactory = require('../../../src/goal/definition/GoalDefinitionFactory');
 import Goal = require('../../../src/goal/definition/GoalDefinition');
 
-describe("ExpressionFactory test", () => {
+describe("GoalDefinitionFactory test", () => {
 
     var factory:GoalFactory = new GoalFactory();
     var goal:Goal;
@@ -25,7 +25,6 @@ describe("ExpressionFactory test", () => {
         jsonCondition.valueLeft = {'value' : 'TEMP_CLI', 'sensor':true};
         jsonCondition.valueRight = {'value' : '15', 'sensor':false};
 
-
         var jsonConditions:any[] = [jsonCondition];
         jsonExpression.conditions = jsonConditions;
 
@@ -38,6 +37,6 @@ describe("ExpressionFactory test", () => {
     });
 
     it("should build a goal with non null conditions", () => {
-        chai.expect(goal.getRequired()).to.be.eqls([['TEMP_CLI']]);
+        chai.expect(goal.getRequired()).to.be.eqls({'TEMP_CLI':null});
     });
 });

@@ -44,15 +44,14 @@ class GoalCondition implements Expression{
     }
 
     public getRequired():string[] {
-        var result:string[] = [];
+        var result:any = {};
 
         if (this.leftOperand.hasToBeDefined()) {
-            result.push(this.leftOperand.getStringDescription());
+            result[this.leftOperand.getStringDescription()] = null;
         }
         if (this.rightOperand.hasToBeDefined()) {
-            result.push(this.rightOperand.getStringDescription());
+            result[this.rightOperand.getStringDescription()] = null;
         }
-
         return result;
     }
 

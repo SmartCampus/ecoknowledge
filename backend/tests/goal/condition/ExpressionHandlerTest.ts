@@ -6,6 +6,7 @@ import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
+var merge = require('merge');
 
 import Operand = require('../../../src/goal/condition/Operand');
 import GoalCondition = require('../../../src/goal/condition/GoalCondition');
@@ -40,8 +41,7 @@ describe("ExpressionHandler test", () => {
     it("Return expected required", () => {
         expressionHandler.addExpression(basicValueComparison);
 
-        var expected = [];
-        expected.push(basicValueComparison.getRequired());
+        var expected = basicValueComparison.getRequired();
 
         chai.expect(expressionHandler.getRequired()).to.be.eql(expected);
     });
@@ -50,10 +50,7 @@ describe("ExpressionHandler test", () => {
         expressionHandler.addExpression(basicValueComparison);
         expressionHandler.addExpression(basicBooleanComparison);
 
-        var expected = [];
-        expected.push(basicValueComparison.getRequired());
-        expected.push(basicBooleanComparison.getRequired());
-
+        var expected = merge(basicValueComparison.getRequired(),basicBooleanComparison.getRequired());
         chai.expect(expressionHandler.getRequired()).to.be.eql(expected);
     });
 
