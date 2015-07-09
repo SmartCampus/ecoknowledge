@@ -2,37 +2,37 @@ import UUID = require('node-uuid');
 
 import Context = require('../Context');
 
-import GoalProvider = require('../goal/GoalProvider');
-import BadgeProvider = require('../badge/BadgeProvider');
-import UserProvider = require('../user/UserProvider');
+import GoalDefinitionRepository = require('../goal/definition/GoalDefinitionRepository');
+import GoalInstanceRepository = require('../goal/instance/GoalInstanceRepository');
+import UserRepository = require('../user/UserRepository');
 
-import Goal = require('../goal/Goal');
+import GoalDefinition = require('../goal/definition/GoalDefinition');
 import GoalCondition = require('../goal/condition/GoalCondition');
 import Operand = require('../goal/condition/Operand');
 
 
-import Badge = require('../badge/BadgeInstance');
+import GoalInstance = require('../goal/instance/GoalInstance');
 
 class DemoContext implements Context {
 
-    private aGoal:Goal;
+    private aGoal:GoalDefinition;
     private aUUID:string;
 
 
-    fill(goalProvider:GoalProvider, badgeProvider:BadgeProvider, userProvider:UserProvider) {
-        if (goalProvider) {
-            this.fillGoalProvider(goalProvider);
+    fill(goalDefinitionRepository:GoalDefinitionRepository, goalInstanceRepository:GoalInstanceRepository, userRepository:UserRepository) {
+        if (goalDefinitionRepository) {
+            this.fillGoalProvider(goalDefinitionRepository);
         }
 
-        if(badgeProvider) {
-            this.fillBadgeProvider(badgeProvider);
+        if(goalInstanceRepository) {
+            this.fillBadgeProvider(goalInstanceRepository);
         }
     }
 
-    public fillGoalProvider(goalProvider:GoalProvider) {
+    public fillGoalProvider(goalProvider:GoalDefinitionRepository) {
         this.aUUID = UUID.v4();
 
-        this.aGoal = new Goal('Clim éco !');
+        this.aGoal = new GoalDefinition('Clim éco !');
         this.aGoal.setUUID(this.aUUID);
 
         this.aGoal.addCondition(new GoalCondition(new Operand('Temp_cli', true), '>', new Operand('15', false),
@@ -43,7 +43,7 @@ class DemoContext implements Context {
         goalProvider.addGoal(this.aGoal);
     }
 
-    public fillBadgeProvider(badgeProvider:BadgeProvider) {
+    public fillBadgeProvider(badgeProvider:GoalInstanceRepository) {
         var mapGoalToConditionAndSensor:any  = {};
 
         var condition1Desc:any = {};
@@ -58,10 +58,10 @@ class DemoContext implements Context {
 
 
         mapGoalToConditionAndSensor[this.aUUID.toString()] = arrayOfConditions;
-        var aBadge = new Badge('Apprenti climatisation',"Vous n'êtes pas un esquimau !",10,
-            [this.aGoal],null,mapGoalToConditionAndSensor);
+        var aBadge = new GoalInstance("Vous n'êtes pas un esquimau !",
+            this.aGoal,null,mapGoalToConditionAndSensor);
 
-        badgeProvider.addBadge(aBadge);
+        badgeProvider.addGoalInstance(aBadge);
     }
 }
 

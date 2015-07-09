@@ -88,7 +88,6 @@ class GoalCondition implements Expression{
         }
 
         console.log("Evaluating", evalString, "...");
-
         return eval(evalString);
     }
 

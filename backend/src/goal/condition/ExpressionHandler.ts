@@ -51,16 +51,11 @@ class ExpressionHandler {
 
   public evaluate(values:any):boolean {
 
-
-    console.log("Evaluation de", this.getRequired(), "avec", values);
-
     var result:boolean = true;
 
     for(var i = 0 ; i < this.expressions.length ; i++) {
       result = result && this.expressions[i].evaluate(values);
-        console.log("CURRENT RESULT", result);
     }
-    console.log("RESULT EH : ", result);
     return result;
   }
 

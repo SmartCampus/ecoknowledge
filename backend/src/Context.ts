@@ -1,9 +1,9 @@
-import GoalProvider = require('./goal/GoalProvider');
-import BadgeProvider = require('./badge/BadgeProvider');
-import UserProvider = require('./user/UserProvider');
+import GoalDefinitionRepository = require('./goal/definition/GoalDefinitionRepository');
+import GoalInstanceRepository = require('./goal/instance/GoalInstanceRepository');
+import UserRepository = require('./user/UserRepository');
 
 interface Context {
-    fill(goalProvider:GoalProvider, badgeProvider:BadgeProvider, userProvider:UserProvider);
+    fill(goalDefinitionRepository:GoalDefinitionRepository, goalInstanceRepository:GoalInstanceRepository, userRepository:UserRepository);
 }
 
 export = Context;

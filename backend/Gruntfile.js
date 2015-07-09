@@ -107,7 +107,8 @@ module.exports = function (grunt) {
         clean: {
             build: ['build/'],
             dist: ['dist/'],
-            test: ['buildTests/']
+            test: ['buildTests/'],
+            all:['src/**/*.js', 'src/**/*js.map','tests/**/*.js', 'tests/**/*js.map']
         }
 // ---------------------------------------------
     });
@@ -116,9 +117,9 @@ module.exports = function (grunt) {
     grunt.registerTask('default', ['build']);
 
     grunt.registerTask('build', function () {
-        grunt.task.run(['clean:build']);
+        grunt.task.run(['clean:build','clean:test']);
 
-        grunt.task.run(['typescript:build']);
+        grunt.task.run(['typescript:build', 'typescript:test']);
     });
 
     grunt.registerTask('develop', function() {

@@ -1,7 +1,7 @@
 import GoalInstance = require('./GoalInstance');
 import GoalInstanceFactory = require('./GoalInstanceFactory');
 import GoalDefinitionRepository = require('../definition/GoalDefinitionRepository');
-import UserProvider = require('../../user/UserProvider');
+import UserProvider = require('../../user/UserRepository');
 
 class BadgeProvider {
 
@@ -13,20 +13,14 @@ class BadgeProvider {
         this.factory = new GoalInstanceFactory();
     }
 
-    public addBadgeByDescription(data:any,goalProvider:GoalDefinitionRepository, userProvider:UserProvider) {
-        var newBadge:GoalInstance = this.factory.createBadge(data,goalProvider, userProvider);
-        console.log("BADGE ID : ", newBadge.getId());
-        this.badges.push(newBadge);
-    }
-
-    public addBadge(aBadge:GoalInstance) {
+    public addGoalInstance(aBadge:GoalInstance) {
         this.badges.push(aBadge);
     }
 
-    public getBadge(badgeUUID:string):GoalInstance {
+    public getGoalInstance(goalInstanceUUID:string):GoalInstance {
         for(var i in this.badges) {
             var currentBadge = this.badges[i];
-            if (currentBadge.hasUUID(badgeUUID)) {
+            if (currentBadge.hasUUID(goalInstanceUUID)) {
                 return currentBadge;
             }
         }
@@ -34,19 +28,19 @@ class BadgeProvider {
         return null;
     }
 
-    public getListOfBadgesInJsonFormat():any[] {
+    public getListOfGoalInstancesInJsonFormat():any[] {
         var result = [];
         for (var i in this.badges) {
-            var currentBadgeDesc:any = {};
-            currentBadgeDesc.name = this.badges[i].getName();
-            currentBadgeDesc.id = this.badges[i].getId();
-            result.push(currentBadgeDesc);
+            var currentGoalInstanceDesc:any = {};
+            currentGoalInstanceDesc.name = this.badges[i].getName();
+            currentGoalInstanceDesc.id = this.badges[i].getId();
+            result.push(currentGoalInstanceDesc);
         }
 
         return result;
     }
 
-    public getBadgesDescriptionInJsonFormat():any[] {
+    public getGoalInstancesDescriptionInJsonFormat():any[] {
         var result = [];
         /*FIXME
         for (var i in this.badges) {

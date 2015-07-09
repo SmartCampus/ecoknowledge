@@ -71,7 +71,7 @@ app.get('/goals/:id', jsonParser, function (req, res, next) {
   console.log("ID :", req.params.id);
 
   var goalUUID:string = req.params.id;
-  var result:any = ecoknowledge.getGoalDescription(goalUUID);
+  var result:any = ecoknowledge.getGoalDefinitionDescription(goalUUID);
 
   console.log("++ Sending", result);
   res.send(result);
@@ -79,7 +79,7 @@ app.get('/goals/:id', jsonParser, function (req, res, next) {
 
 app.get('/goals', jsonParser, function (req, res, next) {
     console.log('/goals');
-  var result = ecoknowledge.getListOfGoals();
+  var result = ecoknowledge.getListOfGoalsDefinition();
   console.log("++ Sending", result);
   res.send(result);
 });
@@ -87,7 +87,7 @@ app.get('/goals', jsonParser, function (req, res, next) {
 app.get('/badges', jsonParser, function (req, res, next) {
 
   console.log("/badges");
-  var result = ecoknowledge.getBadgesDescriptionInJsonFormat();
+  var result = ecoknowledge.getGoalInstancesDescriptionInJsonFormat();
   console.log("++ Sending", result);
 
   res.send(result);
@@ -119,7 +119,7 @@ app.get('/required', jsonParser, function(req,res,next) {
 
 app.post('/addgoal', jsonParser, function (req, res) {
   var actionData = req.body;
-  var result = ecoknowledge.addGoal(actionData);
+  var result = ecoknowledge.addGoalDefinition(actionData);
   res.send(result);
 });
 
@@ -128,7 +128,7 @@ app.post('/addbadge', jsonParser, function (req, res) {
   console.log(actionData);
 
   //TODO : need to add a userUUID in request
-  var result = ecoknowledge.addBadge(actionData);
+  var result = ecoknowledge.addGoalInstance(actionData);
 
   res.send("OK");
 });
@@ -141,7 +141,7 @@ import GoalInstance = require('./goal/instance/GoalInstance');
 app.get('/evaluatebadge', jsonParser, function (req, res) {
   var badgeID:string = req.query.badgeID;
 
-  var badge:GoalInstance = badgeRepository.getBadge(badgeID);
+  var badge:GoalInstance = badgeRepository.getGoalInstance(badgeID);
 
   //TODO move what follow
   var required:string[] = badge.getSensors();

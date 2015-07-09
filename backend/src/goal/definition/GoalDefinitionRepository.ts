@@ -50,7 +50,6 @@ class GoalDefinitionRepository {
 
     public evaluateGoal(data:any):boolean {
         var goalID:string = data.id;
-        console.log("ID", data.id);
         var goal:GoalDefinition = this.getGoal(goalID);
 
         var goalValues:any[] = data.values;
