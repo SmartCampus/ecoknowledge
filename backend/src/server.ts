@@ -98,7 +98,7 @@ var sensors = [{"name":"AC_443"},{"name":"TEMP_442"}];
 app.get('/required', jsonParser, function(req,res,next) {
   var goalName:string = req.query.goalName;
   console.log('goal name : ',goalName);
-  var goal:Goal = goalProvider.getGoal(goalName);
+  var goal:GoalDefinition = goalRepository.getGoal(goalName);
   res.send(goal.getData());
 });
 
