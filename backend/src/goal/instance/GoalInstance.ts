@@ -5,7 +5,7 @@ import TimeBox = require('../../TimeBox');
 
 import UUID = require('node-uuid');
 
-class BadgeInstance {
+class GoalInstance {
     private id:string;
     private goalDefinition:GoalDefinition;
 
@@ -32,8 +32,8 @@ class BadgeInstance {
 
         this.timeBox = timebox;
 
-        if (timebox && timebox.isInTimeBox(Date.now())) {
-            this.status = BadgeStatus.RUN;
+        if (this.timeBox != null && this.timeBox.isInTimeBox(Date.now())) {
+                this.status = BadgeStatus.RUN;
         }
     }
 
@@ -125,4 +125,4 @@ class BadgeInstance {
     }
 }
 
-export = BadgeInstance;
+export = GoalInstance;
