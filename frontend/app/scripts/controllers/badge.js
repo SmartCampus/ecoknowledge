@@ -17,11 +17,18 @@ angular.module('ecoknowledgeApp')
     self.badge.currentGoal = {};
     self.sign = Sign;
     self.addBadge = function () {
-      var toSend = angular.toJson(self.badge);
-      ServiceBadge.post(toSend, function(data) {
-          console.log('Achieve to send the badge', data);
+        var badgeToSend = {};
+        badgeToSend.name = self.badge.name;
+        badgeToSend.description = self.badge.description;
+        badgeToSend.points = self.badge.points;
+        badgeToSend.goals = [];
+        badgeToSend.goals.push(self.badge.currentGoal);
+        var toSend = angular.toJson(badgeToSend);
+        console.log('badge to send : ',toSend);
+        ServiceBadge.post(toSend, function(data) {
+            console.log('Achieve to send the badge', data);
         },function(data) {
-          console.log('Fail to send the badge', data);
+            console.log('Fail to send the badge', data);
         });
     };
 
@@ -39,7 +46,9 @@ angular.module('ecoknowledgeApp')
       self.sensors = [];
       ServiceSensor.get('',function(data){
         console.log('achieve to get the sensors', data);
-        self.sensors = data;
+        for(var sens in data){
+            self.sensors.push(data[sens].name);
+        }
       },function(data){
         console.log('fail when trying to get the sensors',data);
       });
@@ -49,13 +58,53 @@ angular.module('ecoknowledgeApp')
       console.log('select : ',selectedGoal);
       ServiceGoal.getRequired(selectedGoal, function(data) {
         // success
-        self.badge.currentGoal.comparisons = data;
-        console.log(data);
+        console.log('win to get required',data);
+        self.badge.currentGoal.id = selectedGoal;
+        self.badge.currentGoal.conditions = {};
+        for(var posCond in data.conditions){
+            var condition = data.conditions[posCond];
+            if(condition.leftValue.sensor) {
+                self.badge.currentGoal.conditions[condition.leftValue.name] = '';
+            }
+            if(condition.rightValue.sensor){
+                self.badge.currentGoal.conditions[condition.rightValue.name] = '';
+            }
+        }
+        self.currentGoal = {conditions: data.conditions};
       }, function(data) {
         //error
-        console.log(data);
+        console.log('error when trying to get a goal : ',data);
       });
     };
+
+    self.changeSensor = function(sensor, nameSensor){
+        this.change = false;
+        for(var posCondition in self.badge.currentGoal.conditions){
+            var curCondition = self.badge.currentGoal.conditions[posCondition];
+            if(curCondition.name === nameSensor){
+                curCondition.sensor = sensor.name;
+                this.change = true;
+                break;
+            }
+        }
+        if(!this.change){
+            this.condition = {};
+            this.condition.name = nameSensor;
+            this.condition.sensor = sensor.name;
+            self.badge.currentGoal.conditions.push(this.condition);
+        }
+    };
+
+    self.getValue = function(nameSensor){
+        for(var posCondition in self.badge.currentGoal.conditions) {
+            var curCondition = self.badge.currentGoal.conditions[posCondition];
+            if(curCondition.name === nameSensor){
+                return curCondition.sensor;
+            }
+        }
+        return null;
+    };
+
     self.getSensors();
     self.getGoals();
   }]);

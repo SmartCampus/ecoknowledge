@@ -33,14 +33,17 @@
             </select>
 
         </div>
-        {{badgeCreateCtrl.badge.currentGoal.comparisons.conditions}}
+        {{badgeCreateCtrl.badge.currentGoal}}
       <table id="conditions-required">
         <tbody>
-        <tr ng-repeat="currentCondition in badgeCreateCtrl.badge.currentGoal.comparisons.conditions">
+        <tr ng-repeat="currentCondition in badgeCreateCtrl.currentGoal.conditions">
             <td>
                 <select ng-if="currentCondition.leftValue.sensor" name="objective" class="selectpicker form-control"
-                        ng-model="currentCondition.sensor.left" ng-options="sensor.name for sensor in badgeCreateCtrl.sensors" required>
+                        ng-model="badgeCreateCtrl.badge.currentGoal.conditions[currentCondition.leftValue.name]"
+                        ng-options="sensor for sensor in badgeCreateCtrl.sensors" required>
+
                     <option value="" disabled selected>Sélectionnez un capteur</option>
+
                 </select>
             </td>
             <td>{{currentCondition.leftValue.name}}</td>
@@ -48,8 +51,11 @@
             <td>{{currentCondition.rightValue.name}}</td>
             <td>
                 <select ng-if="currentCondition.rightValue.sensor" name="objective" class="selectpicker form-control"
-                        ng-model="currentCondition.sensor.right" ng-options="sensor.name for sensor in badgeCreateCtrl.sensors" required>
+                        ng-model="badgeCreateCtrl.badge.currentGoal.conditions[currentCondition.rightValue.name]"
+                        ng-options="sensor for sensor in badgeCreateCtrl.sensors" required>
+
                     <option value="" disabled selected>Sélectionnez un capteur</option>
+
                 </select>
           </td>
         </tr>
