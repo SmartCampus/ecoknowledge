@@ -22,14 +22,17 @@ import BadgeProvider = require('./badge/BadgeProvider');
 import UserProvider = require('./user/UserProvider');
 
 import EcoKnowledge = require('./Ecoknowledge');
+import Context = require('./Context');
+import DemoContext = require('./context/DemoContext');
 
 var userProvider:UserProvider = new UserProvider();
 var badgeProvider:BadgeProvider = new BadgeProvider();
 var goalProvider:GoalProvider = new GoalProvider();
 
 var ecoknowledge:EcoKnowledge = new EcoKnowledge(goalProvider,badgeProvider, userProvider);
-userProvider.addUser(currentUser);
-console.log(currentUser.getUUID());
+
+var context:Context = new DemoContext();
+context.fill(goalProvider, badgeProvider, userProvider);
 
 // Enable JSON data for requests
 //app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -75,7 +78,7 @@ app.get('/goals/:id', jsonParser, function (req, res, next) {
 });
 
 app.get('/goals', jsonParser, function (req, res, next) {
-    console.log('\nNo slug');
+    console.log('/goals');
   var result = ecoknowledge.getListOfGoals();
   console.log("++ Sending", result);
   res.send(result);
@@ -83,7 +86,8 @@ app.get('/goals', jsonParser, function (req, res, next) {
 
 app.get('/badges', jsonParser, function (req, res, next) {
 
-  var result = ecoknowledge.getListOfBadges();
+  console.log("/badges");
+  var result = ecoknowledge.getBadgesDescriptionInJsonFormat();
   console.log("++ Sending", result);
 
   res.send(result);

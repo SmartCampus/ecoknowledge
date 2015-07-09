@@ -1,6 +1,6 @@
 <div class="col-md-6"><h2>Badges</h2>
     <ul>
-        <li class="badge-list list-group-item" ng-repeat="badge in homeCtrl.badges">
+        <li class="badge-list list-group-item badge-status-{{badge.status}}" ng-repeat="badge in homeCtrl.badges">
             <homepage-badge></homepage-badge>
         </li>
     </ul>

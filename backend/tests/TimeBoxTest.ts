@@ -1,12 +1,12 @@
-/// <reference path="../../typings/mocha/mocha.d.ts" />
-/// <reference path="../../typings/chai/chai.d.ts" />
-/// <reference path="../../typings/sinon/sinon.d.ts" />
+/// <reference path="../typings/mocha/mocha.d.ts" />
+/// <reference path="../typings/chai/chai.d.ts" />
+/// <reference path="../typings/sinon/sinon.d.ts" />
 
 import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
-import TimeBox = require('../../src/goal/TimeBox');
+import TimeBox = require('../src/TimeBox');
 
 describe('TimeBox test', () => {
     describe('Is in timebox', () => {

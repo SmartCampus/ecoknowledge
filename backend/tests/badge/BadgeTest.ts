@@ -18,28 +18,66 @@ describe("Badge test", () => {
     var goal1:Goal, goal2:Goal;
     var goals:Goal[];
 
+    var aSymbolicName:string = 'Temperature_cli';
+    var anotherSymbolicName:string = 'Temperature_ext';
+
+    var aSensorName:string = 'AC_443';
+    var anotherSensorName:string = 'TEMP_444';
+
     beforeEach(() => {
         goal1 = new Goal("goal1");
-        goal1.addCondition(new GoalCondition(new Operand('Temperature', true), '<', new Operand('40', false), 'desc'));
-        goal1.addCondition(new GoalCondition(new Operand('Temperature', true), '>', new Operand('25', false), 'desc'));
+        goal1.addCondition(new GoalCondition(new Operand(aSymbolicName, true), '<', new Operand('40', false), 'desc'));
+        goal1.addCondition(new GoalCondition(new Operand(anotherSymbolicName, true), '>', new Operand('25', false), 'desc'));
 
         goals = [goal1];
 
-        badge = new BadgeInstance("aName", "the badge for noobs", 42, goals, null,[{'name':'Temperature','sensor':'AC_443'}, {'name':'Temperature','sensor':'TEMP_443'}]);
+        var mapGoalToConditionAndSensor:any = {};
+
+        var conditionDescription:any = {};
+        conditionDescription[aSymbolicName] = aSensorName;
+        conditionDescription[anotherSymbolicName] = anotherSensorName;
+
+        mapGoalToConditionAndSensor[goal1.getUUID()] = conditionDescription;
+
+        badge = new BadgeInstance("aName", "the badge for noobs", 42, goals, null,
+            mapGoalToConditionAndSensor);
 
     });
 
 
-    //FIXME test badges became more difficult
+    it("should return sensors required correctly", () => {
+        var expectedDescription:any = {};
+
+        var expectedConditionsDescription = {};
+        expectedConditionsDescription[aSensorName] = null;
+        expectedConditionsDescription[anotherSensorName] = null;
+
+        expectedDescription[goal1.getUUID()] = expectedConditionsDescription;
+
+        chai.expect(badge.getSensors()).to.be.eqls(expectedDescription);
+    });
+
     it("should evaluate the badge as OK", () => {
-        var values = [[[30, 30]]];
-        // chai.expect(badge.evaluate(values)).to.be.true;
+        var correctValueDescription:any = {};
+
+        var correctValuesDescription = {};
+        correctValuesDescription[aSensorName] = 35;
+        correctValuesDescription[anotherSensorName] = 27;
+
+        correctValueDescription[goal1.getUUID()] = correctValuesDescription;
+
+        chai.expect(badge.evaluate(correctValueDescription)).to.be.true;
     });
 
     it("should evaluate the badge as KO", () => {
-        var values = [[[30, 20]]];
-        // chai.expect(badge.evaluate(values)).to.be.false;
+        var incorrectValueDescription:any = {};
+
+        var incorrectValuesDescription = {};
+        incorrectValuesDescription[aSensorName] = 35;
+        incorrectValuesDescription[anotherSensorName] = 20;
+
+        incorrectValueDescription[goal1.getUUID()] = incorrectValuesDescription;
+
+        chai.expect(badge.evaluate(incorrectValueDescription)).to.be.false;
     });
-
-
 });

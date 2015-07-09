@@ -202,13 +202,13 @@ describe('Test GoalCondition', () => {
 
         describe('Evaluate with >', () => {
             it('should evaluate at true with 20', () => {
-                chai.expect(condition.evaluate(['20'])).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM':'20'})).to.be.true;
             });
             it('should evaluate at false with 15', () => {
-                chai.expect(condition.evaluate(['15'])).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM':'15'})).to.be.false;
             });
             it('should evaluate at false with 10', () => {
-                chai.expect(condition.evaluate(['10'])).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM':'10'})).to.be.false;
             });
         });
 
@@ -219,13 +219,13 @@ describe('Test GoalCondition', () => {
             });
 
             it('should evaluate at true with 10', () => {
-                chai.expect(condition.evaluate(['10'])).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM':'10'})).to.be.true;
             });
             it('should evaluate at false with 15', () => {
-                chai.expect(condition.evaluate(['15'])).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM':'15'})).to.be.false;
             });
             it('should evaluate at false with 20', () => {
-                chai.expect(condition.evaluate(['20'])).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM':'20'})).to.be.false;
             });
         });
 
@@ -236,13 +236,13 @@ describe('Test GoalCondition', () => {
             });
 
             it('should evaluate at true with 15', () => {
-                chai.expect(condition.evaluate(['15'])).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM':'15'})).to.be.true;
             });
             it('should evaluate at false with 9', () => {
-                chai.expect(condition.evaluate(['9'])).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM':'9'})).to.be.false;
             });
             it('should evaluate at false with 11', () => {
-                chai.expect(condition.evaluate(['11'])).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM':'11'})).to.be.false;
             });
         });
 
@@ -253,13 +253,13 @@ describe('Test GoalCondition', () => {
             });
 
             it('should evaluate at true with 10', () => {
-                chai.expect(condition.evaluate(['10'])).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM':'10'})).to.be.true;
             });
             it('should evaluate at false with 15', () => {
-                chai.expect(condition.evaluate(['15'])).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM':'15'})).to.be.false;
             });
             it('should evaluate at true with 20', () => {
-                chai.expect(condition.evaluate(['20'])).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM':'20'})).to.be.true;
             });
         });
 
@@ -290,13 +290,13 @@ describe('Test GoalCondition', () => {
 
         describe('Evaluate with <', () => {
             it('should evaluate at true with 20', () => {
-                chai.expect(condition.evaluate(['20'])).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM':'20'})).to.be.true;
             });
             it('should evaluate at false with 15', () => {
-                chai.expect(condition.evaluate(['15'])).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM':'15'})).to.be.false;
             });
             it('should evaluate at false with 10', () => {
-                chai.expect(condition.evaluate(['10'])).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM':'10'})).to.be.false;
             });
         });
 
@@ -307,13 +307,13 @@ describe('Test GoalCondition', () => {
             });
 
             it('should evaluate at true with 10', () => {
-                chai.expect(condition.evaluate(['10'])).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM':'10'})).to.be.true;
             });
             it('should evaluate at false with 15', () => {
-                chai.expect(condition.evaluate(['15'])).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM':'15'})).to.be.false;
             });
             it('should evaluate at false with 20', () => {
-                chai.expect(condition.evaluate(['20'])).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM':'20'})).to.be.false;
             });
         });
 
@@ -324,13 +324,13 @@ describe('Test GoalCondition', () => {
             });
 
             it('should evaluate at true with 15', () => {
-                chai.expect(condition.evaluate(['15'])).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM':'15'})).to.be.true;
             });
             it('should evaluate at false with 9', () => {
-                chai.expect(condition.evaluate(['9'])).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM':'9'})).to.be.false;
             });
             it('should evaluate at false with 11', () => {
-                chai.expect(condition.evaluate(['11'])).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM':'11'})).to.be.false;
             });
         });
 
@@ -341,13 +341,13 @@ describe('Test GoalCondition', () => {
             });
 
             it('should evaluate at true with 10', () => {
-                chai.expect(condition.evaluate(['10'])).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM':'10'})).to.be.true;
             });
             it('should evaluate at false with 15', () => {
-                chai.expect(condition.evaluate(['15'])).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM':'15'})).to.be.false;
             });
             it('should evaluate at true with 20', () => {
-                chai.expect(condition.evaluate(['20'])).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM':'20'})).to.be.true;
             });
         });
 
@@ -377,11 +377,11 @@ describe('Test GoalCondition', () => {
         });
 
         it('should evaluate at true when 20,10 are passed', () => {
-            chai.expect(condition.evaluate(['20', '10'])).to.be.true;
+            chai.expect(condition.evaluate({'TMP_CLIM':'10', 'TMP_EXT':'20'})).to.be.true;
         });
 
         it('should evaluate at false when 10,20 are passed', () => {
-            chai.expect(condition.evaluate(['10', '20'])).to.be.false;
+            chai.expect(condition.evaluate({'TMP_CLIM':'20', 'TMP_EXT':'10'})).to.be.false;
         });
     });
 });

@@ -24,25 +24,50 @@ class ExpressionHandler {
     return result;
   }
 
-  public evaluate(values:string[][]):boolean {
+  /**
+   *
+   * @param values
+   *
+   *          - array describing all goal conditions of goal goalID
+   *          [
+   *
+   *              - each condition can have multiple required field
+   *              [
+   *
+   *                      -describing a required of a condition
+   *                      {
+   *                          'name' : <string>           - symbolic name of the required field, eg : 'Temp_cli',
+   *                          'sensor' : 'sensor_id ',    - sensor id bound to achieve current goal condition, eg : 'AC_443',
+   *                          'value' : <number>          - current value of specified sensor
+   *                       }
+   *              ]
+   *
+   *          ]
+   * @returns {boolean}
+   */
 
-    if(this.expressions.length != values.length) {
-      throw new Error('Can not evaluate expressions ! There are ' + this.expressions.length + ' expressions and ' + values.length + ' values to bind.');
+  public evaluate(values:any):boolean {
+
+    var numberOfConditions = Object.keys(values).length;
+
+      /*
+      FIXME : test doesn't work => if there is Temp>1 AND Temp<10 it will fail
+      */
+      /*
+    if(this.expressions.length != numberOfConditions) {
+      throw new Error('Can not evaluate expressions ! There are ' + this.expressions.length
+          + ' expressions and ' + numberOfConditions + ' values to bind.');
     }
-
+*/
     console.log("Evaluation de", this.getRequired(), "avec", values);
 
     var result:boolean = true;
 
     for(var i = 0 ; i < this.expressions.length ; i++) {
-      result = result && this.expressions[i].evaluate(values[i]);
-
-      //  AND optimization
-      if(!result) {
-        return false;
-      }
+      result = result && this.expressions[i].evaluate(values);
+        console.log("CURRENT RESULT", result);
     }
-
+    console.log("RESULT EH : ", result);
     return result;
   }
 

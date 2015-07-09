@@ -11,10 +11,14 @@ class GoalProvider {
         this.factory = new GoalFactory();
     }
 
-    public addGoal(data:any):string {
+    public addGoalByDescription(data:any):string {
         var newGoal:Goal = this.factory.createGoal(data);
         this.goals.push(newGoal);
         return newGoal.getUUID().toString();
+    }
+
+    public addGoal(aGoal:Goal) {
+        this.goals.push(aGoal);
     }
 
     public getGoal(goalUUID:string):Goal {

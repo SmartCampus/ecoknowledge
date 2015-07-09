@@ -23,6 +23,10 @@ class Goal {
     return this.id;
   }
 
+  public setUUID(aUUID) {
+    this.id = aUUID;
+  }
+
   public hasUUID(aUUID:string):boolean {
     return this.id === aUUID;
   }
@@ -35,7 +39,7 @@ class Goal {
     this.expressions.addExpression(expression);
   }
   
-  public evaluate(values:string[][]):boolean {
+  public evaluate(values:any):boolean {
     return this.expressions.evaluate(values);
   }
 

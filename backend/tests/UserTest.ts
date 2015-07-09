@@ -32,14 +32,14 @@ describe("Add a goal", function () {
 
   it("should add the goal to the user's description", () => {
     /*
-    user.addGoal(new Goal("a", "a", 0));
+    user.addGoalByDescription(new Goal("a", "a", 0));
     chai.expect(user.getGoals().length).to.be.equals(1);
     */
   });
   it("should add the given goal to the user's description", () => {
     /*
     var goal:Goal = new Goal("a", "a", 0);
-    user.addGoal(goal);
+    user.addGoalByDescription(goal);
     chai.expect(user.getGoals().pop()).to.be.equals(goal);
     */
   });
@@ -54,7 +54,7 @@ describe("evaluate a goal", function () {
 
   it("should return false if given goalName doesn't exist", () => {
    // var goal:Goal = new Goal("a", "inf", 10);
-    //user.addGoal(goal);
+    //user.addGoalByDescription(goal);
     //assert.isFalse(user.evaluateGoal("aNameThatDoesntExist", 0));
   });
 });

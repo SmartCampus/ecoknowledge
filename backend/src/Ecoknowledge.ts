@@ -25,12 +25,16 @@ class Ecoknowledge {
         return this.badgeProvider.getListOfBadgesInJsonFormat();
     }
 
+    public getBadgesDescriptionInJsonFormat():any[] {
+        return this.badgeProvider.getBadgesDescriptionInJsonFormat();
+    }
+
     public addGoal(data:any):string {
-        return this.goalProvider.addGoal(data);
+        return this.goalProvider.addGoalByDescription(data);
     }
 
     public addBadge(data:any) {
-        this.badgeProvider.addBadge(data, this.goalProvider, this.userProvider);
+        this.badgeProvider.addBadgeByDescription(data, this.goalProvider, this.userProvider);
     }
 
     // debug only

@@ -2,6 +2,8 @@ import BadgeInstance = require('./BadgeInstance');
 import Goal = require('../goal/Goal');
 import GoalProvider = require('../goal/GoalProvider');
 import UserProvider = require('../user/UserProvider');
+import TimeBoxFactory = require('../TimeBoxFactory');
+import TimeBox = require('../TimeBox');
 
 class BadgeFactory {
 
@@ -24,6 +26,8 @@ class BadgeFactory {
 
             for(var conditionsDescIndex in currentGoalDesc.conditions) {
                 var currentConditionDesc = currentGoalDesc[conditionsDescIndex];
+                console.log(currentConditionDesc);
+
                 var conditionBoundToSensor:any[] = [];
 
                 if(mapGoalsToConditionAndSensors[currentGoalID]) {
@@ -33,12 +37,19 @@ class BadgeFactory {
                 mapGoalsToConditionAndSensors[currentGoalID] = conditionBoundToSensor;
             }
         }
+        console.log("MAPGTCS", mapGoalsToConditionAndSensors);
+
+        var timeBoxDesc:any = data.timebox;
+        if(timeBoxDesc) {
+            var timeBoxFactory:TimeBoxFactory = new TimeBoxFactory();
+            var timeBox:TimeBox = timeBoxFactory.createTimeBox(timeBoxDesc);
+        }
 
         var badge:BadgeInstance = new BadgeInstance(badgeName, badgeDescription,
-            badgePoints, goals,null, mapGoalsToConditionAndSensors);
+            badgePoints, goals,null, mapGoalsToConditionAndSensors, timeBox);
 
         // TODO attach badge to user
-        // user.addBadge(badge);
+        // user.addBadgeByDescription(badge);
 
         return badge;
     }
