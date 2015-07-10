@@ -59,7 +59,7 @@ class DemoContext implements Context {
 
         mapGoalToConditionAndSensor[this.aUUID.toString()] = arrayOfConditions;
         var aBadge = new GoalInstance("Vous n'êtes pas un esquimau !",
-            this.aGoal,null,mapGoalToConditionAndSensor);
+            this.aGoal,mapGoalToConditionAndSensor);
 
         badgeProvider.addGoalInstance(aBadge);
     }
