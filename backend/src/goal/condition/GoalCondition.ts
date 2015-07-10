@@ -46,11 +46,17 @@ class GoalCondition implements Expression{
     public getRequired():string[] {
         var result:any = {};
 
+        var timeBoxDesc:any = {};
+        if(this.timeBox) {
+            timeBoxDesc = this.timeBox.getRequired();
+        }
+
+
         if (this.leftOperand.hasToBeDefined()) {
-            result[this.leftOperand.getStringDescription()] = null;
+            result[this.leftOperand.getStringDescription()] = timeBoxDesc;
         }
         if (this.rightOperand.hasToBeDefined()) {
-            result[this.rightOperand.getStringDescription()] = null;
+            result[this.rightOperand.getStringDescription()] = timeBoxDesc;
         }
         return result;
     }
@@ -64,11 +70,6 @@ class GoalCondition implements Expression{
     }
 
     public evaluate(values:any):boolean {
-        if(!this.checkTimeBox(Date.now())) {
-            console.log("Condition ", this.getDescription(), ": timeBox not reach");
-            return false;
-        }
-
         var evalString:string = '';
 
         if (this.leftOperand.hasToBeDefined() && this.rightOperand.hasToBeDefined()) {

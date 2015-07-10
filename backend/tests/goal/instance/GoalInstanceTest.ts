@@ -43,7 +43,7 @@ describe("GoalInstance test", () => {
         chai.expect(goalInstance.getSensors()).to.be.eqls(expectedConditionsDescription);
     });
 
-    it("should evaluate the badge as OK", () => {
+    it("should evaluate the goal instance as OK", () => {
         var correctValuesDescription = {};
         correctValuesDescription[aSensorName] = 35;
         correctValuesDescription[anotherSensorName] = 27;
@@ -51,7 +51,7 @@ describe("GoalInstance test", () => {
         chai.expect(goalInstance.evaluate(correctValuesDescription)).to.be.true;
     });
 
-    it("should evaluate the badge as KO", () => {
+    it("should evaluate the goal instance as KO", () => {
         var incorrectValuesDescription = {};
         incorrectValuesDescription[aSensorName] = 35;
         incorrectValuesDescription[anotherSensorName] = 20;

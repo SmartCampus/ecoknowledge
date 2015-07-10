@@ -37,6 +37,6 @@ describe("GoalDefinitionFactory test", () => {
     });
 
     it("should build a goal with non null conditions", () => {
-        chai.expect(goal.getRequired()).to.be.eqls({'TEMP_CLI':null});
+        chai.expect(goal.getRequired()).to.be.eqls({'TEMP_CLI':{}});
     });
 });
