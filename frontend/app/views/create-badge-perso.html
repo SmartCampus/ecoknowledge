@@ -1,8 +1,8 @@
-<div class="container jumbotron" ng-controller="BadgeCtrlV2" as badgeCreateCtrl>
+<div class="container jumbotron" ng-controller="BadgeCtrlV2 as badgeCreateCtrl">
     <div class="page-header text-center">
         <h1>Créer un badge</h1>
     </div>
-
+    {{badgeCreateCtrl.badge}}
     <form name="badgeCreateForm" class="form" ng-submit="badgeCreateForm.$valid && badgeCreateCtrl.addBadge()" novalidate>
         <div class="form-group text-left">
             <label for="badge-name">Nom</label>

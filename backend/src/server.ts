@@ -14,12 +14,14 @@ var xmlParser = bodyParser.text({type: "application/xml"});
 
 import GoalDefinition = require('./goal/definition/GoalDefinition');
 import User = require('./user/User');
+import Badge = require('./badge/Badge');
 
 var currentUser:User = new User("Jackie");
 
 import GoalDefinitionRepository = require('./goal/definition/GoalDefinitionRepository');
 import GoalInstanceRepository = require('./goal/instance/GoalInstanceRepository');
 import UserRepository = require('./user/UserRepository');
+import BadgeRepository = require('./badge/BadgeRepository');
 
 import EcoKnowledge = require('./Ecoknowledge');
 import Context = require('./Context');
@@ -28,6 +30,7 @@ import DemoContext = require('./context/DemoContext');
 var userProvider:UserRepository = new UserRepository();
 var badgeRepository:GoalInstanceRepository = new GoalInstanceRepository();
 var goalRepository:GoalDefinitionRepository = new GoalDefinitionRepository();
+var badgeRepositoryV2:BadgeRepository = new BadgeRepository();
 
 var ecoknowledge:EcoKnowledge = new EcoKnowledge(goalRepository,badgeRepository, userProvider);
 
@@ -105,6 +108,13 @@ app.get('/required', jsonParser, function(req,res,next) {
 app.get('/sensors', jsonParser, function(req, res, next) {
   //TODO : link with smartcampus
   res.send(sensors);
+});
+
+app.post('/badgesV2', jsonParser, function(req, res) {
+  var badgeData = req.body;
+  console.log('badges V2 : ', badgeData);
+  badgeRepositoryV2.addBadge(new Badge(badgeData.name, badgeData.points));
+  res.send("OK badges V2");
 });
 
 app.post('/addgoal', jsonParser, function (req, res) {
