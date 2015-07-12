@@ -73,8 +73,8 @@ class GoalInstance {
 
         var result:any = {};
 
-        for (var currentSensorIndex in this.mapSymbolicNameToSensor) {
-            var currentSensor = this.mapSymbolicNameToSensor[currentSensorIndex];
+        for (var currentSymbolicName in this.mapSymbolicNameToSensor) {
+            var currentSensor = this.mapSymbolicNameToSensor[currentSymbolicName];
             result[currentSensor] = null;
         }
 
