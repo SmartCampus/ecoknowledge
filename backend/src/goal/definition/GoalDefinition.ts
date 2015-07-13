@@ -9,7 +9,12 @@ class GoalDefinition {
     private name:string;
     private expressions:ExpressionHandler = new ExpressionHandler();
 
-    constructor(name:string) {
+    private startDate:Date;
+    private endDate:Date;
+
+    private durationInDays:number;
+
+    constructor(name:string, startDate:Date=null, endDate:Date=null, durationInDays:number=null) {
         if (!name) {
             throw new Error('Bad argument : name given is null');
         }

@@ -17,7 +17,7 @@ class GoalFactory {
             var currentExpression = this.expressionFactory.createExpression(goalConditions[i]);
             newGoal.addCondition(currentExpression);
         }
-        console.log("A new goal has been added", data.name);
+
         return newGoal;
     }
 

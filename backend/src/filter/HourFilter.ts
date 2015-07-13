@@ -37,10 +37,6 @@ class HourFilter implements Filter {
             var date:Date = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getMonth(), currentDate.getUTCDay(),
             currentDate.getUTCHours(), currentDate.getUTCMinutes(), currentDate.getUTCSeconds()));
 
-            console.log("DATE", date);
-            console.log("HOURS", date.getHours());
-            console.log("COMP", this.mapTimeOfDayToHours[this.timeOfDay].start);
-
             if(date.getHours() >= this.mapTimeOfDayToHours[this.timeOfDay].start
             && date.getHours() < this.mapTimeOfDayToHours[this.timeOfDay].end) {
                 result.push(currentValue.value);
