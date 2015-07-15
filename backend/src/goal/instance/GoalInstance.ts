@@ -111,9 +111,6 @@ class GoalInstance {
      * @returns {boolean}
      */
     public evaluate(values:any):boolean {
-        console.log("Evaluate an instance with", JSON.stringify(values));
-
-
         var numberOfValues = Object.keys(values).length;
         var numberOfValuesNeeded = Object.keys(this.mapSymbolicNameToSensor).length;
 

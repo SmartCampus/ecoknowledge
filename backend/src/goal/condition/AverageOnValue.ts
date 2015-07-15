@@ -22,18 +22,30 @@ class AverageOnValue implements Expression {
         this.endDate = endDate;
         this.thresholdRate = thresholdRate;
 
+
         condition.setTimeBox(new TimeBox(startDate.getTime(), endDate.getTime()));
 
         this.oldTimeBox = new TimeBox(startDate.getTime(), dateOfCreation.getTime());
         this.newTimeBox = new TimeBox(dateOfCreation.getTime(), endDate.getTime());
+
     }
 
     public setTimeBox(newTimeBox:TimeBox) {
+
         this.dateOfCreation = new Date(newTimeBox.getStartDateInMillis());
         this.endDate = new Date(newTimeBox.getEndDateInMillis());
 
         //TODO "-1 month hardcoded"
         this.startDate = new Date(this.dateOfCreation.getFullYear(), this.dateOfCreation.getMonth() - 1, this.dateOfCreation.getDate());
+
+
+        console.log("STARTDATE", this.startDate);
+        console.log("DATEOFCREATION", this.dateOfCreation);
+        console.log("ENDDATE", this.endDate);
+
+
+        var timeBox:TimeBox = new TimeBox(this.startDate.getTime(), this.endDate.getTime());
+        this.condition.setTimeBox(timeBox);
     }
 
     public getData():any {
@@ -61,11 +73,7 @@ class AverageOnValue implements Expression {
     }
 
     public getRequired():any {
-        var result:any = {};
-
-        result = this.condition.getRequired();
-
-        return result;
+        return this.condition.getRequired();
     }
 
     public getPercentageAchieved():number {
@@ -73,6 +81,7 @@ class AverageOnValue implements Expression {
     }
 
     public evaluate(data:any):boolean {
+
         var sensorNames:string[] = this.condition.getRequired();
 
         var result = true;
@@ -89,9 +98,16 @@ class AverageOnValue implements Expression {
 
             var decreaseRate = 100 - (newAverage * 100 / oldAverage);
 
+            console.log("NEW AVERAGE", newAverage);
+            console.log("OLDAVERAGE", oldAverage);
+            console.log("DECREASE RATE", decreaseRate);
+
+
             result = result && (decreaseRate >= this.thresholdRate);
 
+
             this.percentageAchieved = decreaseRate * 100 / this.thresholdRate;
+            console.log("PERCENT ACHIEVE", this.percentageAchieved);
 
             this.updateDurationAchieved(Date.now());
         }
@@ -101,8 +117,12 @@ class AverageOnValue implements Expression {
 
     public updateDurationAchieved(currentDate:number) {
         var duration = this.endDate.getTime() - this.dateOfCreation.getTime();
+        console.log("DURATIION", duration);
 
-        var durationAchieved = currentDate - this.dateOfCreation.getTime();
+
+        var durationAchieved = (currentDate - this.dateOfCreation.getTime()) ;
+console.log("DURATIONACHIEVED", durationAchieved);
+
 
         if (durationAchieved < 0) {
             throw new Error('Time given is before dateOfCreation !');
@@ -115,7 +135,7 @@ class AverageOnValue implements Expression {
         return this.percentageOfTime;
     }
 
-    private separateOldAndNewData(values:any[], oldValues:number[], newValues:number[]) {
+    public separateOldAndNewData(values:any[], oldValues:number[], newValues:number[]) {
         for (var currentValueIndex in values) {
 
             //  { date : __ , value : __ }
@@ -134,13 +154,14 @@ class AverageOnValue implements Expression {
 
     private computeAverageValues(data:number[]):number {
         var numberOfData = data.length;
-        var cumulativeDataSum = 0;
+
+        var averageValue = 0;
 
         for (var currentData in data) {
-            cumulativeDataSum += data[currentData];
+            averageValue +=  (data[currentData] / numberOfData);
         }
 
-        return cumulativeDataSum / numberOfData;
+        return averageValue;
     }
 }
 

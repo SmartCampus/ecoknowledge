@@ -156,40 +156,49 @@ app.get('/evaluatebadge', jsonParser, function (req, res) {
 
         //TODO move what follow
         var required = badge.getSensors();
-        var sensorsValues:any = {};
 
         console.log("SENSORS TO GET : ", required);
 
         var requiredSensorName = Object.keys(required);
         var numberToLoad:number = requiredSensorName.length;
-        console.log("Sensor names", requiredSensorName);
+        console.log("numbertoload");
+        console.log(numberToLoad);
+
+        console.log("Sensor names");
+        console.log(requiredSensorName);
 
         for (var currentSensorName in requiredSensorName) {
             (function (currentSensorName) {
-                console.log("CURRENTSENSORNAME", currentSensorName);
-                console.log("REQUIRED.CURRENTSENSORNAME", required);
+                console.log("CURRENTSENSORNAME");
+                console.log(currentSensorName);
+                console.log("REQUIRED.CURRENTSENSORNAME");
+                console.log(required);
 
                 var startDate:string = '' + required[currentSensorName].startDate;
                 var endDate:string = '' + required[currentSensorName].endDate;
 
                 var path = 'http://smartcampus.unice.fr/sensors/' + currentSensorName + '/data?date=' + startDate + '/' + endDate;
-                console.log("PATH", path);
+                console.log("PATH");
+                console.log(path);
 
                 var dataJsonString = "";
 
                 http.get(path, function (result) {
                     result.on("data", function (chunk) {
-                        numberToLoad--;
                         dataJsonString += chunk.toString();
                     });
 
                     result.on('end', function() {
-
+                        numberToLoad--;
+                        console.log("remaining number to load");
+                        console.log(numberToLoad);
                         var jsonObject = JSON.parse(dataJsonString);
                         required[jsonObject.id] = jsonObject;
 
-                        var result = badge.evaluate(required);
-                        res.send(badge.getProgress());
+                        if(numberToLoad == 0) {
+                            var result = badge.evaluate(required);
+                            res.send(badge.getProgress());
+                        }
                     });
                 });
             })(requiredSensorName[currentSensorName]);

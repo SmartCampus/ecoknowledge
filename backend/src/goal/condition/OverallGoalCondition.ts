@@ -31,20 +31,15 @@ class OverallGoalCondition implements Expression {
     }
 
     public updateDurationAchieved(currentDate:number) {
-        console.log("Current date", new Date(currentDate));
         var duration = this.condition.getEndDateInMillis() - this.condition.getStartDateInMillis();
 
         var durationAchieved = (currentDate - this.condition.getStartDateInMillis()) * 1000;
-        
-        console.log("DURATION", duration);
-        console.log("DURATION ACHIEVED", durationAchieved);
 
         if (durationAchieved < 0) {
             throw new Error('Time given is before dateOfCreation !');
         }
 
         this.percentageOfTime = durationAchieved * 100 / duration;
-        console.log("PERCENTAGE OF TIME", this.percentageOfTime);
     }
 
     public setTimeBox(newTimeBox:TimeBox){

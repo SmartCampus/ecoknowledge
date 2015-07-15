@@ -18,12 +18,19 @@ class GoalDefinition {
 
     constructor(name:string, startDate:Date, endDate:Date, durationInDays:number) {
 
+        console.log("STARDATE????");
+        console.log(startDate);
+
         if (!name) {
             throw new Error('Bad argument : name given is null');
         }
 
         this.name = name;
         this.id = uuid.v4();
+
+        if(startDate != null && endDate != null && endDate.getTime() < startDate.getTime()) {
+            throw new Error('End date is before start date');
+        }
 
         this.startDate = startDate;
         this.endDate = endDate;

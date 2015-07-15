@@ -337,6 +337,68 @@ describe('Test AverageOnValueTest', () => {
         });
     });
 
+    describe('separate data', () => {
+       it('should separate data correctly', () => {
+
+           var data:any = {};
+           var oldValues:any[] = [];
+           var newValues:any[] = [];
+
+           condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+           averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+
+           var values:any[] = [
+               {
+                   date: new Date(Date.UTC(2000, 1, 2)),
+                   value: 100
+               },
+               {
+                   date: new Date(Date.UTC(2000, 1, 3)),
+                   value: 101
+               },
+               {
+                   date: new Date(Date.UTC(2000, 1, 4)),
+                   value: 99
+               },
+               {
+                   date: new Date(Date.UTC(2000, 1, 5)),
+                   value: 102
+               },
+               {
+                   date: new Date(Date.UTC(2000, 1, 6)),
+                   value: 98
+               },
+               //   OLD/NEW DATA
+               {
+                   date: new Date(Date.UTC(2000, 1, 8)),
+                   value: 85
+               },
+               {
+                   date: new Date(Date.UTC(2000, 1, 9)),
+                   value: 95
+               },
+               {
+                   date: new Date(Date.UTC(2000, 1, 10)),
+                   value: 91
+               },
+               {
+                   date: new Date(Date.UTC(2000, 1, 10)),
+                   value: 89
+               }
+           ];
+
+
+           var expectedOldValues:number[] = [100,101,99,102,98];
+           var expectedNewValues:number[] = [85,95,91,89];
+
+           var actualOldValues:number[] = [];
+           var actualNewValues:number[] = [];
+
+           averageOnValue.separateOldAndNewData(values, actualOldValues, actualNewValues);
+           chai.expect(actualOldValues).to.be.eqls(expectedOldValues);
+           chai.expect(actualNewValues).to.be.eqls(expectedNewValues);
+       }) ;
+    });
 
     describe('getRequired method', () => {
 
@@ -348,6 +410,9 @@ describe('Test AverageOnValueTest', () => {
         timeBoxDesc['startDate'] = '2000-02-01 00:00:00';
         timeBoxDesc['endDate'] = '2000-02-15 00:00:00';
         expected['TMP_Cli'] = timeBoxDesc;
+
+        console.log(JSON.stringify(expected));
+        console.log(JSON.stringify(averageOnValue.getRequired()));
 
         chai.expect(averageOnValue.getRequired()).to.be.eql(expected);
 

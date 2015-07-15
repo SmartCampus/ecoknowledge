@@ -11,9 +11,16 @@ class GoalFactory {
 
     public createGoal(data:any):GoalDefinition {
         var goalName:string = data.name;
+
         var startDateOfValidityPeriod:Date = new Date(data.timeBox.startDate);
         var endDateOfValidityPeriod:Date = new Date(data.timeBox.endDate);
         var durationAllowed:number = data.duration;
+
+        console.log("STARTDATE");
+        console.log(startDateOfValidityPeriod);
+
+        console.log("ENDDATE");
+        console.log(endDateOfValidityPeriod);
 
         var newGoal:GoalDefinition = new GoalDefinition(goalName, startDateOfValidityPeriod, endDateOfValidityPeriod, durationAllowed);
 

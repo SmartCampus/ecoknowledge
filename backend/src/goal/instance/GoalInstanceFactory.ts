@@ -5,7 +5,7 @@ import UserRepository = require('../../user/UserRepository');
 import TimeBoxFactory = require('../../TimeBoxFactory');
 import TimeBox = require('../../TimeBox');
 
-class BadgeFactory {
+class GoalInstanceFactory {
 
     /**
      *
@@ -39,7 +39,7 @@ class BadgeFactory {
 
         if(!this.checkDates(goalDefinition,startDate)) {
             throw new Error('Can not build goal instance ! it does not have the time to be achieved. We are the '
-                + Date.now() + ', the goal end the' + goalDefinition.getEndDate() + ' with a duration of ' + goalDefinition.getDuration() + ' days');
+                + new Date(Date.now()) + ', the goal start the' + goalDefinition.getStartDate() + ' and end the ' +goalDefinition.getEndDate() + ' with a duration of ' + goalDefinition.getDuration() + ' days');
         }
 
         var endDate:Date = new Date(startDate.getFullYear(), startDate.getMonth(),startDate.getDate() + goalDefinition.getDuration());
@@ -61,12 +61,19 @@ class BadgeFactory {
     public checkDates(goalDefinition:GoalDefinition, startDate:Date):boolean {
         var durationInDays:number = goalDefinition.getDuration();
 
+        console.log("DURATION");
+        console.log(durationInDays);
+
         var endDate:Date = new Date(startDate.getFullYear(), startDate.getMonth(),startDate.getDate() + durationInDays);
 
+        console.log(endDate);
+
         var endDateOfValidityPeriod = goalDefinition.getEndDate();
+
+        console.log(endDateOfValidityPeriod);
 
         return endDate.getTime() <= endDateOfValidityPeriod.getTime();
     }
 }
 
-export = BadgeFactory;
+export = GoalInstanceFactory;
