@@ -1,28 +1,28 @@
 'use strict';
 
 var app = angular.module('ecoknowledgeApp')
-    .controller('GoalCtrl', ['ServiceGoal', function (ServiceGoal) {
+    .controller('GoalCtrl', ['ServiceGoal','ServiceBadgeV2', function (ServiceGoal, ServiceBadgeV2) {
 
-      var self = this;
-      self.goal = {};
-      self.goal.conditions = [];
-      self.goal.name = '';
-      self.goal.timebox = {};
-      self.goal.timebox.debut = new Date();
-      self.goal.timebox.fin = new Date();
+    var self = this;
+    self.goal = {};
+    self.goal.conditions = [];
+    self.goal.name = '';
+    self.goal.timeBox = {};
+    self.goal.timeBox.startDate = new Date();
+    self.goal.timeBox.endDate = new Date();
+    self.badges = [];
+    self.type = ['Température', 'Porte'];
 
-      self.type = ['Température', 'Porte'];
-
-      this.addGoal = function () {
-        console.log(self.goal.toJSON());
-        ServiceGoal.post(self.goal.toJSON(),function() {
+    this.addGoal = function () {
+        console.log(angular.toJson(self.goal));
+        ServiceGoal.post(angular.toJson(self.goal),function() {
             console.log('Achieve to add a conditions', self.conditions);
           },function(){
             console.log('Fail when trying to add a conditions', self.conditions);
         });
-      };
+    };
 
-      this.changeComparison = function(iteration,change){
+    this.changeComparison = function(iteration,change){
         iteration.type = change;
         iteration.valueLeft = {};
         iteration.valueRight = {};
@@ -30,18 +30,36 @@ var app = angular.module('ecoknowledgeApp')
         if(change==='boolean'){
           iteration.comparison = '===';
         }
-      };
+    };
 
-      this.changeType = function(iteration, type){
-          iteration.sensor= (type==='sensor');
-      };
+    this.changeType = function(iteration, type){
+      iteration.sensor= (type==='sensor');
+    };
 
-      self.addComparison = function(){
-          self.goal.conditions[self.goal.conditions.length] = {type:'comparison'};
+    self.addComparison = function(){
+      self.goal.conditions[self.goal.conditions.length] = {
+        type:'comparison',
+        expression:{}
       };
+    };
 
-      self.addComparison();
-    }]);
+    self.addComparison();
+
+    ServiceBadgeV2.get('',function(data){
+        console.log('Achieve to get the badges V2 ', data);
+        self.badges = data;
+    }, function(data){
+        console.log('Fail to get the badges V2', data);
+    });
+
+    self.addBadge = function(){
+        console.log('add 1 to nbBadge');
+        self.nbBadge++;
+    };
+
+    self.nbBadge = 1;
+    self.selectedBadge = [];
+}]);
 
 app.directive('stringForm', function(){
   return{
@@ -77,4 +95,11 @@ app.directive('conditions', function(){
     restrict:'E',
     templateUrl:'../../views/create goal/conditions.html'
   };
+});
+
+app.directive('addBadges', function(){
+    return{
+        restrict:'E',
+        templateUrl:'../../views/create goal/add-badges.html'
+    };
 });

@@ -17,7 +17,7 @@ angular.module('ecoknowledgeApp')
         var self = this;
 
         this.addBadge = function(){
-            console.log('là');
+            console.log('add badge V2');
             ServiceBadgeV2.post(self.badge,function(data){
                 console.log('achieve to send a badge',data);
             },function(data){

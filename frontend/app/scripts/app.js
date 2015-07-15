@@ -8,7 +8,7 @@
  *
  * Main module of the application.
  */
-angular
+var app = angular
   .module('ecoknowledgeApp', [
     'ngAnimate',
     'ngCookies',
@@ -51,3 +51,13 @@ angular
         redirectTo: '/'
       });
   });
+
+
+app.filter('range', function() {
+  return function(input, total) {
+    total = parseInt(total);
+    for (var i=0; i<total; i++)
+      input.push(i);
+    return input;
+  };
+});
