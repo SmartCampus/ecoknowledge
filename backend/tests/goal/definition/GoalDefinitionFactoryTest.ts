@@ -15,20 +15,34 @@ describe("GoalDefinitionFactory test", () => {
     var goal:Goal;
 
     beforeEach(() => {
+        var jsonDefinition:any = {};
+        jsonDefinition.name = "Clim";
+
+        var timeBox:any = {};
+        timeBox.startDate = Date.now();
+        timeBox.endDate = Date.now() + 10;
+        jsonDefinition.timeBox = timeBox;
+
+        jsonDefinition.duration = 1;
+
         var jsonExpression:any = {};
-        jsonExpression.name = "Clim";
+        jsonExpression.comparison = '<';
+        jsonExpression.type = 'number';
+        jsonExpression.description = 'description blabla ..';
+        jsonExpression.valueLeft = {'value': 'TEMP_CLI', 'sensor': true};
+        jsonExpression.valueRight = {'value': '15', 'sensor': false};
 
-        var jsonCondition:any = {};
-        jsonCondition.comparison = '<';
-        jsonCondition.type = 'number';
-        jsonCondition.description = 'description blabla ..';
-        jsonCondition.valueLeft = {'value' : 'TEMP_CLI', 'sensor':true};
-        jsonCondition.valueRight = {'value' : '15', 'sensor':false};
+        var aJsonCondition:any = {};
+        aJsonCondition.type = 'overall';
+        aJsonCondition.threshold = 10;
+        aJsonCondition.expression = jsonExpression;
 
-        var jsonConditions:any[] = [jsonCondition];
-        jsonExpression.conditions = jsonConditions;
 
-        goal = factory.createGoal(jsonExpression);
+        var jsonConditions:any[] = [aJsonCondition];
+        jsonDefinition.conditions = jsonConditions;
+
+        goal = factory.createGoal(jsonDefinition);
+        console.log(goal);
     });
 
 
@@ -37,6 +51,6 @@ describe("GoalDefinitionFactory test", () => {
     });
 
     it("should build a goal with non null conditions", () => {
-        chai.expect(goal.getRequired()).to.be.eqls({'TEMP_CLI':null});
+        chai.expect(goal.getRequired()).to.be.not.null;
     });
 });

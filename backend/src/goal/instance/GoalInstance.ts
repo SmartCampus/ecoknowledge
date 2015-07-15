@@ -9,32 +9,41 @@ class GoalInstance {
     private id:string;
     private goalDefinition:GoalDefinition;
 
+    private startDate:Date;
+    private endDate:Date;
+
     private description:string;
     private status:BadgeStatus;
 
     private progress:number;
-    private timeBox:TimeBox;
 
     //  { 'tmp_cli':'ac_443', 'tmp_ext':'TEMP_444', 'door_o':'D_55', ... }
     private mapSymbolicNameToSensor:any = {};
 
-    constructor(description:string, goal:GoalDefinition,
-                mapGoalToConditionAndSensor:any, timebox:TimeBox = null) {
+    constructor(startDate:Date, endDate:Date,description:string, goal:GoalDefinition,
+                mapGoalToConditionAndSensor:any) {
 
         this.id = UUID.v4();
-
         this.description = description;
+
+        this.startDate = startDate;
+        this.endDate = endDate;
+
         this.goalDefinition = goal;
+        this.goalDefinition.setTimeBoxes(new TimeBox(startDate.getTime(),endDate.getTime()));
+
         this.mapSymbolicNameToSensor = mapGoalToConditionAndSensor;
 
         this.progress = 0;
-        this.status = BadgeStatus.WAIT;
+        this.status = BadgeStatus.RUN;
+    }
 
-        this.timeBox = timebox;
+    public getStartDate():Date {
+        return this.startDate;
+    }
 
-        if (this.timeBox != null && this.timeBox.isInTimeBox(Date.now())) {
-                this.status = BadgeStatus.RUN;
-        }
+    public getEndDate():Date {
+        return this.endDate;
     }
 
     public getDescription():string {
@@ -73,8 +82,8 @@ class GoalInstance {
 
         var result:any = {};
 
-        for (var currentSensorIndex in this.mapSymbolicNameToSensor) {
-            var currentSensor = this.mapSymbolicNameToSensor[currentSensorIndex];
+        for (var currentSymbolicName in this.mapSymbolicNameToSensor) {
+            var currentSensor = this.mapSymbolicNameToSensor[currentSymbolicName];
             result[currentSensor] = null;
         }
 

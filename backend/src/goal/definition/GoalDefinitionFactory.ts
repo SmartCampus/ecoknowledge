@@ -1,26 +1,30 @@
-import Goal = require('./GoalDefinition');
-import ExpressionFactory = require('../condition/ExpressionFactory');
+import GoalDefinition = require('./GoalDefinition');
+import ConditionFactory = require('../condition/ConditionFactory');
 
 class GoalFactory {
 
-    private expressionFactory:ExpressionFactory;
+    private conditionFactory:ConditionFactory;
 
     constructor() {
-        this.expressionFactory = new ExpressionFactory();
+        this.conditionFactory = new ConditionFactory();
     }
 
-    public createGoal(data:any):Goal {
+    public createGoal(data:any):GoalDefinition {
         var goalName:string = data.name;
-        var newGoal:Goal = new Goal(goalName);
+        var startDateOfValidityPeriod:Date = new Date(data.timeBox.startDate);
+        var endDateOfValidityPeriod:Date = new Date(data.timeBox.endDate);
+        var durationAllowed:number = data.duration;
+
+        var newGoal:GoalDefinition = new GoalDefinition(goalName, startDateOfValidityPeriod, endDateOfValidityPeriod, durationAllowed);
+
         var goalConditions:any[] = data.conditions;
         for (var i = 0; i < goalConditions.length; i++) {
-            var currentExpression = this.expressionFactory.createExpression(goalConditions[i]);
+            var currentExpression = this.conditionFactory.createCondition(goalConditions[i], data.timeBox, durationAllowed);
             newGoal.addCondition(currentExpression);
         }
-        console.log("A new goal has been added", data.name);
+
         return newGoal;
     }
-
 }
 
 export = GoalFactory;

@@ -1,3 +1,5 @@
+import TimeBox = require('../../TimeBox');
+
 
 interface Expression {
   getRequired():string[];
@@ -6,6 +8,8 @@ interface Expression {
   getComparisonType():string;
   hasLeftOperand(name:string):boolean;
   hasRightOperand(name:string):boolean;
+  getID():string;
+  setTimeBox(newTimeBox:TimeBox);
 
 }
 

@@ -43,7 +43,6 @@ class User {
     }
 
     this.goals.push(newGoal);
-    console.log('A new goal has been added to ' + this.name + "! Goal name :  " + newGoal.getName());
     return true;
   }
 
@@ -53,7 +52,6 @@ class User {
     }
 
     this.badges.push(newBadge);
-    console.log('A new newBadge has been added to ' + this.name + "! newBadge name :  " + newBadge.getName());
     return true;
   }
 
@@ -67,7 +65,6 @@ class User {
 
     var res = null;
     // FIXME var res =  goal.evaluate(goalValue);
-    console.log("goal is", res);
     return res;
   }
 
@@ -94,7 +91,6 @@ class User {
     tmp.push(goalValue);
 
     var res =  badge.evaluate(tmp);
-    console.log("goal is", res);
     return res;
   }
 

@@ -10,17 +10,14 @@ var assert = chai.assert;
 import GoalDefinition = require('../../../src/goal/definition/GoalDefinition');
 import ExpressionHandler = require('../../../src/goal/condition/ExpressionHandler');
 import GoalCondition = require('../../../src/goal/condition/GoalCondition');
+import OverallGoalCondition = require('../../../src/goal/condition/OverallGoalCondition');
 import Operand = require('../../../src/goal/condition/Operand');
 
 describe("Build a goal", function () {
   var goal:GoalDefinition;
 
-  it("should throw an error when name given is null", () => {
-    chai.expect(() => goal = new GoalDefinition(null)).to.throw(Error);
-  });
-
   it("should have given name", () => {
-    goal = new GoalDefinition("aName");
+    goal = new GoalDefinition("aName",null,null,0);
     assert.equal(goal.getName(), "aName");
   });
 });
@@ -29,7 +26,7 @@ describe("Add a condition to a goal", () => {
   var goal:GoalDefinition;
 
   beforeEach(() => {
-    goal = new GoalDefinition("aGoal");
+    goal = new GoalDefinition("aGoal",null,null,0);
   });
 
   it('should have its own uuid', () => {
@@ -38,7 +35,8 @@ describe("Add a condition to a goal", () => {
 
   it('should be possible to add an expression', () => {
     var comparison:GoalCondition = new GoalCondition(new Operand("Température",true), 'inf', new Operand('10',false), 'desc');
-    chai.expect(goal.addCondition(comparison)).not.to.throw;
+    var expression:OverallGoalCondition = new OverallGoalCondition(comparison,new Date(Date.UTC(2000,10,10)),new Date(Date.UTC(2000,10,15)));
+    chai.expect(goal.addCondition(expression)).not.to.throw;
   });
 });
 

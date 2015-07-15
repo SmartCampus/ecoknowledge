@@ -41,6 +41,6 @@ describe("ExpressionFactory test", () => {
     });
 
     it("should build an expression with right required", () => {
-        chai.expect(expression.getRequired()).to.be.eqls({'TEMP_CLI':null});
+        chai.expect(expression.getRequired()).to.be.eqls({'TEMP_CLI':{}});
     });
 });

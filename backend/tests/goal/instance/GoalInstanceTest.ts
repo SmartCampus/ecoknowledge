@@ -10,11 +10,15 @@ import GoalInstance = require('../../../src/goal/instance/GoalInstance');
 import GoalDefinition = require('../../../src/goal/definition/GoalDefinition');
 import GoalCondition = require('../../../src/goal/condition/GoalCondition');
 import Operand = require('../../../src/goal/condition/Operand');
+import AverageOnValue = require('../../../src/goal/condition/AverageOnValue');
 
 describe("GoalInstance test", () => {
 
     var goalInstance:GoalInstance;
     var goalDefinition:GoalDefinition;
+
+    var aStartDate:Date = new Date(Date.UTC(2000,5,1));
+    var aEndDate:Date = new Date(Date.UTC(2000,8,1));
 
     var aSymbolicName:string = 'Temperature_cli';
     var anotherSymbolicName:string = 'Temperature_ext';
@@ -22,16 +26,25 @@ describe("GoalInstance test", () => {
     var aSensorName:string = 'AC_443';
     var anotherSensorName:string = 'TEMP_444';
 
+    var aCondition:GoalCondition = new GoalCondition(new Operand(aSymbolicName, true), '<', new Operand('40', false), 'desc');
+    var anotherCondition:GoalCondition = new GoalCondition(new Operand(anotherSymbolicName, true), '>', new Operand('25', false), 'desc')
+
+    var anAverageCondition:AverageOnValue;
+
     beforeEach(() => {
-        goalDefinition = new GoalDefinition("goal1");
-        goalDefinition.addCondition(new GoalCondition(new Operand(aSymbolicName, true), '<', new Operand('40', false), 'desc'));
-        goalDefinition.addCondition(new GoalCondition(new Operand(anotherSymbolicName, true), '>', new Operand('25', false), 'desc'));
+        goalDefinition = new GoalDefinition("goal1",null,null,100);
+        goalDefinition.addCondition(aCondition);
+        goalDefinition.addCondition(anotherCondition);
 
         var mapSymbolicNameToSensor:any = {};
         mapSymbolicNameToSensor[aSymbolicName] = aSensorName;
         mapSymbolicNameToSensor[anotherSymbolicName] = anotherSensorName;
 
-         goalInstance = new GoalInstance("the badge for noobs", goalDefinition, mapSymbolicNameToSensor);
+        goalInstance = new GoalInstance(aStartDate, aEndDate, "the badge for noobs", goalDefinition, mapSymbolicNameToSensor);
+
+        //FIXME
+        // anAverageCondition = new AverageOnValue(aCondition,<STARTDATE-1month>, goalInstance.getStartDate(), goalInstance.getEndDate());
+
     });
 
 
@@ -43,18 +56,25 @@ describe("GoalInstance test", () => {
         chai.expect(goalInstance.getSensors()).to.be.eqls(expectedConditionsDescription);
     });
 
-    it("should evaluate the badge as OK", () => {
+    it("should evaluate the goal instance as OK", () => {
         var correctValuesDescription = {};
-        correctValuesDescription[aSensorName] = 35;
-        correctValuesDescription[anotherSensorName] = 27;
+        var valuesForASensorName = {'values':[{value:35}]};
+        correctValuesDescription[aSensorName] = valuesForASensorName;
+
+        var valuesForAnotherSensorName = {'values':[{value:27}]};
+        correctValuesDescription[anotherSensorName] = valuesForAnotherSensorName;
 
         chai.expect(goalInstance.evaluate(correctValuesDescription)).to.be.true;
     });
 
-    it("should evaluate the badge as KO", () => {
+    it("should evaluate the goal instance as KO", () => {
         var incorrectValuesDescription = {};
-        incorrectValuesDescription[aSensorName] = 35;
-        incorrectValuesDescription[anotherSensorName] = 20;
+
+        var valuesForASensorName = {'values':[{value:35}]};
+        incorrectValuesDescription[aSensorName] = valuesForASensorName;
+
+        var valuesForAnotherSensorName = {'values':[{value:20}]};
+        incorrectValuesDescription[anotherSensorName] = valuesForAnotherSensorName;
 
         chai.expect(goalInstance.evaluate(incorrectValuesDescription)).to.be.false;
     });
