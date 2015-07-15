@@ -56,13 +56,13 @@ describe("ExpressionHandler test", () => {
     it("Evaluate correctly an expression to false", () => {
         expressionHandler.addExpression(basicValueComparison);
         var values = {'Température': {'values':[{date:null,value:'3'}]}};
-        chai.expect(expressionHandler.evaluate(values)).to.be.false;
+        chai.expect(expressionHandler.evaluate(values,null)).to.be.false;
     });
 
     it("Evaluate correctly an expression to true", () => {
         expressionHandler.addExpression(basicValueComparison);
         var values = {'Température': {'values':[{date:null,value:'-3'}]}};
-        chai.expect(expressionHandler.evaluate(values)).to.be.true;
+        chai.expect(expressionHandler.evaluate(values,null)).to.be.true;
     });
 
     it("Evaluate correctly expressions to true", () => {
@@ -83,7 +83,7 @@ describe("ExpressionHandler test", () => {
             'Door': {values: [{date:null,value:true}]}
         };
 
-        chai.expect(expressionHandler.evaluate(values)).to.be.true;
+        chai.expect(expressionHandler.evaluate(values,null)).to.be.true;
     });
 
     it("Evaluate correctly expressions to false", () => {
@@ -105,7 +105,7 @@ describe("ExpressionHandler test", () => {
             'Door': {values:[{date:null,value:true}]}
         };
 
-        chai.expect(expressionHandler.evaluate(values)).to.be.false;
+        chai.expect(expressionHandler.evaluate(values,null)).to.be.false;
     });
 
     /*FIXME

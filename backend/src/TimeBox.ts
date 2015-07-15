@@ -20,6 +20,14 @@ class TimeBox {
         return this.endDateInMillis;
     }
 
+    public getStartDate():string {
+        return this.convertTime(this.startDateInMillis);
+    }
+
+    public getEndDate():string {
+        return this.convertTime(this.endDateInMillis);
+    }
+
     /**
      *
      * @returns {{startDate: string, endDate: string}}

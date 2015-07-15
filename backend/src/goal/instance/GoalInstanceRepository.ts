@@ -5,7 +5,7 @@ import UserProvider = require('../../user/UserRepository');
 
 class BadgeProvider {
 
-    private badges:GoalInstance[] = [];
+    private goalInstancesArray:GoalInstance[] = [];
 
     private factory:GoalInstanceFactory;
 
@@ -14,12 +14,12 @@ class BadgeProvider {
     }
 
     public addGoalInstance(aBadge:GoalInstance) {
-        this.badges.push(aBadge);
+        this.goalInstancesArray.push(aBadge);
     }
 
     public getGoalInstance(goalInstanceUUID:string):GoalInstance {
-        for(var i in this.badges) {
-            var currentBadge = this.badges[i];
+        for(var i in this.goalInstancesArray) {
+            var currentBadge = this.goalInstancesArray[i];
             if (currentBadge.hasUUID(goalInstanceUUID)) {
                 return currentBadge;
             }
@@ -30,10 +30,10 @@ class BadgeProvider {
 
     public getListOfGoalInstancesInJsonFormat():any[] {
         var result = [];
-        for (var i in this.badges) {
+        for (var i in this.goalInstancesArray) {
             var currentGoalInstanceDesc:any = {};
-            currentGoalInstanceDesc.name = this.badges[i].getName();
-            currentGoalInstanceDesc.id = this.badges[i].getId();
+            currentGoalInstanceDesc.name = this.goalInstancesArray[i].getName();
+            currentGoalInstanceDesc.id = this.goalInstancesArray[i].getId();
             result.push(currentGoalInstanceDesc);
         }
 
@@ -42,17 +42,17 @@ class BadgeProvider {
 
     public getGoalInstancesDescriptionInJsonFormat():any[] {
         var result = [];
-        /*FIXME
-        for (var i in this.badges) {
+
+        for (var i in this.goalInstancesArray) {
 
             var currentBadgeDesc:any = {};
-            currentBadgeDesc.name = this.badges[i].getName();
-            currentBadgeDesc.id = this.badges[i].getId();
-            currentBadgeDesc.points = this.badges[i].getPoints();
-            currentBadgeDesc.desc = this.badges[i].getDescription();
+            currentBadgeDesc.name = this.goalInstancesArray[i].getName();
+            currentBadgeDesc.id = this.goalInstancesArray[i].getId();
+            currentBadgeDesc.desc = this.goalInstancesArray[i].getDescription();
+            currentBadgeDesc.progress = this.goalInstancesArray[i].getProgress();
 
             var statusDesc:string = '';
-            var badgeStatus:number = this.badges[i].getStatus();
+            var badgeStatus:number = this.goalInstancesArray[i].getStatus();
 
             switch(badgeStatus) {
                 case 0:statusDesc = 'WAIT';break;
@@ -65,7 +65,7 @@ class BadgeProvider {
             currentBadgeDesc.status = statusDesc;
             result.push(currentBadgeDesc);
         }
-         */
+
         return result;
     }
 }

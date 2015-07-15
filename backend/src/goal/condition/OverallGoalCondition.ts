@@ -31,15 +31,20 @@ class OverallGoalCondition implements Expression {
     }
 
     public updateDurationAchieved(currentDate:number) {
-        var duration = this.condition.getStartDateInMillis() - this.condition.getEndDateInMillis();
+        console.log("Current date", new Date(currentDate));
+        var duration = this.condition.getEndDateInMillis() - this.condition.getStartDateInMillis();
 
-        var durationAchieved = currentDate - this.condition.getStartDateInMillis();
+        var durationAchieved = (currentDate - this.condition.getStartDateInMillis()) * 1000;
+        
+        console.log("DURATION", duration);
+        console.log("DURATION ACHIEVED", durationAchieved);
 
         if (durationAchieved < 0) {
             throw new Error('Time given is before dateOfCreation !');
         }
 
         this.percentageOfTime = durationAchieved * 100 / duration;
+        console.log("PERCENTAGE OF TIME", this.percentageOfTime);
     }
 
     public setTimeBox(newTimeBox:TimeBox){
@@ -69,7 +74,11 @@ class OverallGoalCondition implements Expression {
      */
 
     public evaluate(data:any) {
+        console.log("Evaluate overall", this.condition.getDescription(), "with", JSON.stringify(data));
+
         var conditionDesc:any = this.condition.getRequired();
+
+        console.log("Required by condition : ", conditionDesc);
 
         //  For each sensors required by internal condition
         for (var currentSensorName in conditionDesc) {
@@ -95,7 +104,10 @@ class OverallGoalCondition implements Expression {
             }
         }
 
+
         this.percentageAchieved = numberOfCorrectValues * 100 / numberOfValues;
+        console.log("PERCENTAGE ACHIEVED", this.percentageAchieved);
+        this.updateDurationAchieved(Date.now());
 
         return (numberOfCorrectValues * 100 / numberOfValues) >= this.thresholdRate;
     }
@@ -110,8 +122,10 @@ class OverallGoalCondition implements Expression {
     }
 
     public getData():any {
+        console.log("LOOOOOOOOOOL", this.percentageAchieved);
+
         return {
-            description: this.condition.getDescription(),
+            description: this.condition.getDescription() + ' ' + this.thresholdRate + '% du temps',
             timeAchieved: this.percentageOfTime,
             conditionAchieved: this.percentageAchieved
         }
