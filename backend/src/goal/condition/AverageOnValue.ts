@@ -37,6 +37,11 @@ class AverageOnValue implements Expression {
     }
 
     public getData():any {
+        return {
+            description: this.condition.getDescription(),
+            timeAchieved: this.percentageOfTime,
+            conditionAchieved: this.percentageAchieved
+        }
     }
 
     public getComparisonType():string {
