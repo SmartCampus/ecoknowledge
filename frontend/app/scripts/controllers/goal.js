@@ -7,12 +7,15 @@ var app = angular.module('ecoknowledgeApp')
       self.goal = {};
       self.goal.conditions = [];
       self.goal.name = '';
+      self.goal.timebox = {};
+      self.goal.timebox.debut = new Date();
+      self.goal.timebox.fin = new Date();
 
       self.type = ['Température', 'Porte'];
 
       this.addGoal = function () {
-        console.log(self.goal);
-        ServiceGoal.post(self.goal,function() {
+        console.log(self.goal.toJSON());
+        ServiceGoal.post(self.goal.toJSON(),function() {
             console.log('Achieve to add a conditions', self.conditions);
           },function(){
             console.log('Fail when trying to add a conditions', self.conditions);
@@ -30,15 +33,11 @@ var app = angular.module('ecoknowledgeApp')
       };
 
       this.changeType = function(iteration, type){
-          if(type==='sensor'){
-            iteration.sensor=true;
-          }else{
-            iteration.sensor=false;
-          }
+          iteration.sensor= (type==='sensor');
       };
 
       self.addComparison = function(){
-          self.goal.conditions[self.goal.conditions.length] = {};
+          self.goal.conditions[self.goal.conditions.length] = {type:'comparison'};
       };
 
       self.addComparison();
@@ -48,6 +47,14 @@ app.directive('stringForm', function(){
   return{
     retrict:'E',
     templateUrl:'../../views/create goal/string-form.html'
+  };
+});
+
+
+app.directive('dateValidityGoal', function(){
+  return{
+    restrict:'E',
+    templateUrl:'../../views/create goal/date-validity-goal.html'
   };
 });
 
@@ -62,5 +69,12 @@ app.directive('numberForm', function(){
   return{
     restrict:'E',
     templateUrl:'../../views/create goal/number-form.html'
+  };
+});
+
+app.directive('conditions', function(){
+  return{
+    restrict:'E',
+    templateUrl:'../../views/create goal/conditions.html'
   };
 });
