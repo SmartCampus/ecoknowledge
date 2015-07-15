@@ -40,10 +40,12 @@ class BadgeProvider {
         return result;
     }
 
-    public getGoalInstancesDescriptionInJsonFormat():any[] {
+    public getGoalInstancesDescriptionInJsonFormat(datastub:any=null):any[] {
         var result = [];
 
         for (var i in this.goalInstancesArray) {
+
+            this.goalInstancesArray[i].evaluate(datastub);
 
             var currentBadgeDesc:any = {};
             currentBadgeDesc.name = this.goalInstancesArray[i].getName();

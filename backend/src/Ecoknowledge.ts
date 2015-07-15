@@ -30,8 +30,8 @@ class Ecoknowledge {
         return this.goalInstanceRepository.getListOfGoalInstancesInJsonFormat();
     }
 
-    public getGoalInstancesDescriptionInJsonFormat():any[] {
-        return this.goalInstanceRepository.getGoalInstancesDescriptionInJsonFormat();
+    public getGoalInstancesDescriptionInJsonFormat(data:any=null):any[] {
+        return this.goalInstanceRepository.getGoalInstancesDescriptionInJsonFormat(data);
     }
 
     public addGoalDefinition(data:any):string {

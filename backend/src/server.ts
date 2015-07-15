@@ -37,7 +37,7 @@ var ecoknowledge:EcoKnowledge = new EcoKnowledge(goalRepository, badgeRepository
 var context:Context = new DemoContext();
 context.fill(goalRepository, badgeRepository, userProvider);
 
-var demo:boolean = false;
+var demo:boolean = true;
 
 // Enable JSON data for requests
 //app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -99,7 +99,7 @@ app.get('/goalsInstance', jsonParser, function (req, res, next) {
 app.get('/badges', jsonParser, function (req, res, next) {
 
     console.log("/badges");
-    var result = ecoknowledge.getGoalInstancesDescriptionInJsonFormat();
+    var result = ecoknowledge.getGoalInstancesDescriptionInJsonFormat(jsonStub);
     console.log("++ Sending", result);
 
     res.send(result);
@@ -146,13 +146,16 @@ app.post('/addbadge', jsonParser, function (req, res) {
 //TODO move async calls
 import GoalInstance = require('./goal/instance/GoalInstance');
 
+var jsonStub:any = {};
+
 //TODO need a badgeID in request
 app.get('/evaluatebadge', jsonParser, function (req, res) {
 
-    if (!demo) {
-        var badgeID:string = req.query.badgeID;
+    var badgeID:string = req.query.badgeID;
 
-        var badge:GoalInstance = badgeRepository.getGoalInstance(badgeID);
+    var badge:GoalInstance = badgeRepository.getGoalInstance(badgeID);
+
+    if (!demo) {
 
         //TODO move what follow
         var required = badge.getSensors();
@@ -248,8 +251,19 @@ app.get('/evaluatebadge', jsonParser, function (req, res) {
 
     }
     else {
-
+        console.log("STUB",JSON.stringify(jsonStub));
+        var result = badge.evaluate(jsonStub);
+        res.send(badge.getProgress());
     }
+});
+
+var fs = require('fs');
+fs.readFile( './stub_values.json', function (err, data) {
+    if (err) {
+        throw err;
+    }
+    jsonStub = JSON.parse(data.toString());
+    console.log("++ Fichier stub chargé correctement");
 });
 
 
@@ -261,6 +275,27 @@ app.post('/evaluategoal', jsonParser, function (req, res) {
     res.send(result);
 
 });
+
+
+
+app.post('/addstub', jsonParser, function(req,res) {
+
+
+     var data = req.body;
+     var value = data.value;
+    var key = data.key;
+
+     var valueDesc:any = {};
+     valueDesc.date = Date.now() / 1000;
+     valueDesc.value = value;
+
+     var oldJson:any[] = jsonStub[key].values;
+     oldJson.push(valueDesc);
+     jsonStub[key].values = oldJson;
+
+     res.send('Valeur' + JSON.stringify(valueDesc) + " ajouté au stub ! ");
+});
+
 
 app.listen(port);
 

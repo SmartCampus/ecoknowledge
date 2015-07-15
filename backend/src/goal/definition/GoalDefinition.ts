@@ -74,7 +74,6 @@ class GoalDefinition {
     }
 
     public evaluate(values:any, goalInstance:GoalInstance = null):boolean {
-        console.log("Evaluate a definition with", JSON.stringify(values));
 
         if (goalInstance != null) {
             goalInstance.resetProgress();
