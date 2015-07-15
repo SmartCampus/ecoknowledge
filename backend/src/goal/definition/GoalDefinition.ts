@@ -1,5 +1,6 @@
 /// <reference path="../../../typings/node-uuid/node-uuid.d.ts" />
 
+import GoalInstance = require('../instance/GoalInstance');
 import ExpressionHandler = require('../condition/ExpressionHandler');
 import Expression = require('../condition/Expression');
 import TimeBox = require('../../TimeBox');
@@ -65,9 +66,14 @@ class GoalDefinition {
         this.expressions.addExpression(expression);
     }
 
-    public evaluate(values:any):boolean {
+    public evaluate(values:any, goalInstance:GoalInstance = null):boolean {
         console.log("Evaluate a definition with", JSON.stringify(values));
-        return this.expressions.evaluate(values);
+
+        if (goalInstance != null) {
+            goalInstance.resetProgress();
+        }
+
+        return this.expressions.evaluate(values, goalInstance);
     }
 
     public getRequired():string[][] {

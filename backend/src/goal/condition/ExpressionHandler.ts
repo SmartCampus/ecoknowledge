@@ -7,6 +7,8 @@ import Expression = require('./Expression');
 import GoalCondition = require('./GoalCondition');
 import TimeBox = require('../../TimeBox');
 
+import GoalInstance = require('../instance/GoalInstance');
+
 class ExpressionHandler {
 
     private expressions:Expression[] = [];
@@ -101,12 +103,14 @@ class ExpressionHandler {
      * @returns {boolean}
      */
 
-    public evaluate(values:any):boolean {
+    public evaluate(values:any, goalInstance:GoalInstance):boolean {
 
         var result:boolean = true;
 
         for (var i = 0; i < this.expressions.length; i++) {
             result = result && this.expressions[i].evaluate(values);
+            var conditionDescription:any = this.expressions[i].getData();
+            goalInstance.addProgress(conditionDescription);
         }
 
         return result;

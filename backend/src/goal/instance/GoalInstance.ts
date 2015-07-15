@@ -15,7 +15,7 @@ class GoalInstance {
     private description:string;
     private status:BadgeStatus;
 
-    private progress:number;
+    private progress:any[]= [];
 
     //  { 'tmp_cli':'ac_443', 'tmp_ext':'TEMP_444', 'door_o':'D_55', ... }
     private mapSymbolicNameToSensor:any = {};
@@ -34,8 +34,15 @@ class GoalInstance {
 
         this.mapSymbolicNameToSensor = mapGoalToConditionAndSensor;
 
-        this.progress = 0;
         this.status = BadgeStatus.RUN;
+    }
+
+    public resetProgress() {
+        this.progress = [];
+    }
+
+    public addProgress(progressDescription:any) {
+        this.progress.push(progressDescription);
     }
 
     public getStartDate():Date {
@@ -66,7 +73,7 @@ class GoalInstance {
         return this.id === aUUID;
     }
 
-    public getProgress():number {
+    public getProgress():any {
         return this.progress;
     }
 
@@ -84,7 +91,7 @@ class GoalInstance {
 
         for (var currentSymbolicName in this.mapSymbolicNameToSensor) {
             var currentSensor = this.mapSymbolicNameToSensor[currentSymbolicName];
-            result[currentSensor] = null;
+            result[currentSensor] = this.goalDefinition.getRequired()[currentSymbolicName];
         }
 
         return result;
@@ -118,7 +125,7 @@ class GoalInstance {
 
         var mapSymbolicNameToValue = this.bindSymbolicNameToValue(values);
 
-        var result = this.goalDefinition.evaluate(mapSymbolicNameToValue);
+        var result = this.goalDefinition.evaluate(mapSymbolicNameToValue, this);
         return result;
     }
 
