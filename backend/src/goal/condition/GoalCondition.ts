@@ -1,8 +1,11 @@
+/// <reference path="../../../typings/node-uuid/node-uuid.d.ts" />
+
 import Operand = require('./Operand');
 import TimeBox = require('../../TimeBox');
-import Expression = require('./Expression');
 
-class GoalCondition implements Expression{
+import uuid = require('node-uuid');
+
+class GoalCondition {
     private leftOperand:Operand;
     private rightOperand:Operand;
 
@@ -11,12 +14,28 @@ class GoalCondition implements Expression{
 
     private timeBox:TimeBox;
 
+    private id:string;
+
     constructor(leftOperand:Operand, typeOfComparison:string, rightOperand:Operand, description:string, timeBox:TimeBox=null) {
         this.leftOperand = leftOperand;
         this.rightOperand = rightOperand;
         this.typeOfComparison = typeOfComparison;
         this.description = description;
         this.timeBox = timeBox;
+
+        this.id = uuid.v4();
+    }
+
+    public getStartDateInMillis() {
+        return this.timeBox.getStartDateInMillis();
+    }
+
+    public getEndDateInMillis() {
+        return this.timeBox.getEndDateInMillis();
+    }
+
+    public getID():string {
+        return this.id;
     }
 
     public getComparisonType():string {
@@ -43,6 +62,17 @@ class GoalCondition implements Expression{
         this.typeOfComparison = newTypeOfComparison;
     }
 
+    public setTimeBox(timebox:TimeBox) {
+        this.timeBox = timebox;
+    }
+
+    /**
+     *
+     * @returns {any}
+     * {
+     *      <sensor_name> : <timebox_desc>
+     * }
+     */
     public getRequired():string[] {
         var result:any = {};
 
@@ -73,15 +103,16 @@ class GoalCondition implements Expression{
         var evalString:string = '';
 
         if (this.leftOperand.hasToBeDefined() && this.rightOperand.hasToBeDefined()) {
-            evalString += values[this.leftOperand.getStringDescription()] + this.typeOfComparison + values[this.rightOperand.getStringDescription()];
+            evalString += this.getFirstValue(values,this.leftOperand.getStringDescription())
+                + this.typeOfComparison + this.getFirstValue(values,this.rightOperand.getStringDescription());
         }
 
         else if (this.leftOperand.hasToBeDefined() && !this.rightOperand.hasToBeDefined()) {
-            evalString += values[this.leftOperand.getStringDescription()] + this.typeOfComparison + this.rightOperand.getStringDescription();
+            evalString += this.getFirstValue(values,this.leftOperand.getStringDescription()) + this.typeOfComparison + this.rightOperand.getStringDescription();
         }
 
         else if (this.rightOperand.hasToBeDefined() && !this.leftOperand.hasToBeDefined()) {
-            evalString += this.leftOperand.getStringDescription() + this.typeOfComparison + values[this.rightOperand.getStringDescription()];
+            evalString += this.leftOperand.getStringDescription() + this.typeOfComparison + this.getFirstValue(values,this.rightOperand.getStringDescription());
         }
 
         else {
@@ -89,6 +120,15 @@ class GoalCondition implements Expression{
         }
 
         return eval(evalString);
+    }
+
+    /**
+     * <sensor-name> : { values : [ {value:_} ] }
+     * @param values
+     */
+    private getFirstValue(values:any, sensorName:string) {
+
+        return values[sensorName].values[0].value;
     }
 
     public getDescription():string {

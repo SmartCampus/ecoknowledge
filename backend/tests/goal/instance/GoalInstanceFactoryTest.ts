@@ -32,10 +32,12 @@ describe("GoalInstanceFactory test", () => {
 
     var anotherConditionName:string = 'Temp_ext';
     var anotherSensorName:string = 'TEMP_443';
+    var now:Date = new Date(Date.now());
 
     var conditions:any = {};
     beforeEach(() => {
-        aGoal = new GoalDefinition(aGoalName);
+
+        aGoal = new GoalDefinition(aGoalName, now, new Date(now.getFullYear(), now.getMonth(), now.getDate()+ 10), 5);
         aGoal.setUUID(aGoalID);
         aGoal.addCondition(new GoalCondition(new Operand(aConditionName, true), '<',
             new Operand(anotherConditionName, true), aGoalDescription));
@@ -45,6 +47,7 @@ describe("GoalInstanceFactory test", () => {
         data = {};
 
         data.id = aGoal.getUUID();
+
         data.description = aGoalDescription;
 
         conditions[aConditionName] = aSensorName;
@@ -57,26 +60,32 @@ describe("GoalInstanceFactory test", () => {
     });
 
     it("should have proper name when built", () => {
-        var goalInstance = factory.createBadge(data, goalDefinitionRepository, null);
+        var goalInstance = factory.createGoalInstance(data, goalDefinitionRepository, null, now);
         chai.expect(goalInstance.getName()).to.be.equal(aGoalName);
     });
 
     it("should have proper description when built", () => {
-        var goalInstance = factory.createBadge(data, goalDefinitionRepository, null);
+        var goalInstance = factory.createGoalInstance(data, goalDefinitionRepository, null, now);
         chai.expect(goalInstance.getDescription()).to.be.equal(aGoalDescription);
     });
 
-    it("should have proper goal when build", () => {
-        var goalInstance = factory.createBadge(data, goalDefinitionRepository, null);
-        chai.expect(goalInstance.getGoalDefinition()).to.be.eqls(aGoal);
-    });
-
     it("should have proper sensors when build", () => {
-        var goalInstance = factory.createBadge(data, goalDefinitionRepository, null);
+        var goalInstance = factory.createGoalInstance(data, goalDefinitionRepository, null, now);
         var expectedConditionsDescription = {};
         expectedConditionsDescription[aSensorName] = null;
         expectedConditionsDescription[anotherSensorName] = null;
 
         chai.expect(goalInstance.getSensors()).to.be.eqls(expectedConditionsDescription);
+    });
+
+    it('should have proper startDate when built', () => {
+        var goalInstance = factory.createGoalInstance(data, goalDefinitionRepository, null, now);
+        chai.expect(goalInstance.getStartDate()).to.be.eq(now);
+    });
+
+    it('should have proper endDate when built', () => {
+        var goalInstance = factory.createGoalInstance(data, goalDefinitionRepository, null, now);
+        var aEndDate:Date = new Date(now.getFullYear(), now.getMonth(), now.getDate() + aGoal.getDuration());
+        chai.expect(goalInstance.getEndDate().getTime()).to.be.eq(aEndDate.getTime());
     });
 });

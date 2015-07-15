@@ -6,7 +6,7 @@ class ExpressionFactory {
 
     static REQUIRED_JSON_FIELD:string[] = ['type', 'comparison', 'valueLeft','valueRight', 'description'];
 
-    public createExpression(expression:any):Expression {
+    public createExpression(expression:any):GoalCondition {
         for (var currentRequiredFieldIndex in ExpressionFactory.REQUIRED_JSON_FIELD) {
             var currentRequiredField = ExpressionFactory.REQUIRED_JSON_FIELD[currentRequiredFieldIndex];
 

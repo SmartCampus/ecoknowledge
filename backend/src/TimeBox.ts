@@ -12,6 +12,18 @@ class TimeBox {
         return currentDateInMillis > this.startDateInMillis && currentDateInMillis < this.endDateInMillis;
     }
 
+    public getStartDateInMillis():number {
+        return this.startDateInMillis;
+    }
+
+    public getEndDateInMillis():number {
+        return this.endDateInMillis;
+    }
+
+    /**
+     *
+     * @returns {{startDate: string, endDate: string}}
+     */
     public getRequired():any {
         var startDateStr = this.convertTime(this.startDateInMillis);
         var endDateStr = this.convertTime(this.endDateInMillis);

@@ -39,7 +39,7 @@ class Ecoknowledge {
     }
 
     public addGoalInstance(data:any) {
-        var goalInstance = this.goalInstanceFactory.createBadge(data, this.goalDefinitionRepository, this.userRepository);
+        var goalInstance = this.goalInstanceFactory.createGoalInstance(data, this.goalDefinitionRepository, this.userRepository);
         this.goalInstanceRepository.addGoalInstance(goalInstance);
     }
 

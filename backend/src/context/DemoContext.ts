@@ -30,6 +30,7 @@ class DemoContext implements Context {
     }
 
     public fillGoalProvider(goalProvider:GoalDefinitionRepository) {
+        /*FIXME
         this.aUUID = UUID.v4();
 
         this.aGoal = new GoalDefinition('Clim éco !');
@@ -41,10 +42,13 @@ class DemoContext implements Context {
             'la température extérieure doit être supérieure à 40°C'));
 
         goalProvider.addGoal(this.aGoal);
+        */
     }
 
     public fillBadgeProvider(badgeProvider:GoalInstanceRepository) {
+        /*
         var mapGoalToConditionAndSensor:any  = {};
+
 
         var condition1Desc:any = {};
         condition1Desc.name = 'Temp_cli';
@@ -58,10 +62,12 @@ class DemoContext implements Context {
 
 
         mapGoalToConditionAndSensor[this.aUUID.toString()] = arrayOfConditions;
-        var aBadge = new GoalInstance("Vous n'êtes pas un esquimau !",
+       var aBadge = new GoalInstance("Vous n'êtes pas un esquimau !",
             this.aGoal,mapGoalToConditionAndSensor);
 
         badgeProvider.addGoalInstance(aBadge);
+       FIXME
+        */
     }
 }
 

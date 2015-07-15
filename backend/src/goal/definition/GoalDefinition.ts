@@ -2,6 +2,7 @@
 
 import ExpressionHandler = require('../condition/ExpressionHandler');
 import Expression = require('../condition/Expression');
+import TimeBox = require('../../TimeBox');
 import uuid = require('node-uuid');
 
 class GoalDefinition {
@@ -14,13 +15,34 @@ class GoalDefinition {
 
     private durationInDays:number;
 
-    constructor(name:string, startDate:Date=null, endDate:Date=null, durationInDays:number=null) {
+    constructor(name:string, startDate:Date, endDate:Date, durationInDays:number) {
+
         if (!name) {
             throw new Error('Bad argument : name given is null');
         }
 
         this.name = name;
         this.id = uuid.v4();
+
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.durationInDays = durationInDays;
+    }
+
+    public setTimeBoxes(newTimeBox:TimeBox) {
+        this.expressions.setTimeBoxes(newTimeBox);
+    }
+
+    public getStartDate():Date {
+        return this.startDate;
+    }
+
+    public getEndDate():Date {
+        return this.endDate;
+    }
+
+    public getDuration():number {
+        return this.durationInDays;
     }
 
     public getUUID() {
