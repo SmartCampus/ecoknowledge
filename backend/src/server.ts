@@ -87,6 +87,13 @@ app.get('/goals', jsonParser, function (req, res, next) {
   res.send(result);
 });
 
+app.get('/goalsInstance', jsonParser, function(req,res,next) {
+  console.log('/goalsInstance');
+  var result = ecoknowledge.getListOfGoalInstances();
+  console.log("++ Sending", result);
+  res.send(result);
+});
+
 app.get('/badges', jsonParser, function (req, res, next) {
 
   console.log("/badges");
@@ -149,18 +156,20 @@ app.get('/evaluatebadge', jsonParser, function (req, res) {
 
   console.log("SENSORS TO GET : ", required);
 
-  async.times(required.length, function(n, next) {
-    var path = 'http://smartcampus.unice.fr/sensors/' + required[n] + '/data/last';
+  var requiredSensorName = Object.keys(required);
+  console.log("Sensor names", requiredSensorName);
+
+  async.times(requiredSensorName.length, function(n, next) {
+    var path = 'http://smartcampus.unice.fr/sensors/' + requiredSensorName[n] + '/data/last';
+    console.log("PATH", path);
 
     http.get(path, function(res) {
       res.on("data", function(chunk) {
         console.log("BODY: ", chunk.toString());
         var jsonObject = JSON.parse(chunk.toString());
-        var value = jsonObject.values[0].value;
 
-        var a = required[n];
+        required[jsonObject.id] = jsonObject;
 
-        sensorsValues[a] = value;
         next(null, null);
       });
     }).on('error', function(e) {
@@ -168,7 +177,7 @@ app.get('/evaluatebadge', jsonParser, function (req, res) {
     });
   },
       function(err) {
-        var result = badge.evaluate([sensorsValues]);
+        var result = badge.evaluate(required);
         res.send(result);
       }
   );

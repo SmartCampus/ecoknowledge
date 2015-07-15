@@ -66,6 +66,7 @@ class GoalDefinition {
     }
 
     public evaluate(values:any):boolean {
+        console.log("Evaluate a definition with", JSON.stringify(values));
         return this.expressions.evaluate(values);
     }
 

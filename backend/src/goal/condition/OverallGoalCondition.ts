@@ -69,7 +69,11 @@ class OverallGoalCondition implements Expression {
      */
 
     public evaluate(data:any) {
+        console.log("Evaluate overall", this.condition.getDescription(), "with", JSON.stringify(data));
+
         var conditionDesc:any = this.condition.getRequired();
+
+        console.log("Required by condition : ", conditionDesc);
 
         //  For each sensors required by internal condition
         for (var currentSensorName in conditionDesc) {
