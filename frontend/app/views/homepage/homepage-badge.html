@@ -1,3 +1,4 @@
+
 <div class="badge-container">
   <table>
     <tr>
@@ -5,19 +6,32 @@
         <h3 class="badge-name">{{badge.name}}</h3>
       </td>
       <td>
-        <p class="badge-points">{{badge.points}} points!</p>
       </td>
       <td>
         <p>Sparks</p>
+      </td>
+    </tr>
+      <tr ng-repeat="condition in badge.progress">
+        <td colspan="3">
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="{{condition.conditionAchieved}}"
+                 aria-valuemin="0" aria-valuemax="100" style="width:{{condition.conditionAchieved}}%">
+              {{condition.description}}
+            </div>
+          </div>
+        </td>
+      </tr>
+    <tr>
+      <td colspan="3">
+        Temps écoulé
       </td>
     </tr>
 
     <tr>
       <td colspan="3">
         <div class="progress">
-          <div class="progress-bar" role="progressbar" aria-valuenow="{{badge.progress}}"
-               aria-valuemin="0" aria-valuemax="100" style="width:{{badge.progress}}%">
-            {{badge.progress}}% Complete
+          <div class="progress-bar" role="progressbar" aria-valuenow="{{badge.progress[0].timeAchieved}}"
+               aria-valuemin="0" aria-valuemax="100" style="width:{{badge.progress[0].timeAchieved}}%">
           </div>
         </div>
       </td>
