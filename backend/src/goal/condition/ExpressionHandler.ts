@@ -22,7 +22,7 @@ class ExpressionHandler {
     }
 
     public setTimeBoxes(newTimeBox:TimeBox) {
-        for(var currentExpressionIndex in this.expressions) {
+        for (var currentExpressionIndex in this.expressions) {
             this.expressions[currentExpressionIndex].setTimeBox(newTimeBox);
         }
     }
@@ -110,7 +110,9 @@ class ExpressionHandler {
         for (var i = 0; i < this.expressions.length; i++) {
             result = result && this.expressions[i].evaluate(values);
             var conditionDescription:any = this.expressions[i].getData();
-            goalInstance.addProgress(conditionDescription);
+            if (goalInstance != null) {
+                goalInstance.addProgress(conditionDescription);
+            }
         }
 
         return result;

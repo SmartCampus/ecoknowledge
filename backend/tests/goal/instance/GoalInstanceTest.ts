@@ -11,6 +11,7 @@ import GoalDefinition = require('../../../src/goal/definition/GoalDefinition');
 import GoalCondition = require('../../../src/goal/condition/GoalCondition');
 import Operand = require('../../../src/goal/condition/Operand');
 import AverageOnValue = require('../../../src/goal/condition/AverageOnValue');
+import TimeBox = require('../../../src/TimeBox');
 
 describe("GoalInstance test", () => {
 
@@ -41,17 +42,20 @@ describe("GoalInstance test", () => {
         mapSymbolicNameToSensor[anotherSymbolicName] = anotherSensorName;
 
         goalInstance = new GoalInstance(aStartDate, aEndDate, "the badge for noobs", goalDefinition, mapSymbolicNameToSensor);
-
-        //FIXME
-        // anAverageCondition = new AverageOnValue(aCondition,<STARTDATE-1month>, goalInstance.getStartDate(), goalInstance.getEndDate());
-
     });
 
 
     it("should return sensors required correctly", () => {
         var expectedConditionsDescription = {};
-        expectedConditionsDescription[aSensorName] = null;
-        expectedConditionsDescription[anotherSensorName] = null;
+
+        var timeBoxOjb:TimeBox = new TimeBox(aStartDate.getTime(), aEndDate.getTime());
+
+        var timeBox:any = {};
+        timeBox.startDate = timeBoxOjb.getStartDate();
+        timeBox.endDate = timeBoxOjb.getEndDate();
+
+        expectedConditionsDescription[aSensorName] = timeBox;
+        expectedConditionsDescription[anotherSensorName] = timeBox;
 
         chai.expect(goalInstance.getSensors()).to.be.eqls(expectedConditionsDescription);
     });
