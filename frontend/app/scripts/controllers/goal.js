@@ -33,14 +33,24 @@ var app = angular.module('ecoknowledgeApp')
     };
 
     this.changeType = function(iteration, type){
-      iteration.sensor= (type==='sensor');
+        iteration.sensor = (type==='sensor');
+        iteration.value = null;
     };
 
     self.addComparison = function(){
       self.goal.conditions[self.goal.conditions.length] = {
         type:'comparison',
+        threshold:100,
         expression:{}
       };
+    };
+
+    self.checkPercent = function(iteration){
+        if(iteration.threshold<0) {
+            iteration.threshold = 0;
+        }else if(iteration.threshold>100) {
+            iteration.threshold = 100;
+        }
     };
 
     self.addComparison();
