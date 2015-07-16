@@ -38,11 +38,31 @@ var app = angular.module('ecoknowledgeApp')
     };
 
     self.addComparison = function(){
-      self.goal.conditions[self.goal.conditions.length] = {
-        type:'comparison',
-        threshold:100,
-        expression:{}
-      };
+        self.goal.conditions[self.goal.conditions.length] = {
+            type:'comparison',
+            threshold:100,
+            expression:{
+                comparison:'<',
+                type:'number',
+                valueLeft:{
+                    value:null,
+                    sensor:true
+                },
+                valueRight:{
+                    value:null,
+                    sensor:false
+                },
+                description:null
+            }
+        };
+    };
+
+    self.addOverall = function(){
+        self.goal.conditions[self.goal.conditions.length] = {
+            type:'overall',
+            threshold:100,
+            expression:{}
+        };
     };
 
     self.checkPercent = function(iteration){
@@ -67,7 +87,7 @@ var app = angular.module('ecoknowledgeApp')
         self.nbBadge++;
     };
 
-    self.nbBadge = 1;
+    self.nbBadge = 0;
     self.selectedBadge = [];
 }]);
 
@@ -111,5 +131,19 @@ app.directive('addBadges', function(){
     return{
         restrict:'E',
         templateUrl:'../../views/create goal/add-badges.html'
+    };
+});
+
+app.directive('overall', function(){
+    return{
+        restrict:'E',
+        templateUrl:'../../views/create goal/overall.html'
+    };
+});
+
+app.directive('comparison', function(){
+    return{
+        restrict:'E',
+        templateUrl:'../../views/create goal/comparison.html'
     };
 });

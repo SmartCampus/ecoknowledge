@@ -1,0 +1,10 @@
+<label>Température : </label>
+<br/>
+<span>
+    <input type="text" placeholder="Nom Symbolique du capteur" ng-model="iteration.expression.valueLeft.value" required>
+    <label>a baissé de</label>
+    <input type="number" ng-change="goalCtrl.checkPercent(iteration)" ng-model="iteration.threshold" required>
+    <label>% par rapport au mois dernier.</label>
+</span>
+<br/>
+<input type="text" placeholder="Description de la condition" ng-model="iteration.expression.description" required>

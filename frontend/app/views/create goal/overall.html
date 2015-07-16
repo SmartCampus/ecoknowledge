@@ -1,0 +1,66 @@
+<div class="input-group">
+
+    <!--Choose the type of comparison-->
+    <select ng-change="goalCtrl.changeComparison(iteration.expression, typeValeurComparaison)" name="typeDeValeurDeComparaison" class = "selectpick form-control"
+            ng-model="typeValeurComparaison" required>
+        <option value="" disabled selected>Sélectionnez un type de valeur à comparer</option>
+        <option value="string">Texte</option>
+        <option value="number">Nombre</option>
+        <option value="boolean">Booléen</option>
+    </select>
+
+    <!--Choose if we want to compare to a sensor or to a value for the left operand-->
+    <div ng-show="typeValeurComparaison!=null">
+        <select name="typeLeft" class="selectpick form-control" ng-model="typeLeft" ng-change="goalCtrl.changeType(iteration.expression.valueLeft, typeLeft)"required>
+            <option value="sensor">Capteur</option>
+            <option ng-if="typeValeurComparaison=='number'" value="number">Nombre</option>
+            <option ng-if="typeValeurComparaison=='string'" value="string">Texte</option>
+            <option ng-if="typeValeurComparaison=='boolean'" value="boolean">Booléen</option>
+        </select>
+
+        <!--Show the correct input in function of the type of the left operand-->
+        <input ng-if="typeLeft=='sensor'" type="text" placeholder="Valeur de la variable" ng-model="iteration.expression.valueLeft.value" required>
+        <input ng-if="typeLeft=='string'" type="text" placeholder="Valeur de la variable" ng-model="iteration.expression.valueLeft.value" required>
+        <input ng-if="typeLeft=='number'" type="number" placeholder="Valeur de la variable" ng-model="iteration.expression.valueLeft.value" required>
+        <select ng-if="typeLeft=='boolean'" class="selectpick form-control" ng-model="iteration.expression.valueLeft.value" required>
+            <option value=true>Vrai</option>
+            <option value=false>Faux</option>
+        </select>
+
+        <!--Show the possibilities of comparisons for a number, a string or a boolean-->
+        <number-form></number-form>
+        <string-form></string-form>
+
+        <!--Choose if we want to compare to a sensor or to a value for the right operand-->
+        <select name="typeRight" class="selectpick form-control" ng-model="typeRight" ng-change="goalCtrl.changeType(iteration.expression.valueRight, typeRight)" required>
+            <option value="sensor">Capteur</option>
+            <option ng-if="typeValeurComparaison=='number'" value="number">Nombre</option>
+            <option ng-if="typeValeurComparaison=='string'" value="string">Texte</option>
+            <option ng-if="typeValeurComparaison=='boolean'" value="boolean">Booléen</option>
+        </select>
+
+        <!--Show the correct input in function of the type of the right operand-->
+        <boolean-form></boolean-form>
+
+        <input ng-if="typeRight=='number'" type="number" name="tempInput" class="form-control"
+               placeholder="Valeur" ng-model="iteration.expression.valueRight.value"
+               ng-required="typeValeurComparaison == 'number'">
+        <input ng-if="typeRight=='sensor'" type="text" placeholder="Valeur de la variable"
+               ng-model="iteration.expression.valueRight.value" required>
+        <input ng-if="typeRight=='string'" type="text" name="tempInput" class="form-control"
+               placeholder="Texte attendu" ng-model="iteration.expression.valueRight.value"
+               ng-required="typeValeurComparaison=='string'">
+
+
+        <!--An input to describe the current condition-->
+        <input type="text" name="descriptionCondition" class="form-control" placeholder="Description de la condition"
+               ng-model="iteration.expression.description" required>
+        <div>
+            <!--An input to tell how much time in percent we have to verify the condition-->
+            <label>Pourcentage de complétion : </label>
+            <input type="number" ng-change="goalCtrl.checkPercent(iteration)" ng-model="iteration.threshold"
+                   placeholder="Valeur attendue" required>
+            <label>%</label>
+        </div>
+    </div>
+</div>
