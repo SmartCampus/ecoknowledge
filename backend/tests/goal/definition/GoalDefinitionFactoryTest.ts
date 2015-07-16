@@ -42,7 +42,6 @@ describe("GoalDefinitionFactory test", () => {
         jsonDefinition.conditions = jsonConditions;
 
         goal = factory.createGoal(jsonDefinition);
-        console.log(goal);
     });
 
 

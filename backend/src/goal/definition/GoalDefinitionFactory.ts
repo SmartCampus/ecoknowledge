@@ -16,12 +16,6 @@ class GoalFactory {
         var endDateOfValidityPeriod:Date = new Date(data.timeBox.endDate);
         var durationAllowed:number = data.duration;
 
-        console.log("STARTDATE");
-        console.log(startDateOfValidityPeriod);
-
-        console.log("ENDDATE");
-        console.log(endDateOfValidityPeriod);
-
         var newGoal:GoalDefinition = new GoalDefinition(goalName, startDateOfValidityPeriod, endDateOfValidityPeriod, durationAllowed);
 
         var goalConditions:any[] = data.conditions;
@@ -29,6 +23,8 @@ class GoalFactory {
             var currentExpression = this.conditionFactory.createCondition(goalConditions[i], data.timeBox, durationAllowed);
             newGoal.addCondition(currentExpression);
         }
+
+        console.log("Creation de l'objectif", goalName, "valide du", startDateOfValidityPeriod, "au", endDateOfValidityPeriod);
 
         return newGoal;
     }

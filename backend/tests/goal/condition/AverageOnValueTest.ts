@@ -341,9 +341,6 @@ describe('Test AverageOnValueTest', () => {
        it('should separate data correctly', () => {
 
            var data:any = {};
-           var oldValues:any[] = [];
-           var newValues:any[] = [];
-
            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
 

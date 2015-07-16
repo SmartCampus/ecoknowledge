@@ -39,7 +39,7 @@ class GoalInstanceFactory {
 
         if(!this.checkDates(goalDefinition,startDate)) {
             throw new Error('Can not build goal instance ! it does not have the time to be achieved. We are the '
-                + new Date(Date.now()) + ', the goal start the' + goalDefinition.getStartDate() + ' and end the ' +goalDefinition.getEndDate() + ' with a duration of ' + goalDefinition.getDuration() + ' days');
+                + now  + ', the goal start the' + goalDefinition.getStartDate() + ' and end the ' +goalDefinition.getEndDate() + ' with a duration of ' + goalDefinition.getDuration() + ' days');
         }
 
         var endDate:Date = new Date(startDate.getFullYear(), startDate.getMonth(),startDate.getDate() + goalDefinition.getDuration());
@@ -61,16 +61,8 @@ class GoalInstanceFactory {
     public checkDates(goalDefinition:GoalDefinition, startDate:Date):boolean {
         var durationInDays:number = goalDefinition.getDuration();
 
-        console.log("DURATION");
-        console.log(durationInDays);
-
         var endDate:Date = new Date(startDate.getFullYear(), startDate.getMonth(),startDate.getDate() + durationInDays);
-
-        console.log(endDate);
-
         var endDateOfValidityPeriod = goalDefinition.getEndDate();
-
-        console.log(endDateOfValidityPeriod);
 
         return endDate.getTime() <= endDateOfValidityPeriod.getTime();
     }

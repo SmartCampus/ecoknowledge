@@ -26,6 +26,7 @@ import BadgeRepository = require('./badge/BadgeRepository');
 import EcoKnowledge = require('./Ecoknowledge');
 import Context = require('./Context');
 import DemoContext = require('./context/DemoContext');
+import Clock = require('./Clock');
 
 var userProvider:UserRepository = new UserRepository();
 var badgeRepository:GoalInstanceRepository = new GoalInstanceRepository();
@@ -191,14 +192,14 @@ app.get('/evaluatebadge', jsonParser, function (req, res) {
                         dataJsonString += chunk.toString();
                     });
 
-                    result.on('end', function() {
+                    result.on('end', function () {
                         numberToLoad--;
                         console.log("remaining number to load");
                         console.log(numberToLoad);
                         var jsonObject = JSON.parse(dataJsonString);
                         required[jsonObject.id] = jsonObject;
 
-                        if(numberToLoad == 0) {
+                        if (numberToLoad == 0) {
                             var result = badge.evaluate(required);
                             res.send(badge.getProgress());
                         }
@@ -251,19 +252,20 @@ app.get('/evaluatebadge', jsonParser, function (req, res) {
 
     }
     else {
-        console.log("STUB",JSON.stringify(jsonStub));
+        console.log("STUB", JSON.stringify(jsonStub));
         var result = badge.evaluate(jsonStub);
         res.send(badge.getProgress());
     }
 });
 
 var fs = require('fs');
-fs.readFile( './stub_values.json', function (err, data) {
+fs.readFile('./stub_values.json', function (err, data) {
     if (err) {
         throw err;
     }
     jsonStub = JSON.parse(data.toString());
     console.log("++ Fichier stub chargé correctement");
+    console.log(JSON.stringify(jsonStub));
 });
 
 
@@ -277,23 +279,33 @@ app.post('/evaluategoal', jsonParser, function (req, res) {
 });
 
 
+app.post('/addstub', jsonParser, function (req, res) {
 
-app.post('/addstub', jsonParser, function(req,res) {
-
-
-     var data = req.body;
-     var value = data.value;
+    var data = req.body;
+    var value = data.value;
     var key = data.key;
 
-     var valueDesc:any = {};
-     valueDesc.date = Date.now() / 1000;
-     valueDesc.value = value;
+    var valueDesc:any = {};
+    valueDesc.date = Clock.getNow() / 1000;
+    valueDesc.value = value;
 
-     var oldJson:any[] = jsonStub[key].values;
-     oldJson.push(valueDesc);
-     jsonStub[key].values = oldJson;
+    var oldJson:any[] = jsonStub[key].values;
+    oldJson.push(valueDesc);
+    jsonStub[key].values = oldJson;
 
-     res.send('Valeur' + JSON.stringify(valueDesc) + " ajouté au stub ! ");
+    res.send('Valeur' + JSON.stringify(valueDesc) + " ajouté au stub ! ");
+});
+
+
+app.post('/setNow', jsonParser, function (req, res) {
+    var data = req.body;
+    console.log("data.now", data.now);
+
+    var newNow:Date = new Date(data.now);
+
+    console.log("New now : ", newNow);
+    Clock.setNow(newNow.getTime());
+    res.send("New now : " + newNow);
 });
 
 

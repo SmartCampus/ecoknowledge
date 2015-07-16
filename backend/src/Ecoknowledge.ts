@@ -2,6 +2,7 @@ import GoalDefinitionRepository = require('./goal/definition/GoalDefinitionRepos
 import GoalInstanceRepository = require('./goal/instance/GoalInstanceRepository');
 import GoalInstanceFactory = require('./goal/instance/GoalInstanceFactory');
 import UserRepository = require('./user/UserRepository');
+import Clock = require('./Clock');
 
 class Ecoknowledge {
     private goalDefinitionRepository:GoalDefinitionRepository;
@@ -39,7 +40,7 @@ class Ecoknowledge {
     }
 
     public addGoalInstance(data:any) {
-        var goalInstance = this.goalInstanceFactory.createGoalInstance(data, this.goalDefinitionRepository, this.userRepository, new Date(Date.now()));
+        var goalInstance = this.goalInstanceFactory.createGoalInstance(data, this.goalDefinitionRepository, this.userRepository,new Date(Clock.getNow()));
         this.goalInstanceRepository.addGoalInstance(goalInstance);
     }
 

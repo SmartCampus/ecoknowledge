@@ -1,6 +1,7 @@
 import GoalCondition = require('./GoalCondition');
 import TimeBox = require('../../TimeBox');
 import Expression = require('./Expression');
+import Clock = require('../../Clock');
 
 class AverageOnValue implements Expression {
     private condition:GoalCondition;
@@ -101,18 +102,13 @@ class AverageOnValue implements Expression {
                 decreaseRate = 100 - (newAverage * 100 / oldAverage);
             }
 
-            console.log("NEW AVERAGE", newAverage);
-            console.log("OLDAVERAGE", oldAverage);
-            console.log("DECREASE RATE", decreaseRate);
-
 
             result = result && (decreaseRate >= this.thresholdRate);
 
 
             this.percentageAchieved = decreaseRate * 100 / this.thresholdRate;
-            console.log("PERCENT ACHIEVE", this.percentageAchieved);
 
-            this.updateDurationAchieved(Date.now());
+            this.updateDurationAchieved(Clock.getNow());
         }
 
         return result;
@@ -120,13 +116,7 @@ class AverageOnValue implements Expression {
 
     public updateDurationAchieved(currentDate:number) {
         var duration = this.endDate.getTime() - this.dateOfCreation.getTime();
-        console.log("ENDDATE", this.endDate, "DATEOFCRE", this.dateOfCreation);
-        console.log("DURATIION", duration);
-
-
         var durationAchieved = (currentDate - this.dateOfCreation.getTime()) ;
-        console.log("DURATIONACHIEVED", durationAchieved);
-
 
         if (durationAchieved < 0) {
             throw new Error('Time given is before dateOfCreation !');
@@ -140,13 +130,19 @@ class AverageOnValue implements Expression {
     }
 
     public separateOldAndNewData(values:any[], oldValues:number[], newValues:number[]) {
+
         for (var currentValueIndex in values) {
 
             //  { date : __ , value : __ }
             var currentValue:any = values[currentValueIndex];
 
-            if (currentValue.date * 1000 >= this.startDate.getTime()
-                && currentValue.date * 1000 <= this.dateOfCreation.getTime()) {
+            var currentDate:Date = new Date(currentValue.date);
+
+            console.log("date:",currentValue.date
+                ,"value:",currentValue.value);
+
+            if (currentDate.getTime()  >= this.startDate.getTime()
+                && currentDate.getTime() <= this.dateOfCreation.getTime()) {
 
                 oldValues.push(currentValue.value);
             }

@@ -17,10 +17,6 @@ class GoalDefinition {
     private durationInDays:number;
 
     constructor(name:string, startDate:Date, endDate:Date, durationInDays:number) {
-
-        console.log("STARDATE????");
-        console.log(startDate);
-
         if (!name) {
             throw new Error('Bad argument : name given is null');
         }

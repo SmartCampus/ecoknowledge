@@ -1,6 +1,7 @@
 import GoalCondition = require('./GoalCondition');
 import Expression = require('./Expression');
 import TimeBox = require('../../TimeBox');
+import Clock = require('../../Clock');
 
 class OverallGoalCondition implements Expression {
     private condition:GoalCondition;
@@ -69,11 +70,7 @@ class OverallGoalCondition implements Expression {
      */
 
     public evaluate(data:any) {
-        console.log("Evaluate overall", this.condition.getDescription(), "with", JSON.stringify(data));
-
         var conditionDesc:any = this.condition.getRequired();
-
-        console.log("Required by condition : ", conditionDesc);
 
         //  For each sensors required by internal condition
         for (var currentSensorName in conditionDesc) {
@@ -101,8 +98,8 @@ class OverallGoalCondition implements Expression {
 
 
         this.percentageAchieved = numberOfCorrectValues * 100 / numberOfValues;
-        console.log("PERCENTAGE ACHIEVED", this.percentageAchieved);
-        this.updateDurationAchieved(Date.now());
+
+        this.updateDurationAchieved(Clock.getNow());
 
         return (numberOfCorrectValues * 100 / numberOfValues) >= this.thresholdRate;
     }
@@ -117,8 +114,6 @@ class OverallGoalCondition implements Expression {
     }
 
     public getData():any {
-        console.log("LOOOOOOOOOOL", this.percentageAchieved);
-
         return {
             description: this.condition.getDescription() + ' ' + this.thresholdRate + '% du temps',
             timeAchieved: this.percentageOfTime,
