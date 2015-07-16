@@ -99,15 +99,15 @@ app.get('/badges', jsonParser, function (req, res, next) {
     res.send(result);
 });
 
-app.get('/badgesV2/', jsonParser, function(req, res, next) {
-  console.log("get /badgesV2");
-  var result = badgeRepositoryV2.getAllBadges();
-  console.log("++ Sending", result);
+app.get('/badgesV2/', jsonParser, function (req, res, next) {
+    console.log("get /badgesV2");
+    var result = badgeRepositoryV2.getAllBadges();
+    console.log("++ Sending", result);
 
-  res.send(result);
+    res.send(result);
 });
 
-var sensors = [{"name": "AC_443"},{"name": "TEMP_442"}];
+var sensors = [{"name": "AC_443"}, {"name": "TEMP_442"}];
 app.get('/required', jsonParser, function (req, res, next) {
     var goalName:string = req.query.goalName;
     console.log('goal name : ', goalName);
@@ -139,6 +139,24 @@ app.post('/addbadge', jsonParser, function (req, res) {
     res.send("OK");
 });
 
+
+app.post('/takeGoal', jsonParser, function (req, res) {
+    var actionData = req.body;
+    console.log(actionData);
+    var goalID = actionData.goalID;
+    console.log("GOALID", goalID);
+
+    var data =
+    {
+        "goal": {
+            "id": goalID,
+            "conditions": {"TMP_CLI": "TEMP_443V"}
+        }
+    };
+
+    ecoknowledge.addGoalInstance(data);
+    res.send("0K");
+});
 
 //TODO move async calls
 import GoalInstance = require('./goal/instance/GoalInstance');

@@ -9,7 +9,7 @@
  * the objectives and the badges we have.
  */
 var app = angular.module('ecoknowledgeApp')
-    .controller('HomeCtrl', ['ServiceBadge', 'ServiceGoal',function (ServiceBadge, ServiceGoal) {
+    .controller('HomeCtrl', ['ServiceBadge', 'ServiceGoal', '$window',function (ServiceBadge, ServiceGoal, $window) {
         var self = this;
         self.goals = [];
         self.badges = [];
@@ -17,6 +17,20 @@ var app = angular.module('ecoknowledgeApp')
         /*
          * Add a goal the the array goals
          */
+
+    self.takeGoal = function(goalID) {
+
+      var toSend = {};
+      toSend.goalID = goalID;
+
+      console.log('TAKE GOAL', toSend);
+      ServiceBadge.takeGoal(toSend, function(data) {
+        console.log('Objectif instancié ',data);
+        $window.location.reload();
+      }, function (data) {
+        console.log('Fail sur l\'instanciation de l\'objectif', data);
+      });
+    };
 
     self.getGoals = function() {
       ServiceGoal.get('',function(data) {
