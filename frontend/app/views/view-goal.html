@@ -1,6 +1,6 @@
 <h1>{{viewGoalCtrl.goal.name}}</h1>
 <ul>
-    <li ng-repeat="condition in viewGoalCtrl.goal.conditions">
-        {{condition.leftValue.name+' '+condition.comparison+' '+condition.rightValue.name}}
+    <li class="list-group-item" ng-repeat="condition in viewGoalCtrl.goal.conditions">
+        {{condition.description}}
     </li>
 </ul>
