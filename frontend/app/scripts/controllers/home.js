@@ -30,6 +30,19 @@ var app = angular.module('ecoknowledgeApp')
       ServiceBadge.get('',function(data) {
           console.log('badges : ',data);
           self.badges =  data;
+
+          for(var badgeIndex in self.badges) {
+            var currentBadge = self.badges[badgeIndex];
+            var startDate = new Date(currentBadge.startDate);
+            var formattedStartDate = '' + startDate.getDay() + ' ' + startDate.getMonth() + ' ' + startDate.getFullYear();
+
+            var endDate = new Date(currentBadge.endDate);
+            var formattedEndDate = '' + endDate.getDay() + ' ' + endDate.getMonth() + ' ' + endDate.getFullYear();
+
+            currentBadge.startDate = formattedStartDate;
+            currentBadge.endDate = formattedEndDate;
+          }
+
         },function(data) {
           console.debug('Fail to get the badges',data);
         });

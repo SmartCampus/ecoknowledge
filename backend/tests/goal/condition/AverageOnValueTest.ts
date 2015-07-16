@@ -37,23 +37,23 @@ describe('Test AverageOnValueTest', () => {
 
             var oldValues:any[] = [
                 {
-                    date: new Date(Date.UTC(2000, 1, 2)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 2)).getTime() / 1000),
                     value: 100
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 3)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 3)).getTime() / 1000),
                     value: 101
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 4)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 4)).getTime() / 1000),
                     value: 99
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 5)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 5)).getTime() / 1000),
                     value: 102
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 6)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 6)).getTime() / 1000),
                     value: 98
                 }
             ];
@@ -61,23 +61,23 @@ describe('Test AverageOnValueTest', () => {
 
             var newValues:any[] = [
                 {
-                    date: new Date(Date.UTC(2000, 1, 8)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
                     value: 89
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 9)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
                     value: 90
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 10)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
                     value: 91
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 11)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 11)).getTime() / 1000),
                     value: 70
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 12)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 12)).getTime() / 1000),
                     value: 110
                 }
             ];
@@ -98,38 +98,38 @@ describe('Test AverageOnValueTest', () => {
 
             var oldValues:any[] = [
                 {
-                    date: new Date(Date.UTC(2000, 1, 2)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 2)).getTime() / 1000),
                     value: 100
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 3)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 3)).getTime() / 1000),
                     value: 101
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 4)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 4)).getTime() / 1000),
                     value: 99
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 5)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 5)).getTime() / 1000),
                     value: 102
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 6)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 6)).getTime() / 1000),
                     value: 98
                 }
             ];
 
             var newValues:any[] = [
                 {
-                    date: new Date(Date.UTC(2000, 1, 8)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
                     value: 89
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 9)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
                     value: 90
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 10)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
                     value: 91
                 }
             ];
@@ -149,39 +149,39 @@ describe('Test AverageOnValueTest', () => {
 
             var oldValues:any[] = [
                 {
-                    date: new Date(Date.UTC(2000, 1, 2)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 2)).getTime() / 1000),
                     value: 100
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 3)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 3)).getTime() / 1000),
                     value: 101
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 4)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 4)).getTime() / 1000),
                     value: 99
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 5)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 5)).getTime() / 1000),
                     value: 102
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 6)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 6)).getTime() / 1000),
                     value: 98
                 }
             ];
 
             var newValues:any[] = [
                 {
-                    date: new Date(Date.UTC(2000, 1, 8)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
                     value: 89
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 9)),
+                    date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
                     value: 91
                 },
                 {
-                    date: new Date(Date.UTC(2000, 1, 10)),
-                    value: 92
+                    date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
+                    value: 91
                 }
             ];
 
@@ -210,23 +210,23 @@ describe('Test AverageOnValueTest', () => {
                 //  average : 100
                 oldValues = [
                     {
-                        date: new Date(Date.UTC(2000, 1, 2)),
+                        date: new Date(new Date(Date.UTC(2000, 1, 2)).getTime() / 1000),
                         value: 100
                     },
                     {
-                        date: new Date(Date.UTC(2000, 1, 3)),
+                        date: new Date(new Date(Date.UTC(2000, 1, 3)).getTime() / 1000),
                         value: 101
                     },
                     {
-                        date: new Date(Date.UTC(2000, 1, 4)),
+                        date: new Date(new Date(Date.UTC(2000, 1, 4)).getTime() / 1000),
                         value: 99
                     },
                     {
-                        date: new Date(Date.UTC(2000, 1, 5)),
+                        date: new Date(new Date(Date.UTC(2000, 1, 5)).getTime() / 1000),
                         value: 102
                     },
                     {
-                        date: new Date(Date.UTC(2000, 1, 6)),
+                        date: new Date(new Date(Date.UTC(2000, 1, 6)).getTime() / 1000),
                         value: 98
                     }
                 ];
@@ -236,15 +236,15 @@ describe('Test AverageOnValueTest', () => {
                 //  average : 100
                 newValues = [
                     {
-                        date: new Date(Date.UTC(2000, 1, 8)),
+                        date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
                         value: 100
                     },
                     {
-                        date: new Date(Date.UTC(2000, 1, 9)),
+                        date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
                         value: 101
                     },
                     {
-                        date: new Date(Date.UTC(2000, 1, 10)),
+                        date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
                         value: 99
                     }
                 ];
@@ -262,15 +262,15 @@ describe('Test AverageOnValueTest', () => {
                 //  average : 95
                 newValues = [
                     {
-                        date: new Date(Date.UTC(2000, 1, 8)),
+                        date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
                         value: 90
                     },
                     {
-                        date: new Date(Date.UTC(2000, 1, 9)),
+                        date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
                         value: 100
                     },
                     {
-                        date: new Date(Date.UTC(2000, 1, 10)),
+                        date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
                         value: 95
                     }
                 ];
@@ -287,19 +287,19 @@ describe('Test AverageOnValueTest', () => {
                 //  average : 95
                 newValues = [
                     {
-                        date: new Date(Date.UTC(2000, 1, 8)),
+                        date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
                         value: 85
                     },
                     {
-                        date: new Date(Date.UTC(2000, 1, 9)),
+                        date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
                         value: 95
                     },
                     {
-                        date: new Date(Date.UTC(2000, 1, 10)),
+                        date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
                         value: 91
                     },
                     {
-                        date: new Date(Date.UTC(2000, 1, 10)),
+                        date: new Date(new Date(Date.UTC(2000, 1, 11)).getTime() / 1000),
                         value: 89
                     }
                 ];
@@ -338,63 +338,63 @@ describe('Test AverageOnValueTest', () => {
     });
 
     describe('separate data', () => {
-       it('should separate data correctly', () => {
+        it('should separate data correctly', () => {
 
-           var data:any = {};
-           condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
-           averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
 
-           var values:any[] = [
-               {
-                   date: new Date(Date.UTC(2000, 1, 2)),
-                   value: 100
-               },
-               {
-                   date: new Date(Date.UTC(2000, 1, 3)),
-                   value: 101
-               },
-               {
-                   date: new Date(Date.UTC(2000, 1, 4)),
-                   value: 99
-               },
-               {
-                   date: new Date(Date.UTC(2000, 1, 5)),
-                   value: 102
-               },
-               {
-                   date: new Date(Date.UTC(2000, 1, 6)),
-                   value: 98
-               },
-               //   OLD/NEW DATA
-               {
-                   date: new Date(Date.UTC(2000, 1, 8)),
-                   value: 85
-               },
-               {
-                   date: new Date(Date.UTC(2000, 1, 9)),
-                   value: 95
-               },
-               {
-                   date: new Date(Date.UTC(2000, 1, 10)),
-                   value: 91
-               },
-               {
-                   date: new Date(Date.UTC(2000, 1, 10)),
-                   value: 89
-               }
-           ];
+            var values:any[] = [
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 2)).getTime() / 1000),
+                    value: 100
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 3)).getTime() / 1000),
+                    value: 101
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 4)).getTime() / 1000),
+                    value: 99
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 5)).getTime() / 1000),
+                    value: 102
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 6)).getTime() / 1000),
+                    value: 98
+                },
+
+                //   OLD/NEW DATA
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
+                    value: 89
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
+                    value: 90
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
+                    value: 91
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 11)).getTime() / 1000),
+                    value: 70
+                }
+            ];
 
 
-           var expectedOldValues:number[] = [100,101,99,102,98];
-           var expectedNewValues:number[] = [85,95,91,89];
+            var expectedOldValues:number[] = [100, 101, 99, 102, 98];
+            var expectedNewValues:number[] = [89, 90, 91, 70];
 
-           var actualOldValues:number[] = [];
-           var actualNewValues:number[] = [];
+            var actualOldValues:number[] = [];
+            var actualNewValues:number[] = [];
 
-           averageOnValue.separateOldAndNewData(values, actualOldValues, actualNewValues);
-           chai.expect(actualOldValues).to.be.eqls(expectedOldValues);
-           chai.expect(actualNewValues).to.be.eqls(expectedNewValues);
-       }) ;
+            averageOnValue.separateOldAndNewData(values, actualOldValues, actualNewValues);
+            chai.expect(actualOldValues).to.be.eqls(expectedOldValues);
+            chai.expect(actualNewValues).to.be.eqls(expectedNewValues);
+        });
     });
 
     describe('getRequired method', () => {

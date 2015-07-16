@@ -1,41 +1,48 @@
-
 <div class="badge-container">
   <table>
     <tr>
       <td>
         <h3 class="badge-name">{{badge.name}}</h3>
       </td>
+    </tr>
+    <tr>
       <td>
-      </td>
-      <td>
-        <p>Sparks</p>
+        Temps restant
       </td>
     </tr>
-      <tr ng-repeat="condition in badge.progress">
-        <td colspan="3">
-          <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="{{condition.conditionAchieved}}"
-                 aria-valuemin="0" aria-valuemax="100" style="width:{{condition.conditionAchieved}}%">
-              {{condition.description}}
-            </div>
-          </div>
-        </td>
-      </tr>
     <tr>
-      <td colspan="3">
-        Temps écoulé
-      </td>
-    </tr>
-
-    <tr>
-      <td colspan="3">
+      <td>
         <div class="progress">
-          <div class="progress-bar" role="progressbar" aria-valuenow="{{badge.progress[0].timeAchieved}}"
-               aria-valuemin="0" aria-valuemax="100" style="width:{{badge.progress[0].timeAchieved}}%">
+          <div class="progress-bar"
+               ng-class="{
+               'progress-bar-danger':badge.timeProgress > 80,
+                'progress-bar-warning':badge.timeProgress > 30 && badge.timeProgress < 80,
+                'progress-bar-success':badge.timeProgress < 30
+                }" role="progressbar" aria-valuenow="{{100-badge.timeProgress}}"
+               aria-valuemin="0" aria-valuemax="100" style="width:{{100-badge.timeProgress}}%">
           </div>
         </div>
       </td>
+
+    <tr>
+      <table ng-repeat="condition in badge.progress">
+        <td>
+          {{condition.description}}
+        </td>
+        </tr>
+        <tr >
+          <td>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="{{condition.conditionAchieved}}"
+                   aria-valuemin="0" aria-valuemax="100" style="width:{{condition.conditionAchieved}}%">
+                {{condition.conditionAchieved}}%
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
     </tr>
+
   </table>
 
 </div>

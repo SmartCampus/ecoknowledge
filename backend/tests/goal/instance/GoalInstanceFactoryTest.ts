@@ -34,7 +34,7 @@ describe("GoalInstanceFactory test", () => {
     var anotherConditionName:string = 'Temp_ext';
     var anotherSensorName:string = 'TEMP_443';
     var now:Date = new Date(Date.now());
-    var endDate:Date = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 5);
+    var endDate:Date = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 5, now.getHours(), now.getMinutes(), now.getSeconds());
 
 
     var conditions:any = {};
@@ -95,7 +95,7 @@ describe("GoalInstanceFactory test", () => {
 
     it('should have proper endDate when built', () => {
         var goalInstance = factory.createGoalInstance(data, goalDefinitionRepository, null, now);
-        var aEndDate:Date = new Date(now.getFullYear(), now.getMonth(), now.getDate() + aGoal.getDuration());
+        var aEndDate:Date = new Date(now.getFullYear(), now.getMonth(), now.getDate() + aGoal.getDuration(), now.getHours(), now.getMinutes(), now.getSeconds());
         chai.expect(goalInstance.getEndDate().getTime()).to.be.eq(aEndDate.getTime());
     });
 });

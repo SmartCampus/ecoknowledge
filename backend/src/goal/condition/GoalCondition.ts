@@ -132,6 +132,10 @@ class GoalCondition {
     }
 
     public getDescription():string {
+        return this.description;
+    }
+
+    public getStringRepresentation():string {
         return this.leftOperand.getStringDescription() + this.typeOfComparison + this.rightOperand.getStringDescription();
     }
 

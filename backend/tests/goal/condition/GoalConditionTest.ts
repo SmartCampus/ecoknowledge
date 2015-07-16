@@ -91,7 +91,7 @@ describe('Test GoalCondition', () => {
         });
 
         it('should get a proper description', () => {
-            chai.expect(condition.getDescription()).to.be.eq('10<11');
+            chai.expect(condition.getStringRepresentation()).to.be.eq('10<11');
         });
 
         describe('Evaluate with <', () => {

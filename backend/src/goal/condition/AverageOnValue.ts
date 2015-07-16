@@ -21,7 +21,7 @@ class AverageOnValue implements Expression {
 
         this.thresholdRate = thresholdRate;
 
-        if(startDate != null && dateOfCreation != null && endDate != null) {
+        if (startDate != null && dateOfCreation != null && endDate != null) {
             this.startDate = startDate;
             this.dateOfCreation = dateOfCreation;
             this.endDate = endDate;
@@ -40,7 +40,8 @@ class AverageOnValue implements Expression {
         this.endDate = new Date(newTimeBox.getEndDateInMillis());
 
         //TODO "-1 month hardcoded"
-        this.startDate = new Date(this.dateOfCreation.getFullYear(), this.dateOfCreation.getMonth() - 1, this.dateOfCreation.getDate());
+        this.startDate = new Date(this.dateOfCreation.getFullYear(), this.dateOfCreation.getMonth() - 1, this.dateOfCreation.getDate(),
+            this.dateOfCreation.getHours(), this.dateOfCreation.getMinutes(), this.dateOfCreation.getSeconds());
 
         var timeBox:TimeBox = new TimeBox(this.startDate.getTime(), this.endDate.getTime());
         this.condition.setTimeBox(timeBox);
@@ -82,6 +83,8 @@ class AverageOnValue implements Expression {
 
         var sensorNames:string[] = this.condition.getRequired();
 
+        console.log("REQUIRED", sensorNames, "\nDATA", JSON.stringify(data));
+
         var result = true;
         for (var currentSensorName in sensorNames) {
             var oldAndNewData:any[] = data[currentSensorName].values;
@@ -93,20 +96,25 @@ class AverageOnValue implements Expression {
 
             console.log("OLDDATA[0]", oldData[0]);
             console.log("newData[0]", newData[0]);
-
-            var oldAverage = this.computeAverageValues(oldData);
-            var newAverage = this.computeAverageValues(newData);
-
             var decreaseRate = 0;
-            if(newAverage) {
-                decreaseRate = 100 - (newAverage * 100 / oldAverage);
-            }
 
+            if (oldData) {
+
+                var oldAverage = this.computeAverageValues(oldData);
+                var newAverage = this.computeAverageValues(newData);
+
+                if (newAverage) {
+                    decreaseRate = 100 - (newAverage * 100 / oldAverage);
+                }
+            }
 
             result = result && (decreaseRate >= this.thresholdRate);
 
 
             this.percentageAchieved = decreaseRate * 100 / this.thresholdRate;
+
+            //  It can be infinite
+            this.percentageAchieved = (this.percentageAchieved >  100)?100:this.percentageAchieved;
 
             this.updateDurationAchieved(Clock.getNow());
         }
@@ -116,13 +124,17 @@ class AverageOnValue implements Expression {
 
     public updateDurationAchieved(currentDate:number) {
         var duration = this.endDate.getTime() - this.dateOfCreation.getTime();
-        var durationAchieved = (currentDate - this.dateOfCreation.getTime()) ;
+        var durationAchieved = (currentDate - this.dateOfCreation.getTime());
 
         if (durationAchieved < 0) {
             throw new Error('Time given is before dateOfCreation !');
         }
 
         this.percentageOfTime = durationAchieved * 100 / duration;
+
+        //  It can have tiny incorrect decimal values
+        this.percentageOfTime = (this.percentageOfTime >  100)?100:this.percentageOfTime;
+
     }
 
     public getDurationAchieved():number {
@@ -131,22 +143,24 @@ class AverageOnValue implements Expression {
 
     public separateOldAndNewData(values:any[], oldValues:number[], newValues:number[]) {
 
+        console.log("SEPARATE DATA", "START DATE", this.startDate, "DOC", this.dateOfCreation);
+
         for (var currentValueIndex in values) {
 
             //  { date : __ , value : __ }
             var currentValue:any = values[currentValueIndex];
 
-            var currentDate:Date = new Date(currentValue.date);
+            var currentDate:Date = new Date(currentValue.date * 1000);
 
-            console.log("date:",currentValue.date
-                ,"value:",currentValue.value);
+            console.log("Current date : ", currentDate);
 
-            if (currentDate.getTime()  >= this.startDate.getTime()
+            if (currentDate.getTime() >= this.startDate.getTime()
                 && currentDate.getTime() <= this.dateOfCreation.getTime()) {
-
+                console.log("OLDVALUE");
                 oldValues.push(currentValue.value);
             }
             else {
+                console.log("NEW VALUE");
                 newValues.push(currentValue.value);
             }
         }
@@ -158,7 +172,7 @@ class AverageOnValue implements Expression {
         var averageValue = 0;
 
         for (var currentData in data) {
-            averageValue +=  (data[currentData] / numberOfData);
+            averageValue += (data[currentData] / numberOfData);
         }
 
         return averageValue;

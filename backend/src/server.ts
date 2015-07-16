@@ -84,25 +84,18 @@ app.get('/goals/:id', jsonParser, function (req, res, next) {
 });
 
 app.get('/goals', jsonParser, function (req, res, next) {
-    console.log('/goals');
     var result = ecoknowledge.getListOfGoalsDefinition();
-    console.log("++ Sending", result);
     res.send(result);
 });
 
 app.get('/goalsInstance', jsonParser, function (req, res, next) {
-    console.log('/goalsInstance');
     var result = ecoknowledge.getListOfGoalInstances();
-    console.log("++ Sending", result);
     res.send(result);
 });
 
 app.get('/badges', jsonParser, function (req, res, next) {
-
-    console.log("/badges");
+    console.log("JSON STUB", JSON.stringify(jsonStub));
     var result = ecoknowledge.getGoalInstancesDescriptionInJsonFormat(jsonStub);
-    console.log("++ Sending", result);
-
     res.send(result);
 });
 
@@ -135,11 +128,7 @@ app.post('/addgoal', jsonParser, function (req, res) {
 
 app.post('/addbadge', jsonParser, function (req, res) {
     var actionData = req.body;
-    console.log(actionData);
-
-    //TODO : need to add a userUUID in request
     var result = ecoknowledge.addGoalInstance(actionData);
-
     res.send("OK");
 });
 
@@ -265,7 +254,6 @@ fs.readFile('./stub_values.json', function (err, data) {
     }
     jsonStub = JSON.parse(data.toString());
     console.log("++ Fichier stub chargé correctement");
-    console.log(JSON.stringify(jsonStub));
 });
 
 
@@ -293,19 +281,17 @@ app.post('/addstub', jsonParser, function (req, res) {
     oldJson.push(valueDesc);
     jsonStub[key].values = oldJson;
 
-    res.send('Valeur' + JSON.stringify(valueDesc) + " ajouté au stub ! ");
+    res.send('Valeur' + JSON.stringify(valueDesc) + " ajoutee au stub ! Etat du stub : " + JSON.stringify(jsonStub));
 });
 
 
 app.post('/setNow', jsonParser, function (req, res) {
     var data = req.body;
-    console.log("data.now", data.now);
-
     var newNow:Date = new Date(data.now);
 
-    console.log("New now : ", newNow);
+    console.log("Mise a jour de la date actuelle. Nous sommes maintenant le", newNow);
     Clock.setNow(newNow.getTime());
-    res.send("New now : " + newNow);
+    res.send("New 'now' : " + newNow);
 });
 
 

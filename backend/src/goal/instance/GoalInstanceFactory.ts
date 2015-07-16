@@ -35,6 +35,10 @@ class GoalInstanceFactory {
         var goalDefinitionID = goalDesc.id;
         var goalDefinition:GoalDefinition = goalRepository.getGoal(goalDefinitionID);
 
+        if(goalDefinition == null)  {
+            throw new Error('Can not create goal instance because ID given of goal definition can not be found');
+        }
+
         var startDate:Date = now;
 
         if(!this.checkDates(goalDefinition,startDate)) {
@@ -42,7 +46,7 @@ class GoalInstanceFactory {
                 + now  + ', the goal start the' + goalDefinition.getStartDate() + ' and end the ' +goalDefinition.getEndDate() + ' with a duration of ' + goalDefinition.getDuration() + ' days');
         }
 
-        var endDate:Date = new Date(startDate.getFullYear(), startDate.getMonth(),startDate.getDate() + goalDefinition.getDuration());
+        var endDate:Date = new Date(startDate.getFullYear(), startDate.getMonth(),startDate.getDate() + goalDefinition.getDuration(), startDate.getHours(), startDate.getMinutes(), startDate.getSeconds());
 
         var mapGoalsToConditionAndSensors:any = goalDesc.conditions;
 
@@ -50,6 +54,8 @@ class GoalInstanceFactory {
 
         // TODO attach badge to user
         // user.addBadgeByDescription(badge);
+
+        console.log("L'objectif ", goalDefinition.getName(), "a ete instancie ! Intervalle de vie de l'objectif : du", startDate, "au", endDate);
 
         return goalInstance;
     }

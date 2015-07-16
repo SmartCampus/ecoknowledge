@@ -5,6 +5,10 @@
   padding:15px;
 }
 
+.badge-name {
+  text-align:center;
+}
+
 .badge-container table {
   width:100%;
   height:100%;

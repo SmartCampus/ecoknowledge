@@ -2,6 +2,7 @@ import GoalDefinition = require('../definition/GoalDefinition');
 import User = require('../../user/User');
 import BadgeStatus = require('../../Status');
 import TimeBox = require('../../TimeBox');
+import Clock = require('../../Clock');
 
 import UUID = require('node-uuid');
 
@@ -16,6 +17,8 @@ class GoalInstance {
     private status:BadgeStatus;
 
     private progress:any[]= [];
+
+    private percentageOfTime:number = 0;
 
     //  { 'tmp_cli':'ac_443', 'tmp_ext':'TEMP_444', 'door_o':'D_55', ... }
     private mapSymbolicNameToSensor:any = {};
@@ -35,6 +38,25 @@ class GoalInstance {
         this.mapSymbolicNameToSensor = mapGoalToConditionAndSensor;
 
         this.status = BadgeStatus.RUN;
+    }
+
+    public updateDurationAchieved(currentDate:number) {
+        var duration = this.endDate.getTime() - this.startDate.getTime();
+        var durationAchieved = (currentDate - this.startDate.getTime());
+
+        if (durationAchieved < 0) {
+            throw new Error('Time given is before dateOfCreation !');
+        }
+
+        this.percentageOfTime = durationAchieved * 100 / duration;
+
+        //  It can have tiny incorrect decimal values
+        this.percentageOfTime = (this.percentageOfTime >  100)?100:this.percentageOfTime;
+
+    }
+
+    public getTimeProgress():number {
+        return this.percentageOfTime;
     }
 
     public resetProgress() {
@@ -111,6 +133,7 @@ class GoalInstance {
      * @returns {boolean}
      */
     public evaluate(values:any):boolean {
+        this.updateDurationAchieved(Clock.getNow());
         var numberOfValues = Object.keys(values).length;
         var numberOfValuesNeeded = Object.keys(this.mapSymbolicNameToSensor).length;
 
@@ -121,6 +144,8 @@ class GoalInstance {
         }
 
         var mapSymbolicNameToValue = this.bindSymbolicNameToValue(values);
+
+        console.log("MAP SYMBOLIC NAME TO VALUE", mapSymbolicNameToValue);
 
         var result = this.goalDefinition.evaluate(mapSymbolicNameToValue, this);
         return result;

@@ -115,7 +115,7 @@ class OverallGoalCondition implements Expression {
 
     public getData():any {
         return {
-            description: this.condition.getDescription() + ' ' + this.thresholdRate + '% du temps',
+            description: this.condition.getStringRepresentation() + ' ' + this.thresholdRate + '% du temps',
             timeAchieved: this.percentageOfTime,
             conditionAchieved: this.percentageAchieved
         }

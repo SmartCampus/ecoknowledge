@@ -53,6 +53,11 @@ class BadgeProvider {
             currentBadgeDesc.desc = this.goalInstancesArray[i].getDescription();
             currentBadgeDesc.progress = this.goalInstancesArray[i].getProgress();
 
+            currentBadgeDesc.startDate = this.goalInstancesArray[i].getStartDate();
+            currentBadgeDesc.endDate = this.goalInstancesArray[i].getEndDate();
+            currentBadgeDesc.timeProgress = this.goalInstancesArray[i].getTimeProgress();
+
+
             var statusDesc:string = '';
             var badgeStatus:number = this.goalInstancesArray[i].getStatus();
 
