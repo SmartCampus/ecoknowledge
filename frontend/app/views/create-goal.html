@@ -3,75 +3,45 @@
         <h1>Créer un objectif</h1>
     </div>
     <form name="goalCreateForm" class="form" ng-submit="goalCreateForm.$valid && goalCtrl.addGoal()" novalidate>
-
         <div class="form-group text-left">
             <label for="goal-name">Nom</label>
             <input name="goalName" type="text" class="form-control " id="goal-name" placeholder="Nom de l'objectif"
                    ng-model="goalCtrl.goal.name" required>
         </div>
 
+        <date-validity-goal></date-validity-goal>
+
+        <br/>
+        <br/>
+
+        <div>
+            <span>
+                <label>Temps pour compléter l'objectif : </label>
+                <input type="number" ng-model="goalCtrl.goal.duration" required>
+                <label> jours</label>
+            </span>
+        </div>
+
+        <br/>
+        <br/>
+
         <ul>
-            <li class="list-group-item" ng-repeat="iteration in goalCtrl.goal.conditions">
-                <div class="input-group">
-                    <select ng-change="goalCtrl.changeComparison(iteration, typeValeurComparaison)" name="typeDeValeurDeComparaison" class = "selectpick form-control"
-                            ng-model="typeValeurComparaison" required>
-                        <option value="" disabled selected>Sélectionnez un type de valeur à comparer</option>
-                        <option value="string">Texte</option>
-                        <option value="number">Nombre</option>
-                        <option value="boolean">Booléen</option>
-                    </select>
+            <conditions></conditions>
 
-                    <div ng-show="typeValeurComparaison!=null">
-                        <select name="typeLeft" class="selectpick form-control" ng-model="typeLeft" ng-change="goalCtrl.changeType(iteration.valueLeft, typeLeft)"required>
-                            <option value="sensor">Capteur</option>
-                            <option ng-if="typeValeurComparaison=='number'" value="number">Nombre</option>
-                            <option ng-if="typeValeurComparaison=='string'" value="string">Texte</option>
-                            <option ng-if="typeValeurComparaison=='boolean'" value="boolean">Booléen</option>
-                        </select>
-                        <input ng-if="typeLeft=='sensor'" type="text" placeholder="Valeur de la variable" ng-model="iteration.valueLeft.value" required>
-                        <input ng-if="typeLeft=='string'" type="text" placeholder="Valeur de la variable" ng-model="iteration.valueLeft.value" required>
-                        <input ng-if="typeLeft=='number'" type="number" placeholder="Valeur de la variable" ng-model="iteration.valueLeft.value" required>
-                        <select ng-if="typeLeft=='boolean'" class="selectpick form-control" ng-model="iteration.valueLeft.value" required>
-                            <option value=true>Vrai</option>
-                            <option value=false>Faux</option>
-                        </select>
-
-                        <number-form></number-form>
-                        <string-form></string-form>
-
-                        <select name="typeRight" class="selectpick form-control" ng-model="typeRight" ng-change="goalCtrl.changeType(iteration.valueRight, typeRight)" required>
-                            <option value="sensor">Capteur</option>
-                            <option ng-if="typeValeurComparaison=='number'" value="number">Nombre</option>
-                            <option ng-if="typeValeurComparaison=='string'" value="string">Texte</option>
-                            <option ng-if="typeValeurComparaison=='boolean'" value="boolean">Booléen</option>
-                        </select>
-
-                        <input ng-if="typeRight=='number'" type="number" name="tempInput" class="form-control"
-                               placeholder="Valeur" ng-model="iteration.valueRight.value"
-                               ng-required="typeValeurComparaison == 'number'">
-                        <input ng-if="typeRight=='sensor'" type="text" placeholder="Valeur de la variable"
-                               ng-model="iteration.valueRight.value" required>
-                        <input ng-if="typeRight=='string'" type="text" name="tempInput" class="form-control"
-                               placeholder="Texte attendu" ng-model="iteration.valueRight.value"
-                               ng-required="typeValeurComparaison=='string'">
-
-                        <boolean-form></boolean-form>
-
-                        <input type="text" name="descriptionCondition" class="form-control" placeholder="Description de la condition"
-                               ng-model="iteration.description" required>
-                    </div>
-                </div>
-                <br/><br/>
-            </li>
             <li class="list-group-item">
                 <div class="input-group">
                     <input type="button" ng-click="goalCtrl.addComparison()" value="Ajouter une condition">
                 </div>
+            </li>
 
-                <div class=" text-center">
+            <add-badges></add-badges>
+
+            <li class="list-group-item">
+                <div class="center-block">
                     <input type="submit" class="btn btn-default" ng-disabled="!goalCreateForm.$valid" value="Créer l'objectif"/>
                 </div>
             </li>
         </ul>
+
     </form>
 </div>

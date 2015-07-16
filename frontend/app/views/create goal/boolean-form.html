@@ -1,6 +1,6 @@
-<div ng-if="iteration.type=='boolean'">
+<div ng-if="iteration.expression.type=='boolean'">
     <select ng-if="typeRight=='boolean'" name="comparaison" class="selectpicker form-control"
-            ng-model="iteration.valueRight.value" ng-required="typeValeurComparaison == 'boolean'">
+            ng-model="iteration.expression.valueRight.value" ng-required="typeValeurComparaison == 'boolean'">
         <option value="" disabled selected>Sélectionnez une valeur booléenne</option>
         <option value="true">Vrai</option>
         <option value="false">Faux</option>

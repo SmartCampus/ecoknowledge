@@ -18,6 +18,10 @@ class BadgeRepository {
 
         return null;
     }
+
+    public getAllBadges():Badge[]{
+        return this.badges;
+    }
 }
 
 export = BadgeRepository;
