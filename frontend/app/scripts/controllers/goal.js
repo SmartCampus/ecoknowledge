@@ -73,8 +73,6 @@ var app = angular.module('ecoknowledgeApp')
         }
     };
 
-    self.addComparison();
-
     ServiceBadgeV2.get('',function(data){
         console.log('Achieve to get the badges V2 ', data);
         self.badges = data;
