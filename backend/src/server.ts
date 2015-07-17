@@ -94,23 +94,18 @@ app.get('/goalsInstance', jsonParser, function (req, res, next) {
 });
 
 app.get('/badges', jsonParser, function (req, res, next) {
-    console.log("JSON STUB", JSON.stringify(jsonStub));
     var result = ecoknowledge.getGoalInstancesDescriptionInJsonFormat(jsonStub);
     res.send(result);
 });
 
 app.get('/badgesV2/', jsonParser, function (req, res, next) {
-    console.log("get /badgesV2");
     var result = badgeRepositoryV2.getAllBadges();
-    console.log("++ Sending", result);
-
     res.send(result);
 });
 
 var sensors = [{"name": "AC_443"}, {"name": "TEMP_442"}];
 app.get('/required', jsonParser, function (req, res, next) {
     var goalName:string = req.query.goalName;
-    console.log('goal name : ', goalName);
     var goal:GoalDefinition = goalRepository.getGoal(goalName);
     res.send(goal.getData());
 });

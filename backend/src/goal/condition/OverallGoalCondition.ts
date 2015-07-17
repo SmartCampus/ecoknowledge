@@ -77,6 +77,7 @@ class OverallGoalCondition implements Expression {
 
             //  Retrieve values associated
             var currentConditionDesc = data[currentSensorName];
+
             var values:any[] = currentConditionDesc.values;
 
             var numberOfValues:number = (values).length;
@@ -86,18 +87,28 @@ class OverallGoalCondition implements Expression {
             for (var currentValueIndex in values) {
                 var value = values[currentValueIndex];
 
-                var dataToEvaluate:any = {};
-                dataToEvaluate[currentSensorName] = {values: [value]};
+                var date:Date = new Date(value.date * 1000);
 
-                //  Check value by value if internal condition is satisfied
-                if (this.condition.evaluate(dataToEvaluate)) {
-                    ++numberOfCorrectValues;
+                if(this.condition.checkTimeBox(date)) {
+                    var dataToEvaluate:any = {};
+                    dataToEvaluate[currentSensorName] = {values: [value]};
+
+                    //  Check value by value if internal condition is satisfied
+                    if (this.condition.evaluate(dataToEvaluate)) {
+                        ++numberOfCorrectValues;
+                    }
                 }
+                else {
+                    numberOfValues--;
+                }
+
             }
         }
 
 
-        this.percentageAchieved = numberOfCorrectValues * 100 / numberOfValues;
+        this.percentageAchieved = ((numberOfCorrectValues * 100 / numberOfValues)*100)/this.thresholdRate;
+
+        this.percentageAchieved = (this.percentageAchieved > 100)?100:this.percentageAchieved;
 
         this.updateDurationAchieved(Clock.getNow());
 

@@ -55,6 +55,7 @@ class BadgeProvider {
 
             currentBadgeDesc.startDate = this.goalInstancesArray[i].getStartDate();
             currentBadgeDesc.endDate = this.goalInstancesArray[i].getEndDate();
+
             currentBadgeDesc.timeProgress = this.goalInstancesArray[i].getTimeProgress();
 
 

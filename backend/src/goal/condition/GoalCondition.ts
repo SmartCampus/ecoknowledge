@@ -131,6 +131,10 @@ class GoalCondition {
         return values[sensorName].values[0].value;
     }
 
+    private getDate(values:any, sensorName:string) {
+        return values[sensorName].values[0].date;
+    }
+
     public getDescription():string {
         return this.description;
     }

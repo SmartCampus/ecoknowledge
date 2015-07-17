@@ -9,7 +9,9 @@ class TimeBox {
     }
 
     public isInTimeBox(currentDateInMillis):boolean{
-        return currentDateInMillis > this.startDateInMillis && currentDateInMillis < this.endDateInMillis;
+        console.log("COMPARING", currentDateInMillis, " > ", this.startDateInMillis, "<", this.endDateInMillis);
+
+        return currentDateInMillis >= this.startDateInMillis && currentDateInMillis <= this.endDateInMillis;
     }
 
     public getStartDateInMillis():number {

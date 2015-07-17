@@ -83,8 +83,6 @@ class AverageOnValue implements Expression {
 
         var sensorNames:string[] = this.condition.getRequired();
 
-        console.log("REQUIRED", sensorNames, "\nDATA", JSON.stringify(data));
-
         var result = true;
         for (var currentSensorName in sensorNames) {
             var oldAndNewData:any[] = data[currentSensorName].values;
@@ -93,9 +91,6 @@ class AverageOnValue implements Expression {
             var newData:number[] = [];
 
             this.separateOldAndNewData(oldAndNewData, oldData, newData);
-
-            console.log("OLDDATA[0]", oldData[0]);
-            console.log("newData[0]", newData[0]);
             var decreaseRate = 0;
 
             if (oldData) {
@@ -143,8 +138,6 @@ class AverageOnValue implements Expression {
 
     public separateOldAndNewData(values:any[], oldValues:number[], newValues:number[]) {
 
-        console.log("SEPARATE DATA", "START DATE", this.startDate, "DOC", this.dateOfCreation);
-
         for (var currentValueIndex in values) {
 
             //  { date : __ , value : __ }
@@ -152,15 +145,11 @@ class AverageOnValue implements Expression {
 
             var currentDate:Date = new Date(currentValue.date * 1000);
 
-            console.log("Current date : ", currentDate);
-
             if (currentDate.getTime() >= this.startDate.getTime()
                 && currentDate.getTime() <= this.dateOfCreation.getTime()) {
-                console.log("OLDVALUE");
                 oldValues.push(currentValue.value);
             }
             else {
-                console.log("NEW VALUE");
                 newValues.push(currentValue.value);
             }
         }

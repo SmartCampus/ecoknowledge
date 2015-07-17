@@ -145,8 +145,6 @@ class GoalInstance {
 
         var mapSymbolicNameToValue = this.bindSymbolicNameToValue(values);
 
-        console.log("MAP SYMBOLIC NAME TO VALUE", mapSymbolicNameToValue);
-
         var result = this.goalDefinition.evaluate(mapSymbolicNameToValue, this);
         return result;
     }
