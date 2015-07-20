@@ -11,9 +11,10 @@ var app = angular.module('ecoknowledgeApp')
     self.goal.timeBox.startDate = new Date();
     self.goal.timeBox.endDate = new Date();
     self.badges = [];
-    self.type = ['Température', 'Porte'];
+    self.selectedBadge = null;
 
     this.addGoal = function () {
+        self.goal.badge = self.selectedBadge;
         console.log(angular.toJson(self.goal));
         ServiceGoal.post(angular.toJson(self.goal),function() {
             console.log('Achieve to add a conditions', self.conditions);
@@ -79,11 +80,6 @@ var app = angular.module('ecoknowledgeApp')
     }, function(data){
         console.log('Fail to get the badges V2', data);
     });
-
-    self.addBadge = function(){
-        console.log('add 1 to nbBadge');
-        self.nbBadge++;
-    };
 
     self.nbBadge = 0;
     self.selectedBadge = [];

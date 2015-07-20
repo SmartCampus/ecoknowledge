@@ -4,6 +4,7 @@ import GoalInstance = require('../instance/GoalInstance');
 import ExpressionHandler = require('../condition/ExpressionHandler');
 import Expression = require('../condition/Expression');
 import TimeBox = require('../../TimeBox');
+import Badge = require('../../badge/Badge');
 import uuid = require('node-uuid');
 
 class GoalDefinition {
@@ -16,11 +17,14 @@ class GoalDefinition {
 
     private durationInDays:number;
 
+    private badge:Badge;
+
     constructor(name:string, startDate:Date, endDate:Date, durationInDays:number) {
         if (!name) {
             throw new Error('Bad argument : name given is null');
         }
 
+        this.badge = null;
         this.name = name;
         this.id = uuid.v4();
 
@@ -51,6 +55,10 @@ class GoalDefinition {
 
     public getUUID() {
         return this.id;
+    }
+
+    public getBadge():Badge{
+        return this.badge;
     }
 
     public setUUID(aUUID) {
@@ -85,9 +93,20 @@ class GoalDefinition {
     public getData():any {
         return {
             "name": this.name,
-            "conditions": this.expressions.getData()
+            "conditions": this.expressions.getData(),
+            "timeBox":{
+                "startDate":this.startDate,
+                "endDate":this.endDate
+            },
+            "durationInDays":this.durationInDays,
+            "badge": this.badge.getData()
         }
     }
+
+    public setBadge(badge:Badge){
+        this.badge = badge;
+    }
+
 }
 
 export = GoalDefinition;

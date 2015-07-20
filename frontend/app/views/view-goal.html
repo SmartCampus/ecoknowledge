@@ -1,6 +1,17 @@
 <h1>{{viewGoalCtrl.goal.name}}</h1>
+<div>
+    Remplissable du {{viewGoalCtrl.goal.timeBox.startDate|date}} au {{viewGoalCtrl.goal.timeBox.endDate|date}}
+    <br/>
+    Durée : {{viewGoalCtrl.goal.durationInDays}} jours
+</div>
 <ul>
     <li class="list-group-item" ng-repeat="condition in viewGoalCtrl.goal.conditions">
         {{condition.description}}
     </li>
 </ul>
+<div>
+    Badge associé : {{viewGoalCtrl.goal.badge.name}}
+    <br/>
+    Fait gagner {{viewGoalCtrl.goal.badge.points}} points
+    <br/>
+</div>

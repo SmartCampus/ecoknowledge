@@ -12,7 +12,7 @@ var app = angular.module('ecoknowledgeApp')
   .controller('HomeCtrl', ['ServiceBadge', 'ServiceGoal', '$window', function (ServiceBadge, ServiceGoal, $window) {
     var self = this;
     self.goals = [];
-    self.badges = [];
+    self.goalsInstance = [];
     self.obtentionValue = {};
     /*
      * Add a goal the the array goals
@@ -43,10 +43,10 @@ var app = angular.module('ecoknowledgeApp')
     self.getBadges = function () {
       ServiceBadge.get('', function (data) {
         console.log('badges : ', data);
-        self.badges = data;
+        self.goalsInstance = data;
 
-        for (var badgeIndex in self.badges) {
-          var currentBadge = self.badges[badgeIndex];
+        for (var badgeIndex in self.goalsInstance) {
+          var currentBadge = self.goalsInstance[badgeIndex];
           var startDate = new Date(currentBadge.startDate);
           var formattedStartDate = '' + startDate.getDate()  + '/' + (startDate.getMonth() + 1) + '/' + startDate.getFullYear();
 
@@ -71,8 +71,8 @@ var app = angular.module('ecoknowledgeApp')
      */
     self.addBadge = function (bdg) {
       console.log(bdg);
-      self.badges.add(bdg);
-      console.log(self.badges);
+      self.goalsInstance.add(bdg);
+      console.log(self.goalsInstance);
     };
 
     self.check = function (badge) {

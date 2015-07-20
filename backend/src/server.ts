@@ -33,7 +33,7 @@ var badgeRepository:GoalInstanceRepository = new GoalInstanceRepository();
 var goalRepository:GoalDefinitionRepository = new GoalDefinitionRepository();
 var badgeRepositoryV2:BadgeRepository = new BadgeRepository();
 
-var ecoknowledge:EcoKnowledge = new EcoKnowledge(goalRepository, badgeRepository, userProvider);
+var ecoknowledge:EcoKnowledge = new EcoKnowledge(goalRepository, badgeRepository, userProvider, badgeRepositoryV2);
 
 var context:Context = new DemoContext();
 context.fill(goalRepository, badgeRepository, userProvider);
@@ -93,11 +93,16 @@ app.get('/goalsInstance', jsonParser, function (req, res, next) {
     res.send(result);
 });
 
+//TODO remove
 app.get('/badges', jsonParser, function (req, res, next) {
     var result = ecoknowledge.getGoalInstancesDescriptionInJsonFormat(jsonStub);
     res.send(result);
 });
 
+app.get('/goalsInstanceRunning', jsonParser, function (req, res, next) {
+    var result = ecoknowledge.getGoalInstancesDescriptionInJsonFormat(jsonStub);
+    res.send(result);
+});
 app.get('/badgesV2/', jsonParser, function (req, res, next) {
     var result = badgeRepositoryV2.getAllBadges();
     res.send(result);

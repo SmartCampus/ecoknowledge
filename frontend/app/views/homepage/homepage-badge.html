@@ -2,12 +2,12 @@
   <table>
     <tr>
       <td>
-        <h3 class="badge-name">{{badge.name}}</h3>
+        <h3 class="badge-name">{{goalInstance.name}}</h3>
       </td>
     </tr>
     <tr>
       <td>
-        Temps restant - du {{badge.startDate}} au {{badge.endDate}}
+        Temps restant - du {{goalInstance.startDate}} au {{goalInstance.endDate}}
       </td>
     </tr>
     <tr>
@@ -15,17 +15,17 @@
         <div class="progress">
           <div class="progress-bar"
                ng-class="{
-               'progress-bar-danger':badge.timeProgress > 80,
-                'progress-bar-warning':badge.timeProgress > 30 && badge.timeProgress < 80,
-                'progress-bar-success':badge.timeProgress < 30
-                }" role="progressbar" aria-valuenow="{{100-badge.timeProgress}}"
-               aria-valuemin="0" aria-valuemax="100" style="width:{{100-badge.timeProgress}}%">
+               'progress-bar-danger':goalInstance.timeProgress > 80,
+                'progress-bar-warning':goalInstance.timeProgress > 30 && goalInstance.timeProgress < 80,
+                'progress-bar-success':goalInstance.timeProgress < 30
+                }" role="progressbar" aria-valuenow="{{100-goalInstance.timeProgress}}"
+               aria-valuemin="0" aria-valuemax="100" style="width:{{100-goalInstance.timeProgress}}%">
           </div>
         </div>
       </td>
 
     <tr>
-      <table ng-repeat="condition in badge.progress">
+      <table ng-repeat="condition in goalInstance.progress">
         <td>
           {{condition.description}}
         </td>

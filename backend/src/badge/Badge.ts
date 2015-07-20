@@ -24,6 +24,13 @@ class Badge {
     public hasUUID(aUUID:string):boolean {
         return this.id === aUUID;
     }
+
+    public getData():any{
+        return {
+            "name":this.name,
+            "points":this.points
+        };
+    }
 }
 
 export = Badge;

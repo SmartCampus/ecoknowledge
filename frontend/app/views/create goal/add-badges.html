@@ -1,6 +1,4 @@
-<select ng-repeat="n in [] | range:goalCtrl.nbBadge" ng-options="badge.name for badge in goalCtrl.badges" name="badges" class="selectpicker form-control"
-        ng-model="goalCtrl.selectedBadge[n]" required>
+<select ng-options="badge.name for badge in goalCtrl.badges" name="badges" class="selectpicker form-control"
+        ng-model="goalCtrl.selectedBadge" required>
     <option value="" disabled selected>Sélectionnez un badge</option>
 </select>
-
-<input type="button" value="Ajoutez un badge" ng-click="goalCtrl.addBadge()">

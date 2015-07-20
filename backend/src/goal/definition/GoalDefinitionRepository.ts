@@ -1,5 +1,7 @@
 import GoalDefinition = require('./GoalDefinition');
 import GoalDefinitionFactory = require('./GoalDefinitionFactory');
+import BadgeRepository = require('../../badge/BadgeRepository');
+import Badge = require('../../badge/Badge');
 
 class GoalDefinitionRepository {
 
@@ -11,8 +13,16 @@ class GoalDefinitionRepository {
         this.factory = new GoalDefinitionFactory();
     }
 
-    public addGoalByDescription(data:any):string {
+    public addGoalByDescription(data:any, badgeRepository:BadgeRepository):string {
         var newGoal:GoalDefinition = this.factory.createGoal(data);
+        if(data.badge === null){
+            throw new Error('badges null when trying to create a new goal');
+        }
+        var badge:Badge = badgeRepository.getBadge(data.badge.id);
+        if(badge === null){
+            throw new Error('No badge with this id when trying to create a new goal');
+        }
+        newGoal.setBadge(badge);
         this.goals.push(newGoal);
         return newGoal.getUUID().toString();
     }
@@ -39,7 +49,7 @@ class GoalDefinitionRepository {
             var currentGoal = this.goals[goalIndex];
 
             var goalDesc:any = {};
-            goalDesc.name = currentGoal.getName();
+            goalDesc.name = currentGoal.getBadge().getName();
             goalDesc.id = currentGoal.getUUID();
 
             result.push(goalDesc);
