@@ -7,6 +7,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-typescript');
     grunt.loadNpmTasks('grunt-mocha-test');
+    grunt.loadNpmTasks('grunt-contrib-copy');
 
 
     // tasks
@@ -15,6 +16,15 @@ module.exports = function (grunt) {
 // ---------------------------------------------
 //                          build and dist tasks
 // ---------------------------------------------
+
+        copy: {
+            buildDatabase: {
+                files: [{expand: true, cwd: 'src/database', src: ['**'], dest: 'build/database/'}]
+            },
+            distDatabase: {
+                files: [{expand: true, cwd: 'src/database', src: ['**'], dest: 'dist/database/'}]
+            }
+        },
 
         typescript: {
             build: {
@@ -56,12 +66,12 @@ module.exports = function (grunt) {
             },
             build: {
                 options: {
-                    script: 'build/server.js'
+                    script: 'build/Backend.js'
                 }
             },
             dist: {
                 options: {
-                    script: 'dist/server.js',
+                    script: 'dist/Backend.js',
                     node_env: 'production'
                 }
             }
@@ -73,7 +83,7 @@ module.exports = function (grunt) {
 // ---------------------------------------------
         watch: {
             express: {
-                files:  [ 'build/server.js' ],
+                files:  [ 'build/Backend.js' ],
                 tasks:  [ 'express:build' ],
                 options: {
                     spawn: false
@@ -83,6 +93,11 @@ module.exports = function (grunt) {
             developServer: {
                 files: ['src/**/*.ts'],
                 tasks: ['typescript:build']
+            },
+
+            developDatabase: {
+                files: ['src/database/**/*.*'],
+                tasks: ['copy:buildDatabase']
             }
         },
 // ---------------------------------------------
@@ -108,7 +123,7 @@ module.exports = function (grunt) {
             build: ['build/'],
             dist: ['dist/'],
             test: ['buildTests/'],
-            all:['src/**/*.js', 'src/**/*js.map','tests/**/*.js', 'tests/**/*js.map']
+            all:['src/**/*.js', 'src/**/*js.map','tests/**/*.js', 'tests/**/*js.map', '!src/database/*']
         }
 // ---------------------------------------------
     });
@@ -119,7 +134,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', function () {
         grunt.task.run(['clean:build','clean:test']);
 
-        grunt.task.run(['typescript:build', 'typescript:test']);
+        grunt.task.run(['typescript:build', 'copy:buildDatabase', 'typescript:test']);
     });
 
     grunt.registerTask('develop', function() {
@@ -129,7 +144,7 @@ module.exports = function (grunt) {
     grunt.registerTask('dist', function () {
         grunt.task.run(['clean:dist']);
 
-        grunt.task.run(['typescript:dist']);
+        grunt.task.run(['typescript:dist', 'copy:distDatabase']);
     });
 
     grunt.registerTask('test', function() {
