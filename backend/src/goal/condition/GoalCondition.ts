@@ -5,7 +5,10 @@ import TimeBox = require('../../TimeBox');
 
 import uuid = require('node-uuid');
 
-class GoalCondition {
+var GoalConditionSchema:any = require('../../database/models/goalCondition.js').schema;
+import ModelItf = require('../../ModelItf');
+
+class GoalCondition extends ModelItf {
     private leftOperand:Operand;
     private rightOperand:Operand;
 
@@ -16,7 +19,8 @@ class GoalCondition {
 
     private id:string;
 
-    constructor(leftOperand:Operand, typeOfComparison:string, rightOperand:Operand, description:string, timeBox:TimeBox=null) {
+    constructor(leftOperand:Operand, typeOfComparison:string, rightOperand:Operand, description:string, timeBox:TimeBox = null, id = null, createdAt = null, updatedAt = null) {
+        super(id, createdAt, updatedAt);
         this.leftOperand = leftOperand;
         this.rightOperand = rightOperand;
         this.typeOfComparison = typeOfComparison;
@@ -24,6 +28,146 @@ class GoalCondition {
         this.timeBox = timeBox;
 
         this.id = uuid.v4();
+    }
+
+
+    public toJSONObject():any {
+        return {
+            description: this.description,
+            timeBox: this.timeBox,
+            typeOfComparison:this.typeOfComparison,
+            leftOperand: this.leftOperand,
+            rightOperand: this.rightOperand
+        }
+    }
+
+    static fromJSONObject(jsonObject:any) {
+        return new GoalCondition(jsonObject.leftOperand, jsonObject.typeOfComparison, jsonObject.rightOperand,
+            jsonObject.description, jsonObject.timeBox, jsonObject.id, jsonObject.createdAt, jsonObject.updatedAt);
+    }
+
+    create(successCallback:Function, failCallback:Function) {
+        console.log("CREATE GOAL CONDITION");
+        var self = this;
+
+        if (!this.hasBeenSaved()) {
+            GoalConditionSchema.create(this.toJSONObject())
+                .then(function (_conditionSequelize) {
+                    self._selfSequelize = _conditionSequelize;
+
+                    var uObject = GoalCondition.fromJSONObject(_conditionSequelize.dataValues);
+                    self._id = uObject.getId();
+
+                    console.log("ID GIVEN BY SEQUELIZE", self._id);
+
+                    var successCallBackInitFields = function () {
+                        successCallback(_conditionSequelize);
+                    };
+
+                    var failCallBackInitFields = function () {
+                        failCallback(_conditionSequelize);
+                    };
+
+                    self.initFieldsInDB(successCallBackInitFields, failCallBackInitFields);
+                })
+                .error(function (error) {
+                    console.log("ERROR ON CREATE GOAL CONDITION");
+                    failCallback(error);
+                });
+        } else {
+            failCallback(new ModelException("Condition already exists."));
+        }
+    }
+
+    /**
+     * Retrieve model description from database and create model instance.
+     *
+     * @method read
+     * @static
+     * @param {number} id - The model instance's id.
+     * @param {Function} successCallback - The callback function when success.
+     * @param {Function} failCallback - The callback function when fail.
+
+     */
+    static read(id : number, successCallback : Function, failCallback : Function) {
+        // search for known ids
+        GoalConditionSchema.findById(id, { include: [{ all: true }]})
+            .then(function(_conditionSequelize) {
+                var goalCondition:GoalCondition = GoalCondition.fromJSONObject(_conditionSequelize.dataValues);
+
+                var leftOperand:Operand = Operand.fromJSONObject(_conditionSequelize.leftOperand);
+                var rightOperand:Operand = Operand.fromJSONObject(_conditionSequelize.rightOperand);
+                goalCondition.setLeftOperand(leftOperand);
+                goalCondition.setRightOperand(rightOperand);
+
+                successCallback(goalCondition);
+            })
+            .error(function(error) {
+                failCallback(error);
+            });
+    }
+
+
+
+    public setTimeBoxViaSequelize() {
+
+    }
+
+    public initFieldsInDB(successCallBack:Function, failCallBack:Function) {
+        var self = this;
+
+        var numberOfFieldsToInit = 3;
+        var numberOfFieldsInit = 0;
+
+        var globalSuccessCallBack = function () {
+            console.log("NB OF FIELD INIT", numberOfFieldsInit);
+            numberOfFieldsInit += 1;
+            if (numberOfFieldsInit == numberOfFieldsToInit) {
+                console.log("CALLBACK NOW");
+                successCallBack();
+            }
+        };
+
+        var globalFailCallBack = function (error) {
+            console.log("SET TIMEBOX FAIL", error);
+            numberOfFieldsInit++;
+            if (numberOfFieldsInit = numberOfFieldsToInit) {
+                failCallBack();
+            }
+        };
+
+        var callBackSuccessCreateTimeBox = function (_timeBoxSequelize) {
+            console.log("SUCCESS CREATE TIMEBOX");
+            self._selfSequelize.setTimeBox(_timeBoxSequelize).then(
+                globalSuccessCallBack).error(globalFailCallBack);
+        };
+
+        var callBackFailCreateTimeBox = function (_timeBoxSequelize) {
+            console.log("FAIL CREATE TIMEBOX");
+            failCallBack(_timeBoxSequelize);
+        };
+
+        this.timeBox.create(callBackSuccessCreateTimeBox, callBackFailCreateTimeBox);
+
+
+
+        var callBackSuccessCreateLeftOperand = function (_operandSequelize) {
+            console.log("SUCCESS CREATE LEFT OPERAND");
+            self._selfSequelize.setLeftOperand(_operandSequelize).then(globalSuccessCallBack).error(globalFailCallBack);
+        };
+
+        var callBackSuccessCreateRightOperand = function (_operandSequelize) {
+            console.log("SUCCESS CREATE RIGHT OPERAND");
+            self._selfSequelize.setRightOperand(_operandSequelize).then(globalSuccessCallBack).error(globalFailCallBack);
+        };
+
+        var callBackFailCreateOperand = function (_operandSequelize) {
+            console.log("FAIL CREATE OPERAND");
+            failCallBack(_operandSequelize);
+        };
+
+        this.leftOperand.create(callBackSuccessCreateLeftOperand, callBackFailCreateOperand);
+        this.rightOperand.create(callBackSuccessCreateRightOperand, callBackFailCreateOperand);
     }
 
     public getStartDateInMillis() {
@@ -40,6 +184,11 @@ class GoalCondition {
 
     public getComparisonType():string {
         return this.typeOfComparison;
+    }
+
+    public getLeftOperand():Operand {
+        console.log("DAT SHIT THO");
+        return this.leftOperand;
     }
 
     public hasLeftOperand(name:string):boolean {
@@ -77,7 +226,7 @@ class GoalCondition {
         var result:any = {};
 
         var timeBoxDesc:any = {};
-        if(this.timeBox) {
+        if (this.timeBox) {
             timeBoxDesc = this.timeBox.getRequired();
         }
 
@@ -92,7 +241,7 @@ class GoalCondition {
     }
 
     public checkTimeBox(currentDateInMillis:any):boolean {
-        if(!this.timeBox) {
+        if (!this.timeBox) {
             return true;
         }
 
@@ -103,16 +252,16 @@ class GoalCondition {
         var evalString:string = '';
 
         if (this.leftOperand.hasToBeDefined() && this.rightOperand.hasToBeDefined()) {
-            evalString += this.getFirstValue(values,this.leftOperand.getStringDescription())
-                + this.typeOfComparison + this.getFirstValue(values,this.rightOperand.getStringDescription());
+            evalString += this.getFirstValue(values, this.leftOperand.getStringDescription())
+                + this.typeOfComparison + this.getFirstValue(values, this.rightOperand.getStringDescription());
         }
 
         else if (this.leftOperand.hasToBeDefined() && !this.rightOperand.hasToBeDefined()) {
-            evalString += this.getFirstValue(values,this.leftOperand.getStringDescription()) + this.typeOfComparison + this.rightOperand.getStringDescription();
+            evalString += this.getFirstValue(values, this.leftOperand.getStringDescription()) + this.typeOfComparison + this.rightOperand.getStringDescription();
         }
 
         else if (this.rightOperand.hasToBeDefined() && !this.leftOperand.hasToBeDefined()) {
-            evalString += this.leftOperand.getStringDescription() + this.typeOfComparison + this.getFirstValue(values,this.rightOperand.getStringDescription());
+            evalString += this.leftOperand.getStringDescription() + this.typeOfComparison + this.getFirstValue(values, this.rightOperand.getStringDescription());
         }
 
         else {
@@ -144,9 +293,13 @@ class GoalCondition {
     }
 
     public getData():any {
-        return {"leftValue":{"name":this.leftOperand.getStringDescription(),"sensor":this.leftOperand.hasToBeDefined()},
-            "rightValue":{"name":this.rightOperand.getStringDescription(),"sensor":this.rightOperand.hasToBeDefined()},
-            "comparison":this.typeOfComparison
+        return {
+            "leftValue": {"name": this.leftOperand.getStringDescription(), "sensor": this.leftOperand.hasToBeDefined()},
+            "rightValue": {
+                "name": this.rightOperand.getStringDescription(),
+                "sensor": this.rightOperand.hasToBeDefined()
+            },
+            "comparison": this.typeOfComparison
         };
     }
 }

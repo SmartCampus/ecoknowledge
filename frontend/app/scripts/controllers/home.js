@@ -6,7 +6,7 @@
  * @description
  * # HomeCtrl
  * Controller of the ecoknowledgeApp for the firstpage which display
- * the objectives and the badges we have.
+ * the objectives and the getAllBadges we have.
  */
 var app = angular.module('ecoknowledgeApp')
   .controller('HomeCtrl', ['ServiceBadge', 'ServiceGoal', '$window', function (ServiceBadge, ServiceGoal, $window) {
@@ -42,7 +42,7 @@ var app = angular.module('ecoknowledgeApp')
 
     self.getBadges = function () {
       ServiceBadge.get('', function (data) {
-        console.log('badges : ', data);
+        console.log('getAllBadges : ', data);
         self.badges = data;
 
         for (var badgeIndex in self.badges) {
@@ -58,7 +58,7 @@ var app = angular.module('ecoknowledgeApp')
         }
 
       }, function (data) {
-        console.debug('Fail to get the badges', data);
+        console.debug('Fail to get the getAllBadges', data);
       });
     };
 
@@ -67,7 +67,7 @@ var app = angular.module('ecoknowledgeApp')
     };
 
     /*
-     * add a badge to the array badges
+     * add a badge to the array getAllBadges
      */
     self.addBadge = function (bdg) {
       console.log(bdg);

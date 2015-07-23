@@ -74,10 +74,10 @@ var app = angular.module('ecoknowledgeApp')
     };
 
     ServiceBadgeV2.get('',function(data){
-        console.log('Achieve to get the badges V2 ', data);
+        console.log('Achieve to get the getAllBadges V2 ', data);
         self.badges = data;
     }, function(data){
-        console.log('Fail to get the badges V2', data);
+        console.log('Fail to get the getAllBadges V2', data);
     });
 
     self.addBadge = function(){

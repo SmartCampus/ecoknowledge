@@ -29,13 +29,13 @@ describe('Service: ServiceBadge', function() {
         });
 
 
-        it('should get all the badges from the service', function () {
+        it('should get all the getAllBadges from the service', function () {
             var mockMonBadge = { goal: 'Mon goal', points: '37', description: 'Une description', name: 'MonBadge' };
             var mockMonBadgePatrick = { goal: 'Mon goal de fou', points: '42', description: 'Un de scription', name: 'MonBadgePatrick' };
             var mockResult = [mockMonBadge, mockMonBadgePatrick];
             //backend definition returns a mock user
-            httpBackend.when('GET',path +'badges/').respond(mockResult);
-            httpBackend.expectGET(path+'badges/');
+            httpBackend.when('GET',path +'getAllBadges/').respond(mockResult);
+            httpBackend.expectGET(path+'getAllBadges/');
             Badge.get('', callbacks.success, callbacks.error);
 
             httpBackend.flush();

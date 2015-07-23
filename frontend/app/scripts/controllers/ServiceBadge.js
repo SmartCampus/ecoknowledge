@@ -7,7 +7,7 @@
 var app = angular.module('ecoknowledgeApp');
 app.service('ServiceBadge', ['$http', function ServiceBadge($http) {
   this.get = function (id, successFunc, failFunc) {
-    $http.get('http://localhost:3000/badges/' + id)
+    $http.get('http://localhost:3000/getAllBadges/' + id)
       .success(function (data) {
         successFunc(data);
       })
