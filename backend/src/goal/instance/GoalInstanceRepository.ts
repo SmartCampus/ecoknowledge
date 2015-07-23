@@ -62,19 +62,62 @@ class BadgeProvider {
             var statusDesc:string = '';
             var badgeStatus:number = this.goalInstancesArray[i].getStatus();
 
-            switch(badgeStatus) {
-                case 0:statusDesc = 'WAIT';break;
-                case 1:statusDesc = 'RUNNING';break;
-                case 2:statusDesc = 'SUCCESS';break;
-                case 3:statusDesc = 'FAIL';break;
-                default: statusDesc = 'UNKNOWN';break;
-            }
+            statusDesc = this.getBadgeStatus(badgeStatus);
 
             currentBadgeDesc.status = statusDesc;
-            result.push(currentBadgeDesc);
+            if(currentBadgeDesc.status != 'SUCCESS') {
+                result.push(currentBadgeDesc);
+            }
         }
 
         return result;
+    }
+
+    public getFinishedGoalInstances():GoalInstance[]{
+        console.log('get finished goal');
+        var goalFinished:GoalInstance[]=[];
+        for (var i in this.goalInstancesArray) {
+            var statusDesc = this.getBadgeStatus(this.goalInstancesArray[i].getStatus());
+            if(statusDesc === 'SUCCESS'){
+                console.log('---Find one', this.goalInstancesArray[i]);
+                goalFinished.push(this.goalInstancesArray[i]);
+            }
+        }
+
+        return goalFinished;
+    }
+
+    public removeUselessGoalInstances(){
+        for (var i in this.goalInstancesArray) {
+            var statusDesc = this.getBadgeStatus(this.goalInstancesArray[i].getStatus());
+            if(statusDesc === 'SUCCESS'){
+                this.goalInstancesArray.splice(i, 1);
+            }
+        }
+    }
+
+    public removeGoalInstance(goalInstanceUuid:string){
+        for(var i in this.goalInstancesArray) {
+            console.log('searching for the correct goal instance');
+            var currentBadge = this.goalInstancesArray[i];
+            if (currentBadge.hasUUID(goalInstanceUuid)) {
+                console.log('goal instance found');
+                this.goalInstancesArray.splice(i, 1);
+                console.log('removed : ',this.goalInstancesArray);
+                break;
+            }
+        }
+    }
+
+    private getBadgeStatus(badgeStatus:number):string{
+        switch(badgeStatus) {
+            case 0: return 'WAIT';
+            case 1: return 'RUNNING';break;
+            case 2: return 'SUCCESS';break;
+            case 3: return 'FAIL';break;
+            default: return 'UNKNOWN';break;
+        }
+        return 'UNKNOWN'
     }
 }
 

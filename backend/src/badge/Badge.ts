@@ -21,6 +21,10 @@ class Badge {
         return this.points;
     }
 
+    public getUuid():string{
+        return this.id;
+    }
+
     public hasUUID(aUUID:string):boolean {
         return this.id === aUUID;
     }

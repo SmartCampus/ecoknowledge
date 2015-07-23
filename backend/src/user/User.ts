@@ -2,6 +2,7 @@
 
 import GoalDefinition = require('../goal/definition/GoalDefinition');
 import GoalInstance = require('../goal/instance/GoalInstance');
+import Badge = require('../badge/Badge');
 
 import uuid = require('node-uuid');
 
@@ -9,14 +10,16 @@ class User {
 
   private name:string;
   private goals:GoalDefinition[] = [];
-  private badges:GoalInstance[] = [];
-
+  private goalInstances:GoalInstance[] = [];
+  private finishedBadge:number[];
   private id;
 
   constructor(name:string) {
     this.name = name;
     this.id = uuid.v4();
+    this.finishedBadge = [];
   }
+
   public getUUID() {
     return this.id;
   }
@@ -34,7 +37,11 @@ class User {
   }
 
   public getBadges():GoalInstance[] {
-    return this.badges;
+    return this.goalInstances;
+  }
+
+  public getFinishedBadges():number[]{
+    return this.finishedBadge;
   }
 
   public addGoal(newGoal:GoalDefinition):boolean {
@@ -51,7 +58,7 @@ class User {
       throw new Error('Can not add a new newBadge to user ' + this.name + ' given newBadge is null');
     }
 
-    this.badges.push(newBadge);
+    this.goalInstances.push(newBadge);
     return true;
   }
 
@@ -95,13 +102,26 @@ class User {
   }
 
   public retrieveBadge(badgeName:string):GoalInstance {
-    for(var i in this.badges) {
-      var currentBadge = this.badges[i];
+    for(var i in this.goalInstances) {
+      var currentBadge = this.goalInstances[i];
       if(currentBadge.getName() === badgeName) {
         return currentBadge;
       }
     }
     return null;
+  }
+
+  public addFinishedBadge(badge:Badge){
+    console.log('add in user');
+    console.log('badge has own property : ',this.finishedBadge.hasOwnProperty(badge.getUuid()));
+    if(this.finishedBadge.hasOwnProperty(badge.getUuid())) {
+      console.log('old badge');
+      this.finishedBadge[badge.getUuid()]++;
+    }else{
+      console.log('new badge');
+      this.finishedBadge[badge.getUuid()] = 1;
+    }
+    console.log('added : ',this.finishedBadge);
   }
 
 }

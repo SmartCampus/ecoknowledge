@@ -146,6 +146,16 @@ class GoalInstance {
         var mapSymbolicNameToValue = this.bindSymbolicNameToValue(values);
 
         var result = this.goalDefinition.evaluate(mapSymbolicNameToValue, this);
+        if(result && this.percentageOfTime>=100){
+            this.status=BadgeStatus.SUCCESS;
+            console.log('success!');
+        }else if(this.percentageOfTime>=100){
+            this.status=BadgeStatus.FAIL;
+            console.log('Fail!');
+        }else{
+            this.status=BadgeStatus.RUN;
+        }
+
         return result;
     }
 

@@ -33,6 +33,8 @@ var badgeRepository:GoalInstanceRepository = new GoalInstanceRepository();
 var goalRepository:GoalDefinitionRepository = new GoalDefinitionRepository();
 var badgeRepositoryV2:BadgeRepository = new BadgeRepository();
 
+userProvider.addUser(currentUser);
+
 var ecoknowledge:EcoKnowledge = new EcoKnowledge(goalRepository, badgeRepository, userProvider, badgeRepositoryV2);
 
 var context:Context = new DemoContext();
@@ -100,11 +102,29 @@ app.get('/badges', jsonParser, function (req, res, next) {
 });
 
 app.get('/goalsInstanceRunning', jsonParser, function (req, res, next) {
+    ecoknowledge.updateFinishedBadgeUser(currentUser.getUUID());
     var result = ecoknowledge.getGoalInstancesDescriptionInJsonFormat(jsonStub);
     res.send(result);
 });
+
+app.get('/badgesV2/:id', jsonParser, function (req, res, next) {
+    console.log('\n++ Get : /badge asked ....');
+    if (!req.params.id) {
+        next();
+    }
+
+    console.log("ID :", req.params.id);
+
+    var badgeUUID:string = req.params.id;
+    var result:any = ecoknowledge.getBadgeInJsonFormat(badgeUUID);
+
+    console.log("++ Sending", result);
+    res.send(result);
+});
+
 app.get('/badgesV2/', jsonParser, function (req, res, next) {
-    var result = badgeRepositoryV2.getAllBadges();
+    console.log('All badges V2');
+    var result = ecoknowledge.getAllBadgesInJsonFormat();
     res.send(result);
 });
 
@@ -118,6 +138,28 @@ app.get('/required', jsonParser, function (req, res, next) {
 app.get('/sensors', jsonParser, function (req, res, next) {
     //TODO : link with smartcampus
     res.send(sensors);
+});
+
+app.get('/trophywall', jsonParser, function (req, res, next) {
+    var trophies:number[] = ecoknowledge.getFinishedBadge(currentUser.getUUID());
+    var trophyWall:any = [];
+    /**[
+         {
+             'number': 12,
+             'badge': badge
+         }
+     ]
+     */
+    for(var badgeId in trophies){
+        var currentBadge:any = {};
+        currentBadge.number = trophies[badgeId];
+        currentBadge.badge = ecoknowledge.getBadgeInJsonFormat(badgeId);
+        trophyWall.push(currentBadge);
+    }
+
+    console.log('trophy wall : ',trophyWall);
+
+    res.send(trophyWall);
 });
 
 app.post('/badgesV2', jsonParser, function (req, res) {
@@ -165,13 +207,14 @@ var jsonStub:any = {};
 
 //TODO need a badgeID in request
 app.get('/evaluatebadge', jsonParser, function (req, res) {
+    console.log('evaluate');
 
     var badgeID:string = req.query.badgeID;
 
     var badge:GoalInstance = badgeRepository.getGoalInstance(badgeID);
 
     if (!demo) {
-
+        console.log('pas demo');
         //TODO move what follow
         var required = badge.getSensors();
 
@@ -215,6 +258,10 @@ app.get('/evaluatebadge', jsonParser, function (req, res) {
 
                         if (numberToLoad == 0) {
                             var result = badge.evaluate(required);
+                            if(result){
+                                ecoknowledge.addFinishedBadge(badgeID, currentUser.getUUID());
+                                ecoknowledge.removeFinishedGoalInstance(badgeID);
+                            }
                             res.send(badge.getProgress());
                         }
                     });
@@ -268,8 +315,12 @@ app.get('/evaluatebadge', jsonParser, function (req, res) {
     else {
         console.log("STUB", JSON.stringify(jsonStub));
         var result = badge.evaluate(jsonStub);
+        if(result){
+            ecoknowledge.addFinishedBadge(badgeID, currentUser.getUUID());
+        }
         res.send(badge.getProgress());
     }
+    console.log('fin');
 });
 
 var fs = require('fs');
@@ -287,6 +338,10 @@ app.post('/evaluategoal', jsonParser, function (req, res) {
     var actionData = req.body;
     console.log(actionData);
     var result = ecoknowledge.evaluateGoal(actionData);
+    if(result){
+        console.log('ok when evaluating');
+        //ecoknowledge.addFinishedBadge(badgeID, currentUser.getUUID());
+    }
     res.send(result);
 
 });

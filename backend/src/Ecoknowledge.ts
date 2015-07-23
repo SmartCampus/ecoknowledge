@@ -5,6 +5,10 @@ import BadgeRepository = require('./badge/BadgeRepository');
 import BadgeFactory = require('./badge/BadgeFactory');
 import UserRepository = require('./user/UserRepository');
 import Clock = require('./Clock');
+import Badge = require('./badge/Badge');
+import User = require('./user/User');
+import GoalInstance = require('./goal/instance/GoalInstance');
+import GoalDefinition = require('./goal/definition/GoalDefinition');
 
 class Ecoknowledge {
     private goalDefinitionRepository:GoalDefinitionRepository;
@@ -12,6 +16,7 @@ class Ecoknowledge {
     private userRepository:UserRepository;
 
     private badgeRepository:BadgeRepository;
+
     private badgeFactory:BadgeFactory;
 
     private goalInstanceFactory:GoalInstanceFactory;
@@ -42,6 +47,39 @@ class Ecoknowledge {
         return this.goalInstanceRepository.getGoalInstancesDescriptionInJsonFormat(data);
     }
 
+    public getUser(userId:string):User{
+        return this.userRepository.getUser(userId);
+    }
+
+    public getBadgeInJsonFormat(badgeId:string):any{
+        var badge:Badge = this.badgeRepository.getBadge(badgeId);
+        console.log('badge in getbadgeinjsonformat : ', badge);
+        var badgeInJson:any = {};
+
+        badgeInJson.id=badge.getUuid();
+        badgeInJson.name=badge.getName();
+        badgeInJson.points=badge.getPoints();
+        return badgeInJson;
+    }
+
+    public getAllBadgesInJsonFormat():any[]{
+        var allBadges:Badge[] = this.badgeRepository.getAllBadges();
+        var allBadgesInJson:any[] = [];
+        for(var i in allBadges){
+            var badgeInJson:any = {};
+            badgeInJson.id = allBadges[i].getUuid();
+            badgeInJson.name = allBadges[i].getName();
+            badgeInJson.points = allBadges[i].getPoints();
+            allBadgesInJson.push(badgeInJson);
+        }
+        return allBadgesInJson;
+    }
+
+    public getFinishedBadge(userId:string):number[]{
+        var user:User = this.getUser(userId);
+        return user.getFinishedBadges();
+    }
+
     public addGoalDefinition(data:any):string {
         return this.goalDefinitionRepository.addGoalByDescription(data, this.badgeRepository);
     }
@@ -59,6 +97,34 @@ class Ecoknowledge {
     // debug only
     public evaluateGoal(data:any):boolean {
         return this.goalDefinitionRepository.evaluateGoal(data);
+    }
+
+    public updateFinishedBadgeUser(userId:string){
+        var user:User = this.getUser(userId);
+        var goalsFinished:GoalInstance[] = this.goalInstanceRepository.getFinishedGoalInstances();
+        console.log('goals finished : ', goalsFinished);
+        for(var i in goalsFinished){
+            console.log("---one goal : ", goalsFinished[i]);
+            var badgeAssociated:Badge = goalsFinished[i].getGoalDefinition().getBadge();
+            console.log('associated badge : ', badgeAssociated);
+            user.addFinishedBadge(badgeAssociated);
+            this.goalInstanceRepository.removeGoalInstance(goalsFinished[i].getId());
+        }
+    }
+
+    public addFinishedBadge(BadgeId:string,userId:string){
+        console.log('addFinishedBadge');
+        var user:User = this.userRepository.getUser(userId);
+        var goalDefinition:GoalDefinition = this.goalInstanceRepository.getGoalInstance(BadgeId).getGoalDefinition();
+        var badge:Badge = goalDefinition.getBadge();
+        console.log('add now');
+        user.addFinishedBadge(badge);
+    }
+
+    public removeFinishedGoalInstance(goalInstanceId:string){
+        console.log('Removing a goal instance',goalInstanceId);
+        this.goalInstanceRepository.removeGoalInstance(goalInstanceId);
+        console.log('finished to remove a goal instance');
     }
 }
 

@@ -9,11 +9,12 @@
  * the objectives and the badges we have.
  */
 var app = angular.module('ecoknowledgeApp')
-  .controller('HomeCtrl', ['ServiceBadge', 'ServiceGoal', '$window', function (ServiceBadge, ServiceGoal, $window) {
+  .controller('HomeCtrl', ['ServiceBadge', 'ServiceGoal', 'ServiceBadgeV2','$window', function (ServiceBadge, ServiceGoal, ServiceBadgeV2, $window) {
     var self = this;
     self.goals = [];
     self.goalsInstance = [];
     self.obtentionValue = {};
+    self.trophies = [];
     /*
      * Add a goal the the array goals
      */
@@ -89,8 +90,20 @@ var app = angular.module('ecoknowledgeApp')
       });
     };
 
+    self.getTrophies = function(){
+      self.trophies = [];
+      ServiceBadgeV2.getTrophies(function(data){
+        self.trophies = data;
+        console.log('trophies get : ', self.trophies);
+      },function(data){
+        console.log('Error getting trophies', data);
+      })
+      ;
+    };
+
     self.getGoals();
     self.getBadges();
+    self.getTrophies();
   }]);
 
 app.directive('listGoal', function () {
@@ -109,6 +122,14 @@ app.directive('listBadge', function () {
   };
 });
 
+app.directive('listTrophies', function () {
+  return {
+    restrict: 'E',
+    templateUrl: '../../views/homepage/list-trophies.html'
+  };
+});
+
+
 app.directive('homepageBadge', function () {
   return {
     restrict: 'E',
@@ -120,5 +141,12 @@ app.directive('homepageGoal', function () {
   return {
     restrict: 'E',
     templateUrl: '../../views/homepage/homepage-goal.html'
+  };
+});
+
+app.directive('homepageTrophy', function () {
+  return {
+    restrict: 'E',
+    templateUrl: '../../views/homepage/homepage-trophy.html'
   };
 });

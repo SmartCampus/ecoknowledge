@@ -1,0 +1,11 @@
+<div class="col-md-4">
+    <h2>Tableau de chasse</h2>
+    <ul>
+        <li ng-repeat="trophyInstance in homeCtrl.trophies track by $index">
+            <homepage-trophy></homepage-trophy>
+        </li>
+    </ul>
+
+    <div ng-show="homeCtrl.trophies.length==0">Vous n'avez pas encore de badge !</div>
+
+</div>

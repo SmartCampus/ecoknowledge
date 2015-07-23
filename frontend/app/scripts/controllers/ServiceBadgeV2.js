@@ -27,4 +27,15 @@ app.service('ServiceBadgeV2',['$http', function ServiceBadgeV2($http){
               failFunc(data);
           });
     };
+
+    this.getTrophies = function(successFunc, failFunc){
+        $http.get(path+'trophywall')
+            .success(function(data){
+                successFunc(data);
+            })
+            .error(function(data){
+                failFunc(data);
+            })
+        ;
+    };
 }]);

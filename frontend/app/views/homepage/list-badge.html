@@ -1,8 +1,8 @@
-<div class="col-md-6"><h2>Objectifs en cours</h2>
+<div class="col-md-4"><h2>Objectifs en cours</h2>
     <ul>
         <li class="badge-list list-group-item badge-status-{{goalInstance.status}}" ng-repeat="goalInstance in homeCtrl.goalsInstance">
             <homepage-badge></homepage-badge>
         </li>
     </ul>
-    <div ng-show="homeCtrl.goalsInstance.length==0">Vous n'avez pas encore de badge !</div>
+    <div ng-show="homeCtrl.goalsInstance.length==0">Vous n'avez pas encore d'objectifs en cours !</div>
 </div>
