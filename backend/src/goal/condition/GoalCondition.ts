@@ -35,7 +35,7 @@ class GoalCondition extends ModelItf {
         return {
             description: this.description,
             timeBox: this.timeBox,
-            typeOfComparison:this.typeOfComparison,
+            typeOfComparison: this.typeOfComparison,
             leftOperand: this.leftOperand,
             rightOperand: this.rightOperand
         }
@@ -46,29 +46,15 @@ class GoalCondition extends ModelItf {
             jsonObject.description, jsonObject.timeBox, jsonObject.id, jsonObject.createdAt, jsonObject.updatedAt);
     }
 
-    create(successCallback:Function, failCallback:Function) {
-        console.log("CREATE GOAL CONDITION");
-        var self = this;
-
-        if (!this.hasBeenSaved()) {
-            GoalConditionSchema.create(this.toJSONObject())
+    buildOBJ(successCallback:Function, failCallback:Function, self:GoalCondition) {
+        if (!self.hasBeenSaved()) {
+            GoalConditionSchema.create(self.toJSONObject())
                 .then(function (_conditionSequelize) {
                     self._selfSequelize = _conditionSequelize;
 
                     var uObject = GoalCondition.fromJSONObject(_conditionSequelize.dataValues);
                     self._id = uObject.getId();
-
-                    console.log("ID GIVEN BY SEQUELIZE", self._id);
-
-                    var successCallBackInitFields = function () {
-                        successCallback(_conditionSequelize);
-                    };
-
-                    var failCallBackInitFields = function () {
-                        failCallback(_conditionSequelize);
-                    };
-
-                    self.initFieldsInDB(successCallBackInitFields, failCallBackInitFields);
+                    successCallback(uObject);
                 })
                 .error(function (error) {
                     console.log("ERROR ON CREATE GOAL CONDITION");
@@ -78,6 +64,20 @@ class GoalCondition extends ModelItf {
             failCallback(new ModelException("Condition already exists."));
         }
     }
+
+
+    /*
+     var successCallBackInitFields = function () {
+     successCallback(_conditionSequelize);
+     };
+
+     var failCallBackInitFields = function () {
+     failCallback(_conditionSequelize);
+     };
+
+     self.initFieldsInDB(successCallBackInitFields, failCallBackInitFields);
+     */
+
 
     /**
      * Retrieve model description from database and create model instance.
@@ -89,10 +89,10 @@ class GoalCondition extends ModelItf {
      * @param {Function} failCallback - The callback function when fail.
 
      */
-    static read(id : number, successCallback : Function, failCallback : Function) {
+    static read(id:number, successCallback:Function, failCallback:Function) {
         // search for known ids
-        GoalConditionSchema.findById(id, { include: [{ all: true }]})
-            .then(function(_conditionSequelize) {
+        GoalConditionSchema.findById(id, {include: [{all: true}]})
+            .then(function (_conditionSequelize) {
                 var goalCondition:GoalCondition = GoalCondition.fromJSONObject(_conditionSequelize.dataValues);
 
                 var leftOperand:Operand = Operand.fromJSONObject(_conditionSequelize.leftOperand);
@@ -102,20 +102,34 @@ class GoalCondition extends ModelItf {
 
                 successCallback(goalCondition);
             })
-            .error(function(error) {
+            .error(function (error) {
                 failCallback(error);
             });
     }
 
-
-
-    public setTimeBoxViaSequelize() {
-
-    }
-
-    public initFieldsInDB(successCallBack:Function, failCallBack:Function) {
+    create(suc:Function, fail:Function) {
         var self = this;
 
+        self.buildOBJ(
+            function(uObject:GoalCondition) {
+                self.initFieldsInDB(
+                    function() {
+
+                    },
+                    function() {
+
+                    },
+                    self
+                );
+            },
+            function(error) {
+
+            },
+            self
+        );
+    }
+
+    public initFieldsInDB(successCallBack:Function, failCallBack:Function, self:GoalCondition) {
         var numberOfFieldsToInit = 3;
         var numberOfFieldsInit = 0;
 
@@ -147,8 +161,7 @@ class GoalCondition extends ModelItf {
             failCallBack(_timeBoxSequelize);
         };
 
-        this.timeBox.create(callBackSuccessCreateTimeBox, callBackFailCreateTimeBox);
-
+        self.timeBox.create(callBackSuccessCreateTimeBox, callBackFailCreateTimeBox);
 
 
         var callBackSuccessCreateLeftOperand = function (_operandSequelize) {
@@ -166,8 +179,8 @@ class GoalCondition extends ModelItf {
             failCallBack(_operandSequelize);
         };
 
-        this.leftOperand.create(callBackSuccessCreateLeftOperand, callBackFailCreateOperand);
-        this.rightOperand.create(callBackSuccessCreateRightOperand, callBackFailCreateOperand);
+        self.leftOperand.create(callBackSuccessCreateLeftOperand, callBackFailCreateOperand);
+        self.rightOperand.create(callBackSuccessCreateRightOperand, callBackFailCreateOperand);
     }
 
     public getStartDateInMillis() {

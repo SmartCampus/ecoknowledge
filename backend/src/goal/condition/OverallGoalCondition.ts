@@ -26,7 +26,13 @@ class OverallGoalCondition extends ModelItf implements Expression {
      */
     constructor(condition:GoalCondition, startDate:Date, endDate:Date, thresholdRate:number = 100) {
         super();
-        this.condition = condition;
+
+        console.log("CONDITION", this.condition);
+
+        if ("undefined" != typeof condition) {
+            console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            this.condition = condition;
+        }
 
         //  Set the timeBox of the internal condition
         var timeBox:TimeBox = new TimeBox(startDate.getTime(), endDate.getTime());
@@ -78,14 +84,18 @@ class OverallGoalCondition extends ModelItf implements Expression {
 
                     console.log("xxxxxxxxxxxxxxxx\n", _overallConditionSequelize.dataValues);
 
-                    var successCallBackInitFields = function (_conditionSequelize) {
-                        var uObject = OverallGoalCondition.fromJSONObject(_overallConditionSequelize.dataValues);
-                        _overallConditionSequelize.setCondition(_conditionSequelize);
-                        self._id = uObject.getId();
-                        successCallback(_overallConditionSequelize);
+                    var successCallBackInitFields = function (_conditionSequelize, condition) {
+                        console.log("BIATCH???", condition);
+
+                        self.setCondition(condition);
+                        _overallConditionSequelize.setCondition(_conditionSequelize).then( function () {
+                            var uObject = OverallGoalCondition.fromJSONObject(_overallConditionSequelize.dataValues);
+                            self._id = uObject.getId();
+                            successCallback(_overallConditionSequelize);
+                        });
                     };
 
-                    var failCallBackInitFields = function (_conditionSequelize) {
+                    var failCallBackInitFields = function (_conditionSequelize, condition) {
                         failCallback(_overallConditionSequelize);
                     };
 
@@ -100,10 +110,10 @@ class OverallGoalCondition extends ModelItf implements Expression {
         }
     }
 
-    static read(id : number, successCallback : Function, failCallback : Function) {
+    static read(id:number, successCallback:Function, failCallback:Function) {
         // search for known ids
-        OverallGoalConditionSchema.findById(id, { include: [{ all: true }]})
-            .then(function(_conditionSequelize) {
+        OverallGoalConditionSchema.findById(id, {include: [{all: true}]})
+            .then(function (_conditionSequelize) {
                 var overallGoalCondition:OverallGoalCondition = OverallGoalCondition.fromJSONObject(_conditionSequelize.dataValues);
 
                 var goalCondition:GoalCondition = GoalCondition.fromJSONObject(_conditionSequelize.condition);
@@ -111,7 +121,7 @@ class OverallGoalCondition extends ModelItf implements Expression {
 
                 successCallback(goalCondition);
             })
-            .error(function(error) {
+            .error(function (error) {
                 failCallback(error);
             });
     }

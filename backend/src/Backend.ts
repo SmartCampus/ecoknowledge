@@ -74,6 +74,8 @@ class Backend extends Server {
             var timeBox:TimeBox = new TimeBox(Date.now() / 1000, Date.now() / 1000 + 500);
 
             var goalCondition:GoalCondition = new GoalCondition(leftOperand, '>', rightOperand, 'a desc', timeBox);
+
+
             var overall:OverallGoalCondition = new OverallGoalCondition(goalCondition, new Date(Date.now()), new Date(Date.now()+5000),50);
 
             var successReadCallBack = function (conditionObject:GoalCondition) {
@@ -90,14 +92,14 @@ class Backend extends Server {
 
             var successCreateCallBack = function (_conditionSequelize) {
                 console.log("SUCCESS CREATE CALL BACK WITH DB ID", goalCondition.getId());
-                OverallGoalCondition.read(overall.getId(), successReadCallBack, failReadCallBack);
+                GoalCondition.read(overall.getId(), successReadCallBack, failReadCallBack);
             };
 
             var failCreateCallBack = function (_conditionSequelize) {
                 console.log("FAIL CREATE CALL BACK", _conditionSequelize);
             };
 
-            overall.create(successCreateCallBack, failCreateCallBack);
+            goalCondition.create(successCreateCallBack, failCreateCallBack);
         });
     }
 }
