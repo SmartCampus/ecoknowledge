@@ -21,6 +21,9 @@ module.exports = function (grunt) {
             buildDatabase: {
                 files: [{expand: true, cwd: 'src/database', src: ['**'], dest: 'build/database/'}]
             },
+            buildTestDatabase: {
+                files: [{expand: true, cwd: 'src/database', src: ['**/**'], dest: 'buildTests/src/database/'}]
+            },
             distDatabase: {
                 files: [{expand: true, cwd: 'src/database', src: ['**'], dest: 'dist/database/'}]
             }
@@ -123,7 +126,7 @@ module.exports = function (grunt) {
             build: ['build/'],
             dist: ['dist/'],
             test: ['buildTests/'],
-            all:['src/**/*.js', 'src/**/*js.map','tests/**/*.js', 'tests/**/*js.map', '!src/database/*']
+            all:['src/**/*.js', 'src/**/*js.map','tests/**/*.js', 'tests/**/*js.map', '!src/database/**/*']
         }
 // ---------------------------------------------
     });
@@ -150,7 +153,7 @@ module.exports = function (grunt) {
     grunt.registerTask('test', function() {
         grunt.task.run(['clean:test']);
 
-        grunt.task.run(['typescript:test', 'mochaTest:test']);
+        grunt.task.run(['copy:buildTestDatabase','typescript:test', 'mochaTest:test']);
     });
 
 }
