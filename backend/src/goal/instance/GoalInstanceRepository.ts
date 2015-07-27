@@ -81,6 +81,7 @@ class BadgeProvider {
             if(statusDesc === 'SUCCESS'){
                 console.log('---Find one', this.goalInstancesArray[i]);
                 goalFinished.push(this.goalInstancesArray[i]);
+                this.goalInstancesArray.splice(i,1);
             }
         }
 
