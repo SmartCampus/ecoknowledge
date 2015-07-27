@@ -61,6 +61,11 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE");
+    next();
+});
+
 var args = process.argv;
 var port = args[2] || 3000;
 
@@ -140,7 +145,7 @@ app.get('/sensors', jsonParser, function (req, res, next) {
     res.send(sensors);
 });
 
-app.get('/goalInstanceRemove/:id', jsonParser, function (req, res, next) {
+app.delete('/goalInstanceRemove/:id', jsonParser, function (req, res, next) {
     console.log('\n++ Remove : /goal instance asked ....');
     console.log("ID :", req.params.id);
 
