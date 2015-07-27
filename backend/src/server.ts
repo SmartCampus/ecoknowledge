@@ -140,6 +140,15 @@ app.get('/sensors', jsonParser, function (req, res, next) {
     res.send(sensors);
 });
 
+app.get('/goalInstanceRemove/:id', jsonParser, function (req, res, next) {
+    console.log('\n++ Remove : /goal instance asked ....');
+    console.log("ID :", req.params.id);
+
+    var goalUUID:string = req.params.id;
+    ecoknowledge.removeGoalInstance(goalUUID);
+    res.send('OK');
+});
+
 app.get('/trophywall', jsonParser, function (req, res, next) {
     var trophies:number[] = ecoknowledge.getFinishedBadge(currentUser.getUUID());
     var trophyWall:any = [];
@@ -260,7 +269,7 @@ app.get('/evaluatebadge', jsonParser, function (req, res) {
                             var result = badge.evaluate(required);
                             if(result){
                                 ecoknowledge.addFinishedBadge(badgeID, currentUser.getUUID());
-                                ecoknowledge.removeFinishedGoalInstance(badgeID);
+                                ecoknowledge.removeGoalInstance(badgeID);
                             }
                             res.send(badge.getProgress());
                         }

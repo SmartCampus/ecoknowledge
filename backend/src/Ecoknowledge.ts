@@ -108,7 +108,6 @@ class Ecoknowledge {
             var badgeAssociated:Badge = goalsFinished[i].getGoalDefinition().getBadge();
             console.log('associated badge : ', badgeAssociated);
             user.addFinishedBadge(badgeAssociated);
-            this.goalInstanceRepository.removeGoalInstance(goalsFinished[i].getId());
         }
     }
 
@@ -121,7 +120,7 @@ class Ecoknowledge {
         user.addFinishedBadge(badge);
     }
 
-    public removeFinishedGoalInstance(goalInstanceId:string){
+    public removeGoalInstance(goalInstanceId:string){
         console.log('Removing a goal instance',goalInstanceId);
         this.goalInstanceRepository.removeGoalInstance(goalInstanceId);
         console.log('finished to remove a goal instance');
