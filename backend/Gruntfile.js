@@ -19,13 +19,13 @@ module.exports = function (grunt) {
 
         copy: {
             buildDatabase: {
-                files: [{expand: true, cwd: 'src/database', src: ['**'], dest: 'build/database/'}]
+                files: [{expand: true, cwd: 'src/database', src: ['**/**'], dest: 'build/database/'}]
             },
             buildTestDatabase: {
                 files: [{expand: true, cwd: 'src/database', src: ['**/**'], dest: 'buildTests/src/database/'}]
             },
             distDatabase: {
-                files: [{expand: true, cwd: 'src/database', src: ['**'], dest: 'dist/database/'}]
+                files: [{expand: true, cwd: 'src/database', src: ['**/**'], dest: 'dist/database/'}]
             }
         },
 

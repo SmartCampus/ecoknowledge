@@ -1,4 +1,3 @@
-
 /**
  * @author Christian Brel <ch.brel@gmail.com>
  */
@@ -7,9 +6,9 @@
 
 /// <reference path="./LoggerLevel.ts" />
 
-var http : any = require("http");
-var express : any = require("express");
-var bodyParser : any = require("body-parser");
+var http:any = require("http");
+var express:any = require("express");
+var bodyParser:any = require("body-parser");
 var relations = require('./database/relations.js');
 
 import Badge = require('./badge/Badge');
@@ -33,7 +32,7 @@ class Server {
      * @property listeningPort
      * @type number
      */
-    listeningPort : number;
+    listeningPort:number;
 
     /**
      * Server's app.
@@ -41,7 +40,7 @@ class Server {
      * @property app
      * @type any
      */
-    app : any;
+    app:any;
 
     /**
      * Server's http server.
@@ -49,7 +48,7 @@ class Server {
      * @property httpServer
      * @type any
      */
-    httpServer : any;
+    httpServer:any;
 
     /**
      * Constructor.
@@ -57,7 +56,7 @@ class Server {
      * @param {number} listeningPort - Listening port.
      * @param {Array<string>} arguments - Command line arguments.
      */
-    constructor(listeningPort : number, arguments : Array<string>) {
+    constructor(listeningPort:number, arguments:Array<string>) {
         this.listeningPort = listeningPort;
 
         this._argumentsProcess(arguments);
@@ -77,18 +76,18 @@ class Server {
         relations.init();
 
         /*
-        connection.sequelize.sync({force: false})
-            .then(function () {
-                console.log("Base created !");
-            });
-*/
+         connection.sequelize.sync({force: false})
+         .then(function () {
+         console.log("Base created !");
+         });
+         */
         connection.sequelize.drop()
-            .then(function() {
+            .then(function () {
                 console.log("All tables dropped !");
                 connection.sequelize.sync({force: false})
-                .then(function () {
-                console.log("Base created !");
-                });
+                    .then(function () {
+                        console.log("Base created !");
+                    });
             });
 
     }
@@ -102,75 +101,76 @@ class Server {
     private _buildServer() {
         this.app = express();
         this.app.use(bodyParser.json()); // for parsing application/json
-        this.app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+        this.app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
 
-        this.app.use(function(req, res, next) {
+        this.app.use(function (req, res, next) {
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            res.header("Access-Control-Allow-Methods", "POST, GET, DELETE");
             next();
         });
         this.httpServer = http.createServer(this.app);
         /*
-        this.app.get('/', function(req, res){
+         this.app.get('/', function(req, res){
 
-             var b:Badge = new Badge('pouic', 10);
+         var b:Badge = new Badge('pouic', 10);
 
-            var leftOP:Operand = new Operand('TMP_CLI', true);
-            var rightOP:Operand = new Operand('10', false);
+         var leftOP:Operand = new Operand('TMP_CLI', true);
+         var rightOP:Operand = new Operand('10', false);
 
-            var timeBox:TimeBox = new TimeBox(Date.now()/1000, (Date.now()+50)/1000);
+         var timeBox:TimeBox = new TimeBox(Date.now()/1000, (Date.now()+50)/1000);
 
-            var goalCondition:GoalCondition = new GoalCondition(leftOP,'>', rightOP,'a desc', timeBox);
-
-
-            b.create(
-                () => {
-                    console.log("badge crée");
-                },
-                () => {
-                    console.log("badge : oups");
-                }
-            );
+         var goalCondition:GoalCondition = new GoalCondition(leftOP,'>', rightOP,'a desc', timeBox);
 
 
-            timeBox.create(
-                () => {
-                    console.log("timebox créée");
-                },
-                () => {
-                    console.log("timebox : oups");
-                }
-            );
+         b.create(
+         () => {
+         console.log("badge crée");
+         },
+         () => {
+         console.log("badge : oups");
+         }
+         );
 
 
-
-            var successCallBackGoalCondition = function (_conditionSequelize) {
-                _conditionSequelize.countOperands().then( function (nbOperands) {
-                    console.log("goalCondition crée avec", nbOperands );
-                });
-
-                _conditionSequelize.getTimeBox().then( function (_timeBox) {
-                    var timeBox:TimeBox = TimeBox.fromJSONObject(_timeBox.dataValues);
-                    console.log("TIME BOX", timeBox);
-                });
-
-            };
-
-            var failCallBackGoalCondition = function (_conditionSequelize) {
-                console.log("goalCondition : oups");
-            };
-
-            goalCondition.create(successCallBackGoalCondition,failCallBackGoalCondition);
-
-            //goalCondition.initFieldsInDB();
+         timeBox.create(
+         () => {
+         console.log("timebox créée");
+         },
+         () => {
+         console.log("timebox : oups");
+         }
+         );
 
 
 
-            //goalCondition.create(() => { console.log("YES");}, () => {console.log("FAIL");});
+         var successCallBackGoalCondition = function (_conditionSequelize) {
+         _conditionSequelize.countOperands().then( function (nbOperands) {
+         console.log("goalCondition crée avec", nbOperands );
+         });
+
+         _conditionSequelize.getTimeBox().then( function (_timeBox) {
+         var timeBox:TimeBox = TimeBox.fromJSONObject(_timeBox.dataValues);
+         console.log("TIME BOX", timeBox);
+         });
+
+         };
+
+         var failCallBackGoalCondition = function (_conditionSequelize) {
+         console.log("goalCondition : oups");
+         };
+
+         goalCondition.create(successCallBackGoalCondition,failCallBackGoalCondition);
+
+         //goalCondition.initFieldsInDB();
 
 
-            res.send('LOL');
-        });
+
+         //goalCondition.create(() => { console.log("YES");}, () => {console.log("FAIL");});
+
+
+         res.send('LOL');
+         });
          */
     }
 
@@ -181,15 +181,15 @@ class Server {
      * @private
      * @param {Array<string>} arguments - Command line arguments.
      */
-    private _argumentsProcess(arguments : Array<string>) {
+    private _argumentsProcess(arguments:Array<string>) {
         var logLevel = LoggerLevel.Error;
 
-        if(arguments && arguments.length > 2) {
+        if (arguments && arguments.length > 2) {
             var param = process.argv[2];
             var keyVal = param.split("=");
-            if(keyVal.length > 1) {
+            if (keyVal.length > 1) {
                 if (keyVal[0] == "loglevel") {
-                    switch(keyVal[1]) {
+                    switch (keyVal[1]) {
                         case "error" :
                             logLevel = LoggerLevel.Error;
                             break;
@@ -222,7 +222,7 @@ class Server {
     run() {
         var self = this;
 
-        this.httpServer.listen(this.listeningPort, function() {
+        this.httpServer.listen(this.listeningPort, function () {
             self.onListen();
         });
     }
@@ -233,7 +233,7 @@ class Server {
      * @method onArgumentsProcess
      * @param {Array<string>} arguments - Command line arguments.
      */
-    onArgumentsProcess(arguments : Array<string>) {
+    onArgumentsProcess(arguments:Array<string>) {
         //Nothing to do.
     }
 

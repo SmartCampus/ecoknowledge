@@ -4,6 +4,7 @@ import GoalInstance = require('../instance/GoalInstance');
 import ExpressionHandler = require('../condition/ExpressionHandler');
 import Expression = require('../condition/Expression');
 import TimeBox = require('../../TimeBox');
+import Badge = require('../../badge/Badge');
 import uuid = require('node-uuid');
 
 class GoalDefinition {
@@ -15,6 +16,8 @@ class GoalDefinition {
     private endDate:Date;
 
     private durationInDays:number;
+
+    private badge:Badge;
 
     constructor(name:string, startDate:Date, endDate:Date, durationInDays:number) {
         if (!name) {
@@ -63,6 +66,14 @@ class GoalDefinition {
 
     public getName():string {
         return this.name;
+    }
+
+    public getBadge():Badge {
+        return this.badge;
+    }
+
+    public setBadge(badge:Badge):void {
+        this.badge = badge;
     }
 
     public addCondition(expression:Expression) {

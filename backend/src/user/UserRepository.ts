@@ -4,6 +4,12 @@ class UserRepository {
 
     private users:User[] = []
 
+    private currentUser:User;
+
+    constructor() {
+        this.currentUser = new User('Jackie!');
+    }
+
     public addUser(user:User) {
         this.users.push(user);
     }
@@ -17,6 +23,10 @@ class UserRepository {
         }
 
         return null;
+    }
+
+    public getCurrentUser():User {
+        return this.currentUser;
     }
 }
 

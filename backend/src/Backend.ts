@@ -16,6 +16,8 @@ import GoalDefinitionFactory = require('./goal/definition/GoalDefinitionFactory'
 import GoalInstanceRepository = require('./goal/instance/GoalInstanceRepository');
 import GoalInstanceFactory = require('./goal/instance/GoalInstanceFactory');
 
+import UserRepository = require('./user/UserRepository');
+
 import Operand = require('./goal/condition/Operand');
 import GoalCondition = require('./goal/condition/GoalCondition');
 import OverallGoalCondition = require('./goal/condition/OverallGoalCondition');
@@ -31,6 +33,8 @@ class Backend extends Server {
 
     private goalInstanceRepository:GoalInstanceRepository;
     private goalInstanceFactory:GoalInstanceFactory;
+
+    private userRepository:UserRepository;
 
     /**
      * Constructor.
@@ -52,6 +56,8 @@ class Backend extends Server {
         this.goalInstanceRepository = new GoalInstanceRepository();
         this.goalInstanceFactory = new GoalInstanceFactory();
 
+        this.userRepository = new UserRepository();
+
         this.buildAPI();
     }
 
@@ -64,7 +70,7 @@ class Backend extends Server {
         console.log("Build API !");
         this.app.use("/badges", (new BadgeRouter(this.badgeRepository, this.badgeFactory)).getRouter());
         this.app.use("/goalsDefinition", (new GoalDefinitionRouter(this.goalDefinitionRepository, this.goalDefinitionFactory)).getRouter());
-        this.app.use("/goalsInstance", (new GoalInstanceRouter(this.goalInstanceRepository, this.goalInstanceFactory, this.goalDefinitionRepository)).getRouter());
+        this.app.use("/goalsInstance", (new GoalInstanceRouter(this.goalInstanceRepository, this.goalInstanceFactory, this.goalDefinitionRepository, this.userRepository)).getRouter());
 
         this.app.get('/test', function(req, res) {
 
