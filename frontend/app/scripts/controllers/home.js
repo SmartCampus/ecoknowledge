@@ -9,7 +9,7 @@
  * the objectives and the badges we have.
  */
 var app = angular.module('ecoknowledgeApp')
-  .controller('HomeCtrl', ['ServiceBadge', 'ServiceGoal', 'ServiceBadgeV2','$window', function (ServiceBadge, ServiceGoal, ServiceBadgeV2, $window) {
+  .controller('HomeCtrl', ['ServiceChallenge', 'ServiceGoal', 'ServiceBadgeV2','$window', function (ServiceChallenge, ServiceGoal, ServiceBadgeV2, $window) {
     var self = this;
     self.goals = [];
     self.goalsInstance = [];
@@ -25,7 +25,7 @@ var app = angular.module('ecoknowledgeApp')
       toSend.goalID = goalID;
 
       console.log('TAKE GOAL', toSend);
-      ServiceBadge.takeGoal(toSend, function (data) {
+      ServiceChallenge.takeGoal(toSend, function (data) {
         console.log('Objectif instancié ', data);
         $window.location.reload();
       }, function (data) {
@@ -34,6 +34,7 @@ var app = angular.module('ecoknowledgeApp')
     };
 
     self.getGoals = function () {
+      self.goals = [];
       ServiceGoal.get('', function (data) {
         self.goals = data;
       }, function () {
@@ -42,7 +43,8 @@ var app = angular.module('ecoknowledgeApp')
     };
 
     self.getBadges = function () {
-      ServiceBadge.get('', function (data) {
+      self.goalsInstance = [];
+      ServiceChallenge.get('', function (data) {
         console.log('badges : ', data);
         self.goalsInstance = data;
 
@@ -77,7 +79,7 @@ var app = angular.module('ecoknowledgeApp')
     };
 
     self.check = function (badge) {
-      ServiceBadge.evaluate(badge.name, function (data) {
+      ServiceChallenge.evaluate(badge.name, function (data) {
         if (data) {
           badge.yes = true;
         }
@@ -109,7 +111,7 @@ var app = angular.module('ecoknowledgeApp')
         self.goalsInstance.splice(index, 1);
       }, function(data){
         console.log('Failed to remove a goal',data);
-      })
+      });
 
     };
 
@@ -127,10 +129,10 @@ app.directive('listGoal', function () {
   };
 });
 
-app.directive('listBadge', function () {
+app.directive('listChallenge', function () {
   return {
     restrict: 'E',
-    templateUrl: '../../views/homepage/list-badge.html'
+    templateUrl: '../../views/homepage/list-challenge.html'
   };
 });
 
@@ -142,10 +144,10 @@ app.directive('listTrophies', function () {
 });
 
 
-app.directive('homepageBadge', function () {
+app.directive('homepageChallenge', function () {
   return {
     restrict: 'E',
-    templateUrl: '../../views/homepage/homepage-badge.html'
+    templateUrl: '../../views/homepage/homepage-challenge.html'
   };
 });
 

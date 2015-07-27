@@ -9,8 +9,8 @@
  */
 
 angular.module('ecoknowledgeApp')
-  .controller('BadgeCtrl',['ServiceGoal','ServiceBadge','ServiceSensor','Sign',
-      function (ServiceGoal, ServiceBadge, ServiceSensor, Sign) {
+  .controller('BadgeCtrl',['ServiceGoal','ServiceChallenge','ServiceSensor','Sign',
+      function (ServiceGoal, ServiceChallenge, ServiceSensor, Sign) {
     var self = this;
     self.badge = {};
     self.goals = [];
@@ -25,7 +25,7 @@ angular.module('ecoknowledgeApp')
         badgeToSend.goals.push(self.badge.currentGoal);
         var toSend = angular.toJson(badgeToSend);
         console.log('badge to send : ',toSend);
-        ServiceBadge.post(toSend, function(data) {
+        ServiceChallenge.post(toSend, function(data) {
             console.log('Achieve to send the badge', data);
         },function(data) {
             console.log('Fail to send the badge', data);

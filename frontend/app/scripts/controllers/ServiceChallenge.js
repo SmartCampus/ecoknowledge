@@ -1,11 +1,11 @@
 'use strict';
 
 /**
- * File with all the services associated to Badge (GET, POST)
+ * File with all the services associated to Challenge (GET, POST)
  */
 
 var app = angular.module('ecoknowledgeApp');
-app.service('ServiceBadge', ['$http', function ServiceBadge($http) {
+app.service('ServiceChallenge', ['$http', function ServiceChallenge($http) {
   this.get = function (id, successFunc, failFunc) {
     $http.get('http://localhost:3000/goalsInstanceRunning/' + id)
       .success(function (data) {

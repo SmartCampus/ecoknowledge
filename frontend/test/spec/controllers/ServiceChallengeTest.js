@@ -2,19 +2,19 @@
 
 var path = 'http://localhost:3000/';
 
-describe('Service: ServiceBadge', function() {
-    var Badge, httpBackend;
+describe('Service: ServiceChallenge', function() {
+    var Challenge, httpBackend;
 
     //load the service's module
     beforeEach(module('ecoknowledgeApp'));
 
     //Initialize the controller and a mock Scope
-    beforeEach(inject(function (_$httpBackend_, _ServiceBadge_) {
+    beforeEach(inject(function (_$httpBackend_, _ServiceChallenge_) {
         httpBackend = _$httpBackend_;
-        Badge = _ServiceBadge_;
+        Challenge = _ServiceChallenge_;
     }));
 
-    describe('Badge.get', function () {
+    describe('Challenge.get', function () {
         var callbacks;
 
         beforeEach(function () {
@@ -29,14 +29,14 @@ describe('Service: ServiceBadge', function() {
         });
 
 
-        it('should get all the badges from the service', function () {
-            var mockMonBadge = { goal: 'Mon goal', points: '37', description: 'Une description', name: 'MonBadge' };
-            var mockMonBadgePatrick = { goal: 'Mon goal de fou', points: '42', description: 'Un de scription', name: 'MonBadgePatrick' };
-            var mockResult = [mockMonBadge, mockMonBadgePatrick];
+        it('should get all the Challenges from the service', function () {
+            var mockMonChallenge = { goal: 'Mon goal', points: '37', description: 'Une description', name: 'MonChallenge' };
+            var mockMonChallengePatrick = { goal: 'Mon goal de fou', points: '42', description: 'Un de scription', name: 'MonChallengePatrick' };
+            var mockResult = [mockMonChallenge, mockMonChallengePatrick];
             //backend definition returns a mock user
             httpBackend.when('GET',path +'goalsInstanceRunning/').respond(mockResult);
             httpBackend.expectGET(path+'goalsInstanceRunning/');
-            Badge.get('', callbacks.success, callbacks.error);
+            Challenge.get('', callbacks.success, callbacks.error);
 
             httpBackend.flush();
 
@@ -46,7 +46,7 @@ describe('Service: ServiceBadge', function() {
         });
     });
 
-    describe('Badge.post', function () {
+    describe('Challenge.post', function () {
         var callbacks;
 
         beforeEach(function () {
@@ -61,11 +61,11 @@ describe('Service: ServiceBadge', function() {
         });
 
         it('should send a new goal to the service', function(){
-            var mockMonBadgePatrick = { goal: 'Mon goal de fou', points: '42', description: 'Un de scription', name: 'MonBadgePatrick' };
+            var mockMonChallengePatrick = { goal: 'Mon goal de fou', points: '42', description: 'Un de scription', name: 'MonChallengePatrick' };
 
             httpBackend.when('POST',path +'addbadge');
             httpBackend.expectPOST(path+'addbadge').respond('gg wp');
-            Badge.post(mockMonBadgePatrick, callbacks.success, callbacks.error);
+            Challenge.post(mockMonChallengePatrick, callbacks.success, callbacks.error);
 
             httpBackend.flush();
 

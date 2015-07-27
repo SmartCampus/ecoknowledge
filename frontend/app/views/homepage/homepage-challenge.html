@@ -1,14 +1,14 @@
 <div class="badge-container">
-  <input type="button" value="Enlever cet objectif" ng-click="homeCtrl.removeObjective(goalInstance)">
+  <input type="button" value="Enlever ce défi" ng-click="homeCtrl.removeObjective(challenge)">
   <table>
     <tr>
       <td>
-        <h3 class="badge-name">{{goalInstance.name}}</h3>
+        <h3 class="badge-name">{{challenge.name}}</h3>
       </td>
     </tr>
     <tr>
       <td>
-        Temps restant - du {{goalInstance.startDate}} au {{goalInstance.endDate}}
+        Temps restant - du {{challenge.startDate}} au {{challenge.endDate}}
       </td>
     </tr>
     <tr>
@@ -16,17 +16,17 @@
         <div class="progress">
           <div class="progress-bar"
                ng-class="{
-               'progress-bar-danger':goalInstance.timeProgress > 80,
-                'progress-bar-warning':goalInstance.timeProgress > 30 && goalInstance.timeProgress < 80,
-                'progress-bar-success':goalInstance.timeProgress < 30
-                }" role="progressbar" aria-valuenow="{{100-goalInstance.timeProgress}}"
-               aria-valuemin="0" aria-valuemax="100" style="width:{{100-goalInstance.timeProgress}}%">
+               'progress-bar-danger':challenge.timeProgress > 80,
+                'progress-bar-warning':challenge.timeProgress > 30 && challenge.timeProgress < 80,
+                'progress-bar-success':challenge.timeProgress < 30
+                }" role="progressbar" aria-valuenow="{{100-challenge.timeProgress}}"
+               aria-valuemin="0" aria-valuemax="100" style="width:{{100-challenge.timeProgress}}%">
           </div>
         </div>
       </td>
 
     <tr>
-      <table ng-repeat="condition in goalInstance.progress">
+      <table ng-repeat="condition in challenge.progress">
         <td>
           {{condition.description}}
         </td>

@@ -1,0 +1,8 @@
+<div class="col-md-4"><h2>Défis en cours</h2>
+    <ul>
+        <li class="badge-list list-group-item badge-status-{{challenge.status}}" ng-repeat="challenge in homeCtrl.goalsInstance">
+            <homepage-challenge></homepage-challenge>
+        </li>
+    </ul>
+    <div ng-show="homeCtrl.goalsInstance.length==0">Vous n'avez pas encore de défis en cours !</div>
+</div>
