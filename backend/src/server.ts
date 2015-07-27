@@ -1,394 +1,194 @@
+/**
+ * @author Christian Brel <ch.brel@gmail.com>
+ */
+
 /// <reference path="../typings/node/node.d.ts" />
-/// <reference path="../typings/express/express.d.ts" />
-/// <reference path="../typings/async/async.d.ts" />
 
-import express = require("express");
-import http = require("http");
-import async = require("async");
-var bodyParser = require('body-parser');
-import path = require('path');
-var app = express();
+var http:any = require("http");
+var express:any = require("express");
+var bodyParser:any = require("body-parser");
+var relations = require('./database/relations.js');
 
-var jsonParser = bodyParser.json();
-var xmlParser = bodyParser.text({type: "application/xml"});
-
-import GoalDefinition = require('./goal/definition/GoalDefinition');
-import User = require('./user/User');
 import Badge = require('./badge/Badge');
+import Operand = require('./goal/condition/Operand');
+import GoalCondition = require('./goal/condition/GoalCondition');
+import TimeBox = require('./TimeBox');
+var connection = require('./database/connection.js');
 
-var currentUser:User = new User("Jackie");
 
-import GoalDefinitionRepository = require('./goal/definition/GoalDefinitionRepository');
-import GoalInstanceRepository = require('./goal/instance/GoalInstanceRepository');
-import UserRepository = require('./user/UserRepository');
-import BadgeRepository = require('./badge/BadgeRepository');
+/**
+ * Represents a Server managing Namespaces.
+ *
+ * @class Server
+ */
+class Server {
 
-import EcoKnowledge = require('./Ecoknowledge');
-import Context = require('./Context');
-import DemoContext = require('./context/DemoContext');
-import Clock = require('./Clock');
-
-var userProvider:UserRepository = new UserRepository();
-var badgeRepository:GoalInstanceRepository = new GoalInstanceRepository();
-var goalRepository:GoalDefinitionRepository = new GoalDefinitionRepository();
-var badgeRepositoryV2:BadgeRepository = new BadgeRepository();
-
-userProvider.addUser(currentUser);
-
-var ecoknowledge:EcoKnowledge = new EcoKnowledge(goalRepository, badgeRepository, userProvider, badgeRepositoryV2);
-
-var context:Context = new DemoContext();
-context.fill(goalRepository, badgeRepository, userProvider);
-
-var demo:boolean = true;
-
-// Enable JSON data for requests
-//app.use( bodyParser.json() );       // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-    extended: true
-}));
-
-app.use(express.static(path.join(__dirname, "public")));
-
-// Allow cross site requests
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    next();
-});
-
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
-
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE");
-    next();
-});
-
-var args = process.argv;
-var port = args[2] || 3000;
-
-app.get('/helloworld/:slug', jsonParser, function (req, res, next) {
-    console.log("HELLOWORLD");
-    res.send("Hello  world!");
-});
-
-// http://localhost:3000/goals/779d6640-e489-4af3-9727-8eed7860cba8
-app.get('/goals/:id', jsonParser, function (req, res, next) {
-    console.log('\n++ Get : /goal asked ....');
-    if (!req.params.id) {
-        next();
-    }
-
-    console.log("ID :", req.params.id);
-
-    var goalUUID:string = req.params.id;
-    var result:any = ecoknowledge.getGoalDefinitionDescription(goalUUID);
-
-    console.log("++ Sending", result);
-    res.send(result);
-});
-
-app.get('/goals', jsonParser, function (req, res, next) {
-    var result = ecoknowledge.getListOfGoalsDefinition();
-    res.send(result);
-});
-
-app.get('/goalsInstance', jsonParser, function (req, res, next) {
-    var result = ecoknowledge.getListOfGoalInstances();
-    res.send(result);
-});
-
-//TODO remove
-app.get('/badges', jsonParser, function (req, res, next) {
-    var result = ecoknowledge.getGoalInstancesDescriptionInJsonFormat(jsonStub);
-    res.send(result);
-});
-
-app.get('/goalsInstanceRunning', jsonParser, function (req, res, next) {
-    ecoknowledge.updateFinishedBadgeUser(currentUser.getUUID());
-    var result = ecoknowledge.getGoalInstancesDescriptionInJsonFormat(jsonStub);
-    res.send(result);
-});
-
-app.get('/badgesV2/:id', jsonParser, function (req, res, next) {
-    console.log('\n++ Get : /badge asked ....');
-    if (!req.params.id) {
-        next();
-    }
-
-    console.log("ID :", req.params.id);
-
-    var badgeUUID:string = req.params.id;
-    var result:any = ecoknowledge.getBadgeInJsonFormat(badgeUUID);
-
-    console.log("++ Sending", result);
-    res.send(result);
-});
-
-app.get('/badgesV2/', jsonParser, function (req, res, next) {
-    console.log('All badges V2');
-    var result = ecoknowledge.getAllBadgesInJsonFormat();
-    res.send(result);
-});
-
-var sensors = [{"name": "AC_443"}, {"name": "TEMP_442"}];
-app.get('/required', jsonParser, function (req, res, next) {
-    var goalName:string = req.query.goalName;
-    var goal:GoalDefinition = goalRepository.getGoal(goalName);
-    res.send(goal.getData());
-});
-
-app.get('/sensors', jsonParser, function (req, res, next) {
-    //TODO : link with smartcampus
-    res.send(sensors);
-});
-
-app.delete('/goalInstanceRemove/:id', jsonParser, function (req, res, next) {
-    console.log('\n++ Remove : /goal instance asked ....');
-    console.log("ID :", req.params.id);
-
-    var goalUUID:string = req.params.id;
-    ecoknowledge.removeGoalInstance(goalUUID);
-    res.send('OK');
-});
-
-app.get('/trophywall', jsonParser, function (req, res, next) {
-    var trophies:number[] = ecoknowledge.getFinishedBadge(currentUser.getUUID());
-    var trophyWall:any = [];
-    /**[
-         {
-             'number': 12,
-             'badge': badge
-         }
-     ]
+    /**
+     * Server's listening port.
+     *
+     * @property listeningPort
+     * @type number
      */
-    for(var badgeId in trophies){
-        var currentBadge:any = {};
-        currentBadge.number = trophies[badgeId];
-        currentBadge.badge = ecoknowledge.getBadgeInJsonFormat(badgeId);
-        trophyWall.push(currentBadge);
+    listeningPort:number;
+
+    /**
+     * Server's app.
+     *
+     * @property app
+     * @type any
+     */
+    app:any;
+
+    /**
+     * Server's http server.
+     *
+     * @property httpServer
+     * @type any
+     */
+    httpServer:any;
+
+    /**
+     * Constructor.
+     *
+     * @param {number} listeningPort - Listening port.
+     * @param {Array<string>} arguments - Command line arguments.
+     */
+    constructor(listeningPort:number, arguments:Array<string>) {
+        this.listeningPort = listeningPort;
+
+        this._buildDatabase();
+        this._buildServer();
     }
 
-    console.log('trophy wall : ',trophyWall);
-
-    res.send(trophyWall);
-});
-
-app.post('/badgesV2', jsonParser, function (req, res) {
-    var badgeData = req.body;
-    console.log('badges V2 : ', badgeData);
-    badgeRepositoryV2.addBadge(new Badge(badgeData.name, badgeData.points));
-    res.send("OK badges V2");
-});
-
-app.post('/addgoal', jsonParser, function (req, res) {
-    var actionData = req.body;
-    var result = ecoknowledge.addGoalDefinition(actionData);
-    res.send(result);
-});
-
-app.post('/addbadge', jsonParser, function (req, res) {
-    var actionData = req.body;
-    var result = ecoknowledge.addGoalInstance(actionData);
-    res.send("OK");
-});
-
-
-app.post('/takeGoal', jsonParser, function (req, res) {
-    var actionData = req.body;
-    console.log(actionData);
-    var goalID = actionData.goalID;
-    console.log("GOALID", goalID);
-
-    var data =
-    {
-        "goal": {
-            "id": goalID,
-            "conditions": {"TMP_CLI": "TEMP_443V"}
-        }
-    };
-
-    ecoknowledge.addGoalInstance(data);
-    res.send("0K");
-});
-
-//TODO move async calls
-import GoalInstance = require('./goal/instance/GoalInstance');
-
-var jsonStub:any = {};
-
-//TODO need a badgeID in request
-app.get('/evaluatebadge', jsonParser, function (req, res) {
-    console.log('evaluate');
-
-    var badgeID:string = req.query.badgeID;
-
-    var badge:GoalInstance = badgeRepository.getGoalInstance(badgeID);
-
-    if (!demo) {
-        console.log('pas demo');
-        //TODO move what follow
-        var required = badge.getSensors();
-
-        console.log("SENSORS TO GET : ", required);
-
-        var requiredSensorName = Object.keys(required);
-        var numberToLoad:number = requiredSensorName.length;
-        console.log("numbertoload");
-        console.log(numberToLoad);
-
-        console.log("Sensor names");
-        console.log(requiredSensorName);
-
-        for (var currentSensorName in requiredSensorName) {
-            (function (currentSensorName) {
-                console.log("CURRENTSENSORNAME");
-                console.log(currentSensorName);
-                console.log("REQUIRED.CURRENTSENSORNAME");
-                console.log(required);
-
-                var startDate:string = '' + required[currentSensorName].startDate;
-                var endDate:string = '' + required[currentSensorName].endDate;
-
-                var path = 'http://smartcampus.unice.fr/sensors/' + currentSensorName + '/data?date=' + startDate + '/' + endDate;
-                console.log("PATH");
-                console.log(path);
-
-                var dataJsonString = "";
-
-                http.get(path, function (result) {
-                    result.on("data", function (chunk) {
-                        dataJsonString += chunk.toString();
-                    });
-
-                    result.on('end', function () {
-                        numberToLoad--;
-                        console.log("remaining number to load");
-                        console.log(numberToLoad);
-                        var jsonObject = JSON.parse(dataJsonString);
-                        required[jsonObject.id] = jsonObject;
-
-                        if (numberToLoad == 0) {
-                            var result = badge.evaluate(required);
-                            if(result){
-                                ecoknowledge.addFinishedBadge(badgeID, currentUser.getUUID());
-                                ecoknowledge.removeGoalInstance(badgeID);
-                            }
-                            res.send(badge.getProgress());
-                        }
-                    });
-                });
-            })(requiredSensorName[currentSensorName]);
-        }
-
+    /**
+     * Build database.
+     *
+     * @method _buildDatabase
+     * @private
+     */
+    private _buildDatabase() {
+        relations.init();
 
         /*
-         if (numberToLoad == 0) {
-         console.log("aaaaaaaaaaa", JSON.stringify(required));
-
-         var result = badge.evaluate(required);
-         res.send(result);
-         }
-
-         async.times(requiredSensorName.length, function (n, next) {
-         var startDate:string = '' + required[requiredSensorName[n]].startDate;
-         var endDate:string = '' + required[requiredSensorName[n]].endDate;
-
-         var path = 'http://smartcampus.unice.fr/sensors/' + requiredSensorName[n] + '/data?date=' + startDate + '/' + endDate;
-         console.log("PATH", path);
-
-         http.get(path, function (result) {
-         result.on('end' , function() {
-         console.log("EEEEEEEEEEENDLOLOLOOLOL");
+         connection.sequelize.sync({force: false})
+         .then(function () {
+         console.log("Base created !");
          });
+         */
+        connection.sequelize.drop()
+            .then(function () {
+                console.log("All tables dropped !");
+                connection.sequelize.sync({force: false})
+                    .then(function () {
+                        console.log("Base created !");
+                    });
+            });
 
-         result.on("data", function (chunk) {
+    }
 
-         console.log("BODY: ",(JSON.parse( chunk.toString())));
-         var jsonObject = JSON.parse(chunk.toString());
+    /**
+     * Build server.
+     *
+     * @method _buildServer
+     * @private
+     */
+    private _buildServer() {
+        this.app = express();
+        this.app.use(bodyParser.json()); // for parsing application/json
+        this.app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
 
-         required[jsonObject.id] = jsonObject;
+        this.app.use(function (req, res, next) {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            res.header("Access-Control-Allow-Methods", "POST, GET, DELETE");
+            next();
+        });
+        this.httpServer = http.createServer(this.app);
+        /*
+         this.app.get('/', function(req, res){
 
-         next(null, null);
-         });
-         }).on('error', function (e) {
-         console.log("Got error: " + e.message);
-         });
+         var b:Badge = new Badge('pouic', 10);
+
+         var leftOP:Operand = new Operand('TMP_CLI', true);
+         var rightOP:Operand = new Operand('10', false);
+
+         var timeBox:TimeBox = new TimeBox(Date.now()/1000, (Date.now()+50)/1000);
+
+         var goalCondition:GoalCondition = new GoalCondition(leftOP,'>', rightOP,'a desc', timeBox);
+
+
+         b.create(
+         () => {
+         console.log("badge crée");
          },
-         function (err) {
-         var result = badge.evaluate(required);
-         res.send(result);
+         () => {
+         console.log("badge : oups");
          }
          );
+
+
+         timeBox.create(
+         () => {
+         console.log("timebox créée");
+         },
+         () => {
+         console.log("timebox : oups");
+         }
+         );
+
+
+
+         var successCallBackGoalCondition = function (_conditionSequelize) {
+         _conditionSequelize.countOperands().then( function (nbOperands) {
+         console.log("goalCondition crée avec", nbOperands );
+         });
+
+         _conditionSequelize.getTimeBox().then( function (_timeBox) {
+         var timeBox:TimeBox = TimeBox.fromJSONObject(_timeBox.dataValues);
+         console.log("TIME BOX", timeBox);
+         });
+
+         };
+
+         var failCallBackGoalCondition = function (_conditionSequelize) {
+         console.log("goalCondition : oups");
+         };
+
+         goalCondition.create(successCallBackGoalCondition,failCallBackGoalCondition);
+
+         //goalCondition.initFieldsInDB();
+
+
+
+         //goalCondition.create(() => { console.log("YES");}, () => {console.log("FAIL");});
+
+
+         res.send('LOL');
+         });
          */
-
-
     }
-    else {
-        console.log("STUB", JSON.stringify(jsonStub));
-        var result = badge.evaluate(jsonStub);
-        if(result){
-            ecoknowledge.addFinishedBadge(badgeID, currentUser.getUUID());
-        }
-        res.send(badge.getProgress());
+
+    /**
+     * Runs the Server.
+     *
+     * @method run
+     */
+    run() {
+        var self = this;
+
+        this.httpServer.listen(this.listeningPort, function () {
+            self.onListen();
+        });
     }
-    console.log('fin');
-});
 
-var fs = require('fs');
-fs.readFile('./stub_values.json', function (err, data) {
-    if (err) {
-        throw err;
+    /**
+     * Method called on server listen action.
+     *
+     * @method onListen
+     */
+    onListen() {
+        console.log("Server listening on *:" + this.listeningPort);
     }
-    jsonStub = JSON.parse(data.toString());
-    console.log("++ Fichier stub chargé correctement");
-});
+}
 
-
-//  For debug only
-app.post('/evaluategoal', jsonParser, function (req, res) {
-    var actionData = req.body;
-    console.log(actionData);
-    var result = ecoknowledge.evaluateGoal(actionData);
-    if(result){
-        console.log('ok when evaluating');
-        //ecoknowledge.addFinishedBadge(badgeID, currentUser.getUUID());
-    }
-    res.send(result);
-
-});
-
-
-app.post('/addstub', jsonParser, function (req, res) {
-
-    var data = req.body;
-    var value = data.value;
-    var key = data.key;
-
-    var valueDesc:any = {};
-    valueDesc.date = Clock.getNow() / 1000;
-    valueDesc.value = value;
-
-    var oldJson:any[] = jsonStub[key].values;
-    oldJson.push(valueDesc);
-    jsonStub[key].values = oldJson;
-
-    res.send('Valeur' + JSON.stringify(valueDesc) + " ajoutee au stub ! Etat du stub : " + JSON.stringify(jsonStub));
-});
-
-
-app.post('/setNow', jsonParser, function (req, res) {
-    var data = req.body;
-    var newNow:Date = new Date(data.now);
-
-    console.log("Mise a jour de la date actuelle. Nous sommes maintenant le", newNow);
-    Clock.setNow(newNow.getTime());
-    res.send("New 'now' : " + newNow);
-});
-
-
-app.listen(port);
-
-console.log("Server started");
+export = Server;
