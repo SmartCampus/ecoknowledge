@@ -54,6 +54,43 @@ class User {
         this.name = name;
     }
 
+    public addChallenge(newGoal:GoalDefinition):void {
+        if (!newGoal) {
+            throw new Error('Can not add a new goal to user ' + this.getName() + ' given goal is null');
+        }
+
+        this.currentChallenges.push(newGoal.getUUID());
+    }
+
+    public deleteChallenge(challengeID:number):void {
+        var challengeIndex:number = this.getChallenge(challengeID);
+        if (!challengeIndex) {
+            throw new BadArgumentException('Can not find given challenge ID');
+        }
+        else {
+            this.currentChallenges.splice(challengeIndex, 1);
+        }
+    }
+
+    /**
+     *  This method will return the index of the given
+     *  challenge id
+     * @param challengeID
+     * @returns {number}
+     *      Index of given challenge ID
+     */
+    public getChallenge(challengeID:number):number {
+        var result:number = null;
+
+        for (var currentChallengeIndex = 0; currentChallengeIndex < this.currentChallenges.length; currentChallengeIndex++) {
+            if (currentChallengeIndex === challengeID) {
+                result = currentChallengeIndex;
+            }
+        }
+
+        return result;
+    }
+
     public getChallenges():number[] {
         return this.currentChallenges;
     }
@@ -74,16 +111,8 @@ class User {
         return Object.keys(this.finishedBadgesMap);
     }
 
-    public addChallenge(newGoal:GoalDefinition):void {
-        if (!newGoal) {
-            throw new Error('Can not add a new goal to user ' + this.getName() + ' given goal is null');
-        }
-
-        this.currentChallenges.push(newGoal.getUUID());
-    }
-
     public addFinishedBadge(badge:Badge) {
-        if(!badge) {
+        if (!badge) {
             throw new BadArgumentException('Can not add given badge to user' + this.getName() + '. Badge given is null');
         }
 

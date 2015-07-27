@@ -46,7 +46,7 @@ class GoalInstanceRouter extends RouterItf {
         this.router.delete('/delete/:id', this.deleteGoalInstance);
         this.router.get('/evaluate', this.evaluate);
 
-        //  Debug rotues only
+        //  Debug routes only
         this.router.post('/addstub', this.addStub);
         this.router.post('/setNow', this.setNow);
     }
@@ -141,14 +141,13 @@ class GoalInstanceRouter extends RouterItf {
                             var result = goalInstanceToEvaluate.evaluate(required);
                             if (result) {
                                 self.addFinishedBadge(goalInstanceID, self.userRepository.getCurrentUser());
-                                self.goalInstanceRepository.removeGoalInstance(goalInstanceID);
                             }
                             console.log("All data were retrieve properly");
                             res.send(goalInstanceToEvaluate.getProgress());
                         },
                         function () {
                             console.log("FAIL MIDDLEWARE");
-                            res.send({error:"Error occured in middleware"});
+                            res.send({error: "Error occured in middleware"});
                         });
 
                 })(requiredSensorName[currentSensorName]);
@@ -163,15 +162,12 @@ class GoalInstanceRouter extends RouterItf {
         }
     }
 
-    private addFinishedBadge(goalInstanceID, userID) {
-        var goalInstanceToEvaluate = this.goalInstanceRepository.getGoalInstance(goalInstanceID);
+    private addFinishedBadge(challengeID, userID) {
         var user = this.userRepository.getUser(userID);
-        var goalDefinition = goalInstanceToEvaluate.getGoalDefinition();
-        var badge = goalDefinition.getBadge();
-        console.log('add now');
+        var badge = this.goalInstanceRepository.getBadgeByChallengeID(challengeID);
         user.addFinishedBadge(badge);
+        user.deleteChallenge(challengeID);
     }
-
 }
 
 export = GoalInstanceRouter;

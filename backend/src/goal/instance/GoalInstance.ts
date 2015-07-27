@@ -1,4 +1,5 @@
 import GoalDefinition = require('../definition/GoalDefinition');
+import Badge = require('../../badge/Badge');
 import User = require('../../user/User');
 import BadgeStatus = require('../../Status');
 import TimeBox = require('../../TimeBox');
@@ -81,6 +82,10 @@ class GoalInstance {
 
     public getGoalDefinition():GoalDefinition {
         return this.goalDefinition;
+    }
+
+    public getBadge():Badge {
+        return this.goalDefinition.getBadge();
     }
 
     public getName():string {

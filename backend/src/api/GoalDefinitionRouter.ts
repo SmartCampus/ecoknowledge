@@ -3,8 +3,6 @@ import RouterItf = require('./RouterItf');
 import GoalDefinitionRepository = require('../goal/definition/GoalDefinitionRepository');
 import GoalDefinitionFactory = require('../goal/definition/GoalDefinitionFactory');
 
-var _self;
-
 /**
  * GoalDefinitionRouter class</br>
  * This class handle all the API for
@@ -22,8 +20,6 @@ class GoalDefinitionRouter extends RouterItf {
         super();
         this.goalDefinitionRepository = goalDefinitionRepository;
         this.goalDefinitionFactory = goalDefinitionFactory;
-
-        _self = this;
     }
 
     buildRouter() {
@@ -38,7 +34,7 @@ class GoalDefinitionRouter extends RouterItf {
      * @param res
      */
     getAllGoalsDefinition(req:any, res:any) {
-        var result = _self.goalDefinitionRepository.getListOfGoalsInJsonFormat();
+        var result = this.goalDefinitionRepository.getListOfGoalsInJsonFormat();
         res.send(result);
     }
 
@@ -54,8 +50,8 @@ class GoalDefinitionRouter extends RouterItf {
      */
     addGoalDefinition(req:any, res:any) {
         var data = req.body;
-        var newGoal = _self.goalDefinitionFactory.createGoal(data);
-        _self.goalDefinitionRepository.addGoal(newGoal);
+        var newGoal = this.goalDefinitionFactory.createGoal(data);
+        this.goalDefinitionRepository.addGoal(newGoal);
         res.send("OK : définition d'objectif créee avec succès");
     }
 }

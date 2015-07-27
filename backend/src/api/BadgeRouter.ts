@@ -7,7 +7,6 @@ import RouterItf = require('./RouterItf');
 import BadgeRepository = require('../badge/BadgeRepository');
 import BadgeFactory = require('../badge/BadgeFactory');
 
-var _self;
 /**
  * BadgeRouter class</br>
  * This class handle all the API for
@@ -31,7 +30,6 @@ class BadgeRouter extends RouterItf {
         super();
         this.badgeRepository = badgeRepository;
         this.badgeFactory = badgeFactory;
-        _self = this;
     }
 
     buildRouter() {
@@ -46,7 +44,7 @@ class BadgeRouter extends RouterItf {
      * @param res
      */
     getAllBadges(req:any, res:any) {
-        var result = _self.badgeRepository.getAllBadges();
+        var result = this.badgeRepository.getAllBadges();
         res.send(result);
     }
 
@@ -63,8 +61,8 @@ class BadgeRouter extends RouterItf {
         var badgeData = req.body;
 
         try {
-            var badge = _self.badgeFactory.createBadge(badgeData);
-            _self.badgeRepository.addBadge(badge);
+            var badge = this.badgeFactory.createBadge(badgeData);
+            this.badgeRepository.addBadge(badge);
             res.send("OK : badge crée avec succès");
         } catch (e) {
             res.status(400).send({'error': e});
