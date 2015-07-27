@@ -41,7 +41,7 @@ class DemoContext implements Context {
         this.aGoal.addCondition(new GoalCondition(new Operand('Temp_ext', true), '>', new Operand('40', false),
             'la température extérieure doit être supérieure à 40°C'));
 
-        goalProvider.addGoal(this.aGoal);
+        goalProvider.addChallenge(this.aGoal);
         */
     }
 

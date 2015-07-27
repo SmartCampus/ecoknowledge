@@ -77,7 +77,7 @@ class Ecoknowledge {
 
     public getFinishedBadge(userId:string):number[]{
         var user:User = this.getUser(userId);
-        return user.getFinishedBadges();
+        return user.getFinishedBadgesID();
     }
 
     public addGoalDefinition(data:any):string {
@@ -112,7 +112,6 @@ class Ecoknowledge {
     }
 
     public addFinishedBadge(BadgeId:string,userId:string){
-        console.log('addFinishedBadge');
         var user:User = this.userRepository.getUser(userId);
         var goalDefinition:GoalDefinition = this.goalInstanceRepository.getGoalInstance(BadgeId).getGoalDefinition();
         var badge:Badge = goalDefinition.getBadge();

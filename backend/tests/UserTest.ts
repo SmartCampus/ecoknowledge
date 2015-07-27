@@ -26,7 +26,7 @@ describe("Add a goal", function () {
   });
 
   it("should throw an error if given goal is null", () => {
-    chai.expect(() => user.addGoal(null)).to.throw(Error);
+    chai.expect(() => user.addChallenge(null)).to.throw(Error);
   });
 
   it("should add the goal to the user's description", () => {

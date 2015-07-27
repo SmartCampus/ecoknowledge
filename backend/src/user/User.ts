@@ -6,124 +6,93 @@ import Badge = require('../badge/Badge');
 
 import uuid = require('node-uuid');
 
+import BadArgumentException = require('../exceptions/BadArgumentException');
+
+/**
+ * Map of finished badges</br>
+ * key : badgeID,
+ * associated : number of times that you earned this badge
+ */
+interface BadgeIDsToNumberOfTimesEarnedMap {
+    [idBadge:number]: number;
+}
+
+
 class User {
 
-  private name:string;
-  private goals:GoalDefinition[] = [];
-  private goalInstances:GoalInstance[] = [];
-  private finishedBadge:number[];
-  private id;
+    private id;
+    private name:string;
+    private currentChallenges:number[] = [];
+    private finishedBadgesMap:BadgeIDsToNumberOfTimesEarnedMap = {};
 
-  constructor(name:string) {
-    this.name = name;
-    this.id = uuid.v4();
-    this.finishedBadge = [];
-  }
-
-  public getUUID() {
-    return this.id;
-  }
-
-  public hasUUID(aUUID:string):boolean {
-    return this.id === aUUID;
-  }
-
-  public getName():string {
-    return this.name;
-  }
-
-  public getGoals():GoalDefinition[] {
-    return this.goals;
-  }
-
-  public getBadges():GoalInstance[] {
-    return this.goalInstances;
-  }
-
-  public getFinishedBadges():number[]{
-    return this.finishedBadge;
-  }
-
-  public addGoal(newGoal:GoalDefinition):boolean {
-    if (!newGoal) {
-      throw new Error('Can not add a new goal to user ' + this.name + ' given goal is null');
+    constructor(name:string) {
+        this.id = uuid.v4();
+        this.name = name;
     }
 
-    this.goals.push(newGoal);
-    return true;
-  }
-
-  public addBadge(newBadge:GoalInstance):boolean {
-    if (!newBadge) {
-      throw new Error('Can not add a new newBadge to user ' + this.name + ' given newBadge is null');
+    public getUUID() {
+        return this.id;
     }
 
-    this.goalInstances.push(newBadge);
-    return true;
-  }
-
-  public evaluateGoal(goalName:string, goalValue:(number|boolean)[]):boolean {
-
-    var goal = this.retrieveGoal(goalName);
-    if(!goal) {
-      console.warn("Can not find goal", goalName);
-      return false;
+    public hasUUID(aUUID:string):boolean {
+        return this.id === aUUID;
     }
 
-    var res = null;
-    // FIXME var res =  goal.evaluate(goalValue);
-    return res;
-  }
-
-  public retrieveGoal(goalName:string):GoalDefinition {
-    for(var i in this.goals) {
-      var currentGoal = this.goals[i];
-      if(currentGoal.getName() === goalName) {
-        return currentGoal;
-      }
-    }
-    return null;
-  }
-
-
-  public evaluateBadge(badgeName:string, goalValue:number):boolean {
-
-    var badge = this.retrieveBadge(badgeName);
-    if(!badge) {
-      console.log("Badge", badgeName, " non trouvé");
-      return false;
+    public setUUID(aUUID:string):void {
+        this.id = aUUID;
     }
 
-    var tmp = [];
-    tmp.push(goalValue);
-
-    var res =  badge.evaluate(tmp);
-    return res;
-  }
-
-  public retrieveBadge(badgeName:string):GoalInstance {
-    for(var i in this.goalInstances) {
-      var currentBadge = this.goalInstances[i];
-      if(currentBadge.getName() === badgeName) {
-        return currentBadge;
-      }
+    public getName():string {
+        return this.name;
     }
-    return null;
-  }
 
-  public addFinishedBadge(badge:Badge){
-    console.log('add in user');
-    console.log('badge has own property : ',this.finishedBadge.hasOwnProperty(badge.getUuid()));
-    if(this.finishedBadge.hasOwnProperty(badge.getUuid())) {
-      console.log('old badge');
-      this.finishedBadge[badge.getUuid()]++;
-    }else{
-      console.log('new badge');
-      this.finishedBadge[badge.getUuid()] = 1;
+    public hasName(name:string):boolean {
+        return this.getName() === name;
     }
-    console.log('added : ',this.finishedBadge);
-  }
 
+    public setName(name:string):void {
+        this.name = name;
+    }
+
+    public getChallenges():number[] {
+        return this.currentChallenges;
+    }
+
+    public setChallenges(challenges:number[]):void {
+        this.currentChallenges = challenges;
+    }
+
+    public getFinishedBadges():BadgeIDsToNumberOfTimesEarnedMap {
+        return this.finishedBadgesMap;
+    }
+
+    public setFinishedBadges(finishedBadges:BadgeIDsToNumberOfTimesEarnedMap) {
+        this.finishedBadgesMap = finishedBadges;
+    }
+
+    public getFinishedBadgesID():string[] {
+        return Object.keys(this.finishedBadgesMap);
+    }
+
+    public addChallenge(newGoal:GoalDefinition):void {
+        if (!newGoal) {
+            throw new Error('Can not add a new goal to user ' + this.getName() + ' given goal is null');
+        }
+
+        this.currentChallenges.push(newGoal.getUUID());
+    }
+
+    public addFinishedBadge(badge:Badge) {
+        if(!badge) {
+            throw new BadArgumentException('Can not add given badge to user' + this.getName() + '. Badge given is null');
+        }
+
+        if (this.finishedBadgesMap.hasOwnProperty(badge.getUuid())) {
+            this.finishedBadgesMap[badge.getUuid()]++;
+        } else {
+            this.finishedBadgesMap[badge.getUuid()] = 1;
+        }
+    }
 }
 
 export = User;
