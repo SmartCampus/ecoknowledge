@@ -7,10 +7,15 @@
 var app = angular.module('ecoknowledgeApp');
 
 app.service('ServiceGoal',['$http', function ServiceGoal($http){
-    var path = 'http://localhost:3000/';
+    var basePath = 'http://localhost:3000/';
     this.get = function(id, successFunc, failFunc) {
-        console.log(path+'goals/' + id);
-      $http.get(path+'goals/'+id)
+
+      var path = basePath+'goals';
+
+      path += (id)? id : '/all';
+      console.log('Get ON', path);
+
+      $http.get(path)
         .success(function (data) {
               successFunc(data);
         })
@@ -21,7 +26,7 @@ app.service('ServiceGoal',['$http', function ServiceGoal($http){
     };
 
      this.getRequired= function(id, successFunc, failFunc) {
-       $http.get(path+'required/?goalName=' + id)
+       $http.get(basePath+'required/?goalName=' + id)
          .success(function (data) {
            successFunc(data);
          })
@@ -31,7 +36,7 @@ app.service('ServiceGoal',['$http', function ServiceGoal($http){
      };
 
     this.post = function(goal, successFunc, failFunc){
-        $http.post(path+'addgoal', goal)
+        $http.post(basePath+'addgoal', goal)
             .success(function(){
                 successFunc();
             })
@@ -41,8 +46,8 @@ app.service('ServiceGoal',['$http', function ServiceGoal($http){
     };
 
     this.delete = function(idGoal, successFunc, failFunc){
-        console.log('adress where remove : ',path+'goalInstanceRemove/'+idGoal);
-        $http.delete(path+'goalInstanceRemove/'+idGoal)
+        console.log('adress where remove : ',basePath+'goalInstanceRemove/'+idGoal);
+        $http.delete(basePath+'goalInstanceRemove/'+idGoal)
             .success(function(data){
                 successFunc(data);
             })

@@ -43,7 +43,7 @@ class OverallGoalCondition implements Expression {
         this.percentageOfTime = durationAchieved * 100 / duration;
     }
 
-    public setTimeBox(newTimeBox:TimeBox){
+    public setTimeBox(newTimeBox:TimeBox) {
         this.condition.setTimeBox(newTimeBox);
     }
 
@@ -89,7 +89,7 @@ class OverallGoalCondition implements Expression {
 
                 var date:Date = new Date(value.date * 1000);
 
-                if(this.condition.checkTimeBox(date)) {
+                if (this.condition.checkTimeBox(date)) {
                     var dataToEvaluate:any = {};
                     dataToEvaluate[currentSensorName] = {values: [value]};
 
@@ -106,9 +106,9 @@ class OverallGoalCondition implements Expression {
         }
 
 
-        this.percentageAchieved = ((numberOfCorrectValues * 100 / numberOfValues)*100)/this.thresholdRate;
+        this.percentageAchieved = ((numberOfCorrectValues * 100 / numberOfValues) * 100) / this.thresholdRate;
 
-        this.percentageAchieved = (this.percentageAchieved > 100)?100:this.percentageAchieved;
+        this.percentageAchieved = (this.percentageAchieved > 100) ? 100 : this.percentageAchieved;
 
         this.updateDurationAchieved(Clock.getNow());
 
@@ -129,6 +129,14 @@ class OverallGoalCondition implements Expression {
             description: this.condition.getStringRepresentation() + ' ' + this.thresholdRate + '% du temps',
             timeAchieved: this.percentageOfTime,
             conditionAchieved: this.percentageAchieved
+        }
+    }
+
+    public getDataInJSON():any {
+        return {
+            type:'overall',
+            thresholdRate: this.thresholdRate,
+            expression: this.condition.getDataInJSON()
         }
     }
 

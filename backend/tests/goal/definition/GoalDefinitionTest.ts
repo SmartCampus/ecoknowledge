@@ -17,7 +17,7 @@ describe("Build a goal", function () {
   var goal:GoalDefinition;
 
   it("should have given name", () => {
-    goal = new GoalDefinition("aName",null,null,0);
+    goal = new GoalDefinition("aName",null,null,0,null);
     assert.equal(goal.getName(), "aName");
   });
 });
@@ -26,7 +26,7 @@ describe("Add a condition to a goal", () => {
   var goal:GoalDefinition;
 
   beforeEach(() => {
-    goal = new GoalDefinition("aGoal",null,null,0);
+    goal = new GoalDefinition("aGoal",null,null,0, null);
   });
 
   it('should have its own uuid', () => {

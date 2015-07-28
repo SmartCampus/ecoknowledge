@@ -9,10 +9,10 @@ class Badge {
 
     private id;
 
-    constructor(name:string,points:number) {
+    constructor(name:string = "default badge", points:number = 0, id=null) {
         this.name = name;
         this.points = points;
-        this.id = uuid.v4();
+        this.id = (id)?id:uuid.v4();
     }
 
     public getName():string {
@@ -23,7 +23,7 @@ class Badge {
         return this.points;
     }
 
-    public getUuid():string{
+    public getUuid():string {
         return this.id;
     }
 
@@ -31,10 +31,18 @@ class Badge {
         return this.id === aUUID;
     }
 
-    public getData():any{
+    public getData():any {
         return {
-            "name":this.name,
-            "points":this.points
+            "name": this.name,
+            "points": this.points
+        };
+    }
+
+    public getDataInJSON():any {
+        return {
+            id: this.id,
+            name: this.name,
+            points: this.points
         };
     }
 }

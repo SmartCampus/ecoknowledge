@@ -16,7 +16,9 @@ class GoalFactory {
         var endDateOfValidityPeriod:Date = new Date(data.timeBox.endDate);
         var durationAllowed:number = data.duration;
 
-        var newGoal:GoalDefinition = new GoalDefinition(goalName, startDateOfValidityPeriod, endDateOfValidityPeriod, durationAllowed);
+        var badge:string = data.badgeID;
+
+        var newGoal:GoalDefinition = new GoalDefinition(goalName, startDateOfValidityPeriod, endDateOfValidityPeriod, durationAllowed, badge);
 
         var goalConditions:any[] = data.conditions;
         for (var i = 0; i < goalConditions.length; i++) {
@@ -24,7 +26,7 @@ class GoalFactory {
             newGoal.addCondition(currentExpression);
         }
 
-        console.log("Creation de l'objectif", goalName, "valide du", startDateOfValidityPeriod, "au", endDateOfValidityPeriod);
+        console.log("Creation de l'objectif", goalName, "valide du", startDateOfValidityPeriod, "au", endDateOfValidityPeriod, "avec le badge", newGoal.getBadgeID());
 
         return newGoal;
     }

@@ -4,7 +4,7 @@ import Operand = require('./Operand');
 
 class ExpressionFactory {
 
-    static REQUIRED_JSON_FIELD:string[] = ['type', 'comparison', 'valueLeft','valueRight', 'description'];
+    static REQUIRED_JSON_FIELD:string[] = ['comparison', 'valueLeft','valueRight', 'description'];
 
     public createExpression(expression:any):GoalCondition {
         for (var currentRequiredFieldIndex in ExpressionFactory.REQUIRED_JSON_FIELD) {

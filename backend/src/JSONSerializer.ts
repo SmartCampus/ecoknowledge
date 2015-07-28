@@ -4,20 +4,29 @@ var fs = require('fs');
 
 class JSONSerializer {
 
-    public save(backend:Backend):boolean {
+    public static JSON_DB_FILE:string = 'db.json';
 
-        var startDate:Date = new Date(Date.now());
-        var endDate:Date = new Date(startDate.getFullYear(), startDate.getMonth() + 1, startDate.getDate());
+    public load():any {
+        if(!fs.existsSync(JSONSerializer.JSON_DB_FILE)) {
+            return {error:'File ' + JSONSerializer.JSON_DB_FILE + ' not found'};
+        }
 
-        var goalDefinition:GoalDefinition = new GoalDefinition("aGoalDefinition", startDate, endDate, 2);
+        var data = fs.readFileSync(JSONSerializer.JSON_DB_FILE, "utf-8");
 
-        fs.writeFile('db.json', goalDefinition.getDataInJSON(), function (err) {
+        if(data.length == 0) {
+            return {error:'+++\tDatabase was empty !\t+++', data:data};
+        }
+        return {success:'+++\tDatabase loaded correctly !\t+++', data:data};
+    }
+
+    public save(data:any, successCallBack:Function, failCallBack:Function):void {
+
+        fs.writeFile(JSONSerializer.JSON_DB_FILE, JSON.stringify(data), function (err) {
             if (err) {
-                return console.log(err);
+                failCallBack(err);
             }
-            console.log("FILE SAVED");
+            successCallBack({success:'+++\tDatabase dumped correctly\t+++'});
         });
-        return true;
     }
 }
 

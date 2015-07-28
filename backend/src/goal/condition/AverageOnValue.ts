@@ -55,6 +55,17 @@ class AverageOnValue implements Expression {
         }
     }
 
+    public getDataInJSON():any {
+        return {
+            type : 'comparison',
+            expression:this.condition.getDataInJSON(),
+            startDate : this.startDate,
+            dateOfCreation: this.dateOfCreation,
+            endDate :this.endDate,
+            thresholdRate : this.thresholdRate
+        }
+    }
+
     public getComparisonType():string {
         return this.condition.getComparisonType();
     }

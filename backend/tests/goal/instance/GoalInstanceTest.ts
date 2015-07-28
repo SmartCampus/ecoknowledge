@@ -33,7 +33,7 @@ describe("GoalInstance test", () => {
     var anAverageCondition:AverageOnValue;
 
     beforeEach(() => {
-        goalDefinition = new GoalDefinition("goal1",null,null,100);
+        goalDefinition = new GoalDefinition("goal1",null,null,100,null);
         goalDefinition.addCondition(aCondition);
         goalDefinition.addCondition(anotherCondition);
 

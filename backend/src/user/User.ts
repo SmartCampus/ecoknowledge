@@ -111,15 +111,15 @@ class User {
         return Object.keys(this.finishedBadgesMap);
     }
 
-    public addFinishedBadge(badge:Badge) {
-        if (!badge) {
+    public addFinishedBadge(badgeID:string) {
+        if (!badgeID) {
             throw new BadArgumentException('Can not add given badge to user' + this.getName() + '. Badge given is null');
         }
 
-        if (this.finishedBadgesMap.hasOwnProperty(badge.getUuid())) {
-            this.finishedBadgesMap[badge.getUuid()]++;
+        if (this.finishedBadgesMap.hasOwnProperty(badgeID)) {
+            this.finishedBadgesMap[badgeID]++;
         } else {
-            this.finishedBadgesMap[badge.getUuid()] = 1;
+            this.finishedBadgesMap[badgeID] = 1;
         }
     }
 }

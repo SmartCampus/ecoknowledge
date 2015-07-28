@@ -15,7 +15,7 @@ class BadgeProvider {
         this.factory = new GoalInstanceFactory();
     }
 
-    public getBadgeByChallengeID(challengeID:string):Badge {
+    public getBadgeByChallengeID(challengeID:string):string {
         return this.getGoalInstance(challengeID).getBadge();
     }
 

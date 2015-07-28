@@ -16,7 +16,7 @@ class GoalCondition {
 
     private id:string;
 
-    constructor(leftOperand:Operand, typeOfComparison:string, rightOperand:Operand, description:string, timeBox:TimeBox=null) {
+    constructor(leftOperand:Operand, typeOfComparison:string, rightOperand:Operand, description:string, timeBox:TimeBox = null) {
         this.leftOperand = leftOperand;
         this.rightOperand = rightOperand;
         this.typeOfComparison = typeOfComparison;
@@ -77,7 +77,7 @@ class GoalCondition {
         var result:any = {};
 
         var timeBoxDesc:any = {};
-        if(this.timeBox) {
+        if (this.timeBox) {
             timeBoxDesc = this.timeBox.getRequired();
         }
 
@@ -92,7 +92,7 @@ class GoalCondition {
     }
 
     public checkTimeBox(currentDateInMillis:any):boolean {
-        if(!this.timeBox) {
+        if (!this.timeBox) {
             return true;
         }
 
@@ -103,16 +103,16 @@ class GoalCondition {
         var evalString:string = '';
 
         if (this.leftOperand.hasToBeDefined() && this.rightOperand.hasToBeDefined()) {
-            evalString += this.getFirstValue(values,this.leftOperand.getStringDescription())
-                + this.typeOfComparison + this.getFirstValue(values,this.rightOperand.getStringDescription());
+            evalString += this.getFirstValue(values, this.leftOperand.getStringDescription())
+                + this.typeOfComparison + this.getFirstValue(values, this.rightOperand.getStringDescription());
         }
 
         else if (this.leftOperand.hasToBeDefined() && !this.rightOperand.hasToBeDefined()) {
-            evalString += this.getFirstValue(values,this.leftOperand.getStringDescription()) + this.typeOfComparison + this.rightOperand.getStringDescription();
+            evalString += this.getFirstValue(values, this.leftOperand.getStringDescription()) + this.typeOfComparison + this.rightOperand.getStringDescription();
         }
 
         else if (this.rightOperand.hasToBeDefined() && !this.leftOperand.hasToBeDefined()) {
-            evalString += this.leftOperand.getStringDescription() + this.typeOfComparison + this.getFirstValue(values,this.rightOperand.getStringDescription());
+            evalString += this.leftOperand.getStringDescription() + this.typeOfComparison + this.getFirstValue(values, this.rightOperand.getStringDescription());
         }
 
         else {
@@ -144,9 +144,28 @@ class GoalCondition {
     }
 
     public getData():any {
-        return {"leftValue":{"name":this.leftOperand.getStringDescription(),"sensor":this.leftOperand.hasToBeDefined()},
-            "rightValue":{"name":this.rightOperand.getStringDescription(),"sensor":this.rightOperand.hasToBeDefined()},
-            "comparison":this.typeOfComparison
+        return {
+            "leftValue": {"name": this.leftOperand.getStringDescription(), "sensor": this.leftOperand.hasToBeDefined()},
+            "rightValue": {
+                "name": this.rightOperand.getStringDescription(),
+                "sensor": this.rightOperand.hasToBeDefined()
+            },
+            "comparison": this.typeOfComparison
+        };
+    }
+
+    public getDataInJSON():any {
+        return {
+            valueLeft: {
+                value: this.leftOperand.getStringDescription(),
+                sensor: this.leftOperand.hasToBeDefined()
+            },
+            valueRight: {
+                value: this.rightOperand.getStringDescription(),
+                sensor: this.rightOperand.hasToBeDefined()
+            },
+            comparison: this.typeOfComparison,
+            description : this.description
         };
     }
 }
