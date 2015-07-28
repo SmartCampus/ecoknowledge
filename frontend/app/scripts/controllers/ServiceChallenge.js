@@ -4,11 +4,12 @@
  * File with all the services associated to Challenge (GET, POST)
  */
 
-  var basePath = 'http://localhost:3000/challenges/';
+var basePath = 'http://localhost:3000/challenges/';
 
 var app = angular.module('ecoknowledgeApp');
 app.service('ServiceChallenge', ['$http', function ServiceChallenge($http) {
   this.get = function (id, successFunc, failFunc) {
+    console.log("BASEPATH", basePath);
     $http.get(basePath + 'all/' + id)
       .success(function (data) {
         successFunc(data);

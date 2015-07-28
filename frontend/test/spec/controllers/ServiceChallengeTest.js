@@ -1,6 +1,6 @@
 'use strict';
 
-var path = 'http://localhost:3000/';
+var basePath = 'http://localhost:3000/challenges/';
 
 describe('Service: ServiceChallenge', function() {
     var Challenge, httpBackend;
@@ -34,8 +34,10 @@ describe('Service: ServiceChallenge', function() {
             var mockMonChallengePatrick = { goal: 'Mon goal de fou', points: '42', description: 'Un de scription', name: 'MonChallengePatrick' };
             var mockResult = [mockMonChallenge, mockMonChallengePatrick];
             //backend definition returns a mock user
-            httpBackend.when('GET',path +'goalsInstanceRunning/').respond(mockResult);
-            httpBackend.expectGET(path+'goalsInstanceRunning/');
+            var urlPath = basePath+'all/';
+
+            httpBackend.when('GET',urlPath).respond(mockResult);
+            httpBackend.expectGET(urlPath);
             Challenge.get('', callbacks.success, callbacks.error);
 
             httpBackend.flush();
@@ -63,8 +65,8 @@ describe('Service: ServiceChallenge', function() {
         it('should send a new goal to the service', function(){
             var mockMonChallengePatrick = { goal: 'Mon goal de fou', points: '42', description: 'Un de scription', name: 'MonChallengePatrick' };
 
-            httpBackend.when('POST',path +'addbadge');
-            httpBackend.expectPOST(path+'addbadge').respond('gg wp');
+            httpBackend.when('POST',basePath +'new');
+            httpBackend.expectPOST(basePath+'new').respond('gg wp');
             Challenge.post(mockMonChallengePatrick, callbacks.success, callbacks.error);
 
             httpBackend.flush();
