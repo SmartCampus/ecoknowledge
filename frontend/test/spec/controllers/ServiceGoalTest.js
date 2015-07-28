@@ -46,8 +46,8 @@ describe('Service: ServiceGoal', function() {
             };
             var mockResult = mockClim, mockPatrick;
             //backend definition returns a mock user
-            httpBackend.when('GET',path +'goals/').respond(mockResult);
-            httpBackend.expectGET(path+'goals/');
+            httpBackend.when('GET',path +'goals/all').respond(mockResult);
+            httpBackend.expectGET(path+'goals/all');
             Goal.get('', callbacks.success, callbacks.error);
 
             httpBackend.flush();
