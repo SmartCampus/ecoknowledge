@@ -20,14 +20,15 @@ describe('Test AverageOnValueTest', () => {
 
     var leftOperand:Operand = new Operand('TMP_Cli', true);
     var rightOperand:Operand = new Operand('15', false);
-    var typeOfComparison:string = '>';
+    var typeOfComparison:string = '<'; //baisse
+    var typeOfComparisonUp:string = '>'; //hausse
     var description:string = 'un test';
 
     var startDate:Date = new Date(Date.UTC(2000, 1, 1));
     var dateOfCreation:Date = new Date(Date.UTC(2000, 1, 7));
     var endDate:Date = new Date(Date.UTC(2000, 1, 15));
 
-    describe('evaluate method', () => {
+    describe('evaluate method decrease', () => {
 
         it('should return true if threshold is reached', () => {
             condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
@@ -413,5 +414,171 @@ describe('Test AverageOnValueTest', () => {
 
         chai.expect(averageOnValue.getRequired()).to.be.eql(expected);
 
+    });
+
+    describe('evaluate method increase', () => {
+
+        it('should return true if threshold is reached', () => {
+            condition = new GoalCondition(leftOperand, typeOfComparisonUp, rightOperand, description);
+            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+
+            var data:any = {};
+
+            var oldValues:any[] = [
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 2)).getTime() / 1000),
+                    value: 100
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 3)).getTime() / 1000),
+                    value: 101
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 4)).getTime() / 1000),
+                    value: 99
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 5)).getTime() / 1000),
+                    value: 102
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 6)).getTime() / 1000),
+                    value: 98
+                }
+            ];
+
+
+            var newValues:any[] = [
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
+                    value: 121
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
+                    value: 110
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
+                    value: 119
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 11)).getTime() / 1000),
+                    value: 70
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 12)).getTime() / 1000),
+                    value: 130
+                }
+            ];
+
+
+            data['TMP_Cli'] = {};
+            data['TMP_Cli'].values = oldValues.concat(newValues);
+
+
+            chai.expect(averageOnValue.evaluate(data)).to.be.true;
+        });
+
+        it('should return true if threshold is reached with different number of measures', () => {
+            condition = new GoalCondition(leftOperand, typeOfComparisonUp, rightOperand, description);
+            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+
+            var data:any = {};
+
+            var oldValues:any[] = [
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 2)).getTime() / 1000),
+                    value: 100
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 3)).getTime() / 1000),
+                    value: 101
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 4)).getTime() / 1000),
+                    value: 99
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 5)).getTime() / 1000),
+                    value: 102
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 6)).getTime() / 1000),
+                    value: 98
+                }
+            ];
+
+            var newValues:any[] = [
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
+                    value: 111
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
+                    value: 110
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
+                    value: 109
+                }
+            ];
+
+
+            data['TMP_Cli'] = {};
+            data['TMP_Cli'].values = oldValues.concat(newValues);
+
+            chai.expect(averageOnValue.evaluate(data)).to.be.true;
+        });
+
+        it('should return false if threshold is close but not reached', () => {
+            condition = new GoalCondition(leftOperand, typeOfComparisonUp, rightOperand, description);
+            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+
+            var data:any = {};
+
+            var oldValues:any[] = [
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 2)).getTime() / 1000),
+                    value: 100
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 3)).getTime() / 1000),
+                    value: 101
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 4)).getTime() / 1000),
+                    value: 99
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 5)).getTime() / 1000),
+                    value: 102
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 6)).getTime() / 1000),
+                    value: 98
+                }
+            ];
+
+            var newValues:any[] = [
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
+                    value: 111
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
+                    value: 109
+                },
+                {
+                    date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
+                    value: 109
+                }
+            ];
+
+
+            data['TMP_Cli'] = {};
+            data['TMP_Cli'].values = oldValues.concat(newValues);
+
+            chai.expect(averageOnValue.evaluate(data)).to.be.false;
+        });
     });
 });

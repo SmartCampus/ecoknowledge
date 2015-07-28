@@ -1,4 +1,4 @@
 <select ng-options="badge.name for badge in goalCtrl.badges" name="badges" class="selectpicker form-control"
-        ng-model="goalCtrl.selectedBadge" required>
+        ng-model="goalCtrl.selectedBadge" ng-required="true">
     <option value="" disabled selected>Sélectionnez un badge</option>
 </select>

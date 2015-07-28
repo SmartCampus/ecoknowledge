@@ -43,7 +43,7 @@ var app = angular.module('ecoknowledgeApp')
             type:'comparison',
             threshold:100,
             expression:{
-                comparison:'<',
+                comparison:null,
                 type:'number',
                 valueLeft:{
                     value:null,

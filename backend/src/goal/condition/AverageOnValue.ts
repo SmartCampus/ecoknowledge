@@ -91,7 +91,7 @@ class AverageOnValue implements Expression {
             var newData:number[] = [];
 
             this.separateOldAndNewData(oldAndNewData, oldData, newData);
-            var decreaseRate = 0;
+            var rate = 0;
 
             if (oldData) {
 
@@ -99,17 +99,26 @@ class AverageOnValue implements Expression {
                 var newAverage = this.computeAverageValues(newData);
 
                 if (newAverage) {
-                    decreaseRate = 100 - (newAverage * 100 / oldAverage);
+                    rate = (newAverage * 100 / oldAverage);
                 }
             }
 
-            result = result && (decreaseRate >= this.thresholdRate);
+            // < baisse
+            // > hausse
+            var changeRate = 0;
 
+            if(this.condition.getComparisonType() === '<'){
+                changeRate = 100 - rate;
+            }else{
+                changeRate = rate - 100;
+            }
 
-            this.percentageAchieved = decreaseRate * 100 / this.thresholdRate;
+            result = result && (changeRate >= this.thresholdRate);
+            this.percentageAchieved = changeRate * 100 / this.thresholdRate;
+
 
             //  It can be infinite
-            this.percentageAchieved = (this.percentageAchieved >  100)?100:this.percentageAchieved;
+            this.percentageAchieved = (this.percentageAchieved > 100)?100:this.percentageAchieved;
 
             this.updateDurationAchieved(Clock.getNow());
         }

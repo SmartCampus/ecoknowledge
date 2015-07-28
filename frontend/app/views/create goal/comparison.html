@@ -2,7 +2,11 @@
 <br/>
 <span>
     <input type="text" placeholder="Nom Symbolique du capteur" ng-model="iteration.expression.valueLeft.value" required>
-    <label>a baissé de</label>
+    <select ng-model="iteration.expression.comparison" required>
+        <option value="" disabled selected>Choisissez un type de comparaison</option>
+        <option value="<">a baissé de</option>
+        <option value=">">a augmenté de</option>
+    </select>
     <input type="number" ng-change="goalCtrl.checkPercent(iteration)" ng-model="iteration.threshold" required>
     <label>% par rapport au mois dernier.</label>
 </span>
