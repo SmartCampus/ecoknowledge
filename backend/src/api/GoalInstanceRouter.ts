@@ -27,6 +27,8 @@ class GoalInstanceRouter extends RouterItf {
         super();
         this.goalInstanceRepository = goalInstanceRepository;
         this.goalInstanceFactory = goalInstanceFactory;
+        console.log("GOALINSTANCEFACTORY", this.goalInstanceFactory);
+
         this.goalDefinitionRepository = goalDefinitionRepository;
         this.userRepository = userRepository;
 

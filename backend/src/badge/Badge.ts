@@ -1,3 +1,5 @@
+/// <reference path="../../typings/node/node.d.ts" />
+
 import uuid = require('node-uuid');
 
 class Badge {

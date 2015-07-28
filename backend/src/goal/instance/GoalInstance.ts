@@ -17,14 +17,14 @@ class GoalInstance {
     private description:string;
     private status:BadgeStatus;
 
-    private progress:any[]= [];
+    private progress:any[] = [];
 
     private percentageOfTime:number = 0;
 
     //  { 'tmp_cli':'ac_443', 'tmp_ext':'TEMP_444', 'door_o':'D_55', ... }
     private mapSymbolicNameToSensor:any = {};
 
-    constructor(startDate:Date, endDate:Date,description:string, goal:GoalDefinition,
+    constructor(startDate:Date, endDate:Date, description:string, goal:GoalDefinition,
                 mapGoalToConditionAndSensor:any) {
 
         this.id = UUID.v4();
@@ -34,7 +34,7 @@ class GoalInstance {
         this.endDate = endDate;
 
         this.goalDefinition = goal;
-        this.goalDefinition.setTimeBoxes(new TimeBox(startDate.getTime(),endDate.getTime()));
+        this.goalDefinition.setTimeBoxes(new TimeBox(startDate.getTime(), endDate.getTime()));
 
         this.mapSymbolicNameToSensor = mapGoalToConditionAndSensor;
 
@@ -52,7 +52,7 @@ class GoalInstance {
         this.percentageOfTime = durationAchieved * 100 / duration;
 
         //  It can have tiny incorrect decimal values
-        this.percentageOfTime = (this.percentageOfTime >  100)?100:this.percentageOfTime;
+        this.percentageOfTime = (this.percentageOfTime > 100) ? 100 : this.percentageOfTime;
 
     }
 
@@ -151,14 +151,14 @@ class GoalInstance {
         var mapSymbolicNameToValue = this.bindSymbolicNameToValue(values);
 
         var result = this.goalDefinition.evaluate(mapSymbolicNameToValue, this);
-        if(result && this.percentageOfTime>=100){
-            this.status=BadgeStatus.SUCCESS;
+        if (result && this.percentageOfTime >= 100) {
+            this.status = BadgeStatus.SUCCESS;
             console.log('success!');
-        }else if(this.percentageOfTime>=100){
-            this.status=BadgeStatus.FAIL;
+        } else if (this.percentageOfTime >= 100) {
+            this.status = BadgeStatus.FAIL;
             console.log('Fail!');
-        }else{
-            this.status=BadgeStatus.RUN;
+        } else {
+            this.status = BadgeStatus.RUN;
         }
 
         return result;
@@ -175,6 +175,10 @@ class GoalInstance {
         }
 
         return result;
+    }
+
+    public getDataInJSON():any {
+
     }
 }
 

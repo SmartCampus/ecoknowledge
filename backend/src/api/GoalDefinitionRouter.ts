@@ -11,6 +11,7 @@ import GoalDefinitionFactory = require('../goal/definition/GoalDefinitionFactory
  * @class GoalDefinitionRouter
  * @extends RouterItf
  */
+
 class GoalDefinitionRouter extends RouterItf {
 
     private goalDefinitionRepository:GoalDefinitionRepository;
@@ -34,6 +35,7 @@ class GoalDefinitionRouter extends RouterItf {
      * @param res
      */
     getAllGoalsDefinition(req:any, res:any) {
+        //  FIXME WON'T WORK
         var result = this.goalDefinitionRepository.getListOfGoalsInJsonFormat();
         res.send(result);
     }
@@ -51,6 +53,8 @@ class GoalDefinitionRouter extends RouterItf {
     addGoalDefinition(req:any, res:any) {
         var data = req.body;
         var newGoal = this.goalDefinitionFactory.createGoal(data);
+
+        //  FIXME WON'T WORK
         this.goalDefinitionRepository.addGoal(newGoal);
         res.send("OK : définition d'objectif créee avec succès");
     }

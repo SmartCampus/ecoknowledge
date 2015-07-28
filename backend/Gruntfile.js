@@ -56,12 +56,12 @@ module.exports = function (grunt) {
             },
             build: {
                 options: {
-                    script: 'build/server.js'
+                    script: 'build/Backend.js'
                 }
             },
             dist: {
                 options: {
-                    script: 'dist/server.js',
+                    script: 'dist/Backend.js',
                     node_env: 'production'
                 }
             }
@@ -73,7 +73,7 @@ module.exports = function (grunt) {
 // ---------------------------------------------
         watch: {
             express: {
-                files:  [ 'build/server.js' ],
+                files:  [ 'build/Backend.js' ],
                 tasks:  [ 'express:build' ],
                 options: {
                     spawn: false

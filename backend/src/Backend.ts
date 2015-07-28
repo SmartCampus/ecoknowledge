@@ -25,16 +25,16 @@ import TimeBox = require('./TimeBox');
 
 class Backend extends Server {
 
-    private badgeRepository:BadgeRepository;
-    private badgeFactory:BadgeFactory;
+    public badgeRepository:BadgeRepository;
+    public badgeFactory:BadgeFactory;
 
-    private goalDefinitionRepository:GoalDefinitionRepository;
-    private goalDefinitionFactory:GoalDefinitionFactory;
+    public goalDefinitionRepository:GoalDefinitionRepository;
+    public goalDefinitionFactory:GoalDefinitionFactory;
 
-    private goalInstanceRepository:GoalInstanceRepository;
-    private goalInstanceFactory:GoalInstanceFactory;
+    public goalInstanceRepository:GoalInstanceRepository;
+    public goalInstanceFactory:GoalInstanceFactory;
 
-    private userRepository:UserRepository;
+    public userRepository:UserRepository;
 
     /**
      * Constructor.
@@ -44,8 +44,6 @@ class Backend extends Server {
      */
     constructor(listeningPort:number, arguments:Array<string>) {
         super(listeningPort, arguments);
-
-        console.log("IM BUILDING THIS SHIT");
 
         this.badgeRepository = new BadgeRepository();
         this.badgeFactory = new BadgeFactory();
@@ -67,12 +65,21 @@ class Backend extends Server {
      * @method buildAPI
      */
     buildAPI() {
-        console.log("Build API !");
-        this.app.use("/badges", (new BadgeRouter(this.badgeRepository, this.badgeFactory)).getRouter());
-        this.app.use("/goalsDefinition", (new GoalDefinitionRouter(this.goalDefinitionRepository, this.goalDefinitionFactory)).getRouter());
-        this.app.use("/goalsInstance", (new GoalInstanceRouter(this.goalInstanceRepository, this.goalInstanceFactory, this.goalDefinitionRepository, this.userRepository)).getRouter());
+        var self = this;
+
+        this.app.use("/badges", (new BadgeRouter(self.badgeRepository, self.badgeFactory)).getRouter());
+        this.app.use("/goalsDefinition", (new GoalDefinitionRouter(self.goalDefinitionRepository, self.goalDefinitionFactory)).getRouter());
+        this.app.use("/goalsInstance", (new GoalInstanceRouter(self.goalInstanceRepository, self.goalInstanceFactory, self.goalDefinitionRepository, self.userRepository)).getRouter());
+
+        var jsonSerializer = require('./JSONSerializer');
+        this.app.get('/test', function(req, res) {
+           jsonSerializer.save(this);
+            res.send('OK');
+        });
     }
 }
+
+export = Backend;
 
 /**
  * Server's Backend listening port.

@@ -77,7 +77,8 @@ class Ecoknowledge {
 
     public getFinishedBadge(userId:string):number[]{
         var user:User = this.getUser(userId);
-        return user.getFinishedBadgesID();
+        //FIXME return user.getFinishedBadgesID();
+        return null;
     }
 
     public addGoalDefinition(data:any):string {

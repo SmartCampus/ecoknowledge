@@ -3,6 +3,8 @@ import GoalInstanceFactory = require('./GoalInstanceFactory');
 import GoalDefinitionRepository = require('../definition/GoalDefinitionRepository');
 import UserProvider = require('../../user/UserRepository');
 
+import Badge = require('../../badge/Badge');
+
 class BadgeProvider {
 
     private goalInstancesArray:GoalInstance[] = [];
@@ -132,6 +134,10 @@ class BadgeProvider {
                 break;
         }
         return 'UNKNOWN'
+    }
+
+    public getDataInJSON():any {
+
     }
 }
 

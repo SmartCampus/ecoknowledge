@@ -28,7 +28,7 @@ class GoalDefinition {
         this.name = name;
         this.id = uuid.v4();
 
-        if(startDate != null && endDate != null && endDate.getTime() < startDate.getTime()) {
+        if (startDate != null && endDate != null && endDate.getTime() < startDate.getTime()) {
             throw new Error('End date is before start date');
         }
 
@@ -57,7 +57,7 @@ class GoalDefinition {
         return this.id;
     }
 
-    public getBadge():Badge{
+    public getBadge():Badge {
         return this.badge;
     }
 
@@ -94,19 +94,30 @@ class GoalDefinition {
         return {
             "name": this.name,
             "conditions": this.expressions.getData(),
-            "timeBox":{
-                "startDate":this.startDate,
-                "endDate":this.endDate
+            "timeBox": {
+                "startDate": this.startDate,
+                "endDate": this.endDate
             },
-            "durationInDays":this.durationInDays,
+            "durationInDays": this.durationInDays,
             "badge": this.badge.getData()
         }
     }
 
-    public setBadge(badge:Badge){
+    public setBadge(badge:Badge) {
         this.badge = badge;
     }
 
+    public getDataInJSON():any {
+        return {
+            id: this.id,
+            name: this.name,
+            conditions: this.expressions.getData(),
+            startDate: this.startDate,
+            endDate: this.endDate,
+            durationInDays: this.durationInDays,
+            badge: this.badge.getData()
+        }
+    }
 }
 
 export = GoalDefinition;
