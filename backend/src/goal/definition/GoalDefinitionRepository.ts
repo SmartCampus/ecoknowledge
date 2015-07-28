@@ -5,24 +5,29 @@ import Badge = require('../../badge/Badge');
 
 class GoalDefinitionRepository {
 
+    private badgeRepository:BadgeRepository;
+
     private goals:GoalDefinition[] = [];
 
     private factory:GoalDefinitionFactory;
 
-    constructor() {
+    constructor(badgeRepository:BadgeRepository) {
         this.factory = new GoalDefinitionFactory();
+        this.badgeRepository = badgeRepository;
     }
 
     public addGoalByDescription(data:any, badgeRepository:BadgeRepository):string {
-        var newGoal:GoalDefinition = this.factory.createGoal(data);
-        if(data.badge === null){
+        var badgeID = data.badgeID;
+
+        if(!badgeID){
             throw new Error('badges null when trying to create a new goal');
         }
-        var badge:Badge = badgeRepository.getBadge(data.badge.id);
-        if(badge === null){
+        var badge:Badge = badgeRepository.getBadge(data.badgeID);
+        if(!badge){
             throw new Error('No badge with this id when trying to create a new goal');
         }
-        newGoal.setBadge(badge);
+
+        var newGoal:GoalDefinition = this.factory.createGoal(data);
         this.goals.push(newGoal);
         return newGoal.getUUID().toString();
     }
@@ -49,7 +54,7 @@ class GoalDefinitionRepository {
             var currentGoal = this.goals[goalIndex];
 
             var goalDesc:any = {};
-            goalDesc.name = currentGoal.getBadge().getName();
+            goalDesc.name = this.badgeRepository.getBadge(currentGoal.getBadgeID()).getName();
             goalDesc.id = currentGoal.getUUID();
 
             result.push(goalDesc);
@@ -69,6 +74,16 @@ class GoalDefinitionRepository {
         }
 
         return goal.evaluate(values);
+    }
+
+    public getDataInJSON():any {
+        var result:any[] = [];
+
+        for(var goalDefinitionIndex in this.goals) {
+            result.push(this.goals[goalDefinitionIndex].getDataInJSON());
+        }
+
+        return result;
     }
 }
 

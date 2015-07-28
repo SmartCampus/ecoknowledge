@@ -10,21 +10,23 @@ import uuid = require('node-uuid');
 class GoalDefinition {
     private id;
     private name:string;
-    private expressions:ExpressionHandler = new ExpressionHandler();
+    private expressions:ExpressionHandler;
 
     private startDate:Date;
     private endDate:Date;
 
     private durationInDays:number;
 
-    private badge:Badge;
+    private badgeID:string;
 
-    constructor(name:string, startDate:Date, endDate:Date, durationInDays:number) {
+    constructor(name:string, startDate:Date, endDate:Date, durationInDays:number, badgeID:string) {
         if (!name) {
             throw new Error('Bad argument : name given is null');
         }
 
-        this.badge = null;
+        this.expressions = new ExpressionHandler();
+
+        this.badgeID = badgeID;
         this.name = name;
         this.id = uuid.v4();
 
@@ -35,6 +37,22 @@ class GoalDefinition {
         this.startDate = startDate;
         this.endDate = endDate;
         this.durationInDays = durationInDays;
+    }
+
+    getBadgeID() {
+        return this.badgeID;
+    }
+
+    public getUUID() {
+        return this.id;
+    }
+
+    public hasUUID(aUUID:string):boolean {
+        return this.id === aUUID;
+    }
+
+    public setUUID(aUUID) {
+        this.id = aUUID;
     }
 
     public setTimeBoxes(newTimeBox:TimeBox) {
@@ -51,22 +69,6 @@ class GoalDefinition {
 
     public getDuration():number {
         return this.durationInDays;
-    }
-
-    public getUUID() {
-        return this.id;
-    }
-
-    public getBadge():Badge {
-        return this.badge;
-    }
-
-    public setUUID(aUUID) {
-        this.id = aUUID;
-    }
-
-    public hasUUID(aUUID:string):boolean {
-        return this.id === aUUID;
     }
 
     public getName():string {
@@ -99,23 +101,21 @@ class GoalDefinition {
                 "endDate": this.endDate
             },
             "durationInDays": this.durationInDays,
-            "badge": this.badge.getData()
+            "badge": this.badgeID
         }
-    }
-
-    public setBadge(badge:Badge) {
-        this.badge = badge;
     }
 
     public getDataInJSON():any {
         return {
             id: this.id,
             name: this.name,
-            conditions: this.expressions.getData(),
-            startDate: this.startDate,
-            endDate: this.endDate,
-            durationInDays: this.durationInDays,
-            badge: this.badge.getData()
+            timeBox: {
+                startDate: this.startDate,
+                endDate: this.endDate
+            },
+            duration: this.durationInDays,
+            conditions: this.expressions.getDataInJSON(),
+            badgeID:this.badgeID
         }
     }
 }

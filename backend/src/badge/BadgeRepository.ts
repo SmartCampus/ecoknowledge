@@ -5,6 +5,7 @@ class BadgeRepository {
     private badges:Badge[] = [];
 
     public addBadge(badge:Badge) {
+        console.log("AJOUT DU BADGE", badge.getUuid());
         this.badges.push(badge);
     }
 
@@ -21,6 +22,17 @@ class BadgeRepository {
 
     public getAllBadges():Badge[]{
         return this.badges;
+    }
+
+    getDataInJSON():any {
+        var result:any[] = [];
+
+        for(var badgeIndex in this.badges) {
+            var currentBadge = this.badges[badgeIndex];
+            result.push(currentBadge.getDataInJSON());
+        }
+
+        return result;
     }
 }
 

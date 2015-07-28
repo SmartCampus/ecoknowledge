@@ -44,7 +44,11 @@ class GoalInstanceRouter extends RouterItf {
 
 
     buildRouter() {
-        this.router.get('/new', this.newGoalInstance);
+        var self = this;
+
+        this.router.post('/new', function(req,res) {
+            self.newGoalInstance(req,res);
+        });
         this.router.delete('/delete/:id', this.deleteGoalInstance);
         this.router.get('/evaluate', this.evaluate);
 

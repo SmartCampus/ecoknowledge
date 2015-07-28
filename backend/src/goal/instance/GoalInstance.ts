@@ -84,8 +84,8 @@ class GoalInstance {
         return this.goalDefinition;
     }
 
-    public getBadge():Badge {
-        return this.goalDefinition.getBadge();
+    public getBadge():string {
+        return this.goalDefinition.getBadgeID();
     }
 
     public getName():string {

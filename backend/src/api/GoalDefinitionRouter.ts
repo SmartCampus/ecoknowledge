@@ -24,8 +24,13 @@ class GoalDefinitionRouter extends RouterItf {
     }
 
     buildRouter() {
-        this.router.get('/all', this.getAllGoalsDefinition);
-        this.router.post('/new', this.addGoalDefinition);
+        var self = this;
+        this.router.get('/all', function(req, res) {
+            self.getAllGoalsDefinition(req, res);
+        });
+        this.router.post('/new', function(req,res) {
+            self.addGoalDefinition(req, res);
+        });
     }
 
     /**
@@ -35,7 +40,6 @@ class GoalDefinitionRouter extends RouterItf {
      * @param res
      */
     getAllGoalsDefinition(req:any, res:any) {
-        //  FIXME WON'T WORK
         var result = this.goalDefinitionRepository.getListOfGoalsInJsonFormat();
         res.send(result);
     }
@@ -53,8 +57,6 @@ class GoalDefinitionRouter extends RouterItf {
     addGoalDefinition(req:any, res:any) {
         var data = req.body;
         var newGoal = this.goalDefinitionFactory.createGoal(data);
-
-        //  FIXME WON'T WORK
         this.goalDefinitionRepository.addGoal(newGoal);
         res.send("OK : définition d'objectif créee avec succès");
     }

@@ -106,18 +106,18 @@ class Ecoknowledge {
         console.log('goals finished : ', goalsFinished);
         for(var i in goalsFinished){
             console.log("---one goal : ", goalsFinished[i]);
-            var badgeAssociated:Badge = goalsFinished[i].getGoalDefinition().getBadge();
-            console.log('associated badge : ', badgeAssociated);
-            user.addFinishedBadge(badgeAssociated);
+            //FIXME badge doesnt exists anymore  var badgeAssociated:Badge = goalsFinished[i].getGoalDefinition().getBadge();
+            //FIXME badge doesnt exists anymore console.log('associated badge : ', badgeAssociated);
+            //FIXME badge doesnt exists anymore  user.addFinishedBadge(badgeAssociated);
         }
     }
 
     public addFinishedBadge(BadgeId:string,userId:string){
         var user:User = this.userRepository.getUser(userId);
         var goalDefinition:GoalDefinition = this.goalInstanceRepository.getGoalInstance(BadgeId).getGoalDefinition();
-        var badge:Badge = goalDefinition.getBadge();
-        console.log('add now');
-        user.addFinishedBadge(badge);
+        //FIXME badge doesnt exists anymore var badge:Badge = goalDefinition.getBadge();
+        //FIXME badge doesnt exists anymore console.log('add now');
+        //FIXME badge doesnt exists anymore  user.addFinishedBadge(badge);
     }
 
     public removeGoalInstance(goalInstanceId:string){

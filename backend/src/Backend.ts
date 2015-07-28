@@ -23,6 +23,8 @@ import GoalCondition = require('./goal/condition/GoalCondition');
 import OverallGoalCondition = require('./goal/condition/OverallGoalCondition');
 import TimeBox = require('./TimeBox');
 
+import StoringHandler = require('./StoringHandler');
+
 class Backend extends Server {
 
     public badgeRepository:BadgeRepository;
@@ -36,6 +38,8 @@ class Backend extends Server {
 
     public userRepository:UserRepository;
 
+    private storingHandler:StoringHandler;
+
     /**
      * Constructor.
      *
@@ -48,7 +52,7 @@ class Backend extends Server {
         this.badgeRepository = new BadgeRepository();
         this.badgeFactory = new BadgeFactory();
 
-        this.goalDefinitionRepository = new GoalDefinitionRepository();
+        this.goalDefinitionRepository = new GoalDefinitionRepository(this.badgeRepository);
         this.goalDefinitionFactory = new GoalDefinitionFactory();
 
         this.goalInstanceRepository = new GoalInstanceRepository();
@@ -56,7 +60,10 @@ class Backend extends Server {
 
         this.userRepository = new UserRepository();
 
+        this.storingHandler = new StoringHandler(this);
+
         this.buildAPI();
+        this.loadData();
     }
 
     /**
@@ -68,14 +75,25 @@ class Backend extends Server {
         var self = this;
 
         this.app.use("/badges", (new BadgeRouter(self.badgeRepository, self.badgeFactory)).getRouter());
-        this.app.use("/goalsDefinition", (new GoalDefinitionRouter(self.goalDefinitionRepository, self.goalDefinitionFactory)).getRouter());
-        this.app.use("/goalsInstance", (new GoalInstanceRouter(self.goalInstanceRepository, self.goalInstanceFactory, self.goalDefinitionRepository, self.userRepository)).getRouter());
+        this.app.use("/goals", (new GoalDefinitionRouter(self.goalDefinitionRepository, self.goalDefinitionFactory)).getRouter());
+        this.app.use("/challenges", (new GoalInstanceRouter(self.goalInstanceRepository, self.goalInstanceFactory, self.goalDefinitionRepository, self.userRepository)).getRouter());
 
-        var jsonSerializer = require('./JSONSerializer');
-        this.app.get('/test', function(req, res) {
-           jsonSerializer.save(this);
+        this.app.get('/test', function (req, res) {
+            self.storingHandler.save(
+                function (result) {
+                    console.log(result.success);
+                },
+                function (err) {
+                    console.log(err.error);
+                });
             res.send('OK');
         });
+    }
+
+    loadData():void {
+        var self = this;
+        var result = self.storingHandler.load();
+        console.log(result);
     }
 }
 
@@ -88,7 +106,7 @@ export = Backend;
  * @type number
  * @private
  */
-var _BackendListeningPort:number = process.env.PORT || 4000;
+var _BackendListeningPort:number = 3000;
 
 /**
  * Server's Backend command line arguments.

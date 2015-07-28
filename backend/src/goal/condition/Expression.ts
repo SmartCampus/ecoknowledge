@@ -10,7 +10,7 @@ interface Expression {
   hasRightOperand(name:string):boolean;
   getID():string;
   setTimeBox(newTimeBox:TimeBox);
-
+  getDataInJSON():any;
 }
 
 export = Expression;

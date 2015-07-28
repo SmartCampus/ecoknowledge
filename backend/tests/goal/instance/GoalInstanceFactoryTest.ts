@@ -16,7 +16,7 @@ import TimeBox = require('../../../src/TimeBox');
 describe("GoalInstanceFactory test", () => {
 
     var factory:GoalInstanceFactory = new GoalInstanceFactory();
-    var goalDefinitionRepository:GoalDefinitionRepository = new GoalDefinitionRepository();
+    var goalDefinitionRepository:GoalDefinitionRepository = new GoalDefinitionRepository(null);
 
     var aGoal:GoalDefinition;
     var aGoalName:string = "goal 1";
@@ -40,7 +40,7 @@ describe("GoalInstanceFactory test", () => {
     var conditions:any = {};
     beforeEach(() => {
 
-        aGoal = new GoalDefinition(aGoalName, now, endDate, 5);
+        aGoal = new GoalDefinition(aGoalName, now, endDate, 5,null);
         aGoal.setUUID(aGoalID);
         aGoal.addCondition(new GoalCondition(new Operand(aConditionName, true), '<',
             new Operand(anotherConditionName, true), aGoalDescription));

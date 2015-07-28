@@ -127,6 +127,17 @@ class ExpressionHandler {
 
         return result;
     }
+
+    public getDataInJSON():any {
+        var result:any[] = [];
+
+        for (var i = 0; i < this.expressions.length; i++) {
+            result.push(this.expressions[i].getDataInJSON());
+        }
+
+        return result;
+    }
+
 }
 
 export = ExpressionHandler;

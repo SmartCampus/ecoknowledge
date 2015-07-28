@@ -33,8 +33,12 @@ class BadgeRouter extends RouterItf {
     }
 
     buildRouter() {
+        var self = this;
+
         this.router.get('/all', this.getAllBadges);
-        this.router.post('/new', this.newBadge);
+        this.router.post('/new', function(req,res) {
+            self.newBadge(req,res);
+        });
     }
 
     /**
@@ -63,9 +67,9 @@ class BadgeRouter extends RouterItf {
         try {
             var badge = this.badgeFactory.createBadge(badgeData);
             this.badgeRepository.addBadge(badge);
-            res.send("OK : badge crée avec succès");
+            res.send({success:'Badge successfully created', info:badge.getUuid(), description:badge.getDataInJSON()});
         } catch (e) {
-            res.status(400).send({'error': e});
+            res.status(400).send({'error': e.toString()});
         }
     }
 }
