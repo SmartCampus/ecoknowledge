@@ -45,14 +45,5 @@ app.service('ServiceGoal',['$http', function ServiceGoal($http){
             });
     };
 
-    this.delete = function(idGoal, successFunc, failFunc){
-        console.log('adress where remove : ',basePath+'goalInstanceRemove/'+idGoal);
-        $http.delete(basePath+'goalInstanceRemove/'+idGoal)
-            .success(function(data){
-                successFunc(data);
-            })
-            .error(function(data){
-                failFunc(data);
-            });
-    };
+
 }]);

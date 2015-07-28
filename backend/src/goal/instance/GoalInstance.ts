@@ -178,7 +178,15 @@ class GoalInstance {
     }
 
     public getDataInJSON():any {
-
+        return {
+            id:this.id,
+            name:this.getName(),
+            timeProgress:this.percentageOfTime,
+            startDate:this.startDate,
+            endDate:this.endDate,
+            condition:this.goalDefinition.getDataInJSON(),
+            progress:this.progress
+        }
     }
 }
 

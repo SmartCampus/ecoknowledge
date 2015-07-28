@@ -4,10 +4,12 @@
  * File with all the services associated to Challenge (GET, POST)
  */
 
+  var basePath = 'http://localhost:3000/challenges/';
+
 var app = angular.module('ecoknowledgeApp');
 app.service('ServiceChallenge', ['$http', function ServiceChallenge($http) {
   this.get = function (id, successFunc, failFunc) {
-    $http.get('http://localhost:3000/goalsInstanceRunning/' + id)
+    $http.get(basePath + 'all/' + id)
       .success(function (data) {
         successFunc(data);
       })
@@ -16,7 +18,7 @@ app.service('ServiceChallenge', ['$http', function ServiceChallenge($http) {
       });
   };
   this.post = function (badge, successFunc, failFunc) {
-    $http.post('http://localhost:3000/addbadge', badge)
+    $http.post(basePath + 'new', badge)
       .success(function (data) {
         successFunc(data);
       })
@@ -26,11 +28,9 @@ app.service('ServiceChallenge', ['$http', function ServiceChallenge($http) {
   };
 
   this.takeGoal = function (goalID, successFunc, failFunc) {
-    $http.post('http://localhost:3000/takeGoal', goalID)
+    $http.post(basePath + 'new', goalID)
       .success(function (data) {
-        console.log('ZIZI');
         successFunc(data);
-
       })
       .error(function (data) {
         failFunc(data);
@@ -38,7 +38,7 @@ app.service('ServiceChallenge', ['$http', function ServiceChallenge($http) {
   };
 
   this.evaluate = function (badgeName, successFunc, failFunc) {
-    $http.get('http://localhost:3000/evaluatebadge?badgeName=' + badgeName)
+    $http.get(basePath + 'evaluatebadge?badgeName=' + badgeName)
       .success(function (data) {
         successFunc(data);
       })
@@ -46,4 +46,19 @@ app.service('ServiceChallenge', ['$http', function ServiceChallenge($http) {
         failFunc(data);
       });
   };
+
+  this.delete = function(idGoal, successFunc, failFunc){
+    console.log("DELETE : path", basePath+'delete/'+idGoal);
+    var path = basePath + 'delete/' + idGoal;
+    $http.delete(path)
+      .success(function(data){
+        console.log("OK?3");
+        successFunc(data);
+      })
+      .error(function(data){
+        console.log("FAIL MA KE PASSA?",data);
+        failFunc(data);
+      });
+  };
+
 }]);

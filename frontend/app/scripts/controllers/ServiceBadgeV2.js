@@ -4,7 +4,7 @@
  * File with all the services associated to Badge (GET, POST)
  */
 
-var path = 'http://localhost:3000/';
+var path = 'http://localhost:3000/badges/';
 
 var app = angular.module('ecoknowledgeApp');
 app.service('ServiceBadgeV2',['$http', function ServiceBadgeV2($http){

@@ -6,6 +6,9 @@ import RouterItf = require('./RouterItf');
 
 import BadgeRepository = require('../badge/BadgeRepository');
 import BadgeFactory = require('../badge/BadgeFactory');
+import UserRepository = require('../user/UserRepository');
+
+import BadArgumentException = require('../exceptions/BadArgumentException');
 
 /**
  * BadgeRouter class</br>
@@ -17,6 +20,7 @@ import BadgeFactory = require('../badge/BadgeFactory');
  */
 class BadgeRouter extends RouterItf {
 
+    private userRepository:UserRepository;
     private badgeRepository:BadgeRepository;
     private badgeFactory:BadgeFactory;
 
@@ -26,16 +30,32 @@ class BadgeRouter extends RouterItf {
      * @param badgeRepository
      *      The badge repository to save and retrieve badges
      */
-    constructor(badgeRepository:BadgeRepository, badgeFactory:BadgeFactory) {
+    constructor(badgeRepository:BadgeRepository, badgeFactory:BadgeFactory, userRepository:UserRepository) {
         super();
+
+        if(!badgeRepository) {
+            throw new BadArgumentException('Badge repository is null');
+        }
+
+        if(!badgeFactory) {
+            throw new BadArgumentException('Badge factory is null');
+        }
+
+        if(!userRepository) {
+            throw new BadArgumentException('User repository is null');
+        }
+
         this.badgeRepository = badgeRepository;
         this.badgeFactory = badgeFactory;
+        this.userRepository = userRepository;
     }
 
     buildRouter() {
         var self = this;
 
-        this.router.get('/all', this.getAllBadges);
+        this.router.get('/trophyWall', function(req,res) {
+            self.getAllBadges(req,res);
+        });
         this.router.post('/new', function(req,res) {
             self.newBadge(req,res);
         });
@@ -48,7 +68,15 @@ class BadgeRouter extends RouterItf {
      * @param res
      */
     getAllBadges(req:any, res:any) {
-        var result = this.badgeRepository.getAllBadges();
+        var badges = this.userRepository.getCurrentUser().getFinishedBadgesID();
+        var result:any[] = [];
+
+        for(var currentBadgeIDIndex in badges) {
+            var currentBadgeID = badges[currentBadgeIDIndex];
+            var currentBadge = this.badgeRepository.getBadge(currentBadgeID);
+            result.push(currentBadge.getData());
+        }
+
         res.send(result);
     }
 

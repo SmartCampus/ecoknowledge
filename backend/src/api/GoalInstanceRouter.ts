@@ -46,15 +46,30 @@ class GoalInstanceRouter extends RouterItf {
     buildRouter() {
         var self = this;
 
-        this.router.post('/new', function(req,res) {
-            self.newGoalInstance(req,res);
+        this.router.post('/new', function (req, res) {
+            self.newGoalInstance(req, res);
         });
-        this.router.delete('/delete/:id', this.deleteGoalInstance);
-        this.router.get('/evaluate', this.evaluate);
+
+        this.router.get('/all', function (req, res) {
+            self.getAllChallenges(req, res);
+        });
+
+        this.router.delete('/delete/:id', function (req, res) {
+            self.deleteGoalInstance(req, res);
+        });
+
+        this.router.get('/evaluate', function (req, res) {
+            self.evaluate(req, res);
+        });
 
         //  Debug routes only
-        this.router.post('/addstub', this.addStub);
-        this.router.post('/setNow', this.setNow);
+        this.router.post('/addstub', function (req, res) {
+            self.addStub(req, res)
+        });
+
+        this.router.post('/setNow', function (req, res) {
+            self.setNow(req, res)
+        });
     }
 
 
@@ -110,13 +125,37 @@ class GoalInstanceRouter extends RouterItf {
 
         var goalInstance = this.goalInstanceFactory.createGoalInstance(data, this.goalDefinitionRepository, null, new Date(Clock.getNow()));
         this.goalInstanceRepository.addGoalInstance(goalInstance);
+        this.userRepository.getCurrentUser().addChallenge(goalInstance.getId());
         res.send({"success": "Objectif ajouté !"});
     }
 
+    getAllChallenges(req:any, res:any) {
+        var result:any[] = [];
+
+        var challenges = this.userRepository.getCurrentUser().getChallenges();
+
+        for(var currentChallengeIDIndex in challenges) {
+            var currentChallengeID = challenges[currentChallengeIDIndex];
+            var currentChallenge = this.goalInstanceRepository.getGoalInstance(currentChallengeID);
+            var currentChallengeDesc = currentChallenge.getDataInJSON();
+            result.push(currentChallengeDesc);
+        }
+
+        res.send(result);
+    }
+
     deleteGoalInstance(req:any, res:any) {
+        console.log("DELETE ASKED MA GUEULE");
         var goalID = req.params.id;
-        this.goalInstanceRepository.removeGoalInstance(goalID);
-        res.send({"success": "Objectif supprimé !"});
+        console.log("DU GOAL", goalID);
+
+        try {
+            this.userRepository.getCurrentUser().deleteChallenge(goalID);
+            res.send({"success": "Objectif supprimé !"});
+        }
+        catch(e) {
+            res.send({error:e.toString()});
+        }
     }
 
     evaluate(req:any, res:any) {

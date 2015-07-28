@@ -22,7 +22,7 @@ class User {
 
     private id;
     private name:string;
-    private currentChallenges:number[] = [];
+    private currentChallenges:string[] = [];
     private finishedBadgesMap:BadgeIDsToNumberOfTimesEarnedMap = {};
 
     constructor(name:string) {
@@ -54,22 +54,27 @@ class User {
         this.name = name;
     }
 
-    public addChallenge(newGoal:GoalDefinition):void {
-        if (!newGoal) {
+    public addChallenge(challengeID:string):void {
+        if (!challengeID) {
             throw new Error('Can not add a new goal to user ' + this.getName() + ' given goal is null');
         }
 
-        this.currentChallenges.push(newGoal.getUUID());
+        this.currentChallenges.push(challengeID);
     }
 
-    public deleteChallenge(challengeID:number):void {
+    public deleteChallenge(challengeID:string):void {
+        console.log("WANnA DElETE IT HU?", this.currentChallenges);
+
         var challengeIndex:number = this.getChallenge(challengeID);
-        if (!challengeIndex) {
+        if (challengeIndex == -1) {
+            console.log("LOL PAS TROUVE MA GUEULE");
             throw new BadArgumentException('Can not find given challenge ID');
         }
         else {
             this.currentChallenges.splice(challengeIndex, 1);
         }
+
+        console.log("Challenge deleted ! Current challenges:",this.currentChallenges);
     }
 
     /**
@@ -79,11 +84,12 @@ class User {
      * @returns {number}
      *      Index of given challenge ID
      */
-    public getChallenge(challengeID:number):number {
-        var result:number = null;
+    public getChallenge(challengeID:string):number {
+        var result:number = -1;
 
         for (var currentChallengeIndex = 0; currentChallengeIndex < this.currentChallenges.length; currentChallengeIndex++) {
-            if (currentChallengeIndex === challengeID) {
+            if (this.currentChallenges[currentChallengeIndex] === challengeID) {
+                console.log("INDEX",currentChallengeIndex);
                 result = currentChallengeIndex;
             }
         }
@@ -91,11 +97,11 @@ class User {
         return result;
     }
 
-    public getChallenges():number[] {
+    public getChallenges():string[] {
         return this.currentChallenges;
     }
 
-    public setChallenges(challenges:number[]):void {
+    public setChallenges(challenges:string[]):void {
         this.currentChallenges = challenges;
     }
 

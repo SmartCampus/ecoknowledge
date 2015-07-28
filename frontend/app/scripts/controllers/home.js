@@ -104,8 +104,10 @@ var app = angular.module('ecoknowledgeApp')
     };
 
     self.removeObjective = function(objective){
+      console.log("OBJECTIVE", objective);
+
       console.log('objective to remove : ',objective.id);
-      ServiceGoal.delete(objective.id,function(data){
+      ServiceChallenge.delete(objective.id,function(data){
         console.log('Succeed to remove a goal instance : ', data);
         var index = self.goalsInstance.indexOf(objective);
         self.goalsInstance.splice(index, 1);
