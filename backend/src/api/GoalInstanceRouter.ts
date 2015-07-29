@@ -9,6 +9,8 @@ import Middleware = require('../Middleware');
 
 import Clock = require('../Clock');
 
+import BadRequestException = require('../exceptions/BadRequestException');
+
 class GoalInstanceRouter extends RouterItf {
     public static DEMO:boolean = true;
 
@@ -27,21 +29,15 @@ class GoalInstanceRouter extends RouterItf {
         super();
         this.goalInstanceRepository = goalInstanceRepository;
         this.goalInstanceFactory = goalInstanceFactory;
-        console.log("GOALINSTANCEFACTORY", this.goalInstanceFactory);
 
         this.goalDefinitionRepository = goalDefinitionRepository;
         this.userRepository = userRepository;
 
         var fs = require('fs');
-        fs.readFile(GoalInstanceRouter.STUB_FILE, function (err, data) {
-            if (err) {
-                throw err;
-            }
-            this.jsonStub = JSON.parse(data.toString());
-            console.log("++ Fichier stub chargé correctement");
-        });
+        var data = fs.readFileSync(GoalInstanceRouter.STUB_FILE, "utf-8");
+        this.jsonStub = JSON.parse(data);
+        console.log("++ Fichier stub chargé correctement\n", JSON.stringify(this.jsonStub));
     }
-
 
     buildRouter() {
         var self = this;
@@ -69,6 +65,10 @@ class GoalInstanceRouter extends RouterItf {
 
         this.router.post('/setNow', function (req, res) {
             self.setNow(req, res)
+        });
+
+        this.router.post('/addBadge', function (req, res) {
+            self.addFinishedBadge(req.challengeID, req.userID);
         });
     }
 
@@ -102,7 +102,7 @@ class GoalInstanceRouter extends RouterItf {
 
 
     newGoalInstance(req:any, res:any) {
-        var goalID = req.body.goalID;
+        var goalID = req.body.id;
 
         if (!goalID) {
             res.status(400).send({'error': 'goalID field is missing in request'});
@@ -134,7 +134,7 @@ class GoalInstanceRouter extends RouterItf {
 
         var challenges = this.userRepository.getCurrentUser().getChallenges();
 
-        for(var currentChallengeIDIndex in challenges) {
+        for (var currentChallengeIDIndex in challenges) {
             var currentChallengeID = challenges[currentChallengeIDIndex];
             var currentChallenge = this.goalInstanceRepository.getGoalInstance(currentChallengeID);
             var currentChallengeDesc = currentChallenge.getDataInJSON();
@@ -145,25 +145,29 @@ class GoalInstanceRouter extends RouterItf {
     }
 
     deleteGoalInstance(req:any, res:any) {
-        console.log("DELETE ASKED MA GUEULE");
         var goalID = req.params.id;
-        console.log("DU GOAL", goalID);
 
         try {
             this.userRepository.getCurrentUser().deleteChallenge(goalID);
             res.send({"success": "Objectif supprimé !"});
         }
-        catch(e) {
-            res.send({error:e.toString()});
+        catch (e) {
+            res.send({error: e.toString()});
         }
     }
 
     evaluate(req:any, res:any) {
         var self = this;
 
-        var goalInstanceID:string = req.query.badgeID;
+        var goalInstanceID:string = req.query.id;
 
         var goalInstanceToEvaluate = this.goalInstanceRepository.getGoalInstance(goalInstanceID);
+
+        if (!goalInstanceToEvaluate) {
+            var msg:string = 'Can not find challenge with given id';
+            res.status(400).send({error: msg});
+            throw new BadRequestException(msg);
+        }
 
         if (!GoalInstanceRouter.DEMO) {
 
@@ -207,6 +211,7 @@ class GoalInstanceRouter extends RouterItf {
         }
     }
 
+    //  debug only
     private addFinishedBadge(challengeID, userID) {
         var user = this.userRepository.getUser(userID);
         var badge = this.goalInstanceRepository.getBadgeByChallengeID(challengeID);
