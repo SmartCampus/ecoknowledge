@@ -1,33 +1,43 @@
 class TimeBox {
 
-    private startDateInMillis:number;
-    private endDateInMillis:number;
+    private startDate:Date;
+    private endDate:Date;
 
-    constructor(startDateInMillis:number, endDateInMillis:number) {
-        this.startDateInMillis = startDateInMillis;
-        this.endDateInMillis = endDateInMillis;
+    constructor(startDateInMillis:Date, endDateInMillis:Date) {
+        this.startDate = startDateInMillis;
+        this.endDate = endDateInMillis;
     }
 
-    public isInTimeBox(currentDateInMillis):boolean{
-        console.log("COMPARING", currentDateInMillis, " > ", this.startDateInMillis, "<", this.endDateInMillis);
+    public isDateInMillisInTimeBox(currentDateInMillis:number):boolean{
+        return currentDateInMillis >= this.startDate.getTime() && currentDateInMillis <= this.endDate.getTime();
+    }
 
-        return currentDateInMillis >= this.startDateInMillis && currentDateInMillis <= this.endDateInMillis;
+    public isDateInTimeBox(currentDate:Date):boolean{
+        return this.isDateInMillisInTimeBox(currentDate.getTime());
+    }
+
+    public getStartDate():Date {
+        return this.startDate;
     }
 
     public getStartDateInMillis():number {
-        return this.startDateInMillis;
+        return this.startDate.getTime();
+    }
+
+    public getEndDate():Date {
+        return this.endDate;
     }
 
     public getEndDateInMillis():number {
-        return this.endDateInMillis;
+        return this.endDate.getTime();
     }
 
-    public getStartDate():string {
-        return this.convertTime(this.startDateInMillis);
+    public getStartDateInStringFormat():string {
+        return this.convertTimeForMiddlewareAPI(this.startDate);
     }
 
-    public getEndDate():string {
-        return this.convertTime(this.endDateInMillis);
+    public getEndDateInJsonFormat():string {
+        return this.convertTimeForMiddlewareAPI(this.endDate);
     }
 
     /**
@@ -35,8 +45,8 @@ class TimeBox {
      * @returns {{startDate: string, endDate: string}}
      */
     public getRequired():any {
-        var startDateStr = this.convertTime(this.startDateInMillis);
-        var endDateStr = this.convertTime(this.endDateInMillis);
+        var startDateStr = this.convertTimeForMiddlewareAPI(this.startDate.getTime());
+        var endDateStr = this.convertTimeForMiddlewareAPI(this.endDate.getTime());
 
         return {
             'startDate':startDateStr,
@@ -44,7 +54,17 @@ class TimeBox {
         }
     }
 
-    private convertTime(aDateInMillis):string {
+    /**
+     * This method is needed because API of SmartCampus middleware wants
+     * dates in the following format : YYYY-MM-DD hh:mm:ss</br>
+     * We wanted to isolated this behavior in a specific method.
+     * @param aDateInMillis
+     *      The date in millis to convert
+     * @returns {string}
+     *      The given date in the following format : YYYY-MM-DD hh:mm:ss</br>
+     *      Uses Date#toISOString method.
+     */
+    private convertTimeForMiddlewareAPI(aDateInMillis):string {
         var date:string= new Date(aDateInMillis).toISOString();
 
         var dateWithoutTail:string[] = date.split('.');

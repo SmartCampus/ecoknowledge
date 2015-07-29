@@ -6,15 +6,15 @@ import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
-import GoalCondition = require('../../../src/goal/condition/GoalCondition');
-import Operand = require('../../../src/goal/condition/Operand');
+import GoalExpression = require('../../../src/condition/expression/GoalExpression');
+import Operand = require('../../../src/condition/expression/Operand');
 import TimeBox = require('../../../src/TimeBox');
 import TimeBoxFactory = require('../../../src/TimeBoxFactory');
 
 describe('Test GoalCondition', () => {
     describe('Build a condition', () => {
 
-        var condition:GoalCondition;
+        var condition:GoalExpression;
 
         var leftOperandRequired:Operand = new Operand('TMP_Cli', true);
         var leftOperandNotRequired:Operand = new Operand('TMP_Cli', false);
@@ -24,20 +24,20 @@ describe('Test GoalCondition', () => {
         var description:string = 'un test';
 
         it('should not have required', () => {
-            condition = new GoalCondition(leftOperandNotRequired, typeOfComparison, rightOperandNotRequired, description);
+            condition = new GoalExpression(leftOperandNotRequired, typeOfComparison, rightOperandNotRequired, description);
             var expected:any = {};
             chai.expect(condition.getRequired()).to.be.eqls(expected);
         });
 
         it('should have proper required on left operand', () => {
-            condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandNotRequired, description);
+            condition = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandNotRequired, description);
             var expected:any = {};
             expected['TMP_Cli'] = {};
             chai.expect(condition.getRequired()).to.be.eqls(expected);
         });
 
         it('should have proper required on right operand', () => {
-            condition = new GoalCondition(leftOperandNotRequired, typeOfComparison, rightOperandRequired, description);
+            condition = new GoalExpression(leftOperandNotRequired, typeOfComparison, rightOperandRequired, description);
             var expected:any = {};
             expected['10'] = {};
 
@@ -45,7 +45,7 @@ describe('Test GoalCondition', () => {
         });
 
         it('should have proper required on both operand', () => {
-            condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
+            condition = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
             var expected:any = {};
             expected['TMP_Cli'] = {};
             expected['10'] = {};
@@ -54,24 +54,24 @@ describe('Test GoalCondition', () => {
         });
 
         it('should have proper left operand', () => {
-            condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
+            condition = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
             chai.expect(condition.hasLeftOperand('TMP_Cli')).to.be.true;
         });
 
         it('should have proper right operand', () => {
-            condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
+            condition = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
             chai.expect(condition.hasRightOperand('10')).to.be.true;
         });
 
         it('should have proper type of comparison', () => {
-            condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
+            condition = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
             chai.expect(condition.getComparisonType()).to.be.eq(typeOfComparison);
         });
 
     });
 
     describe('Evaluate a basic condition without required', () => {
-        var condition:GoalCondition;
+        var condition:GoalExpression;
         var leftOperand:Operand;
         var rightOperand:Operand;
         var typeOfComparison:string;
@@ -83,7 +83,7 @@ describe('Test GoalCondition', () => {
             typeOfComparison = '<';
             description = 'un test';
 
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
         });
 
         it('should evaluate basic boolean comparison should not throw error', () => {
@@ -193,7 +193,7 @@ describe('Test GoalCondition', () => {
     });
 
     describe('Evaluate a condition with a left required', () => {
-        var condition:GoalCondition;
+        var condition:GoalExpression;
         var leftOperand:Operand;
         var rightOperand:Operand;
         var typeOfComparison:string;
@@ -205,7 +205,7 @@ describe('Test GoalCondition', () => {
             typeOfComparison = '>';
             description = 'un test';
 
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
         });
 
         describe('Evaluate with >', () => {
@@ -281,7 +281,7 @@ describe('Test GoalCondition', () => {
     });
 
     describe('Evaluate a condition with a right required', () => {
-        var condition:GoalCondition;
+        var condition:GoalExpression;
         var leftOperand:Operand;
         var rightOperand:Operand;
         var typeOfComparison:string;
@@ -293,7 +293,7 @@ describe('Test GoalCondition', () => {
             typeOfComparison = '<';
             description = 'un test';
 
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
         });
 
         describe('Evaluate with <', () => {
@@ -311,7 +311,7 @@ describe('Test GoalCondition', () => {
         describe('Evaluate with >', () => {
             beforeEach(() => {
                 typeOfComparison = '>';
-                condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+                condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
             });
 
             it('should evaluate at true with 10', () => {
@@ -328,7 +328,7 @@ describe('Test GoalCondition', () => {
         describe('Evaluate with ==', () => {
             beforeEach(() => {
                 typeOfComparison = '==';
-                condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+                condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
             });
 
             it('should evaluate at true with 15', () => {
@@ -345,7 +345,7 @@ describe('Test GoalCondition', () => {
         describe('Evaluate with !=', () => {
             beforeEach(() => {
                 typeOfComparison = '!=';
-                condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+                condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
             });
 
             it('should evaluate at true with 10', () => {
@@ -362,14 +362,14 @@ describe('Test GoalCondition', () => {
         describe('Evaluate with a UNKNOWN field tagged as non required', () => {
             it('should throw an error when evaluate with 15<TMP_CLIM', () => {
                 rightOperand = new Operand('TMP_CLIM', false);
-                condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+                condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
                 chai.expect(() => condition.evaluate([])).to.throw(Error);
             });
         });
     });
 
     describe('Evaluate a condition with both operands required', () => {
-        var condition:GoalCondition;
+        var condition:GoalExpression;
         var leftOperand:Operand;
         var rightOperand:Operand;
         var typeOfComparison:string;
@@ -381,7 +381,7 @@ describe('Test GoalCondition', () => {
             typeOfComparison = '>';
             description = 'un test';
 
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
         });
 
         it('should evaluate at true when 20,10 are passed', () => {
@@ -405,7 +405,7 @@ describe('Test GoalCondition', () => {
 
     describe('Evaluate a condition with a timebox', () => {
         it('should return false if values in the given timeBox do not match condition', () => {
-            var timeBox:TimeBox = new TimeBox(Date.UTC(2015, 0, 20), Date.UTC(2015, 1, 20));
+            var timeBox:TimeBox = new TimeBox(new Date(Date.UTC(2015, 0, 20)), new Date(Date.UTC(2015, 1, 20)));
 
 
         });
@@ -413,14 +413,14 @@ describe('Test GoalCondition', () => {
 
     describe('Check JSON protocol', () => {
 
-        var condition:GoalCondition;
+        var condition:GoalExpression;
 
         var leftOperandRequired:Operand = new Operand('TMP_Cli', true);
         var rightOperandNotRequired:Operand = new Operand('10', false);
         var typeOfComparison:string = '<';
         var description:string = 'un test';
 
-        condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandNotRequired, description);
+        condition = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandNotRequired, description);
 
         it('should return correct protocol if no timebox is specified', () => {
             var expected:any = {};
@@ -438,7 +438,7 @@ describe('Test GoalCondition', () => {
             var timeBox:TimeBox = timeBoxFactory.createTimeBox(timeBoxData);
 
 
-            condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandNotRequired, description, timeBox);
+            condition = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandNotRequired, description);
 
 
             var expected:any = {};

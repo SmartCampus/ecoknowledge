@@ -6,13 +6,13 @@ import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
-import ExpressionFactory = require('../../../src/goal/condition/ExpressionFactory');
-import Expression = require('../../../src/goal/condition/Expression');
+import ExpressionFactory = require('../../../src/condition/factory/ExpressionFactory');
+import GoalExpression = require('../../../src/condition/expression/GoalExpression');
 
 describe("ExpressionFactory test", () => {
 
     var factory:ExpressionFactory = new ExpressionFactory();
-    var expression:Expression;
+    var expression:GoalExpression;
 
     beforeEach(() => {
         var jsonExpression:any = {};

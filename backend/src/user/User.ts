@@ -1,10 +1,9 @@
 /// <reference path="../../typings/node-uuid/node-uuid.d.ts" />
-
-import GoalDefinition = require('../goal/definition/GoalDefinition');
-import GoalInstance = require('../goal/instance/GoalInstance');
-import Badge = require('../badge/Badge');
-
 import uuid = require('node-uuid');
+
+import Goal = require('../goal/Goal');
+import Challenge = require('../challenge/Challenge');
+import Badge = require('../badge/Badge');
 
 import BadArgumentException = require('../exceptions/BadArgumentException');
 

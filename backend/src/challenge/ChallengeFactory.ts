@@ -1,9 +1,9 @@
-import GoalInstance = require('./GoalInstance');
-import GoalDefinition = require('../definition/GoalDefinition');
-import GoalDefinitionRepository = require('../definition/GoalDefinitionRepository');
-import UserRepository = require('../../user/UserRepository');
-import TimeBoxFactory = require('../../TimeBoxFactory');
-import TimeBox = require('../../TimeBox');
+import Challenge = require('./Challenge');
+import Goal = require('../goal/Goal');
+import GoalRepository = require('../goal/GoalRepository');
+import UserRepository = require('../user/UserRepository');
+import TimeBoxFactory = require('../TimeBoxFactory');
+import TimeBox = require('../TimeBox');
 
 class GoalInstanceFactory {
 
@@ -24,9 +24,9 @@ class GoalInstanceFactory {
      *  }
      * @param goalRepository
      * @param userProvider
-     * @returns {GoalInstance}
+     * @returns {Challenge}
      */
-    public createGoalInstance(data:any, goalRepository:GoalDefinitionRepository, userProvider:UserRepository, now:Date):GoalInstance {
+    public createGoalInstance(data:any, goalRepository:GoalRepository, userProvider:UserRepository, now:Date):Challenge {
 
         var id = data.id;
 
@@ -36,7 +36,7 @@ class GoalInstanceFactory {
 
         var goalDefinitionID = goalDesc.id;
 
-        var goalDefinition:GoalDefinition = goalRepository.getGoal(goalDefinitionID);
+        var goalDefinition:Goal = goalRepository.getGoal(goalDefinitionID);
 
         if(goalDefinition == null)  {
             throw new Error('Can not create goal instance because ID given of goal definition can not be found');
@@ -53,7 +53,7 @@ class GoalInstanceFactory {
 
         var mapGoalsToConditionAndSensors:any = goalDesc.conditions;
 
-        var goalInstance:GoalInstance = new GoalInstance(startDate, endDate, goalInstanceDescription, goalDefinition, mapGoalsToConditionAndSensors, id);
+        var goalInstance:Challenge = new Challenge(startDate, endDate, goalInstanceDescription, goalDefinition, mapGoalsToConditionAndSensors, id);
 
         // TODO attach badge to user
         // user.addBadgeByDescription(badge);
@@ -67,7 +67,7 @@ class GoalInstanceFactory {
      * Check if the goal instance is started today, Date.now + goalDefinition#duration <= goalDefinition#endDate
      * @param goalDefinition
      */
-    public checkDates(goalDefinition:GoalDefinition, startDate:Date):boolean {
+    public checkDates(goalDefinition:Goal, startDate:Date):boolean {
         var durationInDays:number = goalDefinition.getDuration();
 
         var endDate:Date = new Date(startDate.getFullYear(), startDate.getMonth(),startDate.getDate() + durationInDays);

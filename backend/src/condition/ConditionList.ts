@@ -1,29 +1,29 @@
-/// <reference path="../../../typings/node-uuid/node-uuid.d.ts" />
+/// <reference path="../../typings/node-uuid/node-uuid.d.ts" />
 
 var merge:any = require('merge');
 import uuid = require('node-uuid');
 
-import Expression = require('./Expression');
-import GoalCondition = require('./GoalCondition');
-import TimeBox = require('../../TimeBox');
+import Condition = require('./Condition');
+import GoalExpression = require('./expression/GoalExpression');
+import TimeBox = require('../TimeBox');
 
-import GoalInstance = require('../instance/GoalInstance');
+import Challenge = require('../challenge/Challenge');
 
-class ExpressionHandler {
+class ConditionList {
 
-    private expressions:Expression[] = [];
+    private conditions:Condition[] = [];
 
-    public getExpressions():Expression[] {
-        return this.expressions;
+    public getConditions():Condition[] {
+        return this.conditions;
     }
 
-    public addExpression(expression:Expression):void {
-        this.expressions.push(expression);
+    public addCondition(condition:Condition):void {
+        this.conditions.push(condition);
     }
 
     public setTimeBoxes(newTimeBox:TimeBox) {
-        for (var currentExpressionIndex in this.expressions) {
-            this.expressions[currentExpressionIndex].setTimeBox(newTimeBox);
+        for (var currentExpressionIndex in this.conditions) {
+            this.conditions[currentExpressionIndex].setTimeBox(newTimeBox);
         }
     }
 
@@ -40,20 +40,20 @@ class ExpressionHandler {
         var result:any = {};
 
         //  For each expression
-        for (var currentExpressionIndex in this.expressions) {
+        for (var currentConditionIndex in this.conditions) {
 
             //  Get its description --> { <sensor-name> : null | {start:_, end:_} }
-            var currentExpression:Expression = this.expressions[currentExpressionIndex];
-            var currentExpressionDesc = currentExpression.getRequired();
+            var currentCondition:Condition = this.conditions[currentConditionIndex];
+            var currentConditionDesc = currentCondition.getRequired();
 
             //  for each sensors required by the current expression
-            for (var currentSensorName in currentExpressionDesc) {
+            for (var currentSensorName in currentConditionDesc) {
 
                 //  check if current sensor has already been added
                 if (result[currentSensorName] != null) {
 
                     //  if so, retrieve previous timeBox and current timeBox
-                    var currentTimeBox = currentExpressionDesc[currentSensorName];
+                    var currentTimeBox = currentConditionDesc[currentSensorName];
                     var oldTimeBox = result[currentSensorName];
 
                     //  merge two timeBoxes
@@ -64,7 +64,7 @@ class ExpressionHandler {
                 }
                 else {
                     //  if not, add current expression description
-                    result[currentSensorName] = currentExpressionDesc[currentSensorName];
+                    result[currentSensorName] = currentConditionDesc[currentSensorName];
                 }
             }
         }
@@ -103,13 +103,13 @@ class ExpressionHandler {
      * @returns {boolean}
      */
 
-    public evaluate(values:any, goalInstance:GoalInstance):boolean {
+    public evaluate(values:any, goalInstance:Challenge):boolean {
 
         var result:boolean = true;
 
-        for (var i = 0; i < this.expressions.length; i++) {
-            result = result && this.expressions[i].evaluate(values);
-            var conditionDescription:any = this.expressions[i].getData();
+        for (var i = 0; i < this.conditions.length; i++) {
+            result = result && this.conditions[i].evaluate(values);
+            var conditionDescription:any = this.conditions[i].getDataInJSON();
             if (goalInstance != null) {
                 goalInstance.addProgress(conditionDescription);
             }
@@ -118,21 +118,11 @@ class ExpressionHandler {
         return result;
     }
 
-    public getData():any {
-        var result:any[] = [];
-
-        for (var i = 0; i < this.expressions.length; i++) {
-            result.push(this.expressions[i].getData());
-        }
-
-        return result;
-    }
-
     public getDataInJSON():any {
         var result:any[] = [];
 
-        for (var i = 0; i < this.expressions.length; i++) {
-            result.push(this.expressions[i].getDataInJSON());
+        for (var i = 0; i < this.conditions.length; i++) {
+            result.push(this.conditions[i].getDataInJSON());
         }
 
         return result;
@@ -140,4 +130,4 @@ class ExpressionHandler {
 
 }
 
-export = ExpressionHandler;
+export = ConditionList;

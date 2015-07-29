@@ -1,5 +1,5 @@
-import GoalDefinition = require('./GoalDefinition');
-import ConditionFactory = require('../condition/ConditionFactory');
+import Goal = require('./Goal');
+import ConditionFactory = require('../condition/factory/ConditionFactory');
 
 class GoalFactory {
 
@@ -9,7 +9,7 @@ class GoalFactory {
         this.conditionFactory = new ConditionFactory();
     }
 
-    public createGoal(data:any):GoalDefinition {
+    public createGoal(data:any):Goal {
         var goalName:string = data.name;
 
         var startDateOfValidityPeriod:Date = new Date(data.timeBox.startDate);
@@ -19,7 +19,7 @@ class GoalFactory {
         var badge:string = data.badgeID;
         var goalID:string = data.id;
 
-        var newGoal:GoalDefinition = new GoalDefinition(goalName, startDateOfValidityPeriod, endDateOfValidityPeriod,
+        var newGoal:Goal = new Goal(goalName, startDateOfValidityPeriod, endDateOfValidityPeriod,
             durationAllowed, badge, goalID);
 
         var goalConditions:any[] = data.conditions;

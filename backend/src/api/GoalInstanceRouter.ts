@@ -1,8 +1,8 @@
 import RouterItf = require('./RouterItf');
 
-import GoalInstanceRepository = require('../goal/instance/GoalInstanceRepository');
-import GoalInstanceFactory = require('../goal/instance/GoalInstanceFactory');
-import GoalDefinitionRepository = require('../goal/definition/GoalDefinitionRepository');
+import ChallengeRepository = require('../challenge/ChallengeRepository');
+import ChallengeFactory = require('../challenge/ChallengeFactory');
+import GoalRepository = require('../goal/GoalRepository');
 import UserRepository = require('../user/UserRepository');
 
 import Middleware = require('../Middleware');
@@ -16,16 +16,16 @@ class GoalInstanceRouter extends RouterItf {
 
     public static STUB_FILE:string = './stub_values.json';
 
-    private goalInstanceRepository:GoalInstanceRepository;
-    private goalInstanceFactory:GoalInstanceFactory;
-    private goalDefinitionRepository:GoalDefinitionRepository;
+    private goalInstanceRepository:ChallengeRepository;
+    private goalInstanceFactory:ChallengeFactory;
+    private goalDefinitionRepository:GoalRepository;
     private userRepository:UserRepository;
 
     private middleware:Middleware;
 
     private jsonStub:any = {};
 
-    constructor(goalInstanceRepository:GoalInstanceRepository, goalInstanceFactory:GoalInstanceFactory, goalDefinitionRepository:GoalDefinitionRepository, userRepository:UserRepository) {
+    constructor(goalInstanceRepository:ChallengeRepository, goalInstanceFactory:ChallengeFactory, goalDefinitionRepository:GoalRepository, userRepository:UserRepository) {
         super();
         this.goalInstanceRepository = goalInstanceRepository;
         this.goalInstanceFactory = goalInstanceFactory;

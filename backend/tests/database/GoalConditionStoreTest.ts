@@ -6,9 +6,9 @@ import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
-import GoalCondition = require('../../src/goal/condition/GoalCondition');
-import Operand = require('../../src/goal/condition/Operand');
-import ExpressionFactory = require('../../src/goal/condition/ExpressionFactory');
+import GoalExpression = require('../../src/condition/expression/GoalExpression');
+import Operand = require('../../src/condition/expression/Operand');
+import ExpressionFactory = require('../../src/condition/factory/ExpressionFactory');
 import TimeBox = require('../../src/TimeBox');
 
 describe('Test store GoalCondition class', () => {
@@ -24,11 +24,11 @@ describe('Test store GoalCondition class', () => {
     var typeOfComparison:string = '<';
     var description = 'a desc';
 
-    var now:number = Date.now();
+    var now:Date = new Date(Date.now());
     var timeBox:TimeBox = new TimeBox(now, now);
 
-    var goalCondition:GoalCondition = new GoalCondition(leftOperand, typeOfComparison,
-        rightOperand, description, timeBox);
+    var goalCondition:GoalExpression = new GoalExpression(leftOperand, typeOfComparison,
+        rightOperand, description);
 
     var expected:any = {
         valueLeft: {
@@ -54,7 +54,7 @@ describe('Test store GoalCondition class', () => {
     describe('build with its own description', () => {
         var expressionFactory:ExpressionFactory = new ExpressionFactory();
 
-        var goalConditionClone:GoalCondition = expressionFactory.createExpression(expected);
+        var goalConditionClone:GoalExpression = expressionFactory.createExpression(expected);
 
         it('should have the same left operand name', () => {
             chai.expect(goalConditionClone.getLeftOperandDescription()).to.be.eq(leftOperandName);
@@ -69,7 +69,7 @@ describe('Test store GoalCondition class', () => {
         });
 
         it('should have the same right operand required', () => {
-            chai.expect(goalConditionClone.isRighOperandRequired()).to.be.eq(rightOperandRequired);
+            chai.expect(goalConditionClone.isRightOperandRequired()).to.be.eq(rightOperandRequired);
         });
 
         it('should have the same type of comparison', () => {

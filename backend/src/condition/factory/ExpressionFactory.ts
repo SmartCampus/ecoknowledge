@@ -1,6 +1,6 @@
-import Expression = require('./Expression');
-import GoalCondition = require('./GoalCondition');
-import Operand = require('./Operand');
+import Condition = require('../Condition');
+import GoalExpression = require('../expression/GoalExpression');
+import Operand = require('../expression/Operand');
 
 import TimeBox = require('../../TimeBox');
 
@@ -9,7 +9,7 @@ class ExpressionFactory {
 
     static REQUIRED_JSON_FIELD:string[] = ['comparison', 'valueLeft', 'valueRight', 'description'];
 
-    public createExpression(expression:any):GoalCondition {
+    public createExpression(expression:any):GoalExpression {
         for (var currentRequiredFieldIndex in ExpressionFactory.REQUIRED_JSON_FIELD) {
             var currentRequiredField = ExpressionFactory.REQUIRED_JSON_FIELD[currentRequiredFieldIndex];
 
@@ -37,7 +37,7 @@ class ExpressionFactory {
 
         var timeBoxObj:TimeBox = new TimeBox(startDate, endDate);
 */
-        var newGoalCondition:GoalCondition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+        var newGoalCondition:GoalExpression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
         return newGoalCondition;
     }
 }

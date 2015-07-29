@@ -1,16 +1,16 @@
-/// <reference path="../../../typings/node-uuid/node-uuid.d.ts" />
+/// <reference path="../../typings/node-uuid/node-uuid.d.ts" />
 
-import GoalInstance = require('../instance/GoalInstance');
-import ExpressionHandler = require('../condition/ExpressionHandler');
-import Expression = require('../condition/Expression');
-import TimeBox = require('../../TimeBox');
-import Badge = require('../../badge/Badge');
 import uuid = require('node-uuid');
 
-class GoalDefinition {
+import ConditionList = require('../condition/ConditionList');
+import Condition = require('../condition/Condition');
+import Challenge = require('../challenge/Challenge');
+import TimeBox = require('../TimeBox');
+
+class Goal {
     private id;
     private name:string;
-    private expressions:ExpressionHandler;
+    private conditionsList:ConditionList;
 
     private startDate:Date;
     private endDate:Date;
@@ -24,7 +24,7 @@ class GoalDefinition {
             throw new Error('Bad argument : name given is null');
         }
 
-        this.expressions = new ExpressionHandler();
+        this.conditionsList = new ConditionList();
 
         this.badgeID = badgeID;
         this.name = name;
@@ -57,7 +57,7 @@ class GoalDefinition {
     }
 
     public setTimeBoxes(newTimeBox:TimeBox) {
-        this.expressions.setTimeBoxes(newTimeBox);
+        this.conditionsList.setTimeBoxes(newTimeBox);
     }
 
     public getStartDate():Date {
@@ -76,27 +76,27 @@ class GoalDefinition {
         return this.name;
     }
 
-    public addCondition(expression:Expression) {
-        this.expressions.addExpression(expression);
+    public addCondition(expression:Condition) {
+        this.conditionsList.addCondition(expression);
     }
 
-    public evaluate(values:any, goalInstance:GoalInstance = null):boolean {
+    public evaluate(values:any, goalInstance:Challenge = null):boolean {
 
         if (goalInstance != null) {
             goalInstance.resetProgress();
         }
 
-        return this.expressions.evaluate(values, goalInstance);
+        return this.conditionsList.evaluate(values, goalInstance);
     }
 
     public getRequired():string[][] {
-        return this.expressions.getRequired();
+        return this.conditionsList.getRequired();
     }
 
     public getData():any {
         return {
             "name": this.name,
-            "conditions": this.expressions.getData(),
+            "conditions": this.conditionsList.getDataInJSON(),
             "timeBox": {
                 "startDate": this.startDate,
                 "endDate": this.endDate
@@ -115,10 +115,10 @@ class GoalDefinition {
                 endDate: this.endDate
             },
             duration: this.durationInDays,
-            conditions: this.expressions.getDataInJSON(),
+            conditions: this.conditionsList.getDataInJSON(),
             badgeID: this.badgeID
         }
     }
 }
 
-export = GoalDefinition;
+export = Goal;

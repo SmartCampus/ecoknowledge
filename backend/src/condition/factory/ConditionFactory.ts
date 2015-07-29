@@ -1,13 +1,14 @@
-import Expression = require('./Expression');
-import GoalCondition = require('./GoalCondition');
-import OverallGoalCondition = require('./OverallGoalCondition');
-import AverageOnValue = require('./AverageOnValue');
+import Condition = require('../Condition');
+import GoalExpression = require('../expression/GoalExpression');
+import OverallGoalCondition = require('../OverallGoalCondition');
+import AverageOnValue = require('../AverageOnValue');
 import ExpressionFactory = require('./ExpressionFactory');
+import Clock = require('../../Clock');
 
 class ConditionFactory {
     private expressionFactory:ExpressionFactory = new ExpressionFactory();
 
-    public createCondition(data:any, goalTimeBox:any, duration:number):Expression {
+    public createCondition(data:any, goalTimeBox:any, duration:number):Condition {
         var type:string = data.type;
         var expression = null;
         switch (type) {
@@ -24,11 +25,11 @@ class ConditionFactory {
         return expression;
     }
 
-    public createOverall(data:any, goaltimeBox:any, duration:number):Expression {
+    public createOverall(data:any, goaltimeBox:any, duration:number):Condition {
 
         data.expression.timeBox = goaltimeBox;
 
-        var goalCondition:GoalCondition = this.expressionFactory.createExpression(data.expression);
+        var goalCondition:GoalExpression = this.expressionFactory.createExpression(data.expression);
 
         var startDateOfValidityPeriod:Date = new Date(goaltimeBox.startDate);
         var endDateOfValidityPeriod:Date = new Date(goaltimeBox.endDate);
@@ -36,14 +37,14 @@ class ConditionFactory {
         var threshold:number = data.threshold;
 
         //  TODO date can be replaced by null => a goal definition is not a goal instance
-        var overallCondition:OverallGoalCondition = new OverallGoalCondition(goalCondition, startDateOfValidityPeriod, endDateOfValidityPeriod, threshold);
+        var overallCondition:OverallGoalCondition = new OverallGoalCondition(null, goalCondition, threshold, startDateOfValidityPeriod, new Date(Clock.getNow()),endDateOfValidityPeriod);
         return overallCondition;
     }
 
-    public createComparison(data:any):Expression {
-        var goalCondition:GoalCondition = this.expressionFactory.createExpression(data.expression);
+    public createComparison(data:any):Condition {
+        var goalExpression:GoalExpression = this.expressionFactory.createExpression(data.expression);
 
-        var averageOnValue:AverageOnValue = new AverageOnValue(goalCondition, null, null, null, data.threshold);
+        var averageOnValue:AverageOnValue = new AverageOnValue(null, goalExpression, data.threshold, null, null,null);
         return averageOnValue;
     }
 }

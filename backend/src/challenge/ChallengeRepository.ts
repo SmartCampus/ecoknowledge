@@ -1,18 +1,18 @@
-import GoalInstance = require('./GoalInstance');
-import GoalInstanceFactory = require('./GoalInstanceFactory');
-import GoalDefinitionRepository = require('../definition/GoalDefinitionRepository');
-import UserProvider = require('../../user/UserRepository');
+import Challenge = require('./Challenge');
+import ChallengeRepository = require('./ChallengeRepository');
+import GoalRepository = require('../goal/GoalRepository');
+import UserProvider = require('../user/UserRepository');
+import Badge = require('../badge/Badge');
 
-import Badge = require('../../badge/Badge');
 
 class BadgeProvider {
 
-    private goalInstancesArray:GoalInstance[] = [];
+    private goalInstancesArray:Challenge[] = [];
 
-    private factory:GoalInstanceFactory;
+    private factory:ChallengeRepository;
 
     constructor() {
-        this.factory = new GoalInstanceFactory();
+        this.factory = new ChallengeRepository();
     }
 
     public displayShortState() {
@@ -28,11 +28,11 @@ class BadgeProvider {
         return this.getGoalInstance(challengeID).getBadge();
     }
 
-    public addGoalInstance(aChallenge:GoalInstance) {
+    public addGoalInstance(aChallenge:Challenge) {
         this.goalInstancesArray.push(aChallenge);
     }
 
-    public getGoalInstance(challengeID:string):GoalInstance {
+    public getGoalInstance(challengeID:string):Challenge {
         for (var i in this.goalInstancesArray) {
             var currentBadge = this.goalInstancesArray[i];
             if (currentBadge.hasUUID(challengeID)) {
@@ -88,9 +88,9 @@ class BadgeProvider {
         return result;
     }
 
-    public getFinishedGoalInstances():GoalInstance[] {
+    public getFinishedGoalInstances():Challenge[] {
         console.log('get finished goal');
-        var goalFinished:GoalInstance[] = [];
+        var goalFinished:Challenge[] = [];
         for (var i in this.goalInstancesArray) {
             var statusDesc = this.getBadgeStatus(this.goalInstancesArray[i].getStatus());
             if (statusDesc === 'SUCCESS') {

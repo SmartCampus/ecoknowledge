@@ -10,18 +10,18 @@ import GoalInstanceRouter = require('./api/GoalInstanceRouter');
 import BadgeRepository = require('./badge/BadgeRepository');
 import BadgeFactory = require('./badge/BadgeFactory');
 
-import GoalDefinitionRepository = require('./goal/definition/GoalDefinitionRepository');
-import GoalDefinitionFactory = require('./goal/definition/GoalDefinitionFactory');
+import GoalRepository = require('./goal/GoalRepository');
+import GoalFactory = require('./goal/GoalFactory');
 
-import GoalInstanceRepository = require('./goal/instance/GoalInstanceRepository');
-import GoalInstanceFactory = require('./goal/instance/GoalInstanceFactory');
+import ChallengeRepository = require('./challenge/ChallengeRepository');
+import ChallengeFactory = require('./challenge/ChallengeFactory');
 
 import UserRepository = require('./user/UserRepository');
 import UserFactory = require('./user/UserFactory');
 
-import Operand = require('./goal/condition/Operand');
-import GoalCondition = require('./goal/condition/GoalCondition');
-import OverallGoalCondition = require('./goal/condition/OverallGoalCondition');
+import Operand = require('./condition/expression/Operand');
+import GoalExpression = require('./condition/expression/GoalExpression');
+import OverallGoalCondition = require('./condition/OverallGoalCondition');
 import TimeBox = require('./TimeBox');
 
 import StoringHandler = require('./StoringHandler');
@@ -31,11 +31,11 @@ class Backend extends Server {
     public badgeRepository:BadgeRepository;
     public badgeFactory:BadgeFactory;
 
-    public goalDefinitionRepository:GoalDefinitionRepository;
-    public goalDefinitionFactory:GoalDefinitionFactory;
+    public goalDefinitionRepository:GoalRepository;
+    public goalDefinitionFactory:GoalFactory;
 
-    public goalInstanceRepository:GoalInstanceRepository;
-    public goalInstanceFactory:GoalInstanceFactory;
+    public goalInstanceRepository:ChallengeRepository;
+    public goalInstanceFactory:ChallengeFactory;
 
     public userRepository:UserRepository;
     public userFactory:UserFactory;
@@ -54,11 +54,11 @@ class Backend extends Server {
         this.badgeRepository = new BadgeRepository();
         this.badgeFactory = new BadgeFactory();
 
-        this.goalDefinitionRepository = new GoalDefinitionRepository(this.badgeRepository);
-        this.goalDefinitionFactory = new GoalDefinitionFactory();
+        this.goalDefinitionRepository = new GoalRepository(this.badgeRepository);
+        this.goalDefinitionFactory = new GoalFactory();
 
-        this.goalInstanceRepository = new GoalInstanceRepository();
-        this.goalInstanceFactory = new GoalInstanceFactory();
+        this.goalInstanceRepository = new ChallengeRepository();
+        this.goalInstanceFactory = new ChallengeFactory();
 
         this.userRepository = new UserRepository();
         this.userFactory = new UserFactory();

@@ -1,5 +1,5 @@
 import Backend = require('./Backend');
-import GoalDefinition = require('./goal/definition/GoalDefinition');
+import Goal = require('./goal/Goal');
 var fs = require('fs');
 
 class JSONSerializer {

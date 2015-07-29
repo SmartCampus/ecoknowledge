@@ -6,9 +6,10 @@ import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
-import GoalCondition = require('../../../src/goal/condition/GoalCondition');
-import AverageOnValue = require('../../../src/goal/condition/AverageOnValue');
-import Operand = require('../../../src/goal/condition/Operand');
+import Condition = require('../../../src/condition/Condition');
+import GoalExpression = require('../../../src/condition/expression/GoalExpression');
+import AverageOnValue = require('../../../src/condition/AverageOnValue');
+import Operand = require('../../../src/condition/expression/Operand');
 import TimeBox = require('../../../src/TimeBox');
 import TimeBoxFactory = require('../../../src/TimeBoxFactory');
 
@@ -16,7 +17,7 @@ describe('Test AverageOnValueTest', () => {
 
     var averageOnValue:AverageOnValue;
 
-    var condition:GoalCondition;
+    var expression:GoalExpression;
 
     var leftOperand:Operand = new Operand('TMP_Cli', true);
     var rightOperand:Operand = new Operand('15', false);
@@ -31,8 +32,8 @@ describe('Test AverageOnValueTest', () => {
     describe('evaluate method decrease', () => {
 
         it('should return true if threshold is reached', () => {
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
-            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+            expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
             var data:any = {};
 
@@ -92,8 +93,8 @@ describe('Test AverageOnValueTest', () => {
         });
 
         it('should return true if threshold is reached with different number of measures', () => {
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
-            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+            expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
             var data:any = {};
 
@@ -143,8 +144,8 @@ describe('Test AverageOnValueTest', () => {
         });
 
         it('should return false if threshold is close but not reached', () => {
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
-            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+            expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
             var data:any = {};
 
@@ -201,8 +202,8 @@ describe('Test AverageOnValueTest', () => {
             var oldValues:any[] = [];
             var newValues:any[] = [];
 
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
-            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+            expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
             beforeEach(() => {
 
@@ -316,19 +317,19 @@ describe('Test AverageOnValueTest', () => {
         describe('duration achieved', () => {
 
             beforeEach(() => {
-                condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
-                averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+                expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+                averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
             });
             it('should be at 50 percent of time', () => {
                 var currentDate:Date = new Date(Date.UTC(2000, 1, 11));
                 averageOnValue.updateDurationAchieved(currentDate.getTime());
-                assert.equal(averageOnValue.getDurationAchieved(), 50);
+                assert.equal(averageOnValue.getPercentageOfTimeElapsed(), 50);
             });
 
             it('should be at 0 percent of time', () => {
                 var currentDate:Date = new Date(Date.UTC(2000, 1, 7));
                 averageOnValue.updateDurationAchieved(currentDate.getTime());
-                assert.equal(averageOnValue.getDurationAchieved(), 0);
+                assert.equal(averageOnValue.getPercentageOfTimeElapsed(), 0);
             });
 
             it('should throw an error if time given is before dateOfCreation', () => {
@@ -341,8 +342,8 @@ describe('Test AverageOnValueTest', () => {
     describe('separate data', () => {
         it('should separate data correctly', () => {
 
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
-            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+            expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
             var values:any[] = [
                 {
@@ -400,8 +401,8 @@ describe('Test AverageOnValueTest', () => {
 
     describe('getRequired method', () => {
 
-        condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
-        averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+        expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+        averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
         var expected:any = {};
         var timeBoxDesc:any = {};
@@ -419,8 +420,8 @@ describe('Test AverageOnValueTest', () => {
     describe('evaluate method increase', () => {
 
         it('should return true if threshold is reached', () => {
-            condition = new GoalCondition(leftOperand, typeOfComparisonUp, rightOperand, description);
-            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+            expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
             var data:any = {};
 
@@ -480,8 +481,8 @@ describe('Test AverageOnValueTest', () => {
         });
 
         it('should return true if threshold is reached with different number of measures', () => {
-            condition = new GoalCondition(leftOperand, typeOfComparisonUp, rightOperand, description);
-            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+            expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
             var data:any = {};
 
@@ -531,8 +532,8 @@ describe('Test AverageOnValueTest', () => {
         });
 
         it('should return false if threshold is close but not reached', () => {
-            condition = new GoalCondition(leftOperand, typeOfComparisonUp, rightOperand, description);
-            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+            expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
             var data:any = {};
 

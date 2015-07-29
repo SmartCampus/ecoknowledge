@@ -1,37 +1,22 @@
-import GoalCondition = require('./GoalCondition');
-import TimeBox = require('../../TimeBox');
-import Expression = require('./Expression');
-import Clock = require('../../Clock');
+import GoalExpression = require('./expression/GoalExpression');
+import Condition = require('./Condition');
+import TimeBox = require('../TimeBox');
+import Clock = require('../Clock');
 
-class AverageOnValue implements Expression {
-    private condition:GoalCondition;
-    private startDate:Date;
-    private dateOfCreation:Date;
-    private endDate:Date;
-    private thresholdRate:number;
+class AverageOnValue extends Condition {
 
     private oldTimeBox:TimeBox;
     private newTimeBox:TimeBox;
 
-    private percentageAchieved:number = 0;
-    private percentageOfTime:number = 0;
+    constructor(id:string, condition:GoalExpression, thresholdRate:number,
+                startDate:Date, dateOfCreation:Date, endDate:Date,
+                percentageAchieved:number = 0, percentageOfTimeElapsed:number = 0) {
 
-    constructor(condition:GoalCondition, startDate:Date, dateOfCreation:Date, endDate:Date, thresholdRate:number) {
-        this.condition = condition;
+        super(id, condition, thresholdRate, startDate, dateOfCreation, endDate,
+            percentageAchieved, percentageOfTimeElapsed);
 
-        this.thresholdRate = thresholdRate;
-
-        if (startDate != null && dateOfCreation != null && endDate != null) {
-            this.startDate = startDate;
-            this.dateOfCreation = dateOfCreation;
-            this.endDate = endDate;
-
-            condition.setTimeBox(new TimeBox(startDate.getTime(), endDate.getTime()));
-
-            this.oldTimeBox = new TimeBox(startDate.getTime(), dateOfCreation.getTime());
-            this.newTimeBox = new TimeBox(dateOfCreation.getTime(), endDate.getTime());
-        }
-
+        this.oldTimeBox = new TimeBox(startDate, dateOfCreation);
+        this.newTimeBox = new TimeBox(dateOfCreation, endDate);
     }
 
     public setTimeBox(newTimeBox:TimeBox) {
@@ -43,56 +28,13 @@ class AverageOnValue implements Expression {
         this.startDate = new Date(this.dateOfCreation.getFullYear(), this.dateOfCreation.getMonth() - 1, this.dateOfCreation.getDate(),
             this.dateOfCreation.getHours(), this.dateOfCreation.getMinutes(), this.dateOfCreation.getSeconds());
 
-        var timeBox:TimeBox = new TimeBox(this.startDate.getTime(), this.endDate.getTime());
-        this.condition.setTimeBox(timeBox);
-    }
-
-    public getData():any {
-        return {
-            description: this.condition.getDescription(),
-            timeAchieved: this.percentageOfTime,
-            conditionAchieved: this.percentageAchieved
-        }
-    }
-
-    public getDataInJSON():any {
-        return {
-            type : 'comparison',
-            expression:this.condition.getDataInJSON(),
-            startDate : this.startDate,
-            dateOfCreation: this.dateOfCreation,
-            endDate :this.endDate,
-            thresholdRate : this.thresholdRate
-        }
-    }
-
-    public getComparisonType():string {
-        return this.condition.getComparisonType();
-    }
-
-    public hasLeftOperand(name:string):boolean {
-        return this.condition.hasLeftOperand(name);
-    }
-
-    public hasRightOperand(name:string):boolean {
-        return this.condition.hasRightOperand(name);
-    }
-
-    public getID():string {
-        return null;
-    }
-
-    public getRequired():any {
-        return this.condition.getRequired();
-    }
-
-    public getPercentageAchieved():number {
-        return this.percentageAchieved;
+        var timeBox:TimeBox = new TimeBox(this.startDate, this.endDate);
+        this.timeBox = timeBox;
     }
 
     public evaluate(data:any):boolean {
 
-        var sensorNames:string[] = this.condition.getRequired();
+        var sensorNames:string[] = this.expression.getRequired();
 
         var result = true;
         for (var currentSensorName in sensorNames) {
@@ -118,9 +60,9 @@ class AverageOnValue implements Expression {
             // > hausse
             var changeRate = 0;
 
-            if(this.condition.getComparisonType() === '<'){
+            if (this.expression.getComparisonType() === '<') {
                 changeRate = 100 - rate;
-            }else{
+            } else {
                 changeRate = rate - 100;
             }
 
@@ -129,7 +71,7 @@ class AverageOnValue implements Expression {
 
 
             //  It can be infinite
-            this.percentageAchieved = (this.percentageAchieved > 100)?100:this.percentageAchieved;
+            this.percentageAchieved = (this.percentageAchieved > 100) ? 100 : this.percentageAchieved;
 
             this.updateDurationAchieved(Clock.getNow());
         }
@@ -145,15 +87,11 @@ class AverageOnValue implements Expression {
             throw new Error('Time given is before dateOfCreation !');
         }
 
-        this.percentageOfTime = durationAchieved * 100 / duration;
+        this.percentageOfTimeElapsed = durationAchieved * 100 / duration;
 
         //  It can have tiny incorrect decimal values
-        this.percentageOfTime = (this.percentageOfTime >  100)?100:this.percentageOfTime;
+        this.percentageOfTimeElapsed = (this.percentageOfTimeElapsed > 100) ? 100 : this.percentageOfTimeElapsed;
 
-    }
-
-    public getDurationAchieved():number {
-        return this.percentageOfTime;
     }
 
     public separateOldAndNewData(values:any[], oldValues:number[], newValues:number[]) {
@@ -185,6 +123,13 @@ class AverageOnValue implements Expression {
         }
 
         return averageValue;
+    }
+
+
+    public getDataInJSON():any {
+        var data:any = super.getDataInJSON();
+        data.type = 'comparison';
+        return data;
     }
 }
 
