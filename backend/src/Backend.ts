@@ -17,6 +17,7 @@ import GoalInstanceRepository = require('./goal/instance/GoalInstanceRepository'
 import GoalInstanceFactory = require('./goal/instance/GoalInstanceFactory');
 
 import UserRepository = require('./user/UserRepository');
+import UserFactory = require('./user/UserFactory');
 
 import Operand = require('./goal/condition/Operand');
 import GoalCondition = require('./goal/condition/GoalCondition');
@@ -37,6 +38,7 @@ class Backend extends Server {
     public goalInstanceFactory:GoalInstanceFactory;
 
     public userRepository:UserRepository;
+    public userFactory:UserFactory;
 
     private storingHandler:StoringHandler;
 
@@ -59,6 +61,7 @@ class Backend extends Server {
         this.goalInstanceFactory = new GoalInstanceFactory();
 
         this.userRepository = new UserRepository();
+        this.userFactory = new UserFactory();
 
         this.storingHandler = new StoringHandler(this);
 
@@ -93,7 +96,7 @@ class Backend extends Server {
     loadData():void {
         var self = this;
         var result = self.storingHandler.load();
-        console.log(result);
+        console.log(result.success);
     }
 }
 

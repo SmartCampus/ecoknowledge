@@ -5,7 +5,6 @@ class BadgeRepository {
     private badges:Badge[] = [];
 
     public addBadge(badge:Badge) {
-        console.log("AJOUT DU BADGE", badge.getUuid());
         this.badges.push(badge);
     }
 
@@ -33,6 +32,15 @@ class BadgeRepository {
         }
 
         return result;
+    }
+
+    public displayShortState() {
+        console.log("\n\n+++\t Etat du repository des badges\t+++");
+
+        for(var currentBadgeIndex in this.badges) {
+            var currentBadge = this.badges[currentBadgeIndex];
+            console.log("#",currentBadge.getUuid(),"\t |\tBadge : '", currentBadge.getName(), "'")
+        }
     }
 }
 

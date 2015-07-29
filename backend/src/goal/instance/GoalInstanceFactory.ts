@@ -28,11 +28,14 @@ class GoalInstanceFactory {
      */
     public createGoalInstance(data:any, goalRepository:GoalDefinitionRepository, userProvider:UserRepository, now:Date):GoalInstance {
 
+        var id = data.id;
+
         var goalInstanceDescription:string = data.description;
 
         var goalDesc:any = data.goal;
 
         var goalDefinitionID = goalDesc.id;
+
         var goalDefinition:GoalDefinition = goalRepository.getGoal(goalDefinitionID);
 
         if(goalDefinition == null)  {
@@ -50,12 +53,12 @@ class GoalInstanceFactory {
 
         var mapGoalsToConditionAndSensors:any = goalDesc.conditions;
 
-        var goalInstance:GoalInstance = new GoalInstance(startDate, endDate, goalInstanceDescription, goalDefinition, mapGoalsToConditionAndSensors);
+        var goalInstance:GoalInstance = new GoalInstance(startDate, endDate, goalInstanceDescription, goalDefinition, mapGoalsToConditionAndSensors, id);
 
         // TODO attach badge to user
         // user.addBadgeByDescription(badge);
 
-        console.log("L'objectif ", goalDefinition.getName(), "a ete instancie ! Intervalle de vie de l'objectif : du", startDate, "au", endDate);
+        // console.log("L'objectif ", goalDefinition.getName(), "a ete instancie ! Intervalle de vie de l'objectif : du", startDate, "au", endDate);
 
         return goalInstance;
     }

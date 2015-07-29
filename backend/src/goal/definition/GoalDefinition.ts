@@ -19,7 +19,7 @@ class GoalDefinition {
 
     private badgeID:string;
 
-    constructor(name:string, startDate:Date, endDate:Date, durationInDays:number, badgeID:string) {
+    constructor(name:string, startDate:Date, endDate:Date, durationInDays:number, badgeID:string, id = null) {
         if (!name) {
             throw new Error('Bad argument : name given is null');
         }
@@ -28,7 +28,8 @@ class GoalDefinition {
 
         this.badgeID = badgeID;
         this.name = name;
-        this.id = uuid.v4();
+
+        this.id = (id) ? id : uuid.v4();
 
         if (startDate != null && endDate != null && endDate.getTime() < startDate.getTime()) {
             throw new Error('End date is before start date');
@@ -115,7 +116,7 @@ class GoalDefinition {
             },
             duration: this.durationInDays,
             conditions: this.expressions.getDataInJSON(),
-            badgeID:this.badgeID
+            badgeID: this.badgeID
         }
     }
 }

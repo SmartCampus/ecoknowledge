@@ -7,25 +7,25 @@ class JSONSerializer {
     public static JSON_DB_FILE:string = 'db.json';
 
     public load():any {
-        if(!fs.existsSync(JSONSerializer.JSON_DB_FILE)) {
-            return {error:'File ' + JSONSerializer.JSON_DB_FILE + ' not found'};
+        if (!fs.existsSync(JSONSerializer.JSON_DB_FILE)) {
+            return {error: 'File ' + JSONSerializer.JSON_DB_FILE + ' not found'};
         }
 
         var data = fs.readFileSync(JSONSerializer.JSON_DB_FILE, "utf-8");
 
-        if(data.length == 0) {
-            return {error:'+++\tDatabase was empty !\t+++', data:data};
+        if (data.length == 0) {
+            return {error: '+++\tDatabase was empty !\t+++', data: data};
         }
-        return {success:'+++\tDatabase loaded correctly !\t+++', data:data};
+        return {success: '+++\tDatabase loaded correctly !\t+++', data: data};
     }
 
     public save(data:any, successCallBack:Function, failCallBack:Function):void {
 
-        fs.writeFile(JSONSerializer.JSON_DB_FILE, JSON.stringify(data), function (err) {
+        fs.writeFile(JSONSerializer.JSON_DB_FILE, JSON.stringify(data, null, 2), function (err) {
             if (err) {
                 failCallBack(err);
             }
-            successCallBack({success:'+++\tDatabase dumped correctly\t+++'});
+            successCallBack({success: '+++\tDatabase dumped correctly\t+++'});
         });
     }
 }

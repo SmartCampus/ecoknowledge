@@ -15,18 +15,27 @@ class BadgeProvider {
         this.factory = new GoalInstanceFactory();
     }
 
+    public displayShortState() {
+        console.log("\n\n+++\t Etat du repository des defis\t+++");
+
+        for(var currentChallengeIndex in this.goalInstancesArray) {
+            var currentChallenge = this.goalInstancesArray[currentChallengeIndex];
+            console.log("#",currentChallenge.getId(),"\t |\tDefi : '", currentChallenge.getName(), "'")
+        }
+    }
+
     public getBadgeByChallengeID(challengeID:string):string {
         return this.getGoalInstance(challengeID).getBadge();
     }
 
-    public addGoalInstance(aBadge:GoalInstance) {
-        this.goalInstancesArray.push(aBadge);
+    public addGoalInstance(aChallenge:GoalInstance) {
+        this.goalInstancesArray.push(aChallenge);
     }
 
-    public getGoalInstance(goalInstanceUUID:string):GoalInstance {
+    public getGoalInstance(challengeID:string):GoalInstance {
         for (var i in this.goalInstancesArray) {
             var currentBadge = this.goalInstancesArray[i];
-            if (currentBadge.hasUUID(goalInstanceUUID)) {
+            if (currentBadge.hasUUID(challengeID)) {
                 return currentBadge;
             }
         }
@@ -137,7 +146,13 @@ class BadgeProvider {
     }
 
     public getDataInJSON():any {
+        var result:any[] = [];
 
+        for(var currentChallengeIndex in this.goalInstancesArray) {
+            result.push(this.goalInstancesArray[currentChallengeIndex].getDataInJSON());
+        }
+
+        return result;
     }
 }
 

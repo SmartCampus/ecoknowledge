@@ -25,9 +25,10 @@ class GoalInstance {
     private mapSymbolicNameToSensor:any = {};
 
     constructor(startDate:Date, endDate:Date, description:string, goal:GoalDefinition,
-                mapGoalToConditionAndSensor:any) {
+                mapGoalToConditionAndSensor:any, id = null) {
 
-        this.id = UUID.v4();
+
+        this.id = (id) ? id : UUID.v4();
         this.description = description;
 
         this.startDate = startDate;
@@ -179,13 +180,16 @@ class GoalInstance {
 
     public getDataInJSON():any {
         return {
-            id:this.id,
-            name:this.getName(),
-            timeProgress:this.percentageOfTime,
-            startDate:this.startDate,
-            endDate:this.endDate,
-            condition:this.goalDefinition.getDataInJSON(),
-            progress:this.progress
+            id: this.id,
+            name: this.getName(),
+            timeProgress: this.percentageOfTime,
+            startDate: this.startDate,
+            endDate: this.endDate,
+            goal: {
+                id: this.goalDefinition.getUUID(),
+                conditions: this.mapSymbolicNameToSensor
+            },
+            progress: this.progress
         }
     }
 }

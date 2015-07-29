@@ -6,18 +6,14 @@ class UserRepository {
 
     private currentUser:User;
 
-    constructor() {
-        this.currentUser = new User('Jackie!');
-    }
-
     public addUser(user:User) {
         this.users.push(user);
     }
 
     public getUser(aUUID:string):User {
-        for(var i in this.users) {
+        for (var i in this.users) {
             var currentUser = this.users[i];
-            if(currentUser.hasUUID(aUUID)) {
+            if (currentUser.hasUUID(aUUID)) {
                 return currentUser;
             }
         }
@@ -27,6 +23,30 @@ class UserRepository {
 
     public getCurrentUser():User {
         return this.currentUser;
+    }
+
+    public setCurrentUser(user:User) {
+        this.currentUser = user;
+    }
+
+    public getDataInJSON():any {
+        var result:any[] = [];
+
+        for(var currentUserIndex in this.users) {
+            var currentUser = this.users[currentUserIndex];
+            result.push(currentUser.getDataInJSON());
+        }
+
+        return result;
+    }
+
+    public displayShortState() {
+        console.log("\n\n+++\t Etat du repository des utilisateurs\t+++");
+
+        for(var currentUserIndex in this.users) {
+            var currentUser = this.users[currentUserIndex];
+            console.log("#",currentUser.getUUID(),"\t |\tUser : '", currentUser.getName(), "'")
+        }
     }
 }
 

@@ -16,6 +16,15 @@ class GoalDefinitionRepository {
         this.badgeRepository = badgeRepository;
     }
 
+    public displayShortState() {
+        console.log("\n\n+++\t Etat du repository des objectifs\t+++");
+
+        for(var currentGoalIndex in this.goals) {
+            var currentGoal = this.goals[currentGoalIndex];
+            console.log("#",currentGoal.getUUID(),"\t |\tObjectif : '", currentGoal.getName(), "'")
+        }
+    }
+
     public addGoalByDescription(data:any, badgeRepository:BadgeRepository):string {
         var badgeID = data.badgeID;
 

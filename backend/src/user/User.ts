@@ -25,8 +25,10 @@ class User {
     private currentChallenges:string[] = [];
     private finishedBadgesMap:BadgeIDsToNumberOfTimesEarnedMap = {};
 
-    constructor(name:string) {
-        this.id = uuid.v4();
+    constructor(name:string, id = null, currentChallenges:string[] = null, finishedBadgesMap:BadgeIDsToNumberOfTimesEarnedMap = null) {
+
+        this.id = (id) ? id : uuid.v4();
+
         this.name = name;
     }
 
@@ -74,7 +76,7 @@ class User {
             this.currentChallenges.splice(challengeIndex, 1);
         }
 
-        console.log("Challenge deleted ! Current challenges:",this.currentChallenges);
+        console.log("Challenge deleted ! Current challenges:", this.currentChallenges);
     }
 
     /**
@@ -89,7 +91,7 @@ class User {
 
         for (var currentChallengeIndex = 0; currentChallengeIndex < this.currentChallenges.length; currentChallengeIndex++) {
             if (this.currentChallenges[currentChallengeIndex] === challengeID) {
-                console.log("INDEX",currentChallengeIndex);
+                console.log("INDEX", currentChallengeIndex);
                 result = currentChallengeIndex;
             }
         }
@@ -126,6 +128,15 @@ class User {
             this.finishedBadgesMap[badgeID]++;
         } else {
             this.finishedBadgesMap[badgeID] = 1;
+        }
+    }
+
+    public getDataInJSON():any {
+        return {
+            id: this.id,
+            name: this.name,
+            currentChallenges: this.currentChallenges,
+            finishedBadgesMap: this.finishedBadgesMap
         }
     }
 }
