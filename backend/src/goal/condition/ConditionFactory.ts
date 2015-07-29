@@ -25,6 +25,9 @@ class ConditionFactory {
     }
 
     public createOverall(data:any, goaltimeBox:any, duration:number):Expression {
+
+        data.expression.timeBox = goaltimeBox;
+
         var goalCondition:GoalCondition = this.expressionFactory.createExpression(data.expression);
 
         var startDateOfValidityPeriod:Date = new Date(goaltimeBox.startDate);

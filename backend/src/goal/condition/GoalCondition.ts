@@ -42,6 +42,22 @@ class GoalCondition {
         return this.typeOfComparison;
     }
 
+    public getLeftOperandDescription():string {
+        return this.leftOperand.getStringDescription();
+    }
+
+    public getRightOperandDescription():string {
+        return this.rightOperand.getStringDescription();
+    }
+
+    public isLeftOperandRequired():boolean {
+        return this.leftOperand.hasToBeDefined();
+    }
+
+    public isRighOperandRequired():boolean {
+        return this.rightOperand.hasToBeDefined();
+    }
+
     public hasLeftOperand(name:string):boolean {
         return this.leftOperand.getStringDescription() == name;
     }
@@ -165,7 +181,11 @@ class GoalCondition {
                 sensor: this.rightOperand.hasToBeDefined()
             },
             comparison: this.typeOfComparison,
-            description : this.description
+            description: this.description,
+            timeBox: {
+                startDate: this.getStartDateInMillis(),
+                endDate: this.getEndDateInMillis()
+            }
         };
     }
 }
