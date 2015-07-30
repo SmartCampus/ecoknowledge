@@ -1,9 +1,9 @@
-import GoalDefinitionRepository = require('./goal/definition/GoalDefinitionRepository');
-import GoalInstanceRepository = require('./goal/instance/GoalInstanceRepository');
+import GoalRepository = require('./goal/GoalRepository');
+import ChallengeRepository = require('./challenge/ChallengeRepository');
 import UserRepository = require('./user/UserRepository');
 
 interface Context {
-    fill(goalDefinitionRepository:GoalDefinitionRepository, goalInstanceRepository:GoalInstanceRepository, userRepository:UserRepository);
+    fill(goalDefinitionRepository:GoalRepository, goalInstanceRepository:ChallengeRepository, userRepository:UserRepository);
 }
 
 export = Context;

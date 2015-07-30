@@ -1,10 +1,9 @@
 /// <reference path="../../typings/node-uuid/node-uuid.d.ts" />
-
-import GoalDefinition = require('../goal/definition/GoalDefinition');
-import GoalInstance = require('../goal/instance/GoalInstance');
-import Badge = require('../badge/Badge');
-
 import uuid = require('node-uuid');
+
+import Goal = require('../goal/Goal');
+import Challenge = require('../challenge/Challenge');
+import Badge = require('../badge/Badge');
 
 import BadArgumentException = require('../exceptions/BadArgumentException');
 
@@ -67,11 +66,9 @@ class User {
     }
 
     public deleteChallenge(challengeID:string):void {
-        console.log("WANnA DElETE IT HU?", this.currentChallenges);
 
         var challengeIndex:number = this.getChallenge(challengeID);
         if (challengeIndex == -1) {
-            console.log("LOL PAS TROUVE MA GUEULE");
             throw new BadArgumentException('Can not find given challenge ID');
         }
         else {
@@ -93,7 +90,6 @@ class User {
 
         for (var currentChallengeIndex = 0; currentChallengeIndex < this.currentChallenges.length; currentChallengeIndex++) {
             if (this.currentChallenges[currentChallengeIndex] === challengeID) {
-                console.log("INDEX", currentChallengeIndex);
                 result = currentChallengeIndex;
             }
         }

@@ -1,15 +1,15 @@
-import GoalDefinition = require('../definition/GoalDefinition');
-import Badge = require('../../badge/Badge');
-import User = require('../../user/User');
-import BadgeStatus = require('../../Status');
-import TimeBox = require('../../TimeBox');
-import Clock = require('../../Clock');
-
 import UUID = require('node-uuid');
 
-class GoalInstance {
+import Goal = require('../goal/Goal');
+import Badge = require('../badge/Badge');
+import User = require('../user/User');
+import BadgeStatus = require('../Status');
+import TimeBox = require('../TimeBox');
+import Clock = require('../Clock');
+
+class Challenge {
     private id:string;
-    private goalDefinition:GoalDefinition;
+    private goalDefinition:Goal;
 
     private startDate:Date;
     private endDate:Date;
@@ -24,7 +24,7 @@ class GoalInstance {
     //  { 'tmp_cli':'ac_443', 'tmp_ext':'TEMP_444', 'door_o':'D_55', ... }
     private mapSymbolicNameToSensor:any = {};
 
-    constructor(startDate:Date, endDate:Date, description:string, goal:GoalDefinition,
+    constructor(startDate:Date, endDate:Date, description:string, goal:Goal,
                 mapGoalToConditionAndSensor:any, id = null) {
 
 
@@ -35,7 +35,7 @@ class GoalInstance {
         this.endDate = endDate;
 
         this.goalDefinition = goal;
-        this.goalDefinition.setTimeBoxes(new TimeBox(startDate.getTime(), endDate.getTime()));
+        this.goalDefinition.setTimeBoxes(new TimeBox(startDate, endDate));
 
         this.mapSymbolicNameToSensor = mapGoalToConditionAndSensor;
 
@@ -81,7 +81,7 @@ class GoalInstance {
         return this.description;
     }
 
-    public getGoalDefinition():GoalDefinition {
+    public getGoalDefinition():Goal {
         return this.goalDefinition;
     }
 
@@ -121,6 +121,7 @@ class GoalInstance {
             var currentSensor = this.mapSymbolicNameToSensor[currentSymbolicName];
             result[currentSensor] = this.goalDefinition.getRequired()[currentSymbolicName];
         }
+
 
         return result;
     }
@@ -207,4 +208,4 @@ class GoalInstance {
     }
 }
 
-export = GoalInstance;
+export = Challenge;

@@ -1,7 +1,7 @@
 import RouterItf = require('./RouterItf');
 
-import GoalDefinitionRepository = require('../goal/definition/GoalDefinitionRepository');
-import GoalDefinitionFactory = require('../goal/definition/GoalDefinitionFactory');
+import GoalRepository = require('../goal/GoalRepository');
+import GoalFactory = require('../goal/GoalFactory');
 
 /**
  * GoalDefinitionRouter class</br>
@@ -14,10 +14,10 @@ import GoalDefinitionFactory = require('../goal/definition/GoalDefinitionFactory
 
 class GoalDefinitionRouter extends RouterItf {
 
-    private goalDefinitionRepository:GoalDefinitionRepository;
-    private goalDefinitionFactory:GoalDefinitionFactory;
+    private goalDefinitionRepository:GoalRepository;
+    private goalDefinitionFactory:GoalFactory;
 
-    constructor(goalDefinitionRepository:GoalDefinitionRepository, goalDefinitionFactory:GoalDefinitionFactory) {
+    constructor(goalDefinitionRepository:GoalRepository, goalDefinitionFactory:GoalFactory) {
         super();
         this.goalDefinitionRepository = goalDefinitionRepository;
         this.goalDefinitionFactory = goalDefinitionFactory;

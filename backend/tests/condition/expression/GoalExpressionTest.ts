@@ -6,15 +6,15 @@ import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
-import GoalCondition = require('../../../src/goal/condition/GoalCondition');
-import Operand = require('../../../src/goal/condition/Operand');
+import GoalExpression = require('../../../src/condition/expression/GoalExpression');
+import Operand = require('../../../src/condition/expression/Operand');
 import TimeBox = require('../../../src/TimeBox');
 import TimeBoxFactory = require('../../../src/TimeBoxFactory');
 
-describe('Test GoalCondition', () => {
-    describe('Build a condition', () => {
+describe('Test GoalExpression', () => {
+    describe('Build a goalExpression', () => {
 
-        var condition:GoalCondition;
+        var goalExpression:GoalExpression;
 
         var leftOperandRequired:Operand = new Operand('TMP_Cli', true);
         var leftOperandNotRequired:Operand = new Operand('TMP_Cli', false);
@@ -24,54 +24,49 @@ describe('Test GoalCondition', () => {
         var description:string = 'un test';
 
         it('should not have required', () => {
-            condition = new GoalCondition(leftOperandNotRequired, typeOfComparison, rightOperandNotRequired, description);
-            var expected:any = {};
-            chai.expect(condition.getRequired()).to.be.eqls(expected);
+            goalExpression = new GoalExpression(leftOperandNotRequired, typeOfComparison, rightOperandNotRequired, description);
+            var expected:string[] = [];
+            chai.expect(goalExpression.getRequired()).to.be.eqls(expected);
         });
 
         it('should have proper required on left operand', () => {
-            condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandNotRequired, description);
-            var expected:any = {};
-            expected['TMP_Cli'] = {};
-            chai.expect(condition.getRequired()).to.be.eqls(expected);
+            goalExpression = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandNotRequired, description);
+            var expected:string[] = ['TMP_Cli'];
+            chai.expect(goalExpression.getRequired()).to.be.eqls(expected);
         });
 
         it('should have proper required on right operand', () => {
-            condition = new GoalCondition(leftOperandNotRequired, typeOfComparison, rightOperandRequired, description);
-            var expected:any = {};
-            expected['10'] = {};
-
-            chai.expect(condition.getRequired()).to.be.eqls(expected);
+            goalExpression = new GoalExpression(leftOperandNotRequired, typeOfComparison, rightOperandRequired, description);
+            var expected:string[] = ['10'];
+            chai.expect(goalExpression.getRequired()).to.be.eqls(expected);
         });
 
         it('should have proper required on both operand', () => {
-            condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
-            var expected:any = {};
-            expected['TMP_Cli'] = {};
-            expected['10'] = {};
+            goalExpression = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
+            var expected:string[] = ['TMP_Cli', '10'];
 
-            chai.expect(condition.getRequired()).to.be.eqls(expected);
+            chai.expect(goalExpression.getRequired()).to.be.eqls(expected);
         });
 
         it('should have proper left operand', () => {
-            condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
-            chai.expect(condition.hasLeftOperand('TMP_Cli')).to.be.true;
+            goalExpression = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
+            chai.expect(goalExpression.hasLeftOperand('TMP_Cli')).to.be.true;
         });
 
         it('should have proper right operand', () => {
-            condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
-            chai.expect(condition.hasRightOperand('10')).to.be.true;
+            goalExpression = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
+            chai.expect(goalExpression.hasRightOperand('10')).to.be.true;
         });
 
         it('should have proper type of comparison', () => {
-            condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
-            chai.expect(condition.getComparisonType()).to.be.eq(typeOfComparison);
+            goalExpression = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
+            chai.expect(goalExpression.getComparisonType()).to.be.eq(typeOfComparison);
         });
 
     });
 
     describe('Evaluate a basic condition without required', () => {
-        var condition:GoalCondition;
+        var condition:GoalExpression;
         var leftOperand:Operand;
         var rightOperand:Operand;
         var typeOfComparison:string;
@@ -83,11 +78,11 @@ describe('Test GoalCondition', () => {
             typeOfComparison = '<';
             description = 'un test';
 
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
         });
 
         it('should evaluate basic boolean comparison should not throw error', () => {
-            chai.expect(() => condition.evaluate([])).not.to.throw(Error);
+            chai.expect(() => condition.evaluate({})).not.to.throw(Error);
         });
 
         it('should get a proper description', () => {
@@ -96,19 +91,19 @@ describe('Test GoalCondition', () => {
 
         describe('Evaluate with <', () => {
             it('should evaluate 10<11 at true', () => {
-                chai.expect(condition.evaluate([])).to.be.true;
+                chai.expect(condition.evaluate({})).to.be.true;
             });
 
             it('should evaluate 10<10 at false', () => {
                 rightOperand = new Operand('10', false);
                 condition.setRightOperand(rightOperand);
-                chai.expect(condition.evaluate([])).to.be.false;
+                chai.expect(condition.evaluate({})).to.be.false;
             });
 
             it('should evaluate 10<9 at false', () => {
                 rightOperand = new Operand('9', false);
                 condition.setRightOperand(rightOperand);
-                chai.expect(condition.evaluate([])).to.be.false;
+                chai.expect(condition.evaluate({})).to.be.false;
             });
         });
 
@@ -122,19 +117,19 @@ describe('Test GoalCondition', () => {
             it('should evaluate 10>9 at true', () => {
                 rightOperand = new Operand('9', false);
                 condition.setRightOperand(rightOperand);
-                chai.expect(condition.evaluate([])).to.be.true;
+                chai.expect(condition.evaluate({})).to.be.true;
             });
 
             it('should evaluate 10>10 at false', () => {
                 rightOperand = new Operand('10', false);
                 condition.setRightOperand(rightOperand);
-                chai.expect(condition.evaluate([])).to.be.false;
+                chai.expect(condition.evaluate({})).to.be.false;
             });
 
             it('should evaluate 10>11 at false', () => {
                 rightOperand = new Operand('11', false);
                 condition.setRightOperand(rightOperand);
-                chai.expect(condition.evaluate([])).to.be.false;
+                chai.expect(condition.evaluate({})).to.be.false;
             });
         });
 
@@ -148,13 +143,13 @@ describe('Test GoalCondition', () => {
             it('should evaluate 10==10 at true', () => {
                 rightOperand = new Operand('10', false);
                 condition.setRightOperand(rightOperand);
-                chai.expect(condition.evaluate([])).to.be.true;
+                chai.expect(condition.evaluate({})).to.be.true;
             });
 
             it('should evaluate 10==9 at false', () => {
                 rightOperand = new Operand('9', false);
                 condition.setRightOperand(rightOperand);
-                chai.expect(condition.evaluate([])).to.be.false;
+                chai.expect(condition.evaluate({})).to.be.false;
             });
 
             it('should evaluate 10==11 at false', () => {
@@ -174,26 +169,26 @@ describe('Test GoalCondition', () => {
             it('should evaluate 10!=10 at false', () => {
                 rightOperand = new Operand('10', false);
                 condition.setRightOperand(rightOperand);
-                chai.expect(condition.evaluate([])).to.be.false;
+                chai.expect(condition.evaluate({})).to.be.false;
             });
 
             it('should evaluate 10!=9 at true', () => {
                 rightOperand = new Operand('9', false);
                 condition.setRightOperand(rightOperand);
-                chai.expect(condition.evaluate([])).to.be.true;
+                chai.expect(condition.evaluate({})).to.be.true;
             });
 
             it('should evaluate 10!=11 at true', () => {
                 rightOperand = new Operand('11', false);
                 condition.setRightOperand(rightOperand);
-                chai.expect(condition.evaluate([])).to.be.true;
+                chai.expect(condition.evaluate({})).to.be.true;
             });
         });
 
     });
 
     describe('Evaluate a condition with a left required', () => {
-        var condition:GoalCondition;
+        var condition:GoalExpression;
         var leftOperand:Operand;
         var rightOperand:Operand;
         var typeOfComparison:string;
@@ -205,18 +200,18 @@ describe('Test GoalCondition', () => {
             typeOfComparison = '>';
             description = 'un test';
 
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
         });
 
         describe('Evaluate with >', () => {
             it('should evaluate at true with 20', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values: [{value: '20'}]}})).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM': '20'})).to.be.true;
             });
             it('should evaluate at false with 15', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '15'}]}})).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM': '15'})).to.be.false;
             });
             it('should evaluate at false with 10', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '10'}]}})).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM': '10'})).to.be.false;
             });
         });
 
@@ -227,13 +222,13 @@ describe('Test GoalCondition', () => {
             });
 
             it('should evaluate at true with 10', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '10'}]}})).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM': '10'})).to.be.true;
             });
             it('should evaluate at false with 15', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '15'}]}})).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM': '15'})).to.be.false;
             });
             it('should evaluate at false with 20', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '20'}]}})).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM': '20'})).to.be.false;
             });
         });
 
@@ -244,13 +239,13 @@ describe('Test GoalCondition', () => {
             });
 
             it('should evaluate at true with 15', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '15'}]}})).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM': '15'})).to.be.true;
             });
             it('should evaluate at false with 9', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '9'}]}})).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM': '9'})).to.be.false;
             });
             it('should evaluate at false with 11', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '11'}]}})).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM': '11'})).to.be.false;
             });
         });
 
@@ -261,13 +256,13 @@ describe('Test GoalCondition', () => {
             });
 
             it('should evaluate at true with 10', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM':{values:[ {value: '10'}]}})).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM': '10'})).to.be.true;
             });
             it('should evaluate at false with 15', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '15'}]}})).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM': '15'})).to.be.false;
             });
             it('should evaluate at true with 20', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '20'}]}})).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM': '20'})).to.be.true;
             });
         });
 
@@ -281,7 +276,7 @@ describe('Test GoalCondition', () => {
     });
 
     describe('Evaluate a condition with a right required', () => {
-        var condition:GoalCondition;
+        var condition:GoalExpression;
         var leftOperand:Operand;
         var rightOperand:Operand;
         var typeOfComparison:string;
@@ -293,83 +288,83 @@ describe('Test GoalCondition', () => {
             typeOfComparison = '<';
             description = 'un test';
 
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
         });
 
         describe('Evaluate with <', () => {
             it('should evaluate at true with 20', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '20'}]}})).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM': '20'})).to.be.true;
             });
             it('should evaluate at false with 15', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '15'}]}})).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM': '15'})).to.be.false;
             });
             it('should evaluate at false with 10', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM':{values:[ {value: '10'}]}})).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM': '10'})).to.be.false;
             });
         });
 
         describe('Evaluate with >', () => {
             beforeEach(() => {
                 typeOfComparison = '>';
-                condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+                condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
             });
 
             it('should evaluate at true with 10', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '10'}]}})).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM': '10'})).to.be.true;
             });
             it('should evaluate at false with 15', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '15'}]}})).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM': '15'})).to.be.false;
             });
             it('should evaluate at false with 20', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM':{values:[ {value: '20'}]}})).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM': '20'})).to.be.false;
             });
         });
 
         describe('Evaluate with ==', () => {
             beforeEach(() => {
                 typeOfComparison = '==';
-                condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+                condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
             });
 
             it('should evaluate at true with 15', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM':{values:[ {value: '15'}]}})).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM': '15'})).to.be.true;
             });
             it('should evaluate at false with 9', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '9'}]}})).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM': '9'})).to.be.false;
             });
             it('should evaluate at false with 11', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '11'}]}})).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM': '11'})).to.be.false;
             });
         });
 
         describe('Evaluate with !=', () => {
             beforeEach(() => {
                 typeOfComparison = '!=';
-                condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+                condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
             });
 
             it('should evaluate at true with 10', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '10'}]}})).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM': '10'})).to.be.true;
             });
             it('should evaluate at false with 15', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '15'}]}})).to.be.false;
+                chai.expect(condition.evaluate({'TMP_CLIM': '15'})).to.be.false;
             });
             it('should evaluate at true with 20', () => {
-                chai.expect(condition.evaluate({'TMP_CLIM': {values:[{value: '20'}]}})).to.be.true;
+                chai.expect(condition.evaluate({'TMP_CLIM': '20'})).to.be.true;
             });
         });
 
         describe('Evaluate with a UNKNOWN field tagged as non required', () => {
             it('should throw an error when evaluate with 15<TMP_CLIM', () => {
                 rightOperand = new Operand('TMP_CLIM', false);
-                condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+                condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
                 chai.expect(() => condition.evaluate([])).to.throw(Error);
             });
         });
     });
 
     describe('Evaluate a condition with both operands required', () => {
-        var condition:GoalCondition;
+        var condition:GoalExpression;
         var leftOperand:Operand;
         var rightOperand:Operand;
         var typeOfComparison:string;
@@ -381,14 +376,14 @@ describe('Test GoalCondition', () => {
             typeOfComparison = '>';
             description = 'un test';
 
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
+            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
         });
 
         it('should evaluate at true when 20,10 are passed', () => {
             chai.expect(condition.evaluate(
                 {
-                    'TMP_CLIM'  : {values: [{value: '10'}]},
-                    'TMP_EXT'   : {values: [{value: '20'}]}
+                    'TMP_CLIM': '10',
+                    'TMP_EXT': '20'
                 }
             )).to.be.true;
         });
@@ -396,8 +391,8 @@ describe('Test GoalCondition', () => {
         it('should evaluate at false when 10,20 are passed', () => {
             chai.expect(condition.evaluate(
                 {
-                    'TMP_CLIM'  : {values: [{value: '20'}]},
-                    'TMP_EXT'   : {values: [{value: '10'}]}
+                    'TMP_CLIM': '20',
+                    'TMP_EXT': '10'
                 }
             )).to.be.false;
         });
@@ -405,7 +400,7 @@ describe('Test GoalCondition', () => {
 
     describe('Evaluate a condition with a timebox', () => {
         it('should return false if values in the given timeBox do not match condition', () => {
-            var timeBox:TimeBox = new TimeBox(Date.UTC(2015, 0, 20), Date.UTC(2015, 1, 20));
+            var timeBox:TimeBox = new TimeBox(new Date(Date.UTC(2015, 0, 20)), new Date(Date.UTC(2015, 1, 20)));
 
 
         });
@@ -413,41 +408,20 @@ describe('Test GoalCondition', () => {
 
     describe('Check JSON protocol', () => {
 
-        var condition:GoalCondition;
+        var condition:GoalExpression;
 
         var leftOperandRequired:Operand = new Operand('TMP_Cli', true);
         var rightOperandNotRequired:Operand = new Operand('10', false);
         var typeOfComparison:string = '<';
         var description:string = 'un test';
 
-        condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandNotRequired, description);
+        condition = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandNotRequired, description);
 
-        it('should return correct protocol if no timebox is specified', () => {
-            var expected:any = {};
-            expected['TMP_Cli'] = {};
-
-            chai.expect(condition.getRequired()).to.be.eqls(expected);
-        });
-
-        it('should return correct protocol if no timebox is specified', () => {
-            var timeBoxData:any = {};
-            timeBoxData.startDate = new Date(Date.UTC(1995, 1, 2));
-            timeBoxData.endDate = new Date(Date.UTC(2005, 1, 2));
-
-            var timeBoxFactory:TimeBoxFactory = new TimeBoxFactory();
-            var timeBox:TimeBox = timeBoxFactory.createTimeBox(timeBoxData);
-
-
-            condition = new GoalCondition(leftOperandRequired, typeOfComparison, rightOperandNotRequired, description, timeBox);
-
-
-            var expected:any = {};
-            expected['TMP_Cli'] = {
-                "startDate": "1995-02-02 00:00:00",
-                "endDate": "2005-02-02 00:00:00"
-            };
+        it('should return correct protocol', () => {
+            var expected:string[] = ['TMP_Cli'];
 
             chai.expect(condition.getRequired()).to.be.eqls(expected);
         });
+
     });
 });

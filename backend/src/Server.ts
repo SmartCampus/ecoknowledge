@@ -9,8 +9,8 @@ var express:any = require("express");
 var bodyParser:any = require("body-parser");
 
 import Badge = require('./badge/Badge');
-import Operand = require('./goal/condition/Operand');
-import GoalCondition = require('./goal/condition/GoalCondition');
+import Operand = require('./condition/expression/Operand');
+import GoalCondition = require('./condition/Condition');
 import TimeBox = require('./TimeBox');
 
 /**

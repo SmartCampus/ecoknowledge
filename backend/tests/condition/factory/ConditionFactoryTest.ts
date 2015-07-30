@@ -6,13 +6,13 @@ import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
-import ExpressionFactory = require('../../../src/goal/condition/ExpressionFactory');
-import Expression = require('../../../src/goal/condition/Expression');
+import ExpressionFactory = require('../../../src/condition/factory/ExpressionFactory');
+import GoalExpression = require('../../../src/condition/expression/GoalExpression');
 
-describe("ExpressionFactory test", () => {
+describe("ConditionFactory test", () => {
 
     var factory:ExpressionFactory = new ExpressionFactory();
-    var expression:Expression;
+    var expression:GoalExpression;
 
     beforeEach(() => {
         var jsonExpression:any = {};
@@ -41,6 +41,6 @@ describe("ExpressionFactory test", () => {
     });
 
     it("should build an expression with right required", () => {
-        chai.expect(expression.getRequired()).to.be.eqls({'TEMP_CLI':{}});
+        chai.expect(expression.getRequired()).to.be.eqls(['TEMP_CLI']);
     });
 });

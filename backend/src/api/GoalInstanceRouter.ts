@@ -1,9 +1,16 @@
 import RouterItf = require('./RouterItf');
-
+/*
+<<<<<<< HEAD
 import GoalInstanceRepository = require('../goal/instance/GoalInstanceRepository');
 import GoalInstanceFactory = require('../goal/instance/GoalInstanceFactory');
 import GoalInstance = require('../goal/instance/GoalInstance');
 import GoalDefinitionRepository = require('../goal/definition/GoalDefinitionRepository');
+=======*/
+import ChallengeRepository = require('../challenge/ChallengeRepository');
+import ChallengeFactory = require('../challenge/ChallengeFactory');
+import GoalRepository = require('../goal/GoalRepository');
+import Challenge = require('../challenge/Challenge');
+//>>>>>>> aa0a6c1444ee6545f84f07d0b04d9a4b0ab6900d
 import UserRepository = require('../user/UserRepository');
 
 import Middleware = require('../Middleware');
@@ -17,16 +24,16 @@ class GoalInstanceRouter extends RouterItf {
 
     public static STUB_FILE:string = './stub_values.json';
 
-    private goalInstanceRepository:GoalInstanceRepository;
-    private goalInstanceFactory:GoalInstanceFactory;
-    private goalDefinitionRepository:GoalDefinitionRepository;
+    private goalInstanceRepository:ChallengeRepository;
+    private goalInstanceFactory:ChallengeFactory;
+    private goalDefinitionRepository:GoalRepository;
     private userRepository:UserRepository;
 
     private middleware:Middleware;
 
     private jsonStub:any = {};
 
-    constructor(goalInstanceRepository:GoalInstanceRepository, goalInstanceFactory:GoalInstanceFactory, goalDefinitionRepository:GoalDefinitionRepository, userRepository:UserRepository) {
+    constructor(goalInstanceRepository:ChallengeRepository, goalInstanceFactory:ChallengeFactory, goalDefinitionRepository:GoalRepository, userRepository:UserRepository) {
         super();
         this.goalInstanceRepository = goalInstanceRepository;
         this.goalInstanceFactory = goalInstanceFactory;
@@ -164,7 +171,7 @@ class GoalInstanceRouter extends RouterItf {
     evaluate(req:any, res:any) {
         var goalInstanceID:string = req.query.id;
 
-        var goalInstanceToEvaluate:GoalInstance = this.goalInstanceRepository.getGoalInstance(goalInstanceID);
+        var goalInstanceToEvaluate:Challenge = this.goalInstanceRepository.getGoalInstance(goalInstanceID);
 
         if (!goalInstanceToEvaluate) {
             var msg:string = 'Can not find challenge with given id';
@@ -179,7 +186,7 @@ class GoalInstanceRouter extends RouterItf {
         var challenges:string[] = this.userRepository.getCurrentUser().getChallenges();
         for(var challenge in challenges){
             var currentChallengeID:string = challenges[challenge];
-            var challengeToEvaluate:GoalInstance = this.goalInstanceRepository.getGoalInstance(currentChallengeID);
+            var challengeToEvaluate:Challenge = this.goalInstanceRepository.getGoalInstance(currentChallengeID);
             this.evaluateChallenge(challengeToEvaluate, currentChallengeID);
         }
         res.send('OK');
@@ -195,7 +202,7 @@ class GoalInstanceRouter extends RouterItf {
         user.deleteChallenge(challengeID);
     }
 
-    private evaluateChallenge(goalInstanceToEvaluate:GoalInstance, goalInstanceID){
+    private evaluateChallenge(goalInstanceToEvaluate:Challenge, goalInstanceID){
         if (!GoalInstanceRouter.DEMO) {
 
             //TODO move what follow

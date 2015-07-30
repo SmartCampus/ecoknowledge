@@ -1,24 +1,26 @@
-/// <reference path="../../../typings/mocha/mocha.d.ts" />
-/// <reference path="../../../typings/chai/chai.d.ts" />
-/// <reference path="../../../typings/sinon/sinon.d.ts" />
+/// <reference path="../../typings/mocha/mocha.d.ts" />
+/// <reference path="../../typings/chai/chai.d.ts" />
+/// <reference path="../../typings/sinon/sinon.d.ts" />
 
 import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
-import GoalInstanceFactory = require('../../../src/goal/instance/GoalInstanceFactory');
-import GoalDefinitionRepository = require('../../../src/goal/definition/GoalDefinitionRepository');
-import GoalDefinition = require('../../../src/goal/definition/GoalDefinition');
-import GoalCondition = require('../../../src/goal/condition/GoalCondition');
-import Operand = require('../../../src/goal/condition/Operand');
-import TimeBox = require('../../../src/TimeBox');
+import ChallengeFactory = require('../../src/challenge/ChallengeFactory');
+import GoalRepository = require('../../src/goal/GoalRepository');
+import Goal = require('../../src/goal/Goal');
+import OverallGoalCondition = require('../../src/condition/OverallGoalCondition');
+import GoalExpression = require('../../src/condition/expression/GoalExpression');
+import Operand = require('../../src/condition/expression/Operand');
+import TimeBox = require('../../src/TimeBox');
+import Clock = require('../../src/Clock');
 
 describe("GoalInstanceFactory test", () => {
 
-    var factory:GoalInstanceFactory = new GoalInstanceFactory();
-    var goalDefinitionRepository:GoalDefinitionRepository = new GoalDefinitionRepository(null);
+    var factory:ChallengeFactory = new ChallengeFactory();
+    var goalDefinitionRepository:GoalRepository = new GoalRepository(null);
 
-    var aGoal:GoalDefinition;
+    var aGoal:Goal;
     var aGoalName:string = "goal 1";
 
     var data:any;
@@ -33,17 +35,20 @@ describe("GoalInstanceFactory test", () => {
 
     var anotherConditionName:string = 'Temp_ext';
     var anotherSensorName:string = 'TEMP_443';
-    var now:Date = new Date(Date.now());
+    var now:Date = new Date(Clock.getNow());
     var endDate:Date = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 5, now.getHours(), now.getMinutes(), now.getSeconds());
 
 
     var conditions:any = {};
     beforeEach(() => {
 
-        aGoal = new GoalDefinition(aGoalName, now, endDate, 5,null);
+        aGoal = new Goal(aGoalName, now, endDate, 5,null);
         aGoal.setUUID(aGoalID);
-        aGoal.addCondition(new GoalCondition(new Operand(aConditionName, true), '<',
-            new Operand(anotherConditionName, true), aGoalDescription));
+
+        var goalCondition:OverallGoalCondition = new OverallGoalCondition(null,new GoalExpression(new Operand(aConditionName, true), '<',
+            new Operand(anotherConditionName, true),aGoalDescription),0,null,null,null);
+
+        aGoal.addCondition(goalCondition);
 
         goalDefinitionRepository.addGoal(aGoal);
 
@@ -75,11 +80,11 @@ describe("GoalInstanceFactory test", () => {
     it("should have proper sensors when build", () => {
         var goalInstance = factory.createGoalInstance(data, goalDefinitionRepository, null, now);
 
-        var timeBox:TimeBox = new TimeBox(now.getTime(), endDate.getTime());
+        var timeBox:TimeBox = new TimeBox(now, endDate);
 
         var timeBoxDesc:any = {};
-        timeBoxDesc.startDate = timeBox.getStartDate();
-        timeBoxDesc.endDate = timeBox.getEndDate();
+        timeBoxDesc.startDate = timeBox.getStartDateInStringFormat();
+        timeBoxDesc.endDate = timeBox.getEndDateInStringFormat();
 
         var expectedConditionsDescription = {};
         expectedConditionsDescription[aSensorName] = timeBoxDesc;

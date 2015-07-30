@@ -1,18 +1,18 @@
-import GoalDefinition = require('./GoalDefinition');
-import GoalDefinitionFactory = require('./GoalDefinitionFactory');
-import BadgeRepository = require('../../badge/BadgeRepository');
-import Badge = require('../../badge/Badge');
+import Goal = require('./Goal');
+import GoalFactory = require('./GoalFactory');
+import BadgeRepository = require('../badge/BadgeRepository');
+import Badge = require('../badge/Badge');
 
 class GoalDefinitionRepository {
 
     private badgeRepository:BadgeRepository;
 
-    private goals:GoalDefinition[] = [];
+    private goals:Goal[] = [];
 
-    private factory:GoalDefinitionFactory;
+    private factory:GoalFactory;
 
     constructor(badgeRepository:BadgeRepository) {
-        this.factory = new GoalDefinitionFactory();
+        this.factory = new GoalFactory();
         this.badgeRepository = badgeRepository;
     }
 
@@ -36,16 +36,16 @@ class GoalDefinitionRepository {
             throw new Error('No badge with this id when trying to create a new goal');
         }
 
-        var newGoal:GoalDefinition = this.factory.createGoal(data);
+        var newGoal:Goal = this.factory.createGoal(data);
         this.goals.push(newGoal);
         return newGoal.getUUID().toString();
     }
 
-    public addGoal(aGoal:GoalDefinition) {
+    public addGoal(aGoal:Goal) {
         this.goals.push(aGoal);
     }
 
-    public getGoal(goalUUID:string):GoalDefinition {
+    public getGoal(goalUUID:string):Goal {
         for(var i in this.goals) {
             var currentGoal = this.goals[i];
             if(currentGoal.hasUUID(goalUUID)) {
@@ -76,7 +76,7 @@ class GoalDefinitionRepository {
 
     public evaluateGoal(data:any):boolean {
         var goalID:string = data.id;
-        var goal:GoalDefinition = this.getGoal(goalID);
+        var goal:Goal = this.getGoal(goalID);
 
         var goalValues:any[] = data.values;
         var values = [];

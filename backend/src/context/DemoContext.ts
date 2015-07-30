@@ -2,24 +2,24 @@ import UUID = require('node-uuid');
 
 import Context = require('../Context');
 
-import GoalDefinitionRepository = require('../goal/definition/GoalDefinitionRepository');
-import GoalInstanceRepository = require('../goal/instance/GoalInstanceRepository');
+import GoalRepository = require('../goal/GoalRepository');
+import ChallengeRepository = require('../challenge/ChallengeRepository');
 import UserRepository = require('../user/UserRepository');
 
-import GoalDefinition = require('../goal/definition/GoalDefinition');
-import GoalCondition = require('../goal/condition/GoalCondition');
-import Operand = require('../goal/condition/Operand');
+import Goal = require('../goal/Goal');
+import GoalExpression = require('../condition/expression/GoalExpression');
+import Operand = require('../condition/expression/Operand');
 
 
-import GoalInstance = require('../goal/instance/GoalInstance');
+import Challenge = require('../challenge/Challenge');
 
 class DemoContext implements Context {
 
-    private aGoal:GoalDefinition;
+    private aGoal:Goal;
     private aUUID:string;
 
 
-    fill(goalDefinitionRepository:GoalDefinitionRepository, goalInstanceRepository:GoalInstanceRepository, userRepository:UserRepository) {
+    fill(goalDefinitionRepository:GoalRepository, goalInstanceRepository:ChallengeRepository, userRepository:UserRepository) {
         if (goalDefinitionRepository) {
             this.fillGoalProvider(goalDefinitionRepository);
         }
@@ -29,7 +29,7 @@ class DemoContext implements Context {
         }
     }
 
-    public fillGoalProvider(goalProvider:GoalDefinitionRepository) {
+    public fillGoalProvider(goalProvider:GoalRepository) {
         /*FIXME
         this.aUUID = UUID.v4();
 
@@ -45,7 +45,7 @@ class DemoContext implements Context {
         */
     }
 
-    public fillBadgeProvider(badgeProvider:GoalInstanceRepository) {
+    public fillBadgeProvider(badgeProvider:ChallengeRepository) {
         /*
         var mapGoalToConditionAndSensor:any  = {};
 

@@ -6,7 +6,7 @@ import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
-import Operand = require('../../../src/goal/condition/Operand');
+import Operand = require('../../../src/condition/expression/Operand');
 
 describe('Test Operand', () => {
     var operand:Operand;

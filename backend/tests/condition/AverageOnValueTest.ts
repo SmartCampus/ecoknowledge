@@ -1,22 +1,23 @@
-/// <reference path="../../../typings/mocha/mocha.d.ts" />
-/// <reference path="../../../typings/chai/chai.d.ts" />
-/// <reference path="../../../typings/sinon/sinon.d.ts" />
+/// <reference path="../../typings/mocha/mocha.d.ts" />
+/// <reference path="../../typings/chai/chai.d.ts" />
+/// <reference path="../../typings/sinon/sinon.d.ts" />
 
 import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
-import GoalCondition = require('../../../src/goal/condition/GoalCondition');
-import AverageOnValue = require('../../../src/goal/condition/AverageOnValue');
-import Operand = require('../../../src/goal/condition/Operand');
-import TimeBox = require('../../../src/TimeBox');
-import TimeBoxFactory = require('../../../src/TimeBoxFactory');
+import Condition = require('../../src/condition/Condition');
+import GoalExpression = require('../../src/condition/expression/GoalExpression');
+import AverageOnValue = require('../../src/condition/AverageOnValue');
+import Operand = require('../../src/condition/expression/Operand');
+import TimeBox = require('../../src/TimeBox');
+import TimeBoxFactory = require('../../src/TimeBoxFactory');
 
 describe('Test AverageOnValueTest', () => {
 
     var averageOnValue:AverageOnValue;
 
-    var condition:GoalCondition;
+    var expression:GoalExpression;
 
     var leftOperand:Operand = new Operand('TMP_Cli', true);
     var rightOperand:Operand = new Operand('15', false);
@@ -31,30 +32,30 @@ describe('Test AverageOnValueTest', () => {
     describe('evaluate method decrease', () => {
 
         it('should return true if threshold is reached', () => {
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
-            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+            expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
             var data:any = {};
 
             var oldValues:any[] = [
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 2)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 2)),
                     value: 100
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 3)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 3)),
                     value: 101
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 4)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 4)),
                     value: 99
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 5)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 5)),
                     value: 102
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 6)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 6)),
                     value: 98
                 }
             ];
@@ -62,23 +63,23 @@ describe('Test AverageOnValueTest', () => {
 
             var newValues:any[] = [
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 8)),
                     value: 89
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 9)),
                     value: 90
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 10)),
                     value: 91
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 11)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 11)),
                     value: 70
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 12)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 12)),
                     value: 110
                 }
             ];
@@ -92,45 +93,45 @@ describe('Test AverageOnValueTest', () => {
         });
 
         it('should return true if threshold is reached with different number of measures', () => {
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
-            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+            expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
             var data:any = {};
 
             var oldValues:any[] = [
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 2)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 2)),
                     value: 100
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 3)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 3)),
                     value: 101
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 4)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 4)),
                     value: 99
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 5)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 5)),
                     value: 102
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 6)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 6)),
                     value: 98
                 }
             ];
 
             var newValues:any[] = [
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 8)),
                     value: 89
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 9)),
                     value: 90
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 10)),
                     value: 91
                 }
             ];
@@ -143,45 +144,45 @@ describe('Test AverageOnValueTest', () => {
         });
 
         it('should return false if threshold is close but not reached', () => {
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
-            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+            expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
             var data:any = {};
 
             var oldValues:any[] = [
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 2)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 2)),
                     value: 100
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 3)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 3)),
                     value: 101
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 4)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 4)),
                     value: 99
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 5)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 5)),
                     value: 102
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 6)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 6)),
                     value: 98
                 }
             ];
 
             var newValues:any[] = [
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 8)),
                     value: 89
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 9)),
                     value: 91
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 10)),
                     value: 91
                 }
             ];
@@ -201,8 +202,8 @@ describe('Test AverageOnValueTest', () => {
             var oldValues:any[] = [];
             var newValues:any[] = [];
 
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
-            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+            expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
             beforeEach(() => {
 
@@ -211,23 +212,23 @@ describe('Test AverageOnValueTest', () => {
                 //  average : 100
                 oldValues = [
                     {
-                        date: new Date(new Date(Date.UTC(2000, 1, 2)).getTime() / 1000),
+                        date: new Date(Date.UTC(2000, 1, 2)),
                         value: 100
                     },
                     {
-                        date: new Date(new Date(Date.UTC(2000, 1, 3)).getTime() / 1000),
+                        date: new Date(Date.UTC(2000, 1, 3)),
                         value: 101
                     },
                     {
-                        date: new Date(new Date(Date.UTC(2000, 1, 4)).getTime() / 1000),
+                        date: new Date(Date.UTC(2000, 1, 4)),
                         value: 99
                     },
                     {
-                        date: new Date(new Date(Date.UTC(2000, 1, 5)).getTime() / 1000),
+                        date: new Date(Date.UTC(2000, 1, 5)),
                         value: 102
                     },
                     {
-                        date: new Date(new Date(Date.UTC(2000, 1, 6)).getTime() / 1000),
+                        date: new Date(Date.UTC(2000, 1, 6)),
                         value: 98
                     }
                 ];
@@ -237,15 +238,15 @@ describe('Test AverageOnValueTest', () => {
                 //  average : 100
                 newValues = [
                     {
-                        date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
+                        date: new Date(Date.UTC(2000, 1, 8)),
                         value: 100
                     },
                     {
-                        date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
+                        date: new Date(Date.UTC(2000, 1, 9)),
                         value: 101
                     },
                     {
-                        date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
+                        date: new Date(Date.UTC(2000, 1, 10)),
                         value: 99
                     }
                 ];
@@ -263,15 +264,15 @@ describe('Test AverageOnValueTest', () => {
                 //  average : 95
                 newValues = [
                     {
-                        date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
+                        date: new Date(Date.UTC(2000, 1, 8)),
                         value: 90
                     },
                     {
-                        date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
+                        date: new Date(Date.UTC(2000, 1, 9)),
                         value: 100
                     },
                     {
-                        date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
+                        date: new Date(Date.UTC(2000, 1, 10)),
                         value: 95
                     }
                 ];
@@ -288,19 +289,19 @@ describe('Test AverageOnValueTest', () => {
                 //  average : 95
                 newValues = [
                     {
-                        date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
+                        date: new Date(Date.UTC(2000, 1, 8)),
                         value: 85
                     },
                     {
-                        date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
+                        date: new Date(Date.UTC(2000, 1, 9)),
                         value: 95
                     },
                     {
-                        date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
+                        date: new Date(Date.UTC(2000, 1, 10)),
                         value: 91
                     },
                     {
-                        date: new Date(new Date(Date.UTC(2000, 1, 11)).getTime() / 1000),
+                        date: new Date(Date.UTC(2000, 1, 11)),
                         value: 89
                     }
                 ];
@@ -316,19 +317,19 @@ describe('Test AverageOnValueTest', () => {
         describe('duration achieved', () => {
 
             beforeEach(() => {
-                condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
-                averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+                expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+                averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
             });
             it('should be at 50 percent of time', () => {
                 var currentDate:Date = new Date(Date.UTC(2000, 1, 11));
                 averageOnValue.updateDurationAchieved(currentDate.getTime());
-                assert.equal(averageOnValue.getDurationAchieved(), 50);
+                assert.equal(averageOnValue.getPercentageOfTimeElapsed(), 50);
             });
 
             it('should be at 0 percent of time', () => {
                 var currentDate:Date = new Date(Date.UTC(2000, 1, 7));
                 averageOnValue.updateDurationAchieved(currentDate.getTime());
-                assert.equal(averageOnValue.getDurationAchieved(), 0);
+                assert.equal(averageOnValue.getPercentageOfTimeElapsed(), 0);
             });
 
             it('should throw an error if time given is before dateOfCreation', () => {
@@ -341,46 +342,46 @@ describe('Test AverageOnValueTest', () => {
     describe('separate data', () => {
         it('should separate data correctly', () => {
 
-            condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
-            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+            expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
             var values:any[] = [
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 2)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 2)),
                     value: 100
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 3)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 3)),
                     value: 101
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 4)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 4)),
                     value: 99
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 5)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 5)),
                     value: 102
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 6)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 6)),
                     value: 98
                 },
 
                 //   OLD/NEW DATA
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 8)),
                     value: 89
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 9)),
                     value: 90
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 10)),
                     value: 91
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 11)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 11)),
                     value: 70
                 }
             ];
@@ -400,8 +401,8 @@ describe('Test AverageOnValueTest', () => {
 
     describe('getRequired method', () => {
 
-        condition = new GoalCondition(leftOperand, typeOfComparison, rightOperand, description);
-        averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+        expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+        averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
         var expected:any = {};
         var timeBoxDesc:any = {};
@@ -419,30 +420,30 @@ describe('Test AverageOnValueTest', () => {
     describe('evaluate method increase', () => {
 
         it('should return true if threshold is reached', () => {
-            condition = new GoalCondition(leftOperand, typeOfComparisonUp, rightOperand, description);
-            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+            expression = new GoalExpression(leftOperand, typeOfComparisonUp, rightOperand, description);
+            averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
             var data:any = {};
 
             var oldValues:any[] = [
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 2)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 2)),
                     value: 100
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 3)).getTime() / 1000),
+                    date:new Date(Date.UTC(2000, 1, 3)),
                     value: 101
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 4)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 4)),
                     value: 99
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 5)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 5)),
                     value: 102
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 6)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 6)),
                     value: 98
                 }
             ];
@@ -450,23 +451,23 @@ describe('Test AverageOnValueTest', () => {
 
             var newValues:any[] = [
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 8)),
                     value: 121
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 9)),
                     value: 110
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 10)),
                     value: 119
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 11)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 11)),
                     value: 70
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 12)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 12)),
                     value: 130
                 }
             ];
@@ -480,45 +481,45 @@ describe('Test AverageOnValueTest', () => {
         });
 
         it('should return true if threshold is reached with different number of measures', () => {
-            condition = new GoalCondition(leftOperand, typeOfComparisonUp, rightOperand, description);
-            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+            expression = new GoalExpression(leftOperand, typeOfComparisonUp, rightOperand, description);
+            averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
             var data:any = {};
 
             var oldValues:any[] = [
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 2)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 2)),
                     value: 100
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 3)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 3)),
                     value: 101
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 4)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 4)),
                     value: 99
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 5)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 5)),
                     value: 102
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 6)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 6)),
                     value: 98
                 }
             ];
 
             var newValues:any[] = [
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 8)),
                     value: 111
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 9)),
                     value: 110
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 10)),
                     value: 109
                 }
             ];
@@ -531,45 +532,45 @@ describe('Test AverageOnValueTest', () => {
         });
 
         it('should return false if threshold is close but not reached', () => {
-            condition = new GoalCondition(leftOperand, typeOfComparisonUp, rightOperand, description);
-            averageOnValue = new AverageOnValue(condition, startDate, dateOfCreation, endDate, 10);
+            expression = new GoalExpression(leftOperand, typeOfComparisonUp, rightOperand, description);
+            averageOnValue = new AverageOnValue(null,expression,10, startDate, dateOfCreation, endDate);
 
             var data:any = {};
 
             var oldValues:any[] = [
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 2)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 2)),
                     value: 100
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 3)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 3)),
                     value: 101
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 4)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 4)),
                     value: 99
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 5)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 5)),
                     value: 102
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 6)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 6)),
                     value: 98
                 }
             ];
 
             var newValues:any[] = [
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 8)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 8)),
                     value: 111
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 9)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 9)),
                     value: 109
                 },
                 {
-                    date: new Date(new Date(Date.UTC(2000, 1, 10)).getTime() / 1000),
+                    date: new Date(Date.UTC(2000, 1, 10)),
                     value: 109
                 }
             ];

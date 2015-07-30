@@ -6,9 +6,9 @@ import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
-import GoalCondition = require('../../src/goal/condition/GoalCondition');
-import Operand = require('../../src/goal/condition/Operand');
-import ExpressionFactory = require('../../src/goal/condition/ExpressionFactory');
+import GoalExpression = require('../../src/condition/expression/GoalExpression');
+import Operand = require('../../src/condition/expression/Operand');
+import ExpressionFactory = require('../../src/condition/factory/ExpressionFactory');
 import TimeBox = require('../../src/TimeBox');
 
 describe('Test store GoalCondition class', () => {
@@ -24,11 +24,8 @@ describe('Test store GoalCondition class', () => {
     var typeOfComparison:string = '<';
     var description = 'a desc';
 
-    var now:number = Date.now();
-    var timeBox:TimeBox = new TimeBox(now, now);
-
-    var goalCondition:GoalCondition = new GoalCondition(leftOperand, typeOfComparison,
-        rightOperand, description, timeBox);
+    var goalExpression:GoalExpression = new GoalExpression(leftOperand, typeOfComparison,
+        rightOperand, description);
 
     var expected:any = {
         valueLeft: {
@@ -40,21 +37,17 @@ describe('Test store GoalCondition class', () => {
             sensor: rightOperand.hasToBeDefined()
         },
         comparison: typeOfComparison,
-        description: description,
-        timeBox: {
-            startDate: now,
-            endDate: now
-        }
+        description: description
     };
 
     it('should return the proper json object', () => {
-        chai.expect(goalCondition.getDataInJSON()).to.be.eqls(expected);
+        chai.expect(goalExpression.getDataInJSON()).to.be.eqls(expected);
     });
 
     describe('build with its own description', () => {
         var expressionFactory:ExpressionFactory = new ExpressionFactory();
 
-        var goalConditionClone:GoalCondition = expressionFactory.createExpression(expected);
+        var goalConditionClone:GoalExpression = expressionFactory.createExpression(expected);
 
         it('should have the same left operand name', () => {
             chai.expect(goalConditionClone.getLeftOperandDescription()).to.be.eq(leftOperandName);
@@ -69,7 +62,7 @@ describe('Test store GoalCondition class', () => {
         });
 
         it('should have the same right operand required', () => {
-            chai.expect(goalConditionClone.isRighOperandRequired()).to.be.eq(rightOperandRequired);
+            chai.expect(goalConditionClone.isRightOperandRequired()).to.be.eq(rightOperandRequired);
         });
 
         it('should have the same type of comparison', () => {
@@ -79,15 +72,5 @@ describe('Test store GoalCondition class', () => {
         it('should have the same description', () => {
             chai.expect(goalConditionClone.getDescription()).to.be.eq(description);
         });
-
-        /*FIXME
-        it('should have the same startDate', () => {
-            chai.expect(goalConditionClone.getStartDateInMillis()).to.be.eq(now);
-        });
-
-        it('should have the same endDate', () => {
-            chai.expect(goalConditionClone.getEndDateInMillis()).to.be.eq(now);
-        });
-        */
     });
 });
