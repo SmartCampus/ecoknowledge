@@ -26,7 +26,9 @@ class OverallGoalCondition extends _Condition{
         var conditionDesc:any = this.expression.getRequired();
 
         //  For each sensors required by internal condition
-        for (var currentSensorName in conditionDesc) {
+        for (var currentSensorNameIndex in conditionDesc) {
+
+            var currentSensorName:string = conditionDesc[currentSensorNameIndex];
 
             //  Retrieve values associated
             var currentConditionDesc = data[currentSensorName];
@@ -44,7 +46,7 @@ class OverallGoalCondition extends _Condition{
 
                 if (this.isInTimeBox(date)) {
                     var dataToEvaluate:any = {};
-                    dataToEvaluate[currentSensorName] = value;
+                    dataToEvaluate[currentSensorName] = value.value;
 
                     //  Check value by value if internal condition is satisfied
                     if (this.expression.evaluate(dataToEvaluate)) {

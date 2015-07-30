@@ -89,7 +89,7 @@ class Goal {
         return this.conditionsList.evaluate(values, goalInstance);
     }
 
-    public getRequired():string[][] {
+    public getRequired():any {
         return this.conditionsList.getRequired();
     }
 

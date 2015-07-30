@@ -21,8 +21,8 @@ class AverageOnValue extends Condition {
 
     public setTimeBox(newTimeBox:TimeBox) {
 
-        this.dateOfCreation = new Date(newTimeBox.getStartDateInMillis());
-        this.endDate = new Date(newTimeBox.getEndDateInMillis());
+        this.dateOfCreation =newTimeBox.getStartDate();
+        this.endDate = newTimeBox.getEndDate();
 
         //TODO "-1 month hardcoded"
         this.startDate = new Date(this.dateOfCreation.getFullYear(), this.dateOfCreation.getMonth() - 1, this.dateOfCreation.getDate(),
@@ -37,13 +37,17 @@ class AverageOnValue extends Condition {
         var sensorNames:string[] = this.expression.getRequired();
 
         var result = true;
-        for (var currentSensorName in sensorNames) {
+        for (var currentSensorNameIndex in sensorNames) {
+
+            var currentSensorName:string = sensorNames[currentSensorNameIndex];
+
             var oldAndNewData:any[] = data[currentSensorName].values;
 
             var oldData:number[] = [];
             var newData:number[] = [];
 
             this.separateOldAndNewData(oldAndNewData, oldData, newData);
+
             var rate = 0;
 
             if (oldData) {
@@ -101,7 +105,7 @@ class AverageOnValue extends Condition {
             //  { date : __ , value : __ }
             var currentValue:any = values[currentValueIndex];
 
-            var currentDate:Date = new Date(currentValue.date * 1000);
+            var currentDate:Date = new Date(currentValue.date);
 
             if (currentDate.getTime() >= this.startDate.getTime()
                 && currentDate.getTime() <= this.dateOfCreation.getTime()) {

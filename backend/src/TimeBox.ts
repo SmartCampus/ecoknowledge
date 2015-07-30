@@ -3,9 +3,9 @@ class TimeBox {
     private startDate:Date;
     private endDate:Date;
 
-    constructor(startDateInMillis:Date, endDateInMillis:Date) {
-        this.startDate = startDateInMillis;
-        this.endDate = endDateInMillis;
+    constructor(starDate:Date, endDate:Date) {
+        this.startDate = starDate;
+        this.endDate = endDate;
     }
 
     public isDateInMillisInTimeBox(currentDateInMillis:number):boolean{
@@ -33,11 +33,11 @@ class TimeBox {
     }
 
     public getStartDateInStringFormat():string {
-        return this.convertTimeForMiddlewareAPI(this.startDate);
+        return this.convertTimeForMiddlewareAPI(this.startDate.getTime());
     }
 
-    public getEndDateInJsonFormat():string {
-        return this.convertTimeForMiddlewareAPI(this.endDate);
+    public getEndDateInStringFormat():string {
+        return this.convertTimeForMiddlewareAPI(this.endDate.getTime());
     }
 
     /**
@@ -64,7 +64,7 @@ class TimeBox {
      *      The given date in the following format : YYYY-MM-DD hh:mm:ss</br>
      *      Uses Date#toISOString method.
      */
-    private convertTimeForMiddlewareAPI(aDateInMillis):string {
+    public convertTimeForMiddlewareAPI(aDateInMillis):string {
         var date:string= new Date(aDateInMillis).toISOString();
 
         var dateWithoutTail:string[] = date.split('.');

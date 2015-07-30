@@ -16,6 +16,16 @@ class Comparator {
 
     evaluate(leftValue, rightValue) {
 
+        return eval(leftValue + this.typeOfComparison + rightValue);
+
+        /*
+        console.log("LEFT VALUE TYPE", typeof leftValue, " RIGHT VALUE TYPE", typeof rightValue);
+
+        if (typeof leftValue != typeof  rightValue) {
+            throw new Error('Can not compare given values. Different types : leftValue type : ' + typeof leftValue
+                + 'rightValue type : ' + typeof rightValue);
+        }
+
         switch (this.typeOfComparison) {
             case '<':
                 return leftValue < rightValue;
@@ -26,6 +36,7 @@ class Comparator {
             case '!=':
                 return leftValue != rightValue;
         }
+        */
     }
 
 }

@@ -122,6 +122,7 @@ class Challenge {
             result[currentSensor] = this.goalDefinition.getRequired()[currentSymbolicName];
         }
 
+
         return result;
     }
 
@@ -152,6 +153,7 @@ class Challenge {
         var mapSymbolicNameToValue = this.bindSymbolicNameToValue(values);
 
         var result = this.goalDefinition.evaluate(mapSymbolicNameToValue, this);
+
         if (result && this.percentageOfTime >= 100) {
             this.status = BadgeStatus.SUCCESS;
             console.log('success!');

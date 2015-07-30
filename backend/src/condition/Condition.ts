@@ -74,8 +74,16 @@ class Condition {
      * @returns {string[]}
      *      The array of symbolic names in the expression
      */
-    getRequired():string[] {
-        return this.expression.getRequired();
+    getRequired():any {
+        var result:any = {};
+        var sensorRequired:string[] = this.expression.getRequired();
+
+        for (var currentSensorRequiredIndex in sensorRequired) {
+            var currentSensorRequired:string = sensorRequired[currentSensorRequiredIndex];
+            result[currentSensorRequired] = this.timeBox.getRequired();
+        }
+
+        return result;
     }
 
     hasLeftOperand(operandName:string):boolean {
@@ -110,7 +118,7 @@ class Condition {
         this.timeBox = newTimeBox;
         this.startDate = newTimeBox.getStartDate();
         this.endDate = newTimeBox.getEndDate();
-    }
+   }
 
     isInTimeBox(date:Date):boolean {
         return this.timeBox.isDateInTimeBox(date);

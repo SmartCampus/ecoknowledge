@@ -35,7 +35,7 @@ class ConditionList {
      *      ...
      *  }
      */
-    public getRequired():string[][] {
+    public getRequired():any {
 
         var result:any = {};
 
@@ -87,6 +87,11 @@ class ConditionList {
         var newStart = (currentStart > oldStart) ? oldStart : currentStart;
         var newEnd = (currentEnd > oldEnd) ? currentEnd : oldEnd;
 
+        /*
+        console.log("currentStart", currentStart, "currentEnd", currentEnd, "oldStart", oldStart,
+        "oldEnd", oldEnd, "newstart", newStart, "newEnd", newEnd);
+        */
+
         return {
             start: newStart,
             end: newEnd
@@ -108,7 +113,9 @@ class ConditionList {
         var result:boolean = true;
 
         for (var i = 0; i < this.conditions.length; i++) {
+
             result = result && this.conditions[i].evaluate(values);
+
             var conditionDescription:any = this.conditions[i].getDataInJSON();
             if (goalInstance != null) {
                 goalInstance.addProgress(conditionDescription);

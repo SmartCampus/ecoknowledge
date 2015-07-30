@@ -24,10 +24,7 @@ describe('Test store GoalCondition class', () => {
     var typeOfComparison:string = '<';
     var description = 'a desc';
 
-    var now:Date = new Date(Date.now());
-    var timeBox:TimeBox = new TimeBox(now, now);
-
-    var goalCondition:GoalExpression = new GoalExpression(leftOperand, typeOfComparison,
+    var goalExpression:GoalExpression = new GoalExpression(leftOperand, typeOfComparison,
         rightOperand, description);
 
     var expected:any = {
@@ -40,15 +37,11 @@ describe('Test store GoalCondition class', () => {
             sensor: rightOperand.hasToBeDefined()
         },
         comparison: typeOfComparison,
-        description: description,
-        timeBox: {
-            startDate: now,
-            endDate: now
-        }
+        description: description
     };
 
     it('should return the proper json object', () => {
-        chai.expect(goalCondition.getDataInJSON()).to.be.eqls(expected);
+        chai.expect(goalExpression.getDataInJSON()).to.be.eqls(expected);
     });
 
     describe('build with its own description', () => {
@@ -79,15 +72,5 @@ describe('Test store GoalCondition class', () => {
         it('should have the same description', () => {
             chai.expect(goalConditionClone.getDescription()).to.be.eq(description);
         });
-
-        /*FIXME
-        it('should have the same startDate', () => {
-            chai.expect(goalConditionClone.getStartDateInMillis()).to.be.eq(now);
-        });
-
-        it('should have the same endDate', () => {
-            chai.expect(goalConditionClone.getEndDateInMillis()).to.be.eq(now);
-        });
-        */
     });
 });

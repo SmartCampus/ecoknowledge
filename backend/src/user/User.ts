@@ -66,11 +66,9 @@ class User {
     }
 
     public deleteChallenge(challengeID:string):void {
-        console.log("WANnA DElETE IT HU?", this.currentChallenges);
 
         var challengeIndex:number = this.getChallenge(challengeID);
         if (challengeIndex == -1) {
-            console.log("LOL PAS TROUVE MA GUEULE");
             throw new BadArgumentException('Can not find given challenge ID');
         }
         else {
@@ -92,7 +90,6 @@ class User {
 
         for (var currentChallengeIndex = 0; currentChallengeIndex < this.currentChallenges.length; currentChallengeIndex++) {
             if (this.currentChallenges[currentChallengeIndex] === challengeID) {
-                console.log("INDEX", currentChallengeIndex);
                 result = currentChallengeIndex;
             }
         }
