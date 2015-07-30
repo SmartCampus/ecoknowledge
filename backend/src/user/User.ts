@@ -30,6 +30,8 @@ class User {
         this.id = (id) ? id : uuid.v4();
 
         this.name = name;
+        this.currentChallenges = currentChallenges;
+        this.finishedBadgesMap = finishedBadgesMap;
     }
 
     public getUUID() {

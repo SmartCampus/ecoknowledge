@@ -116,7 +116,7 @@ class OverallGoalCondition implements Expression {
     }
 
     private retrieveValues(data:any, values:number[]) {
-        var valuesDesc = data.values;
+        var  valuesDesc = data.values;
 
         for (var currentValueDescIndex in valuesDesc) {
             var currentValueDesc = valuesDesc[currentValueDescIndex];
@@ -134,9 +134,11 @@ class OverallGoalCondition implements Expression {
 
     public getDataInJSON():any {
         return {
-            type:'overall',
+            type: 'overall',
             thresholdRate: this.thresholdRate,
-            expression: this.condition.getDataInJSON()
+            expression: this.condition.getDataInJSON(),
+            startDate: this.condition.getStartDateInMillis(),
+            endDate: this.condition.getEndDateInMillis()
         }
     }
 
