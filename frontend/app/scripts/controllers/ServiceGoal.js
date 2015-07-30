@@ -7,26 +7,23 @@
 var app = angular.module('ecoknowledgeApp');
 
 app.service('ServiceGoal',['$http', function ServiceGoal($http){
-    var basePath = 'http://localhost:3000/';
+    var basePathGoal = 'http://localhost:3000/goals/';
     this.get = function(id, successFunc, failFunc) {
-
-      var path = basePath+'goals';
-
-      path += (id)? id : '/all';
-      console.log('Get ON', path);
-
-      $http.get(path)
+        var path = basePathGoal;
+        path += (id)? id : 'all';
+        console.log('Get ON', path);
+        $http.get(path)
         .success(function (data) {
-              successFunc(data);
+            successFunc(data);
         })
         .error(function (data) {
-          failFunc(data);
+            console.log('path : ', path);
+            failFunc(data);
         });
-
     };
 
      this.getRequired= function(id, successFunc, failFunc) {
-       $http.get(basePath+'required/?goalName=' + id)
+       $http.get(basePathGoal+'required/?goalName=' + id)
          .success(function (data) {
            successFunc(data);
          })
@@ -36,7 +33,9 @@ app.service('ServiceGoal',['$http', function ServiceGoal($http){
      };
 
     this.post = function(goal, successFunc, failFunc){
-        $http.post(basePath+'addgoal', goal)
+        console.log('goal : ',goal);
+        console.log('path : ',basePathGoal+'new');
+        $http.post(basePathGoal+'new', goal)
             .success(function(){
                 successFunc();
             })
@@ -44,6 +43,5 @@ app.service('ServiceGoal',['$http', function ServiceGoal($http){
                 failFunc();
             });
     };
-
 
 }]);

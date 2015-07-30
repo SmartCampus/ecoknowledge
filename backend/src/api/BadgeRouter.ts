@@ -54,11 +54,41 @@ class BadgeRouter extends RouterItf {
         var self = this;
 
         this.router.get('/trophyWall', function(req,res) {
-            self.getAllBadges(req,res);
+            self.getAllFinishedBadges(req,res);
         });
         this.router.post('/new', function(req,res) {
             self.newBadge(req,res);
         });
+        this.router.get('/all', function(req,res) {
+           self.getAllBadges(req,res);
+        });
+        this.router.get('/:id', function(req, res) {
+           self.getBadge(req, res);
+        });
+    }
+
+    /**
+     *  This method will return all badges
+     *  from the trophy wall of a user
+     *  using badgeRepository#getBadge
+     * @param req
+     * @param res
+     */
+    getAllFinishedBadges(req:any, res:any) {
+        var badges = this.userRepository.getCurrentUser().getFinishedBadges();
+        var result:any[] = [];
+
+        console.log('badges : ', badges);
+        for(var currentBadgeIDIndex in badges) {
+            var currentBadge = this.badgeRepository.getBadge(currentBadgeIDIndex).getData();
+            var dataTrophy = {
+                number:badges[currentBadgeIDIndex],
+                badge:currentBadge
+            };
+
+            result.push(dataTrophy);
+        }
+        res.send(result);
     }
 
     /**
@@ -68,16 +98,19 @@ class BadgeRouter extends RouterItf {
      * @param res
      */
     getAllBadges(req:any, res:any) {
-        var badges = this.userRepository.getCurrentUser().getFinishedBadgesID();
-        var result:any[] = [];
+        var badges = this.badgeRepository.getDataInJSON();
+        res.send(badges);
+    }
 
-        for(var currentBadgeIDIndex in badges) {
-            var currentBadgeID = badges[currentBadgeIDIndex];
-            var currentBadge = this.badgeRepository.getBadge(currentBadgeID);
-            result.push(currentBadge.getData());
-        }
-
-        res.send(result);
+    /**
+     *  This method will return a specific badge
+     *  using badgeRepository#getBadge
+     * @param req
+     * @param res
+     */
+    getBadge(req:any, res:any) {
+        var badge = this.badgeRepository.getBadge(req.params.id).getDataInJSON();
+        res.send(badge);
     }
 
     /**

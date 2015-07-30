@@ -14,7 +14,7 @@ var app = angular.module('ecoknowledgeApp')
     self.selectedBadge = null;
 
     this.addGoal = function () {
-        self.goal.badge = self.selectedBadge;
+        self.goal.badgeID = self.selectedBadge.id;
         console.log(angular.toJson(self.goal));
         ServiceGoal.post(angular.toJson(self.goal),function() {
             console.log('Achieve to add a conditions', self.conditions);
@@ -74,7 +74,7 @@ var app = angular.module('ecoknowledgeApp')
         }
     };
 
-    ServiceBadgeV2.get('',function(data){
+    ServiceBadgeV2.get('all',function(data){
         console.log('Achieve to get the badges V2 ', data);
         self.badges = data;
     }, function(data){
@@ -87,7 +87,7 @@ var app = angular.module('ecoknowledgeApp')
 
 app.directive('stringForm', function(){
   return{
-    retrict:'E',
+    restrict:'E',
     templateUrl:'../../views/create goal/string-form.html'
   };
 });

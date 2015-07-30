@@ -2,6 +2,7 @@ import RouterItf = require('./RouterItf');
 
 import GoalInstanceRepository = require('../goal/instance/GoalInstanceRepository');
 import GoalInstanceFactory = require('../goal/instance/GoalInstanceFactory');
+import GoalInstance = require('../goal/instance/GoalInstance');
 import GoalDefinitionRepository = require('../goal/definition/GoalDefinitionRepository');
 import UserRepository = require('../user/UserRepository');
 
@@ -56,6 +57,10 @@ class GoalInstanceRouter extends RouterItf {
 
         this.router.get('/evaluate', function (req, res) {
             self.evaluate(req, res);
+        });
+
+        this.router.get('/evaluate/all', function (req, res) {
+            self.evaluateAll(req, res);
         });
 
         //  Debug routes only
@@ -157,11 +162,9 @@ class GoalInstanceRouter extends RouterItf {
     }
 
     evaluate(req:any, res:any) {
-        var self = this;
-
         var goalInstanceID:string = req.query.id;
 
-        var goalInstanceToEvaluate = this.goalInstanceRepository.getGoalInstance(goalInstanceID);
+        var goalInstanceToEvaluate:GoalInstance = this.goalInstanceRepository.getGoalInstance(goalInstanceID);
 
         if (!goalInstanceToEvaluate) {
             var msg:string = 'Can not find challenge with given id';
@@ -169,6 +172,30 @@ class GoalInstanceRouter extends RouterItf {
             throw new BadRequestException(msg);
         }
 
+        res.send(this.evaluateChallenge(goalInstanceToEvaluate, goalInstanceID));
+    }
+
+    evaluateAll(req:any, res:any){
+        var challenges:string[] = this.userRepository.getCurrentUser().getChallenges();
+        for(var challenge in challenges){
+            var currentChallengeID:string = challenges[challenge];
+            var challengeToEvaluate:GoalInstance = this.goalInstanceRepository.getGoalInstance(currentChallengeID);
+            this.evaluateChallenge(challengeToEvaluate, currentChallengeID);
+        }
+        res.send('OK');
+    }
+
+    //  debug only
+    private addFinishedBadge(challengeID:string, userID:string) {
+        console.log('user id : ', userID);
+        console.log('challenge ID : ', challengeID);
+        var user = this.userRepository.getUser(userID);
+        var badge = this.goalInstanceRepository.getBadgeByChallengeID(challengeID);
+        user.addFinishedBadge(badge);
+        user.deleteChallenge(challengeID);
+    }
+
+    private evaluateChallenge(goalInstanceToEvaluate:GoalInstance, goalInstanceID){
         if (!GoalInstanceRouter.DEMO) {
 
             //TODO move what follow
@@ -185,18 +212,18 @@ class GoalInstanceRouter extends RouterItf {
                     var path = 'http://smartcampus.unice.fr/sensors/' + currentSensorName + '/data?date=' + startDate + '/' + endDate;
                     var dataJsonString = "";
 
-                    self.middleware.getSensorsInfo(required, numberToLoad, dataJsonString, path,
+                    this.middleware.getSensorsInfo(required, numberToLoad, dataJsonString, path,
                         function () {
                             var result = goalInstanceToEvaluate.evaluate(required);
                             if (result) {
-                                self.addFinishedBadge(goalInstanceID, self.userRepository.getCurrentUser());
+                                this.addFinishedBadge(goalInstanceID, this.userRepository.getCurrentUser().getUUID());
                             }
                             console.log("All data were retrieve properly");
-                            res.send(goalInstanceToEvaluate.getProgress());
+                            return goalInstanceToEvaluate.getProgress();
                         },
                         function () {
                             console.log("FAIL MIDDLEWARE");
-                            res.send({error: "Error occured in middleware"});
+                           return {error: "Error occured in middleware"};
                         });
 
                 })(requiredSensorName[currentSensorName]);
@@ -205,18 +232,10 @@ class GoalInstanceRouter extends RouterItf {
         else {
             var result = goalInstanceToEvaluate.evaluate(this.jsonStub);
             if (result) {
-                this.addFinishedBadge(goalInstanceID, this.userRepository.getCurrentUser());
+                this.addFinishedBadge(goalInstanceID, this.userRepository.getCurrentUser().getUUID());
             }
-            res.send(goalInstanceToEvaluate.getProgress());
+            return goalInstanceToEvaluate.getProgress();
         }
-    }
-
-    //  debug only
-    private addFinishedBadge(challengeID, userID) {
-        var user = this.userRepository.getUser(userID);
-        var badge = this.goalInstanceRepository.getBadgeByChallengeID(challengeID);
-        user.addFinishedBadge(badge);
-        user.deleteChallenge(challengeID);
     }
 }
 

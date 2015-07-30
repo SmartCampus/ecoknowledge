@@ -39,7 +39,9 @@ app.service('ServiceChallenge', ['$http', function ServiceChallenge($http) {
   };
 
   this.evaluate = function (badgeName, successFunc, failFunc) {
-    $http.get(basePath + 'evaluatebadge?badgeName=' + badgeName)
+    var pathEval = basePath + 'evaluate/'+(badgeName==='all'?'all':('evaluatebadge?badgeName=' + badgeName));
+    console.log('path eval trophy : ',pathEval);
+    $http.get(pathEval)
       .success(function (data) {
         successFunc(data);
       })

@@ -28,9 +28,24 @@ class GoalDefinitionRouter extends RouterItf {
         this.router.get('/all', function(req, res) {
             self.getAllGoalsDefinition(req, res);
         });
+        this.router.get('/:id', function(req, res) {
+           self.getGoalDefinition(req, res);
+        });
         this.router.post('/new', function(req,res) {
             self.addGoalDefinition(req, res);
         });
+    }
+
+    /**
+     * This method will return the goal definition
+     * of a specific goal, using its uuid and
+     * using goalDefinitionRepository#getListOfGoalsInJsonFormat
+     * @param req
+     * @param res
+     */
+    getGoalDefinition(req, res){
+        var result = this.goalDefinitionRepository.getGoal(req.params.id).getDataInJSON();
+        res.send(result);
     }
 
     /**
@@ -40,6 +55,7 @@ class GoalDefinitionRouter extends RouterItf {
      * @param res
      */
     getAllGoalsDefinition(req:any, res:any) {
+        console.log('');
         var result = this.goalDefinitionRepository.getListOfGoalsInJsonFormat();
         res.send(result);
     }

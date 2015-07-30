@@ -12,7 +12,7 @@ class Badge {
     constructor(name:string = "default badge", points:number = 0, id=null) {
         this.name = name;
         this.points = points;
-        this.id = (id)?id:uuid.v4();
+        this.id = (id) ? id : uuid.v4();
     }
 
     public getName():string {

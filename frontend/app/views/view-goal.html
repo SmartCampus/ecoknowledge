@@ -2,16 +2,16 @@
 <div>
     Remplissable du {{viewGoalCtrl.goal.timeBox.startDate|date}} au {{viewGoalCtrl.goal.timeBox.endDate|date}}
     <br/>
-    Durée : {{viewGoalCtrl.goal.durationInDays}} jours
+    Durée : {{viewGoalCtrl.goal.duration}} jours
 </div>
 <ul>
     <li class="list-group-item" ng-repeat="condition in viewGoalCtrl.goal.conditions">
-        {{condition.description}}
+        {{condition.expression.description}}
     </li>
 </ul>
 <div>
-    Badge associé : {{viewGoalCtrl.goal.badge.name}}
+    Badge associé : {{viewGoalCtrl.badge.name}}
     <br/>
-    Fait gagner {{viewGoalCtrl.goal.badge.points}} points
+    Fait gagner {{viewGoalCtrl.badge.points}} points
     <br/>
 </div>

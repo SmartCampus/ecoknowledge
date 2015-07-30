@@ -82,8 +82,8 @@ describe('Service: ServiceGoal', function() {
             };
 
 
-            httpBackend.when('POST',path +'adddgoal');
-            httpBackend.expectPOST(path+'addgoal').respond('gg wp');
+            httpBackend.when('POST',path +'goals/new');
+            httpBackend.expectPOST(path+'goals/new').respond('gg wp');
             Goal.post(mockPatrick, callbacks.success, callbacks.error);
 
             httpBackend.flush();

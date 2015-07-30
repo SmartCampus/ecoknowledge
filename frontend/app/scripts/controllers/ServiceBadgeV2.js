@@ -9,7 +9,7 @@ var path = 'http://localhost:3000/badges/';
 var app = angular.module('ecoknowledgeApp');
 app.service('ServiceBadgeV2',['$http', function ServiceBadgeV2($http){
     this.post = function(badge, successFunc, failFunc){
-        $http.post(path+'badgesV2', badge)
+        $http.post(path+'new', badge)
             .success(function(data){
                 successFunc(data);
             })
@@ -19,7 +19,7 @@ app.service('ServiceBadgeV2',['$http', function ServiceBadgeV2($http){
     };
 
     this.get = function(id, successFunc, failFunc){
-      $http.get(path+'badgesV2/'+id)
+      $http.get(path+id)
           .success(function(data){
               successFunc(data);
           })
@@ -29,7 +29,7 @@ app.service('ServiceBadgeV2',['$http', function ServiceBadgeV2($http){
     };
 
     this.getTrophies = function(successFunc, failFunc){
-        $http.get(path+'trophywall')
+        $http.get(path+'trophyWall')
             .success(function(data){
                 successFunc(data);
             })

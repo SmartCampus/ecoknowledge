@@ -22,7 +22,7 @@ var app = angular.module('ecoknowledgeApp')
     self.takeGoal = function (goalID) {
 
       var toSend = {};
-      toSend.goalID = goalID;
+      toSend.id = goalID;
 
       console.log('TAKE GOAL', toSend);
       ServiceChallenge.takeGoal(toSend, function (data) {
@@ -43,9 +43,15 @@ var app = angular.module('ecoknowledgeApp')
     };
 
     self.getBadges = function () {
+      ServiceChallenge.evaluate('all',function(data){
+        console.log('achieve eval');
+      },function(data){
+        console.log('fail eval');
+      });
+
       self.goalsInstance = [];
       ServiceChallenge.get('', function (data) {
-        console.log('badges : ', data);
+        console.log('get the badges : ');
         self.goalsInstance = data;
 
         for (var badgeIndex in self.goalsInstance) {
@@ -73,23 +79,7 @@ var app = angular.module('ecoknowledgeApp')
      * add a badge to the array badges
      */
     self.addBadge = function (bdg) {
-      console.log(bdg);
       self.goalsInstance.add(bdg);
-      console.log(self.goalsInstance);
-    };
-
-    self.check = function (badge) {
-      ServiceChallenge.evaluate(badge.name, function (data) {
-        if (data) {
-          badge.yes = true;
-        }
-        else {
-          badge.fail = true;
-        }
-        console.debug(data);
-      }, function (data) {
-        console.debug(data);
-      });
     };
 
     self.getTrophies = function(){
@@ -99,8 +89,7 @@ var app = angular.module('ecoknowledgeApp')
         console.log('trophies get : ', self.trophies);
       },function(data){
         console.log('Error getting trophies', data);
-      })
-      ;
+      });
     };
 
     self.removeObjective = function(objective){

@@ -151,18 +151,19 @@ class GoalInstance {
 
         var mapSymbolicNameToValue = this.bindSymbolicNameToValue(values);
 
-        var result = this.goalDefinition.evaluate(mapSymbolicNameToValue, this);
-        if (result && this.percentageOfTime >= 100) {
+        var resultEval = this.goalDefinition.evaluate(mapSymbolicNameToValue, this);
+
+        if (resultEval && this.percentageOfTime >= 100) {
             this.status = BadgeStatus.SUCCESS;
             console.log('success!');
+            return true;
         } else if (this.percentageOfTime >= 100) {
             this.status = BadgeStatus.FAIL;
             console.log('Fail!');
         } else {
             this.status = BadgeStatus.RUN;
         }
-
-        return result;
+        return false;
     }
 
     private bindSymbolicNameToValue(mapSensorToValue:any) {
@@ -189,7 +190,19 @@ class GoalInstance {
                 id: this.goalDefinition.getUUID(),
                 conditions: this.mapSymbolicNameToSensor
             },
-            progress: this.progress
+            progress: this.progress,
+            status: this.getStatusAsString()
+        }
+    }
+
+
+    private getStatusAsString():string {
+        switch(this.status){
+            case 0: return 'WAIT'; break;
+            case 1: return 'RUNNING'; break;
+            case 2: return 'SUCCESS'; break;
+            case 3: return 'FAIL'; break;
+            default: return 'UNKNOWN'; break;
         }
     }
 }
