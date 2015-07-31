@@ -20,9 +20,10 @@
               "value": "15",
               "sensor": false
             },
-            "comparison": ">",
+            "comparison": "<",
             "description": "a desc"
           },
+		  "threshold":25,
           "startDate": "2015-06-29T09:06:19.000Z",
           "dateOfCreation": "2015-07-29T09:06:19.178Z",
           "endDate": "2015-07-31T09:06:19.000Z"

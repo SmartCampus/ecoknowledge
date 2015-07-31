@@ -73,7 +73,6 @@ class AverageOnValue extends Condition {
             result = result && (changeRate >= this.thresholdRate);
             this.percentageAchieved = changeRate * 100 / this.thresholdRate;
 
-
             //  It can be infinite
             this.percentageAchieved = (this.percentageAchieved > 100) ? 100 : this.percentageAchieved;
 
@@ -105,7 +104,7 @@ class AverageOnValue extends Condition {
             //  { date : __ , value : __ }
             var currentValue:any = values[currentValueIndex];
 
-            var currentDate:Date = new Date(currentValue.date);
+            var currentDate:Date = new Date(parseFloat(currentValue.date));
 
             if (currentDate.getTime() >= this.startDate.getTime()
                 && currentDate.getTime() <= this.dateOfCreation.getTime()) {

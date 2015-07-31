@@ -92,7 +92,7 @@ class GoalInstanceRouter extends RouterItf {
         var key = data.key;
 
         var valueDesc:any = {};
-        valueDesc.date = Clock.getNow() / 1000;
+        valueDesc.date = Clock.getNow();
         valueDesc.value = value;
 
         var oldJson:any[] = this.jsonStub[key].values;
@@ -152,6 +152,8 @@ class GoalInstanceRouter extends RouterItf {
             var currentChallengeDesc = currentChallenge.getDataInJSON();
             result.push(currentChallengeDesc);
         }
+
+        console.log("RES SEND", JSON.stringify(result));
 
         res.send(result);
     }
