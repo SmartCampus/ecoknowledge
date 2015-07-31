@@ -10,7 +10,7 @@
       "duration": 2,
       "conditions": [
         {
-          "type": "comparison",
+          "id": "d4566648-8811-42ef-83e1-a144de52d6ea",
           "expression": {
             "valueLeft": {
               "value": "TMP_CLI",
@@ -23,10 +23,13 @@
             "comparison": "<",
             "description": "a desc"
           },
-		  "threshold":25,
-          "startDate": "2015-06-29T09:06:19.000Z",
-          "dateOfCreation": "2015-07-29T09:06:19.178Z",
-          "endDate": "2015-07-31T09:06:19.000Z"
+          "threshold": 25,
+          "startDate": "2015-07-01T12:01:57.000Z",
+          "dateOfCreation": "2015-07-31T12:01:57.339Z",
+          "endDate": "2015-08-02T12:01:57.000Z",
+          "percentageAchieved": 100,
+          "percentageOfTimeElapsed": 100,
+          "type": "comparison"
         }
       ],
       "badgeID": "44bb8108-8830-4f43-abd1-3ef643303d92"
@@ -44,29 +47,11 @@
       "id": "2cf91e02-a320-4766-aa9f-6efce3142d44",
       "name": "Jackie!",
       "currentChallenges": [],
-      "finishedBadgesMap": {}
+      "finishedBadgesMap": {
+        "44bb8108-8830-4f43-abd1-3ef643303d92": 1
+      }
     }
   ],
   "challenges": [
-    {
-      "id": "7015f504-9829-4e0c-b09b-807366d81647",
-      "name": "Clim",
-      "timeProgress": 54.78062471615277,
-      "startDate": "2015-07-29T09:06:19.178Z",
-      "endDate": "2015-07-31T09:06:19.000Z",
-      "goal": {
-        "id": "3221c575-85ca-447b-86f3-3a4ef39985dc",
-        "conditions": {
-          "TMP_CLI": "TEMP_443V"
-        }
-      },
-      "progress": [
-        {
-          "description": "a desc",
-          "timeAchieved": 54.78062471615277,
-          "conditionAchieved": null
-        }
-      ]
-    }
-  ]
+    ]
 }

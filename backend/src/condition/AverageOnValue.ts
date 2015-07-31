@@ -50,31 +50,37 @@ class AverageOnValue extends Condition {
 
             var rate = 0;
 
-            if (oldData) {
+            if (oldData.length != 0 && newData.length != 0) {
 
                 var oldAverage = this.computeAverageValues(oldData);
                 var newAverage = this.computeAverageValues(newData);
 
+                console.log("OLD", oldAverage, "NEW", newAverage);
+
                 if (newAverage) {
                     rate = (newAverage * 100 / oldAverage);
                 }
+
+
+                // < baisse
+                // > hausse
+                var changeRate = 0;
+
+                if (this.expression.getComparisonType() === '<') {
+                    changeRate = 100 - rate;
+                } else {
+                    changeRate = rate - 100;
+                }
+
+
+                result = result && (changeRate >= this.thresholdRate);
+                this.percentageAchieved = changeRate * 100 / this.thresholdRate;
+                console.log("percentageAchieved", this.percentageAchieved);
+
+                //  It can be infinite
+                this.percentageAchieved = (this.percentageAchieved > 100) ? 100 : this.percentageAchieved;
             }
 
-            // < baisse
-            // > hausse
-            var changeRate = 0;
-
-            if (this.expression.getComparisonType() === '<') {
-                changeRate = 100 - rate;
-            } else {
-                changeRate = rate - 100;
-            }
-
-            result = result && (changeRate >= this.thresholdRate);
-            this.percentageAchieved = changeRate * 100 / this.thresholdRate;
-
-            //  It can be infinite
-            this.percentageAchieved = (this.percentageAchieved > 100) ? 100 : this.percentageAchieved;
 
             this.updateDurationAchieved(Clock.getNow());
         }
