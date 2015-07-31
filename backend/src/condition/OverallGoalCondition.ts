@@ -1,11 +1,11 @@
-import _GoalExpression = require('./expression/GoalExpression');
-import _Condition = require('./Condition');
+import GoalExpression = require('./expression/GoalExpression');
+import Condition = require('./Condition');
 import Clock = require('../Clock');
 
-class OverallGoalCondition extends _Condition{
+class OverallGoalCondition extends Condition{
 
 
-    constructor(id:string, condition:_GoalExpression, thresholdRate:number,
+    constructor(id:string, condition:GoalExpression, thresholdRate:number,
                 startDate:Date, dateOfCreation:Date, endDate:Date,
                 percentageAchieved:number = 0, percentageOfTimeElapsed:number = 0) {
 
@@ -23,7 +23,7 @@ class OverallGoalCondition extends _Condition{
      */
 
     public evaluate(data:any) {
-        var conditionDesc:any = this.expression.getRequired();
+        var conditionDesc:string[] = this.expression.getRequired();
 
         //  For each sensors required by internal condition
         for (var currentSensorNameIndex in conditionDesc) {
