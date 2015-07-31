@@ -3,19 +3,21 @@ import Filter = require('../Filter');
 class HourFilter implements Filter {
 
     private timeOfDay:string;
+    private internalFilter:Filter;
+
 
     private mapTimeOfDayToHours:any = {
         'morning': {
-            'start':8,
-            'end':12
+            'start': 8,
+            'end': 12
         },
         'afternoon': {
-            'start':12,
-            'end':18
+            'start': 12,
+            'end': 18
         },
-        'night':{
-            'start':18,
-            'end':8
+        'night': {
+            'start': 18,
+            'end': 8
         }
     };
 
@@ -26,19 +28,18 @@ class HourFilter implements Filter {
     apply(values:any[]) {
         var result:any[] = [];
 
-        for(var currentValueIndex in values) {
+        for (var currentValueIndex in values) {
+
             var currentValue = values[currentValueIndex];
 
             var currentDateDesc:string = currentValue.date;
 
             var currentDateInSecondsSinceEPOCH = parseInt(currentDateDesc);
-            var currentDate:Date = new Date(currentDateInSecondsSinceEPOCH*1000);
+            var currentDate:Date = new Date(currentDateInSecondsSinceEPOCH);
 
-            var date:Date = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getMonth(), currentDate.getUTCDay(),
-            currentDate.getUTCHours(), currentDate.getUTCMinutes(), currentDate.getUTCSeconds()));
-
-            if(date.getHours() >= this.mapTimeOfDayToHours[this.timeOfDay].start
-            && date.getHours() < this.mapTimeOfDayToHours[this.timeOfDay].end) {
+            console.log("CURRENT DATE.GETHOURS", currentDate.getHours(), "VS", this.mapTimeOfDayToHours[this.timeOfDay].start, "AND", this.mapTimeOfDayToHours[this.timeOfDay].end);
+            if (currentDate.getHours() >= this.mapTimeOfDayToHours[this.timeOfDay].start
+                && currentDate.getHours() < this.mapTimeOfDayToHours[this.timeOfDay].end) {
                 result.push(currentValue.value);
             }
         }
