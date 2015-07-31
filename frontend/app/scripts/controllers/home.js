@@ -65,6 +65,7 @@ var app = angular.module('ecoknowledgeApp')
           currentBadge.startDate = formattedStartDate;
           currentBadge.endDate = formattedEndDate;
         }
+        console.log('goals : ', angular.toJson(self.goalsInstance));
 
       }, function (data) {
         console.debug('Fail to get the badges', data);
