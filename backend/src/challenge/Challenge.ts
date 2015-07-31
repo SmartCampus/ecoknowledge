@@ -122,10 +122,12 @@ class Challenge {
             result[currentSensor] = this.goalDefinition.getRequired()[currentSymbolicName];
         }
 
-
         return result;
     }
 
+    setGoal(goal) {
+        this.goalDefinition = goal;
+    }
 
     /**
      *
@@ -167,7 +169,7 @@ class Challenge {
         return result;
     }
 
-    private bindSymbolicNameToValue(mapSensorToValue:any) {
+    public bindSymbolicNameToValue(mapSensorToValue:any) {
         var result:any = {};
 
         for (var currentSymbolicName in this.mapSymbolicNameToSensor) {

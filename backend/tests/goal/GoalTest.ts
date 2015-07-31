@@ -39,6 +39,31 @@ describe("Add a condition to a goal", () => {
         var expression:OverallGoalCondition = new OverallGoalCondition(null, comparison, 0, new Date(Date.UTC(2000, 10, 10)), new Date(Clock.getNow()), new Date(Date.UTC(2000, 10, 15)));
         chai.expect(goal.addCondition(expression)).not.to.throw;
     });
+
+    it("should return the proper json", () => {
+        var expected:any = {
+            id: goal.getUUID(),
+            name: goal.getName(),
+            timeBox: {
+                startDate: goal.getStartDate(),
+                endDate: goal.getEndDate()
+            },
+            duration: goal.getDuration(),
+            conditions: goal.getConditions().getDataInJSON(),
+            badgeID: goal.getBadgeID()
+        }
+
+        var actual = goal.getDataInJSON();
+
+        chai.expect(expected).to.be.eqls(actual);
+    });
+
+    it("should call conditionsList evaluate on evaluate call", () => {
+        var goalStubObj = sinon.stub(goal.getConditions(), "evaluate");
+        goalStubObj.onFirstCall().returns(true);
+        goal.evaluate({'a': null, 'b': null});
+        chai.assert(goalStubObj.calledOnce);
+    });
 });
 
 
