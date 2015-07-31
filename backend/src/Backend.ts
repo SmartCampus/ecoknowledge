@@ -18,6 +18,7 @@ import ChallengeFactory = require('./challenge/ChallengeFactory');
 
 import UserRepository = require('./user/UserRepository');
 import UserFactory = require('./user/UserFactory');
+import User = require('./user/User');
 
 import Operand = require('./condition/expression/Operand');
 import GoalExpression = require('./condition/expression/GoalExpression');
@@ -96,7 +97,12 @@ class Backend extends Server {
     loadData():void {
         var self = this;
         var result = self.storingHandler.load();
-        console.log(result.success);
+        if(result.success) {
+            console.log(result.success);
+        }
+        else {
+            this.userRepository.setCurrentUser(new User('Jackie'));
+        }
     }
 }
 
