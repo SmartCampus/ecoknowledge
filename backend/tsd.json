@@ -37,6 +37,15 @@
     },
     "node-uuid/node-uuid.d.ts": {
       "commit": "d73cbcb405788eb85cc4a4167b963ef4dd630cdc"
+    },
+    "moment/moment.d.ts": {
+      "commit": "ff4d925801749dab05d17e52d4ed041daaa23142"
+    },
+    "moment/moment-node.d.ts": {
+      "commit": "ff4d925801749dab05d17e52d4ed041daaa23142"
+    },
+    "moment-timezone/moment-timezone.d.ts": {
+      "commit": "f0fff7255c6cc3507b13639d1ed08e7ea0ce3e65"
     }
   }
 }

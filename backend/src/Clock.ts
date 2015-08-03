@@ -9,6 +9,10 @@ class Clock {
     static setNow(newNow:number) {
         Clock.now = newNow;
     }
+
+    static getTimeZone():string {
+        return 'Europe/Paris';
+    }
 }
 
 export = Clock;

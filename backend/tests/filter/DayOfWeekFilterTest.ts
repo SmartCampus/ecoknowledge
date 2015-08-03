@@ -11,7 +11,7 @@ import DayOfWeekFilter = require('../../src/filter/DayOfWeekFilter');
 import DayFilter = require('../../src/filter/daysOfWeek/DayFilter');
 import BadArgumentException = require('../../src/exceptions/BadArgumentException');
 
-describe('PeriodOfDayFilter test', () => {
+describe('DayOfWeekFilter test', () => {
 
     describe('Test constructor', () => {
         var aNameThatDoesntExist:string = 'pouet';
@@ -31,7 +31,7 @@ describe('PeriodOfDayFilter test', () => {
         });
 
         it('should build the filter with proper parameters', () => {
-            chai.expect(filter.getFilterTimeIntervals()).to.be.eqls([0, 6]);
+            chai.expect(filter.getFilterTimeIntervals()).to.be.eqls([1, 7]);
         });
     });
 
@@ -44,7 +44,7 @@ describe('PeriodOfDayFilter test', () => {
         });
 
         it('should build the filter with proper parameters', () => {
-            chai.expect(filter.getFilterTimeIntervals()).to.be.eqls([5, 6]);
+            chai.expect(filter.getFilterTimeIntervals()).to.be.eqls([6, 7]);
         });
     });
 
@@ -57,7 +57,7 @@ describe('PeriodOfDayFilter test', () => {
         });
 
         it('should build the filter with proper parameters', () => {
-            chai.expect(filter.getFilterTimeIntervals()).to.be.eqls([0, 4]);
+            chai.expect(filter.getFilterTimeIntervals()).to.be.eqls([1, 5]);
         });
     });
 });
