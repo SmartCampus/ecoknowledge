@@ -146,8 +146,6 @@ class GoalInstanceRouter extends RouterItf {
             result.push(currentChallengeDesc);
         }
 
-        console.log("RES SEND", JSON.stringify(result));
-
         res.send(result);
     }
 
@@ -225,7 +223,6 @@ class GoalInstanceRouter extends RouterItf {
                             return goalInstanceToEvaluate.getProgress();
                         },
                         function () {
-                            console.log("FAIL MIDDLEWARE");
                            return {error: "Error occured in middleware"};
                         });
 

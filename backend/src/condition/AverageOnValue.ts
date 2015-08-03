@@ -55,8 +55,6 @@ class AverageOnValue extends Condition {
                 var oldAverage = this.computeAverageValues(oldData);
                 var newAverage = this.computeAverageValues(newData);
 
-                console.log("OLD", oldAverage, "NEW", newAverage);
-
                 if (newAverage) {
                     rate = (newAverage * 100 / oldAverage);
                 }
@@ -75,7 +73,6 @@ class AverageOnValue extends Condition {
 
                 result = result && (changeRate >= this.thresholdRate);
                 this.percentageAchieved = changeRate * 100 / this.thresholdRate;
-                console.log("percentageAchieved", this.percentageAchieved);
 
                 //  It can be infinite
                 this.percentageAchieved = (this.percentageAchieved > 100) ? 100 : this.percentageAchieved;

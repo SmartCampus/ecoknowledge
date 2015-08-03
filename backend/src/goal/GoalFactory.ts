@@ -27,7 +27,6 @@ class GoalFactory {
             var currentExpression = this.conditionFactory.createCondition(goalConditions[i], data.timeBox, durationAllowed);
             newGoal.addCondition(currentExpression);
         }
-        console.log('new goal : ',newGoal.getDataInJSON());
         //  console.log("Creation de l'objectif", goalName, "valide du", startDateOfValidityPeriod, "au", endDateOfValidityPeriod, "avec le badge", newGoal.getBadgeID());
 
         return newGoal;

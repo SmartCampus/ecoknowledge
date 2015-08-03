@@ -55,7 +55,6 @@ class GoalDefinitionRouter extends RouterItf {
      * @param res
      */
     getAllGoalsDefinition(req:any, res:any) {
-        console.log('');
         var result = this.goalDefinitionRepository.getListOfGoalsInJsonFormat();
         res.send(result);
     }
