@@ -31,8 +31,8 @@ describe("GoalInstance test", () => {
     var anExpression:GoalExpression = new GoalExpression(new Operand(aSymbolicName, true), '<', new Operand('40', false), 'desc');
     var anotherExpression:GoalExpression = new GoalExpression(new Operand(anotherSymbolicName, true), '>', new Operand('25', false), 'desc')
 
-    var anAverageCondition:AverageOnValue = new AverageOnValue(null, anExpression, 10, aStartDate, aDateOfCreation, aEndDate);
-    var anotherAverageCondition:AverageOnValue = new AverageOnValue(null, anotherExpression, 10, aStartDate, aDateOfCreation, aEndDate);
+    var anAverageCondition:AverageOnValue = new AverageOnValue(null, anExpression, 10, aStartDate, aDateOfCreation, aEndDate, new Date(0,1,0,0,0,0,0));
+    var anotherAverageCondition:AverageOnValue = new AverageOnValue(null, anotherExpression, 10, aStartDate, aDateOfCreation, aEndDate, new Date(0,1,0,0,0,0,0));
 
     beforeEach(() => {
         goalDefinition = new Goal("goal1", null, null, 100, null);

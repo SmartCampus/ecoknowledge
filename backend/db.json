@@ -5,7 +5,7 @@
       "name": "Clim",
       "timeBox": {
         "startDate": "2015-07-01T06:58:42.000Z",
-        "endDate": "2015-07-31T13:01:24.000Z"
+        "endDate": "2015-08-31T13:01:24.000Z"
       },
       "duration": 2,
       "conditions": [
@@ -21,14 +21,26 @@
               "sensor": false
             },
             "comparison": ">",
-            "description": "a desc"
+            "description": "a desc",
+            "periodOfTime": "1900-01-31T00:00:00.000Z"
           },
-          "startDate": "2015-06-29T09:06:19.000Z",
-          "dateOfCreation": "2015-07-29T09:06:19.178Z",
-          "endDate": "2015-07-31T09:06:19.000Z"
+          "startDate": "2015-06-29T14:59:24.000Z",
+          "dateOfCreation": "2015-07-29T14:59:24.892Z",
+          "endDate": "2015-08-31T14:59:24.000Z"
         }
       ],
       "badgeID": "44bb8108-8830-4f43-abd1-3ef643303d92"
+    },
+    {
+      "id": "919c35f2-47c0-421a-8b49-3423457eb817",
+      "name": "mon obj",
+      "timeBox": {
+        "startDate": "2015-07-17T15:00:32.000Z",
+        "endDate": "2015-08-31T15:00:32.000Z"
+      },
+      "duration": 1,
+      "conditions": [],
+      "badgeID": "fde68334-f515-4563-954b-ac91b4a42f88"
     }
   ],
   "badges": [
@@ -36,13 +48,20 @@
       "id": "44bb8108-8830-4f43-abd1-3ef643303d92",
       "name": "Badge de test",
       "points": 100
+    },
+    {
+      "id": "fde68334-f515-4563-954b-ac91b4a42f88",
+      "name": "POURQUOI PAS DE COULEUR POUR LE CHALLENGE?",
+      "points": "100"
     }
   ],
   "users": [
     {
       "id": "2cf91e02-a320-4766-aa9f-6efce3142d44",
       "name": "Jackie!",
-      "currentChallenges": [],
+      "currentChallenges": [
+        "fd0bdbea-348a-4406-8c3e-120a07770cc5"
+      ],
       "finishedBadgesMap": {}
     }
   ],
@@ -50,22 +69,30 @@
     {
       "id": "7015f504-9829-4e0c-b09b-807366d81647",
       "name": "Clim",
-      "timeProgress": 54.78062471615277,
-      "startDate": "2015-07-29T09:06:19.178Z",
-      "endDate": "2015-07-31T09:06:19.000Z",
+      "timeProgress": 0,
+      "startDate": "2015-07-29T14:59:24.892Z",
+      "endDate": "2015-07-31T14:59:24.000Z",
       "goal": {
         "id": "3221c575-85ca-447b-86f3-3a4ef39985dc",
         "conditions": {
           "TMP_CLI": "TEMP_443V"
         }
       },
-      "progress": [
-        {
-          "description": "a desc",
-          "timeAchieved": 54.78062471615277,
-          "conditionAchieved": null
+      "progress": []
+    },
+    {
+      "id": "fd0bdbea-348a-4406-8c3e-120a07770cc5",
+      "name": "mon obj",
+      "timeProgress": 0,
+      "startDate": "2015-07-29T14:59:24.892Z",
+      "endDate": "2015-07-30T14:59:24.000Z",
+      "goal": {
+        "id": "919c35f2-47c0-421a-8b49-3423457eb817",
+        "conditions": {
+          "TMP_CLI": "TEMP_443V"
         }
-      ]
+      },
+      "progress": []
     }
   ]
 }

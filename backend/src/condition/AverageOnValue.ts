@@ -7,9 +7,10 @@ class AverageOnValue extends Condition {
 
     private oldTimeBox:TimeBox;
     private newTimeBox:TimeBox;
+    private referencePeriod:Date;
 
     constructor(id:string, condition:GoalExpression, thresholdRate:number,
-                startDate:Date, dateOfCreation:Date, endDate:Date,
+                startDate:Date, dateOfCreation:Date, endDate:Date, referencePeriod:Date,
                 percentageAchieved:number = 0, percentageOfTimeElapsed:number = 0) {
 
         super(id, condition, thresholdRate, startDate, dateOfCreation, endDate,
@@ -17,6 +18,7 @@ class AverageOnValue extends Condition {
 
         this.oldTimeBox = new TimeBox(startDate, dateOfCreation);
         this.newTimeBox = new TimeBox(dateOfCreation, endDate);
+        this.referencePeriod = referencePeriod;
     }
 
     public setTimeBox(newTimeBox:TimeBox) {
@@ -24,8 +26,12 @@ class AverageOnValue extends Condition {
         this.dateOfCreation =newTimeBox.getStartDate();
         this.endDate = newTimeBox.getEndDate();
 
-        //TODO "-1 month hardcoded"
-        this.startDate = new Date(this.dateOfCreation.getFullYear(), this.dateOfCreation.getMonth() - 1, this.dateOfCreation.getDate(),
+        var timeOfTheUltimateOriginOfOrigins:Date = new Date(0,0,0,0,0,0,0);
+        var year:number = this.referencePeriod.getFullYear() - timeOfTheUltimateOriginOfOrigins.getFullYear();
+        var month:number = this.referencePeriod.getUTCMonth() - timeOfTheUltimateOriginOfOrigins.getUTCMonth();
+        var day:number = this.referencePeriod.getUTCDate() - timeOfTheUltimateOriginOfOrigins.getUTCDate();
+
+        this.startDate = new Date(this.dateOfCreation.getFullYear() - year, this.dateOfCreation.getMonth() - month, this.dateOfCreation.getDate() - day,
             this.dateOfCreation.getHours(), this.dateOfCreation.getMinutes(), this.dateOfCreation.getSeconds());
 
         var timeBox:TimeBox = new TimeBox(this.startDate, this.endDate);

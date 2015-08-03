@@ -43,8 +43,7 @@ class ConditionFactory {
 
     public createComparison(data:any):Condition {
         var goalExpression:GoalExpression = this.expressionFactory.createExpression(data.expression);
-
-        var averageOnValue:AverageOnValue = new AverageOnValue(null, goalExpression, data.threshold, null, null,null);
+        var averageOnValue:AverageOnValue = new AverageOnValue(null, goalExpression, data.threshold,null, null,null,new Date(data.expression.periodOfTime));
         return averageOnValue;
     }
 }

@@ -74,6 +74,21 @@ var app = angular.module('ecoknowledgeApp')
         }
     };
 
+    self.week = function(){
+        var d = new Date(0,0,7,0,0,0,0);
+        return d;
+    };
+
+    self.month = function(){
+        var d = new Date(0,1,0,0,0,0,0);
+        return d;
+    };
+
+    self.year = function(){
+        var d = new Date(1,0,0,0,0,0,0);
+        return d;
+    };
+
     ServiceBadgeV2.get('all',function(data){
         console.log('Achieve to get the badges V2 ', data);
         self.badges = data;

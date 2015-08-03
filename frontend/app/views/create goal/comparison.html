@@ -8,7 +8,14 @@
         <option value=">">a augmenté de</option>
     </select>
     <input type="number" ng-change="goalCtrl.checkPercent(iteration)" ng-model="iteration.threshold" required>
-    <label>% par rapport au mois dernier.</label>
+    <label>% par rapport </label>
+    <select ng-model="iteration.expression.periodOfTime" required>
+       <option value="" disabled selected>Choisissez une période de référence</option>
+       <option value="{{goalCtrl.week()}}">à la semaine dernière</option>
+       <option value="{{goalCtrl.month()}}">au mois dernier</option>
+       <option value="{{goalCtrl.year()}}">à l'année dernière</option>
+    </select>
+    {{iteration.expression.periodOfTime}}
 </span>
 <br/>
 <input type="text" placeholder="Description de la condition" ng-model="iteration.expression.description" required>
