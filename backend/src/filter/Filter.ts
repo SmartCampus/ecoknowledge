@@ -17,11 +17,6 @@ class Filter {
         this.hourFilter = new PeriodOfDayFilter(periodOfDay);
     }
 
-    setFilters(dayFilter, hourFilter) {
-        this.dayFilter = dayFilter;
-        this.hourFilter = hourFilter;
-    }
-
     apply(values:any):any[] {
         var result:number[] = [];
 
