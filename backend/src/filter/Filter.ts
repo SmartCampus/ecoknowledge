@@ -1,5 +1,8 @@
+/// <reference path="../../typings/node/node.d.ts" />
+
 import PeriodOfDayFilter = require('./PeriodOfDayFilter');
 import DayOfWeekFilter = require('./DayOfWeekFilter');
+var moment = require('moment-timezone');
 
 class Filter {
     private dayFilter:DayOfWeekFilter;
@@ -28,6 +31,10 @@ class Filter {
 
             var currentDateInSecondsSinceEPOCH = parseInt(currentDateDesc);
             var currentDate:Date = new Date(currentDateInSecondsSinceEPOCH);
+
+            var date = moment(currentDateDesc).tz('Europe/Paris');
+
+            console.log("DATE",currentDate);
 
             if (this.dayFilter.apply(currentDate) && this.hourFilter.apply(currentDate)) {
                 result.push(currentValue);
