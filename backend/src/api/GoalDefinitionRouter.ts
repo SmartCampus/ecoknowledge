@@ -71,9 +71,14 @@ class GoalDefinitionRouter extends RouterItf {
      */
     addGoalDefinition(req:any, res:any) {
         var data = req.body;
-        var newGoal = this.goalDefinitionFactory.createGoal(data);
-        this.goalDefinitionRepository.addGoal(newGoal);
-        res.send("OK : définition d'objectif créee avec succès");
+        try {
+            var newGoal = this.goalDefinitionFactory.createGoal(data);
+            this.goalDefinitionRepository.addGoal(newGoal);
+            res.send("OK : définition d'objectif créee avec succès");
+        }
+        catch(e) {
+            res.send(e.toString());
+        }
     }
 }
 

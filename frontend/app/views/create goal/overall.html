@@ -62,5 +62,26 @@
                    placeholder="Valeur attendue" required>
             <label>%</label>
         </div>
+
+      <div>
+        <label>Jours concernées</label>
+        <select name="dayOfWeekFilter" class="selectpick form-control" ng-model="dayOfWeekFilter" ng-change="goalCtrl.changeDayOfWeekFilter(iteration, dayOfWeekFilter)" required>
+          <option value="all" selected>Toute la semaine</option>
+          <option value="working-week">Les jours de travails (du lundi au vendredi)</option>
+          <option value="week-end">Le week-end</option>
+        </select>
+      </div>
+
+
+      <div>
+        <label>Période de la journée concernées</label>
+        <select name="periodOfDayFilter" class="selectpick form-control" ng-model="periodOfDayFilter" ng-change="goalCtrl.changePeriodOfDayFilter(iteration, periodOfDayFilter)" required>
+          <option value="all" selected>Toute la journée (jour + nuit)</option>
+          <option value="morning">Le matin</option>
+          <option value="afternoon">L'après midi</option>
+          <option value="night">La nuit</option>
+        </select>
+      </div>
+
     </div>
 </div>

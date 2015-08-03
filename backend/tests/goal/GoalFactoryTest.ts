@@ -36,7 +36,9 @@ describe("GoalDefinitionFactory test", () => {
         aJsonCondition.type = 'overall';
         aJsonCondition.threshold = 10;
         aJsonCondition.expression = jsonExpression;
-
+        aJsonCondition.filter = {};
+        aJsonCondition.filter.dayOfWeekFilter = 'all';
+        aJsonCondition.filter.periodOfDayFilter = 'all';
 
         var jsonConditions:any[] = [aJsonCondition];
         jsonDefinition.conditions = jsonConditions;

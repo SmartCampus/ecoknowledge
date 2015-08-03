@@ -50,6 +50,10 @@ class DayOfWeekFilter {
     getFilterTimeIntervals():number[] {
         return this.internalFilter.getTimeIntervals();
     }
+
+    getFilterName():string {
+        return this.daysOfWeek;
+    }
 }
 
 export = DayOfWeekFilter;

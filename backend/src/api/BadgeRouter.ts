@@ -78,7 +78,6 @@ class BadgeRouter extends RouterItf {
         var badges = this.userRepository.getCurrentUser().getFinishedBadges();
         var result:any[] = [];
 
-        console.log('badges : ', badges);
         for(var currentBadgeIDIndex in badges) {
             var currentBadge = this.badgeRepository.getBadge(currentBadgeIDIndex).getData();
             var dataTrophy = {

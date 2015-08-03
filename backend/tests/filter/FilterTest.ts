@@ -40,16 +40,22 @@ describe('FilterTest test', () => {
             var filter = new Filter('all', 'all');
 
             var result:any[] = filter.apply(jsonValuesInAfternoon);
-            var expected:any[] = ['28', '26', '28', '28', '27', '28', '28'];
 
-            chai.expect(result).to.be.eqls(expected);
+            chai.expect(result).to.be.eqls(jsonValuesInAfternoon);
         });
 
         it('should filter afternoon values if hour filter is satisfied', () => {
             var filter = new Filter('all', 'afternoon');
 
             var result:any[] = filter.apply(jsonValuesInMorningAndAfternoon);
-            var expected:any[] = ['17', '30', '25', '21', '3'];
+
+            var expected:any[] = [
+                {"date": "1436522404000", "value": "17"},   //  10/7/2015 12:00:04 GMT+2:00 DST
+                {"date": "1436522434000", "value": "30"},   //  10/7/2015 12:00:34 GMT+2:00 DST
+                {"date": "1436522464000", "value": "25"},   //  10/7/2015 12:01:04 GMT+2:00 DST
+                {"date": "1436522494000", "value": "21"},   //  10/7/2015 12:01:34 GMT+2:00 DST
+                {"date": "1438608351000", "value": "3"}     //  3/8/2015 15:25:51
+            ];
 
             chai.expect(result).to.be.eqls(expected);
         });

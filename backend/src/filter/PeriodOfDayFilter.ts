@@ -45,6 +45,10 @@ class PeriodOfDayFilter {
     setInternalFilter(filter) {
         this.internalFilter = filter
     }
+
+    getFilterName():string {
+        return this.timeOfDay;
+    }
 }
 
 export = PeriodOfDayFilter;

@@ -22,26 +22,36 @@ class Filter {
         this.hourFilter = new PeriodOfDayFilter(periodOfDay);
     }
 
-    apply(values:any):any[] {
-        var result:number[] = [];
+    apply(data:any):any[] {
+        var result:any[] = [];
 
-        for (var currentValueIndex in values) {
-            var currentPairOfDateAndValue = values[currentValueIndex];
+        for (var currentPairOfDateAndValueIndex in data) {
+            var currentPairOfDateAndValue = data[currentPairOfDateAndValueIndex];
 
             var currentDateDesc:string = currentPairOfDateAndValue.date;
             var currentValue:number = currentPairOfDateAndValue.value;
 
             var currentDateInSecondsSinceEPOCH = parseInt(currentDateDesc);
 
-            var date = moment.tz(currentDateInSecondsSinceEPOCH,Clock.getTimeZone());
+            var date = moment.tz(currentDateInSecondsSinceEPOCH, Clock.getTimeZone());
 
             if (this.dayFilter.apply(date) && this.hourFilter.apply(date)) {
-                result.push(currentValue);
-            }
 
+                result.push({
+                    "date":currentDateDesc,
+                    "value":currentValue
+                });
+            }
         }
 
         return result;
+    }
+
+    getDataInJSON():any {
+        return {
+            dayOfWeekFilter: this.dayFilter.getFilterName(),
+            periodOfDayFilter: this.hourFilter.getFilterName()
+        }
     }
 }
 
