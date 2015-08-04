@@ -63,8 +63,6 @@ class GoalDefinitionRepository {
             var currentGoal = this.goals[goalIndex];
 
             var goalDesc:any = {};
-            console.log('current goal', currentGoal);
-            console.log(currentGoal.getBadgeID());
             goalDesc.name = this.badgeRepository.getBadge(currentGoal.getBadgeID()).getName();
             goalDesc.id = currentGoal.getUUID();
 

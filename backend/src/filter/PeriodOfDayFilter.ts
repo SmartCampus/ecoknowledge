@@ -1,8 +1,13 @@
+/// <reference path="../../typings/moment/moment.d.ts" />
+/// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
+/// <reference path="../../typings/moment/moment.d.ts" />
+/// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
 import HourFilter = require('./periodOfDay/HourFilter');
 import DayTimeFilter = require('./periodOfDay/DayTimeFilter');
 import NightTimeFilter = require('./periodOfDay/NightTimeFilter');
 
 import BadArgumentException = require('../exceptions/BadArgumentException');
+import moment = require('moment');
 
 class PeriodOfDayFilter {
 
@@ -25,7 +30,7 @@ class PeriodOfDayFilter {
         this.internalFilter = this.mapTimeOfDayToHours[timeOfDay];
     }
 
-    apply(date:Date) {
+    apply(date:moment.Moment) {
         return this.internalFilter.filter(date);
     }
 
@@ -33,12 +38,16 @@ class PeriodOfDayFilter {
         return this.internalFilter;
     }
 
-    getFilterTimeIntervals():number[]  {
+    getFilterTimeIntervals():number[] {
         return this.internalFilter.getTimeIntervals();
     }
 
     setInternalFilter(filter) {
         this.internalFilter = filter
+    }
+
+    getFilterName():string {
+        return this.timeOfDay;
     }
 }
 

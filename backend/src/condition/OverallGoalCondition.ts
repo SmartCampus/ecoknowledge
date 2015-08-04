@@ -1,16 +1,19 @@
 import GoalExpression = require('./expression/GoalExpression');
 import Condition = require('./Condition');
 import Clock = require('../Clock');
+import Filter = require('../filter/Filter');
 
-class OverallGoalCondition extends Condition{
+import BadArgumentException = require('../exceptions/BadArgumentException');
+
+class OverallGoalCondition extends Condition {
 
 
     constructor(id:string, condition:GoalExpression, thresholdRate:number,
                 startDate:Date, dateOfCreation:Date, endDate:Date,
-                percentageAchieved:number = 0, percentageOfTimeElapsed:number = 0) {
+                percentageAchieved:number = 0, percentageOfTimeElapsed:number = 0, filter:Filter = null) {
 
-        super(id,condition,thresholdRate,startDate,dateOfCreation,endDate,
-            percentageAchieved,percentageOfTimeElapsed);
+        super(id, condition, thresholdRate, startDate, dateOfCreation, endDate,
+            percentageAchieved, percentageOfTimeElapsed, filter);
     }
 
     /**
@@ -23,15 +26,23 @@ class OverallGoalCondition extends Condition{
      */
 
     public evaluate(data:any) {
+
+        var remainingData:any = super.applyFilters(data);
+        data = remainingData;
+
         var conditionDesc:string[] = this.expression.getRequired();
 
         //  For each sensors required by internal condition
         for (var currentSensorNameIndex in conditionDesc) {
-
             var currentSensorName:string = conditionDesc[currentSensorNameIndex];
 
             //  Retrieve values associated
             var currentConditionDesc = data[currentSensorName];
+
+            if(!currentConditionDesc) {
+                throw new BadArgumentException('Can not evaluate condition ! Proper argument were not provided. Field' + currentSensorName + ' is missing');
+            }
+
 
             var values:any[] = currentConditionDesc.values;
 

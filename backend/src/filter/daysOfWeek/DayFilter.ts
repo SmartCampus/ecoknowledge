@@ -1,3 +1,7 @@
+/// <reference path="../../../typings/node/node.d.ts" />
+/// <reference path="../../../typings/moment/moment.d.ts" />
+/// <reference path="../../../typings/moment-timezone/moment-timezone.d.ts" />
+
 class DayFilter {
     private startDay:number;
     private endDay:number;
@@ -14,13 +18,10 @@ class DayFilter {
         this.endDay = endDay;
     }
 
-    filter(date:Date) {
-        var convertedDayOfWeek = (date.getDay() + 6) % 7;
-        //  JS has following model : Sunday(0), Monday(1), ..., Saturday(6)
-        //  and we want following model : Monday(0), Tuesday(1), ..., Sunday(6)
+    filter(date:moment.Moment) {
 
-        return convertedDayOfWeek >= this.startDay
-            && convertedDayOfWeek <= this.endDay;
+        return date.day() >= this.startDay
+            && date.day() <= this.endDay;
     }
 
     getTimeIntervals():number[] {

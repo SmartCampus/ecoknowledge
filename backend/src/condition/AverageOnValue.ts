@@ -2,6 +2,7 @@ import GoalExpression = require('./expression/GoalExpression');
 import Condition = require('./Condition');
 import TimeBox = require('../TimeBox');
 import Clock = require('../Clock');
+import Filter = require('../filter/Filter');
 
 class AverageOnValue extends Condition {
 
@@ -11,10 +12,10 @@ class AverageOnValue extends Condition {
 
     constructor(id:string, condition:GoalExpression, thresholdRate:number,
                 startDate:Date, dateOfCreation:Date, endDate:Date, referencePeriod:Date,
-                percentageAchieved:number = 0, percentageOfTimeElapsed:number = 0) {
+                percentageAchieved:number = 0, percentageOfTimeElapsed:number = 0, filter:Filter = null) {
 
         super(id, condition, thresholdRate, startDate, dateOfCreation, endDate,
-            percentageAchieved, percentageOfTimeElapsed);
+            percentageAchieved, percentageOfTimeElapsed, filter);
 
         this.oldTimeBox = new TimeBox(startDate, dateOfCreation);
         this.newTimeBox = new TimeBox(dateOfCreation, endDate);
@@ -23,7 +24,7 @@ class AverageOnValue extends Condition {
 
     public setTimeBox(newTimeBox:TimeBox) {
 
-        this.dateOfCreation =newTimeBox.getStartDate();
+        this.dateOfCreation = newTimeBox.getStartDate();
         this.endDate = newTimeBox.getEndDate();
 
         var timeOfTheUltimateOriginOfOrigins:Date = new Date(0,0,0,0,0,0,0);
@@ -39,6 +40,8 @@ class AverageOnValue extends Condition {
     }
 
     public evaluate(data:any):boolean {
+        var remainingData:any = super.applyFilters(data);
+        data = remainingData;
 
         var sensorNames:string[] = this.expression.getRequired();
 

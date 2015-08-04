@@ -2,6 +2,8 @@
 
 import PeriodOfDayFilter = require('./PeriodOfDayFilter');
 import DayOfWeekFilter = require('./DayOfWeekFilter');
+import Clock = require('../../src/Clock');
+
 var moment = require('moment-timezone');
 
 class Filter {
@@ -20,28 +22,36 @@ class Filter {
         this.hourFilter = new PeriodOfDayFilter(periodOfDay);
     }
 
-    apply(values:any):any[] {
-        var result:number[] = [];
+    apply(data:any):any[] {
+        var result:any[] = [];
 
-        for (var currentValueIndex in values) {
-            var currentPairOfDateAndValue = values[currentValueIndex];
+        for (var currentPairOfDateAndValueIndex in data) {
+            var currentPairOfDateAndValue = data[currentPairOfDateAndValueIndex];
 
             var currentDateDesc:string = currentPairOfDateAndValue.date;
             var currentValue:number = currentPairOfDateAndValue.value;
 
             var currentDateInSecondsSinceEPOCH = parseInt(currentDateDesc);
-            var currentDate:Date = new Date(currentDateInSecondsSinceEPOCH);
 
-            var date = moment(currentDateDesc).tz('Europe/Paris');
+            var date = moment.tz(currentDateInSecondsSinceEPOCH, Clock.getTimeZone());
 
-            console.log("DATE",currentDate);
+            if (this.dayFilter.apply(date) && this.hourFilter.apply(date)) {
 
-            if (this.dayFilter.apply(currentDate) && this.hourFilter.apply(currentDate)) {
-                result.push(currentValue);
+                result.push({
+                    "date":currentDateDesc,
+                    "value":currentValue
+                });
             }
         }
 
         return result;
+    }
+
+    getDataInJSON():any {
+        return {
+            dayOfWeekFilter: this.dayFilter.getFilterName(),
+            periodOfDayFilter: this.hourFilter.getFilterName()
+        }
     }
 }
 

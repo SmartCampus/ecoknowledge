@@ -1,7 +1,7 @@
 /// <reference path="../../typings/node-uuid/node-uuid.d.ts" />
 
 import TimeBox = require('../TimeBox');
-
+import Filter = require('../filter/Filter');
 import GoalExpression = require('./expression/GoalExpression');
 import UUID = require('node-uuid');
 
@@ -19,6 +19,8 @@ class Condition {
 
     protected percentageAchieved:number;
     protected percentageOfTimeElapsed:number;
+
+    protected filter:Filter;
 
     /**
      * Constructor of base class Condition, it allows you to build a goal condition
@@ -41,7 +43,7 @@ class Condition {
      */
     constructor(id:string, expression:GoalExpression, thresholdRate:number,
                 startDate:Date, dateOfCreation:Date, endDate:Date,
-                percentageAchieved:number = 0, percentageOfTimeElapsed:number = 0) {
+                percentageAchieved:number = 0, percentageOfTimeElapsed:number = 0, filter:Filter = null) {
 
         this.id = (id) ? id : UUID.v4();
 
@@ -56,6 +58,8 @@ class Condition {
 
         this.percentageAchieved = percentageAchieved;
         this.percentageOfTimeElapsed = percentageOfTimeElapsed;
+
+        this.filter = (filter) ? filter : new Filter('all', 'all');
     }
 
     /**
@@ -118,7 +122,7 @@ class Condition {
         this.timeBox = newTimeBox;
         this.startDate = newTimeBox.getStartDate();
         this.endDate = newTimeBox.getEndDate();
-   }
+    }
 
     isInTimeBox(date:Date):boolean {
         return this.timeBox.isDateInTimeBox(date);
@@ -161,12 +165,17 @@ class Condition {
             dateOfCreation: this.dateOfCreation,
             endDate: this.endDate,
             percentageAchieved: this.percentageAchieved,
-            percentageOfTimeElapsed: this.percentageOfTimeElapsed
+            percentageOfTimeElapsed: this.percentageOfTimeElapsed,
+            filter: this.filter.getDataInJSON()
         }
     }
 
     evaluate(data:any):boolean {
         throw new Error('Can not call base class method ! Must be overridden and implemented.');
+    }
+
+    applyFilters(data:any):any {
+        return data;//this.filter.apply(data);
     }
 }
 

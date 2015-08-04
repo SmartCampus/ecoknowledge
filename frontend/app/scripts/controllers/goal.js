@@ -38,6 +38,14 @@ var app = angular.module('ecoknowledgeApp')
         iteration.value = null;
     };
 
+    this.changeDayOfWeekFilter = function(iteration, dayOfWeekFilter) {
+      iteration.filter.dayOfWeekFilter = dayOfWeekFilter;
+    };
+
+    this.changePeriodOfDayFilter = function(iteration, periodOfDayFilter) {
+      iteration.filter.periodOfDayFilter = periodOfDayFilter;
+    };
+
     self.addComparison = function(){
         self.goal.conditions[self.goal.conditions.length] = {
             type:'comparison',

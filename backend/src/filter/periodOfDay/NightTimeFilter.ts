@@ -1,3 +1,6 @@
+/// <reference path="../../../typings/moment/moment.d.ts" />
+/// <reference path="../../../typings/moment-timezone/moment-timezone.d.ts" />
+
 import HourFilter = require('./HourFilter');
 
 class NightTimeFilter implements HourFilter {
@@ -10,8 +13,8 @@ class NightTimeFilter implements HourFilter {
         this.endHour = endHour;
     }
 
-    filter(date:Date):boolean {
-        var dateHours = date.getHours();
+    filter(date:moment.Moment):boolean {
+        var dateHours = date.hours();
 
         return (dateHours >= this.startHour && dateHours <= 23) ||
             dateHours <= this.endHour;

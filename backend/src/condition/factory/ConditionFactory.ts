@@ -4,6 +4,7 @@ import OverallGoalCondition = require('../OverallGoalCondition');
 import AverageOnValue = require('../AverageOnValue');
 import ExpressionFactory = require('./ExpressionFactory');
 import Clock = require('../../Clock');
+import Filter = require('../../filter/Filter');
 
 class ConditionFactory {
     private expressionFactory:ExpressionFactory = new ExpressionFactory();
@@ -36,8 +37,12 @@ class ConditionFactory {
 
         var threshold:number = data.threshold;
 
-        //  TODO date can be replaced by null => a goal definition is not a goal instance
-        var overallCondition:OverallGoalCondition = new OverallGoalCondition(null, goalCondition, threshold, startDateOfValidityPeriod, new Date(Clock.getNow()),endDateOfValidityPeriod);
+        var dayOfWeekFilterDesc:string = data.filter.dayOfWeekFilter;
+        var periodOfDayFilterDesc:string = data.filter.periodOfDayFilter;
+
+        var filter:Filter = new Filter(dayOfWeekFilterDesc, periodOfDayFilterDesc);
+
+        var overallCondition:OverallGoalCondition = new OverallGoalCondition(null, goalCondition, threshold, startDateOfValidityPeriod, new Date(Clock.getNow()), endDateOfValidityPeriod, 0, 0, filter);
         return overallCondition;
     }
 

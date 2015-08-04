@@ -1,6 +1,10 @@
+/// <reference path="../../typings/moment/moment.d.ts" />
+/// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
+import moment = require('moment');
 import DayFilter = require('./daysOfWeek/DayFilter');
 
 import BadArgumentException = require('../exceptions/BadArgumentException');
+
 
 /**
  * DayFilter - filter dates by days of week</br>
@@ -21,9 +25,9 @@ class DayOfWeekFilter {
      * @type {{all: DayFilter (0, 6), week-end: DayFilter(5, 6), working-week: DayFilter(0, 4)}}
      */
     private mapDayToDayOfWeek:any = {
-        'all': new DayFilter(0, 6),
-        'week-end': new DayFilter(5, 6),
-        'working-week': new DayFilter(0, 4)
+        'all': new DayFilter(1, 7),
+        'week-end': new DayFilter(6, 7),
+        'working-week': new DayFilter(1, 5)
     };
 
     constructor(daysOfWeek:string) {
@@ -35,7 +39,7 @@ class DayOfWeekFilter {
         this.internalFilter = this.mapDayToDayOfWeek[daysOfWeek];
     }
 
-    apply(date:Date) {
+    apply(date:moment.Moment) {
         return this.internalFilter.filter(date);
     }
 
@@ -45,6 +49,10 @@ class DayOfWeekFilter {
 
     getFilterTimeIntervals():number[] {
         return this.internalFilter.getTimeIntervals();
+    }
+
+    getFilterName():string {
+        return this.daysOfWeek;
     }
 }
 
