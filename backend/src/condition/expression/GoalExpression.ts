@@ -82,16 +82,16 @@ class GoalExpression {
         var rightValue = this.rightOperand.getStringDescription();
 
         if (this.leftOperand.hasToBeDefined()) {
-            if(!values[this.leftOperand.getStringDescription()]) {
-                throw new BadArgumentException('Can not evaluate goal expression.' + this.leftOperand.getStringDescription()
+            if(!values.hasOwnProperty(this.leftOperand.getStringDescription())) {
+                throw new BadArgumentException('Can not evaluate left operand of goal expression.' + this.leftOperand.getStringDescription()
                     + ' is needed but not provided in the parameter');
             }
             leftValue = values[this.leftOperand.getStringDescription()];
         }
 
         if (this.rightOperand.hasToBeDefined()) {
-            if(!values[this.rightOperand.getStringDescription()]) {
-                throw new BadArgumentException('Can not evaluate goal expression.' + this.rightOperand.getStringDescription()
+            if(!values.hasOwnProperty(this.rightOperand.getStringDescription())) {
+                throw new BadArgumentException('Can not evaluate right operand of goal expression.' + this.rightOperand.getStringDescription()
                     + ' is needed but not provided in the parameter');
             }
 
