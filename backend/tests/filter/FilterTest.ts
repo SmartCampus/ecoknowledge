@@ -37,7 +37,7 @@ describe('FilterTest test', () => {
     describe('apply method', () => {
 
         it('should filter everything if filters allow it', () => {
-            var filter = new Filter('all', 'all');
+            var filter = new Filter('all', ['all']);
 
             var result:any[] = filter.apply(jsonValuesInAfternoon);
 
@@ -45,7 +45,7 @@ describe('FilterTest test', () => {
         });
 
         it('should filter afternoon values if hour filter is satisfied', () => {
-            var filter = new Filter('all', 'afternoon');
+            var filter = new Filter('all', ['afternoon']);
 
             var result:any[] = filter.apply(jsonValuesInMorningAndAfternoon);
 
@@ -60,8 +60,25 @@ describe('FilterTest test', () => {
             chai.expect(result).to.be.eqls(expected);
         });
 
+        it('should filter afternoon values if hour filter is satisfied even if another "all" filter is present', () => {
+            var filter = new Filter('all', ['afternoon','all']);
+
+            var result:any[] = filter.apply(jsonValuesInMorningAndAfternoon);
+
+            var expected:any[] = [
+                {"date": "1436522404000", "value": "17"},   //  10/7/2015 12:00:04 GMT+2:00 DST
+                {"date": "1436522434000", "value": "30"},   //  10/7/2015 12:00:34 GMT+2:00 DST
+                {"date": "1436522464000", "value": "25"},   //  10/7/2015 12:01:04 GMT+2:00 DST
+                {"date": "1436522494000", "value": "21"},   //  10/7/2015 12:01:34 GMT+2:00 DST
+                {"date": "1438608351000", "value": "3"}     //  3/8/2015 15:25:51
+            ];
+
+            chai.expect(result).to.be.eqls(expected);
+        });
+
+
         it('should filter nothing if day filter is not satisfied', () => {
-            var filter = new Filter('week-end', 'all');
+            var filter = new Filter('week-end', ['all']);
 
             var result:any[] = filter.apply(jsonValuesInMorningAndAfternoon);
             var expected:any[] = [];
@@ -70,7 +87,7 @@ describe('FilterTest test', () => {
         });
 
         it('should filter nothing if no filter is satisfied', () => {
-            var filter = new Filter('week-end', 'morning');
+            var filter = new Filter('week-end', ['morning']);
 
             var result:any[] = filter.apply(jsonValuesInMorningAndAfternoon);
             var expected:any[] = [];

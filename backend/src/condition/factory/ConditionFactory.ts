@@ -38,7 +38,7 @@ class ConditionFactory {
         var threshold:number = data.threshold;
 
         var dayOfWeekFilterDesc:string = data.filter.dayOfWeekFilter;
-        var periodOfDayFilterDesc:string = data.filter.periodOfDayFilter;
+        var periodOfDayFilterDesc:string[] = data.filter.periodOfDayFilter;
 
         var filter:Filter = new Filter(dayOfWeekFilterDesc, periodOfDayFilterDesc);
 

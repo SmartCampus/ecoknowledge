@@ -39,10 +39,16 @@ var app = angular.module('ecoknowledgeApp')
     };
 
     this.changeDayOfWeekFilter = function(iteration, dayOfWeekFilter) {
+      if(iteration.filter == null) {
+        iteration.filter = {};
+      }
       iteration.filter.dayOfWeekFilter = dayOfWeekFilter;
     };
 
     this.changePeriodOfDayFilter = function(iteration, periodOfDayFilter) {
+      if(iteration.filter == null) {
+        iteration.filter = {};
+      }
       iteration.filter.periodOfDayFilter = periodOfDayFilter;
     };
 
