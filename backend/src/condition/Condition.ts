@@ -62,6 +62,10 @@ class Condition {
         this.filter = (filter) ? filter : new Filter('all', 'all');
     }
 
+    getStringRepresentation():string {
+        return this.expression.getStringRepresentation() + " - " + this.expression.getDescription();
+    }
+
     /**
      * This method will return the id of the current condition
      * @returns {string}

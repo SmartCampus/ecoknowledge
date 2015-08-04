@@ -86,6 +86,10 @@ class OverallGoalCondition extends Condition {
         data.type = 'overall';
         return data;
     }
+
+    getStringRepresentation():string {
+        return 'Overall - ' + super.getStringRepresentation();
+    }
 }
 
 export = OverallGoalCondition;
