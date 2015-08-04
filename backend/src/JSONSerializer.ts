@@ -13,7 +13,8 @@ class JSONSerializer {
 
         var data = fs.readFileSync(JSONSerializer.JSON_DB_FILE, "utf-8");
 
-        if (data.length == 0) {
+
+        if (Object.keys(JSON.parse(data)).length == 0) {
             return {error: '+++\tDatabase was empty !\t+++', data: data};
         }
         return {success: '+++\tDatabase loaded correctly !\t+++', data: data};

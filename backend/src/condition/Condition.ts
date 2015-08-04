@@ -155,8 +155,8 @@ class Condition {
     getDataInJSON():any {
         return {
             id: this.id,
-            condition: this.expression.getDataInJSON(),
-            thresholdRate: this.thresholdRate,
+            expression: this.expression.getDataInJSON(),
+            threshold: this.thresholdRate,
             startDate: this.startDate,
             dateOfCreation: this.dateOfCreation,
             endDate: this.endDate,

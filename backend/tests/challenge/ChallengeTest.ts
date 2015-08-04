@@ -36,6 +36,7 @@ describe("GoalInstance test", () => {
 
     beforeEach(() => {
         goalDefinition = new Goal("goal1", null, null, 100, null);
+
         goalDefinition.addCondition(anAverageCondition);
         goalDefinition.addCondition(anotherAverageCondition);
 
@@ -65,33 +66,45 @@ describe("GoalInstance test", () => {
         chai.expect(result).to.be.eqls(expectedConditionsDescription);
     });
 
+    it("should call goal definition evaluate on evaluate method", () => {
+        var goalStubObj = sinon.stub(goalDefinition, "evaluate");
+        goalStubObj.returns(true);
+
+        var fakeParams:any = {'a': null, 'b': null};
+
+        goalInstance.evaluate(fakeParams);
+
+        chai.assert(goalStubObj.calledOnce);
+        chai.assert(goalStubObj.calledWith(goalInstance.bindSymbolicNameToValue(fakeParams), goalInstance));
+    });
+
     /*
-    FIXME
-    it("should evaluate the goal instance as OK", () => {
-        var aStartDatePlus1Day:Date = new Date(Date.UTC(2000, 5, 2));
+     FIXME
+     it("should evaluate the goal instance as OK", () => {
+     var aStartDatePlus1Day:Date = new Date(Date.UTC(2000, 5, 2));
 
-        var timeBoxObj:TimeBox = new TimeBox(aStartDatePlus1Day, aEndDate);
+     var timeBoxObj:TimeBox = new TimeBox(aStartDatePlus1Day, aEndDate);
 
-        var correctValuesDescription = {};
-        var valuesForASensorName = {'values': [{date:timeBoxObj.getStartDateInStringFormat(), value:35}]};
-        correctValuesDescription[aSensorName] = valuesForASensorName;
+     var correctValuesDescription = {};
+     var valuesForASensorName = {'values': [{date:timeBoxObj.getStartDateInStringFormat(), value:35}]};
+     correctValuesDescription[aSensorName] = valuesForASensorName;
 
-        var valuesForAnotherSensorName = {'values': [{date:timeBoxObj.getStartDateInStringFormat(), value:27}]};
-        correctValuesDescription[anotherSensorName] = valuesForAnotherSensorName;
+     var valuesForAnotherSensorName = {'values': [{date:timeBoxObj.getStartDateInStringFormat(), value:27}]};
+     correctValuesDescription[anotherSensorName] = valuesForAnotherSensorName;
 
-        chai.expect(goalInstance.evaluate(correctValuesDescription)).to.be.true;
-    });
+     chai.expect(goalInstance.evaluate(correctValuesDescription)).to.be.true;
+     });
 
-    it("should evaluate the goal instance as KO", () => {
-        var incorrectValuesDescription = {};
+     it("should evaluate the goal instance as KO", () => {
+     var incorrectValuesDescription = {};
 
-        var valuesForASensorName = {'values': [{value: 35}]};
-        incorrectValuesDescription[aSensorName] = valuesForASensorName;
+     var valuesForASensorName = {'values': [{value: 35}]};
+     incorrectValuesDescription[aSensorName] = valuesForASensorName;
 
-        var valuesForAnotherSensorName = {'values': [{value: 20}]};
-        incorrectValuesDescription[anotherSensorName] = valuesForAnotherSensorName;
+     var valuesForAnotherSensorName = {'values': [{value: 20}]};
+     incorrectValuesDescription[anotherSensorName] = valuesForAnotherSensorName;
 
-        chai.expect(goalInstance.evaluate(incorrectValuesDescription)).to.be.false;
-    });
-    */
+     chai.expect(goalInstance.evaluate(incorrectValuesDescription)).to.be.false;
+     });
+     */
 });

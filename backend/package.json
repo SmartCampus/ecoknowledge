@@ -6,6 +6,8 @@
     "body-parser": "^1.13.1",
     "express": "^4.13.0",
     "merge": "^1.2.0",
+    "moment": "^2.10.6",
+    "moment-timezone": "^0.4.0",
     "node-uuid": "^1.4.3"
   },
   "repository": {},

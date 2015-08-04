@@ -1,16 +1,9 @@
 import RouterItf = require('./RouterItf');
-/*
-<<<<<<< HEAD
-import GoalInstanceRepository = require('../goal/instance/GoalInstanceRepository');
-import GoalInstanceFactory = require('../goal/instance/GoalInstanceFactory');
-import GoalInstance = require('../goal/instance/GoalInstance');
-import GoalDefinitionRepository = require('../goal/definition/GoalDefinitionRepository');
-=======*/
+
 import ChallengeRepository = require('../challenge/ChallengeRepository');
 import ChallengeFactory = require('../challenge/ChallengeFactory');
 import GoalRepository = require('../goal/GoalRepository');
 import Challenge = require('../challenge/Challenge');
-//>>>>>>> aa0a6c1444ee6545f84f07d0b04d9a4b0ab6900d
 import UserRepository = require('../user/UserRepository');
 
 import Middleware = require('../Middleware');
@@ -92,7 +85,7 @@ class GoalInstanceRouter extends RouterItf {
         var key = data.key;
 
         var valueDesc:any = {};
-        valueDesc.date = Clock.getNow() / 1000;
+        valueDesc.date = Clock.getNow();
         valueDesc.value = value;
 
         var oldJson:any[] = this.jsonStub[key].values;
@@ -197,9 +190,10 @@ class GoalInstanceRouter extends RouterItf {
         console.log('user id : ', userID);
         console.log('challenge ID : ', challengeID);
         var user = this.userRepository.getUser(userID);
-        var badge = this.goalInstanceRepository.getBadgeByChallengeID(challengeID);
-        user.addFinishedBadge(badge);
+        var badgeID = this.goalInstanceRepository.getBadgeByChallengeID(challengeID);
+        user.addFinishedBadge(badgeID);
         user.deleteChallenge(challengeID);
+
     }
 
     private evaluateChallenge(goalInstanceToEvaluate:Challenge, goalInstanceID){
@@ -229,7 +223,6 @@ class GoalInstanceRouter extends RouterItf {
                             return goalInstanceToEvaluate.getProgress();
                         },
                         function () {
-                            console.log("FAIL MIDDLEWARE");
                            return {error: "Error occured in middleware"};
                         });
 

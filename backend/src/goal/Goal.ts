@@ -93,6 +93,10 @@ class Goal {
         return this.conditionsList.getRequired();
     }
 
+    public getConditions():ConditionList {
+        return this.conditionsList;
+    }
+
     public getData():any {
         return {
             "name": this.name,

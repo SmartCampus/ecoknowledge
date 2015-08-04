@@ -44,10 +44,12 @@ class GoalInstanceFactory {
 
         var startDate:Date = now;
 
+        /*
         if(!this.checkDates(goalDefinition,startDate)) {
             throw new Error('Can not build goal instance ! it does not have the time to be achieved. We are the '
                 + now  + ', the goal start the' + goalDefinition.getStartDate() + ' and end the ' +goalDefinition.getEndDate() + ' with a duration of ' + goalDefinition.getDuration() + ' days');
         }
+        */
 
         var endDate:Date = new Date(startDate.getFullYear(), startDate.getMonth(),startDate.getDate() + goalDefinition.getDuration(), startDate.getHours(), startDate.getMinutes(), startDate.getSeconds());
 

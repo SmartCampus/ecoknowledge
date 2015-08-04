@@ -398,14 +398,6 @@ describe('Test GoalExpression', () => {
         });
     });
 
-    describe('Evaluate a condition with a timebox', () => {
-        it('should return false if values in the given timeBox do not match condition', () => {
-            var timeBox:TimeBox = new TimeBox(new Date(Date.UTC(2015, 0, 20)), new Date(Date.UTC(2015, 1, 20)));
-
-
-        });
-    });
-
     describe('Check JSON protocol', () => {
 
         var condition:GoalExpression;
