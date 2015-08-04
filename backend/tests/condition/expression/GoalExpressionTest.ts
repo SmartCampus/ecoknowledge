@@ -10,6 +10,7 @@ import GoalExpression = require('../../../src/condition/expression/GoalExpressio
 import Operand = require('../../../src/condition/expression/Operand');
 import TimeBox = require('../../../src/TimeBox');
 import TimeBoxFactory = require('../../../src/TimeBoxFactory');
+import BadArgumentException = require('../../../src/exceptions/BadArgumentException');
 
 describe('Test GoalExpression', () => {
     describe('Build a goalExpression', () => {
@@ -398,11 +399,47 @@ describe('Test GoalExpression', () => {
         });
     });
 
+    describe('Error cases', () => {
+        var condition:GoalExpression;
+        var leftOperand:Operand;
+        var rightOperand:Operand;
+        var typeOfComparison:string;
+        var description:string;
+
+        beforeEach(() => {
+            leftOperand = new Operand('TMP_CLI', true);
+            rightOperand = new Operand('15', false);
+            typeOfComparison = '>';
+            description = 'un test';
+
+            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+        });
+
+        it('should throw an error if left operand is required and not provided', () => {
+            chai.expect(() => {
+                condition.evaluate({TMP_CLIIIIIIIII: 20})
+            }).to.throw(BadArgumentException);
+        });
+
+        it('should throw an error if right operand is required and not provided', () => {
+            condition = new GoalExpression(rightOperand, typeOfComparison, leftOperand, description);
+            chai.expect(() => {
+                condition.evaluate({TMP_CLIIIIIIIII: 20})
+            }).to.throw(BadArgumentException);
+        });
+
+        it('should not throw an error if value 0 is given', () => {
+            chai.expect(
+                condition.evaluate({TMP_CLI: 0})
+            ).to.be.eq(false);
+        });
+    });
+
     describe('Check JSON protocol', () => {
 
         var condition:GoalExpression;
 
-        var leftOperandRequired:Operand = new Operand('TMP_Cli', true);
+        var leftOperandRequired:Operand = new Operand('TMP_CLI', true);
         var rightOperandNotRequired:Operand = new Operand('10', false);
         var typeOfComparison:string = '<';
         var description:string = 'un test';
@@ -410,7 +447,7 @@ describe('Test GoalExpression', () => {
         condition = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandNotRequired, description);
 
         it('should return correct protocol', () => {
-            var expected:string[] = ['TMP_Cli'];
+            var expected:string[] = ['TMP_CLI'];
 
             chai.expect(condition.getRequired()).to.be.eqls(expected);
         });

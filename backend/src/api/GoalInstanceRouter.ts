@@ -176,13 +176,18 @@ class GoalInstanceRouter extends RouterItf {
     }
 
     evaluateAll(req:any, res:any){
-        var challenges:string[] = this.userRepository.getCurrentUser().getChallenges();
-        for(var challenge in challenges){
-            var currentChallengeID:string = challenges[challenge];
-            var challengeToEvaluate:Challenge = this.goalInstanceRepository.getGoalInstance(currentChallengeID);
-            this.evaluateChallenge(challengeToEvaluate, currentChallengeID);
+        try {
+            var challenges = this.userRepository.getCurrentUser().getChallenges();
+            for (var challenge in challenges) {
+                var currentChallengeID = challenges[challenge];
+                var challengeToEvaluate = this.goalInstanceRepository.getGoalInstance(currentChallengeID);
+                this.evaluateChallenge(challengeToEvaluate, currentChallengeID);
+            }
+            res.send({success:''});
         }
-        res.send('OK');
+        catch(e) {
+            res.send(e.toString());
+        }
     }
 
     //  debug only
@@ -230,6 +235,7 @@ class GoalInstanceRouter extends RouterItf {
             }
         }
         else {
+            console.log('++++++++++++ \tMODE DEMO\t+++++++++++');
             var result = goalInstanceToEvaluate.evaluate(this.jsonStub);
             if (result) {
                 this.addFinishedBadge(goalInstanceID, this.userRepository.getCurrentUser().getUUID());
