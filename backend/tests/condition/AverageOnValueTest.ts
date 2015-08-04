@@ -401,22 +401,13 @@ describe('Test AverageOnValueTest', () => {
             chai.expect(actualNewValues).to.be.eqls(expectedNewValues);
         });
 
-        it('should separate data if these are older than 20days', () => {
-            var newStartDate:Date = new Date(Date.UTC(1999, 1, 1));
+        it('should separate data if these are older than 20 days', () => {
+            var newStartDate:Date = new Date(Date.UTC(1999, 12, 18));
             expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
             averageOnValue = new AverageOnValue(null,expression,10, newStartDate, dateOfCreation, endDate,new Date(0,0,20,0,0,0,0));
 
             var values:any[] = [
                 {
-                    date: new Date(Date.UTC(1999, 12, 18)).getTime().toString(),
-                    value: 95
-                },{
-                    date: new Date(Date.UTC(1999, 12, 27)).getTime().toString(),
-                    value: 105
-                },{
-                    date: new Date(Date.UTC(1999, 12, 31)).getTime().toString(),
-                    value: 100
-                },{
                     date: new Date(Date.UTC(2000, 1, 2)).getTime().toString(),
                     value: 100
                 },
@@ -438,6 +429,86 @@ describe('Test AverageOnValueTest', () => {
                 },
 
                 //   OLD/NEW DATA
+
+                {
+                    date: new Date(Date.UTC(2000, 1, 8)).getTime().toString(),
+                    value: 89
+                },
+                {
+                    date: new Date(Date.UTC(2000, 1, 9)).getTime().toString(),
+                    value: 90
+                },
+                {
+                    date: new Date(Date.UTC(2000, 1, 10)).getTime().toString(),
+                    value: 91
+                },
+                {
+                    date: new Date(Date.UTC(2000, 1, 11)).getTime().toString(),
+                    value: 70
+                },
+
+                //too old data, so it won't be in the arrays
+                {
+                    date: new Date(Date.UTC(1999, 12, 17)).getTime().toString(),
+                    value: 42
+                }
+            ];
+
+
+            var expectedOldValues:number[] = [100, 101, 99, 102, 98];
+            var expectedNewValues:number[] = [89, 90, 91, 70];
+
+            var actualOldValues:number[] = [];
+            var actualNewValues:number[] = [];
+
+            averageOnValue.separateOldAndNewData(values, actualOldValues, actualNewValues);
+            chai.expect(actualOldValues).to.be.eqls(expectedOldValues);
+            chai.expect(actualNewValues).to.be.eqls(expectedNewValues);
+        });
+
+        it('should add data if these are younger than 30 days', () => {
+            var newStartDate:Date = new Date(Date.UTC(1999, 12, 8));
+            expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            averageOnValue = new AverageOnValue(null,expression,10, newStartDate, dateOfCreation, endDate,new Date(0,0,30,0,0,0,0));
+
+            var values:any[] = [
+
+                //datas after 1999-12-8
+                {
+                    date: new Date(Date.UTC(1999, 12, 8)).getTime().toString(),
+                    value: 95
+                },
+                {
+                    date: new Date(Date.UTC(1999, 12, 12)).getTime().toString(),
+                    value: 105
+                },
+                {
+                    date: new Date(Date.UTC(1999, 12, 31)).getTime().toString(),
+                    value: 100
+                },
+                {
+                    date: new Date(Date.UTC(2000, 1, 2)).getTime().toString(),
+                    value: 100
+                },
+                {
+                    date: new Date(Date.UTC(2000, 1, 3)).getTime().toString(),
+                    value: 101
+                },
+                {
+                    date: new Date(Date.UTC(2000, 1, 4)).getTime().toString(),
+                    value: 99
+                },
+                {
+                    date: new Date(Date.UTC(2000, 1, 5)).getTime().toString(),
+                    value: 102
+                },
+                {
+                    date: new Date(Date.UTC(2000, 1, 6)).getTime().toString(),
+                    value: 98
+                },
+
+                //   OLD/NEW DATA
+
                 {
                     date: new Date(Date.UTC(2000, 1, 8)).getTime().toString(),
                     value: 89
@@ -457,7 +528,7 @@ describe('Test AverageOnValueTest', () => {
             ];
 
 
-            var expectedOldValues:number[] = [95,105,100, 100, 101, 99, 102, 98];
+            var expectedOldValues:number[] = [95,105,100,100, 101, 99, 102, 98];
             var expectedNewValues:number[] = [89, 90, 91, 70];
 
             var actualOldValues:number[] = [];

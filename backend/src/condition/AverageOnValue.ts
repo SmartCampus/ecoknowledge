@@ -122,7 +122,7 @@ class AverageOnValue extends Condition {
                 && currentDate.getTime() <= this.dateOfCreation.getTime()) {
                 oldValues.push(currentValue.value);
             }
-            else {
+            else if(currentDate.getTime() >= this.dateOfCreation.getTime()){
                 newValues.push(currentValue.value);
             }
         }
