@@ -21,7 +21,7 @@ class GoalDefinitionRepository {
 
         for(var currentGoalIndex in this.goals) {
             var currentGoal = this.goals[currentGoalIndex];
-            console.log("#",currentGoal.getUUID(),"\t |\tObjectif : '", currentGoal.getName(), "'")
+            console.log(currentGoal.getStringRepresentation());
         }
     }
 

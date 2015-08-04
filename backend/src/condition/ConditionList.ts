@@ -135,6 +135,17 @@ class ConditionList {
         return result;
     }
 
+    getStringRepresentation():string {
+        var result:string = '';
+
+        for(var currentConditionIndex in this.conditions) {
+            var currentCondition = this.conditions[currentConditionIndex];
+            result += '\t|\t\t' + currentCondition.getStringRepresentation();
+        }
+
+        return result;
+    }
+
 }
 
 export = ConditionList;

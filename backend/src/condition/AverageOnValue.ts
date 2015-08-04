@@ -146,6 +146,11 @@ class AverageOnValue extends Condition {
         data.type = 'comparison';
         return data;
     }
+
+
+    getStringRepresentation():string {
+        return 'Comparison - ' + super.getStringRepresentation();
+    }
 }
 
 export = AverageOnValue;

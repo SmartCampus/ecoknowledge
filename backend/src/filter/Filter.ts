@@ -2,7 +2,7 @@
 
 import PeriodOfDayFilter = require('./PeriodOfDayFilter');
 import DayOfWeekFilter = require('./DayOfWeekFilter');
-import Clock = require('../../src/Clock');
+import Clock = require('../Clock');
 
 var moment = require('moment-timezone');
 

@@ -123,6 +123,11 @@ class Goal {
             badgeID: this.badgeID
         }
     }
+
+    getStringRepresentation():string {
+        return '\n#' + this.id + '\n'
+            + '\t' + this.name + '\t-\t' + this.startDate.toISOString() + ' :: ' + this.endDate.toISOString() + '\n' + this.conditionsList.getStringRepresentation();
+    }
 }
 
 export = Goal;
