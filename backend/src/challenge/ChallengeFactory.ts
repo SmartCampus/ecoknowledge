@@ -31,28 +31,32 @@ class GoalInstanceFactory {
      */
     public createGoalInstance(data:any, goalRepository:GoalRepository, userProvider:UserRepository, now:moment.Moment):Challenge {
 
-        var id = data.id;
+        var challengeID = data.id;
 
-        var goalInstanceDescription:string = data.description;
+        var challengeDescription:string = data.description;
 
-        var goalDesc:any = data.goal;
+        var goalJSONDesc:any = data.goal;
+        var goalID = goalJSONDesc.id;
+        var goal:Goal = goalRepository.getGoal(goalID);
 
-        var goalDefinitionID = goalDesc.id;
-
-        var goalDefinition:Goal = goalRepository.getGoal(goalDefinitionID);
-
-        if (goalDefinition == null) {
+        if (goal == null) {
             throw new Error('Can not create goal instance because ID given of goal definition can not be found');
         }
 
         //  Check if challenge is built from db (startDate and endDate are provided in data parameter)
         //  Or if challengeFactory was called from a 'newChallenge' method
-        var startDate = moment(now);
-        var mapGoalsToConditionAndSensors:any = goalDesc.conditions;
+        var nowDate = moment(now);
+        var mapGoalsToConditionAndSensors:any = goalJSONDesc.conditions;
 
         if (data.startDate != null) {
-            return this.restoreChallenge(id, data, goalDefinition, goalInstanceDescription, goalRepository, mapGoalsToConditionAndSensors, startDate);
+            return this.restoreChallenge(challengeID, data, goal, challengeDescription, goalRepository, mapGoalsToConditionAndSensors, nowDate);
         }
+
+        /*  TODO check the badge status
+            if(now.isAfter(startDate) && now.isBefore(endDate)) status = BadgeStatus.Run;
+            etc
+            This can be done only when goal will be recurrent (lol)
+        */
 
 
         /*
@@ -62,10 +66,10 @@ class GoalInstanceFactory {
          }
          */
 
-        var endDate:Date = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + goalDefinition.getDuration(), startDate.getHours(), startDate.getMinutes(), startDate.getSeconds());
+        var endDate:Date = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate() + goal.getDuration(), nowDate.getHours(), nowDate.getMinutes(), nowDate.getSeconds());
 
 
-        var challenge:Challenge = new Challenge(startDate, endDate, goalInstanceDescription, goalDefinition, mapGoalsToConditionAndSensors, id);
+        var challenge:Challenge = new Challenge(nowDate, endDate, challengeDescription, goal, mapGoalsToConditionAndSensors, challengeID);
 
         // TODO attach badge to user
         // user.addBadgeByDescription(badge);
