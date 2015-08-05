@@ -113,6 +113,12 @@ class GoalInstanceRouter extends RouterItf {
             res.status(400).send({'error': 'goalID field is missing in request'});
         }
 
+        var newChall:Challenge = this.createGoalInstance(goalID,new Date(Clock.getNow()));
+
+        res.send({"success": ("Objectif ajouté !"+newChall.getDataInJSON())});
+    }
+
+    createGoalInstance(goalID:string,date:Date):Challenge{
         //  TODO ! stub !
         //  The data object below is a stub to manually
         //  bind a symbolic name to a sensor name.
@@ -128,10 +134,11 @@ class GoalInstanceRouter extends RouterItf {
             }
         };
 
-        var goalInstance = this.goalInstanceFactory.createGoalInstance(data, this.goalDefinitionRepository, null, new Date(Clock.getNow()));
+        var goalInstance = this.goalInstanceFactory.createGoalInstance(data, this.goalDefinitionRepository, null, date);
         this.goalInstanceRepository.addGoalInstance(goalInstance);
         this.userRepository.getCurrentUser().addChallenge(goalInstance.getId());
-        res.send({"success": "Objectif ajouté !"});
+        //TODO if checkdate return null
+        return goalInstance;
     }
 
     getAllChallenges(req:any, res:any) {
@@ -198,10 +205,10 @@ class GoalInstanceRouter extends RouterItf {
         var badgeID = this.goalInstanceRepository.getBadgeByChallengeID(challengeID);
         user.addFinishedBadge(badgeID);
         user.deleteChallenge(challengeID);
-
     }
 
     private evaluateChallenge(goalInstanceToEvaluate:Challenge, goalInstanceID){
+        var self=this;
         if (!GoalInstanceRouter.DEMO) {
 
             //TODO move what follow
@@ -222,7 +229,11 @@ class GoalInstanceRouter extends RouterItf {
                         function () {
                             var result = goalInstanceToEvaluate.evaluate(required);
                             if (result) {
+                                var newChall = self.createGoalInstance(goalInstanceToEvaluate.getGoalDefinition().getUUID(),goalInstanceToEvaluate.getEndDate());
                                 this.addFinishedBadge(goalInstanceID, this.userRepository.getCurrentUser().getUUID());
+                                if(newChall!=null){
+                                    self.evaluateChallenge(newChall, newChall.getId());
+                                }
                             }
                             console.log("All data were retrieve properly");
                             return goalInstanceToEvaluate.getProgress();
@@ -238,7 +249,11 @@ class GoalInstanceRouter extends RouterItf {
             console.log('++++++++++++ \tMODE DEMO\t+++++++++++');
             var result = goalInstanceToEvaluate.evaluate(this.jsonStub);
             if (result) {
+                var newChall = self.createGoalInstance(goalInstanceToEvaluate.getGoalDefinition().getUUID(), goalInstanceToEvaluate.getEndDate());
                 this.addFinishedBadge(goalInstanceID, this.userRepository.getCurrentUser().getUUID());
+                if(newChall!=null){
+                    self.evaluateChallenge(newChall, newChall.getId());
+                }
             }
             return goalInstanceToEvaluate.getProgress();
         }
