@@ -46,6 +46,7 @@ class AverageOnValue extends Condition {
         var sensorNames:string[] = this.expression.getRequired();
 
         var result = true;
+
         for (var currentSensorNameIndex in sensorNames) {
 
             var currentSensorName:string = sensorNames[currentSensorNameIndex];
@@ -67,7 +68,6 @@ class AverageOnValue extends Condition {
                 if (newAverage) {
                     rate = (newAverage * 100 / oldAverage);
                 }
-
 
                 // < baisse
                 // > hausse
@@ -114,16 +114,16 @@ class AverageOnValue extends Condition {
         for (var currentValueIndex in values) {
 
             //  { date : __ , value : __ }
-            var currentValue:any = values[currentValueIndex];
+            var currentPairDateValue:any = values[currentValueIndex];
 
-            var currentDate:Date = new Date(parseFloat(currentValue.date));
+            var currentDate = parseFloat(currentPairDateValue.date);
 
-            if (currentDate.getTime() >= this.startDate.getTime()
-                && currentDate.getTime() <= this.dateOfCreation.getTime()) {
-                oldValues.push(currentValue.value);
+            if (currentDate >= this.startDate.getTime()
+                && currentDate <= this.dateOfCreation.getTime()) {
+                oldValues.push(currentPairDateValue.value);
             }
-            else if(currentDate.getTime() >= this.dateOfCreation.getTime()){
-                newValues.push(currentValue.value);
+            else if(currentDate >= this.dateOfCreation.getTime()){
+                newValues.push(currentPairDateValue.value);
             }
         }
     }

@@ -37,7 +37,7 @@ class GoalInstanceRouter extends RouterItf {
         var fs = require('fs');
         var data = fs.readFileSync(GoalInstanceRouter.STUB_FILE, "utf-8");
         this.jsonStub = JSON.parse(data);
-        console.log("++ Fichier stub chargé correctement\n", JSON.stringify(this.jsonStub));
+        console.log("++ Fichier stub chargé correctement\n");
     }
 
     buildRouter() {
@@ -92,7 +92,7 @@ class GoalInstanceRouter extends RouterItf {
         oldJson.push(valueDesc);
         this.jsonStub[key].values = oldJson;
 
-        res.send('Valeur' + JSON.stringify(valueDesc) + " ajoutee au stub ! Etat du stub : " + JSON.stringify(this.jsonStub));
+        res.send('Valeur' + JSON.stringify(valueDesc) + " ajoutee au stub !");
     }
 
 

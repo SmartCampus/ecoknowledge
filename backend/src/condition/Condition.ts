@@ -59,7 +59,7 @@ class Condition {
         this.percentageAchieved = percentageAchieved;
         this.percentageOfTimeElapsed = percentageOfTimeElapsed;
 
-        this.filter = (filter) ? filter : new Filter('all', 'all');
+        this.filter = (filter) ? filter : new Filter('all', ['all']);
     }
 
     getStringRepresentation():string {

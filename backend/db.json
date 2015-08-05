@@ -10,7 +10,7 @@
       "duration": 2,
       "conditions": [
         {
-          "id": "d4566648-8811-42ef-83e1-a144de52d6ea",
+          "id": "35359c1d-58c5-4181-9b8f-62b965514f90",
           "expression": {
             "valueLeft": {
               "value": "TMP_CLI",
@@ -21,29 +21,59 @@
               "sensor": false
             },
             "comparison": ">",
-            "description": "a desc",
-            "periodOfTime": "1900-01-31T00:00:00.000Z"
+            "description": "a desc"
           },
           "threshold": 25,
-          "startDate": "2015-07-01T12:01:57.000Z",
-          "dateOfCreation": "2015-07-31T12:01:57.339Z",
-          "endDate": "2015-08-02T12:01:57.000Z",
-          "percentageAchieved": 100,
-          "percentageOfTimeElapsed": 100,
+          "startDate": null,
+          "dateOfCreation": "2015-08-04T12:36:40.453Z",
+          "endDate": "2015-08-06T12:36:40.000Z",
+          "percentageAchieved": 0,
+          "percentageOfTimeElapsed": 0,
+          "filter": {
+            "dayOfWeekFilter": "all",
+            "periodOfDayFilter": ["all"]
+          },
           "type": "comparison"
         }
       ],
       "badgeID": "44bb8108-8830-4f43-abd1-3ef643303d92"
     },
     {
-      "id": "919c35f2-47c0-421a-8b49-3423457eb817",
-      "name": "mon obj",
+      "id": "9bddaf87-5065-4df7-920a-d1d249c9171d",
+      "name": "Obj1",
       "timeBox": {
-        "startDate": "2015-07-17T15:00:32.000Z",
-        "endDate": "2015-08-31T15:00:32.000Z"
+        "startDate": "2015-08-04T12:25:57.787Z",
+        "endDate": "2015-08-31T12:25:57.787Z"
       },
-      "duration": 1,
-      "conditions": [],
+      "duration": 2,
+      "conditions": [
+        {
+          "id": "27839fca-e9e8-4b07-8ce1-1a2bcec5f08c",
+          "expression": {
+            "valueLeft": {
+              "value": "TMP_CLI",
+              "sensor": true
+            },
+            "valueRight": {
+              "value": 1,
+              "sensor": false
+            },
+            "comparison": ">",
+            "description": "tmp_cli > 1"
+          },
+          "threshold": 100,
+          "startDate": "2015-08-04T12:36:40.453Z",
+          "dateOfCreation": "2015-08-04T12:36:40.453Z",
+          "endDate": "2015-08-06T12:36:40.000Z",
+          "percentageAchieved": null,
+          "percentageOfTimeElapsed": 0,
+          "filter": {
+            "dayOfWeekFilter": "working-week",
+            "periodOfDayFilter":  ["all"]
+          },
+          "type": "overall"
+        }
+      ],
       "badgeID": "fde68334-f515-4563-954b-ac91b4a42f88"
     }
   ],
@@ -63,12 +93,15 @@
     {
       "id": "2cf91e02-a320-4766-aa9f-6efce3142d44",
       "name": "Jackie!",
-      "currentChallenges": [],
+      "currentChallenges": [
+      ],
       "finishedBadgesMap": {
-        "44bb8108-8830-4f43-abd1-3ef643303d92": 1
+        "44bb8108-8830-4f43-abd1-3ef643303d92": 1,
+        "fde68334-f515-4563-954b-ac91b4a42f88": 1
       }
     }
   ],
   "challenges": [
-    ]
+    
+  ]
 }

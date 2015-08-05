@@ -8,18 +8,23 @@ var moment = require('moment-timezone');
 
 class Filter {
     private dayFilter:DayOfWeekFilter;
-    private hourFilter:PeriodOfDayFilter;
+    private hourFilter:PeriodOfDayFilter[] = [];
 
     /**
      *
      * @param daysOfWeek
      *      Can be 'all', 'week-end' or 'working-week'
-     * @param periodOfDay
+     * @param periodOfDayFilters
      *      Can be 'all', 'morning', 'afternoon' or 'night'
      */
-    constructor(daysOfWeek:string, periodOfDay:string) {
+    constructor(daysOfWeek:string, periodOfDayFilters:string[]) {
         this.dayFilter = new DayOfWeekFilter(daysOfWeek);
-        this.hourFilter = new PeriodOfDayFilter(periodOfDay);
+
+        for (var currentPeriodOfDayFilterIndex = 0 ; currentPeriodOfDayFilterIndex < periodOfDayFilters.length ; currentPeriodOfDayFilterIndex++) {
+            var currentPeriodOfDayFilter = periodOfDayFilters[currentPeriodOfDayFilterIndex];
+            var currentFilter:PeriodOfDayFilter = new PeriodOfDayFilter(currentPeriodOfDayFilter);
+            this.hourFilter.push(currentFilter);
+        }
     }
 
     apply(data:any):any[] {
@@ -35,11 +40,17 @@ class Filter {
 
             var date = moment.tz(currentDateInSecondsSinceEPOCH, Clock.getTimeZone());
 
-            if (this.dayFilter.apply(date) && this.hourFilter.apply(date)) {
+            var applyResult = true;
 
+            for (var currentPeriodOfDayFilterIndex in this.hourFilter) {
+                var currentPeriodOfDayFilter = this.hourFilter[currentPeriodOfDayFilterIndex];
+                applyResult = applyResult && currentPeriodOfDayFilter.apply(date);
+            }
+
+            if (this.dayFilter.apply(date) && applyResult) {
                 result.push({
-                    "date":currentDateDesc,
-                    "value":currentValue
+                    "date": currentDateDesc,
+                    "value": currentValue
                 });
             }
         }
@@ -48,9 +59,15 @@ class Filter {
     }
 
     getDataInJSON():any {
+        var result:string[] = [];
+
+        for (var currentPeriodOfDayFilterIndex in this.hourFilter) {
+            var currentPeriodOfDayFilter = this.hourFilter[currentPeriodOfDayFilterIndex];
+            result.push(currentPeriodOfDayFilter.getFilterName());
+        }
         return {
             dayOfWeekFilter: this.dayFilter.getFilterName(),
-            periodOfDayFilter: this.hourFilter.getFilterName()
+            periodOfDayFilter: result
         }
     }
 }

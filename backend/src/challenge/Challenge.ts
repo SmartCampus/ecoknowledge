@@ -142,6 +142,13 @@ class Challenge {
      * @returns {boolean}
      */
     public evaluate(values:any):boolean {
+
+        //  Check if badge is running. If Waiting or failed, it must be left unchanged
+        if(this.status != BadgeStatus.RUN) {
+            return false;
+        }
+
+
         this.updateDurationAchieved(Clock.getNow());
         var numberOfValues = Object.keys(values).length;
         var numberOfValuesNeeded = Object.keys(this.mapSymbolicNameToSensor).length;

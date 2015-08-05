@@ -5,6 +5,9 @@ import UserRepository = require('../user/UserRepository');
 import TimeBoxFactory = require('../TimeBoxFactory');
 import TimeBox = require('../TimeBox');
 
+var moment = require('moment');
+var moment_timezone = require('moment-timezone');
+
 class GoalInstanceFactory {
 
     /**
@@ -26,43 +29,65 @@ class GoalInstanceFactory {
      * @param userProvider
      * @returns {Challenge}
      */
-    public createGoalInstance(data:any, goalRepository:GoalRepository, userProvider:UserRepository, now:Date):Challenge {
+    public createGoalInstance(data:any, goalRepository:GoalRepository, userProvider:UserRepository, now:moment.Moment):Challenge {
 
-        var id = data.id;
+        var challengeID = data.id;
 
-        var goalInstanceDescription:string = data.description;
+        var challengeDescription:string = data.description;
 
-        var goalDesc:any = data.goal;
+        var goalJSONDesc:any = data.goal;
+        var goalID = goalJSONDesc.id;
+        var goal:Goal = goalRepository.getGoal(goalID);
 
-        var goalDefinitionID = goalDesc.id;
-
-        var goalDefinition:Goal = goalRepository.getGoal(goalDefinitionID);
-
-        if(goalDefinition == null)  {
+        if (goal == null) {
             throw new Error('Can not create goal instance because ID given of goal definition can not be found');
         }
 
-        var startDate:Date = now;
+        //  Check if challenge is built from db (startDate and endDate are provided in data parameter)
+        //  Or if challengeFactory was called from a 'newChallenge' method
+        var nowDate = moment(now);
+        var mapGoalsToConditionAndSensors:any = goalJSONDesc.conditions;
 
-        /*
-        if(!this.checkDates(goalDefinition,startDate)) {
-            throw new Error('Can not build goal instance ! it does not have the time to be achieved. We are the '
-                + now  + ', the goal start the' + goalDefinition.getStartDate() + ' and end the ' +goalDefinition.getEndDate() + ' with a duration of ' + goalDefinition.getDuration() + ' days');
+        if (data.startDate != null) {
+            return this.restoreChallenge(challengeID, data, goal, challengeDescription, goalRepository, mapGoalsToConditionAndSensors, nowDate);
         }
+
+        /*  TODO check the badge status
+            if(now.isAfter(startDate) && now.isBefore(endDate)) status = BadgeStatus.Run;
+            etc
+            This can be done only when goal will be recurrent (lol)
         */
 
-        var endDate:Date = new Date(startDate.getFullYear(), startDate.getMonth(),startDate.getDate() + goalDefinition.getDuration(), startDate.getHours(), startDate.getMinutes(), startDate.getSeconds());
 
-        var mapGoalsToConditionAndSensors:any = goalDesc.conditions;
+        /*
+         if(!this.checkDates(goalDefinition,startDate)) {
+         throw new Error('Can not build goal instance ! it does not have the time to be achieved. We are the '
+         + now  + ', the goal start the' + goalDefinition.getStartDate() + ' and end the ' +goalDefinition.getEndDate() + ' with a duration of ' + goalDefinition.getDuration() + ' days');
+         }
+         */
 
-        var goalInstance:Challenge = new Challenge(startDate, endDate, goalInstanceDescription, goalDefinition, mapGoalsToConditionAndSensors, id);
+        var endDate:Date = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate() + goal.getDuration(), nowDate.getHours(), nowDate.getMinutes(), nowDate.getSeconds());
+
+
+        var challenge:Challenge = new Challenge(nowDate, endDate, challengeDescription, goal, mapGoalsToConditionAndSensors, challengeID);
 
         // TODO attach badge to user
         // user.addBadgeByDescription(badge);
 
         // console.log("L'objectif ", goalDefinition.getName(), "a ete instancie ! Intervalle de vie de l'objectif : du", startDate, "au", endDate);
 
-        return goalInstance;
+        return challenge;
+    }
+
+    private restoreChallenge(id, data:any, goalDefinition:Goal, goalInstanceDescription:string, goalRepository:GoalRepository, mapGoalsToConditionAndSensors, now:moment.Moment):Challenge{
+        var startDateDesc = data.startDate;
+        var endDateDesc = data.endDate;
+
+        var startDate = moment(startDateDesc);
+        var endDate = moment(endDateDesc);
+
+        var challenge:Challenge = new Challenge(startDate, endDate, goalInstanceDescription, goalDefinition, mapGoalsToConditionAndSensors, id);
+        return challenge;
     }
 
     /**
@@ -72,7 +97,7 @@ class GoalInstanceFactory {
     public checkDates(goalDefinition:Goal, startDate:Date):boolean {
         var durationInDays:number = goalDefinition.getDuration();
 
-        var endDate:Date = new Date(startDate.getFullYear(), startDate.getMonth(),startDate.getDate() + durationInDays);
+        var endDate:Date = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + durationInDays);
         var endDateOfValidityPeriod = goalDefinition.getEndDate();
 
         return endDate.getTime() <= endDateOfValidityPeriod.getTime();
