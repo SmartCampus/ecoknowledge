@@ -1,5 +1,6 @@
 import Goal = require('./Goal');
 import ConditionFactory = require('../condition/factory/ConditionFactory');
+import BadArgumentException = require('../exceptions/BadArgumentException');
 
 class GoalFactory {
 
@@ -14,7 +15,24 @@ class GoalFactory {
 
         var startDateOfValidityPeriod:Date = new Date(data.timeBox.startDate);
         var endDateOfValidityPeriod:Date = new Date(data.timeBox.endDate);
-        var durationAllowed:number = data.duration;
+
+
+        var durationAllowedDesc:string = data.duration;
+        var durationAllowed:number = 0;
+
+        switch (durationAllowedDesc) {
+            case 'day':
+                durationAllowed = 1;
+                break;
+            case 'week' :
+                durationAllowed = 7;
+                break;
+            case 'month' :
+                durationAllowed = 30;
+                break;
+            default :
+                throw new BadArgumentException('Can not build goal. Given duration allowed' + durationAllowedDesc + ' is unknown');
+        }
 
         var badge:string = data.badgeID;
         var goalID:string = data.id;

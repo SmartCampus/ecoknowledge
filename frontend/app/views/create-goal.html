@@ -22,12 +22,14 @@
                     <option value="day" selected>Jour (récurrent)</option>
                     <option value="week">Semaine (récurrent)</option>
                     <option value="month">Mois (récurrent)</option>
-                    <option value="month" disabled>Du {{goalCtrl.goal.timeBox.startDate | date:'dd/MM/yyyy'}} au {{goalCtrl.goal.timeBox.endDate | date:'dd/MM/yyyy'}} (non disponible)</option>
+                    <option value="all" disabled>Du {{goalCtrl.goal.timeBox.startDate | date:'dd/MM/yyyy'}} au {{goalCtrl.goal.timeBox.endDate | date:'dd/MM/yyyy'}} (non disponible)</option>
                   </select>
 
 
+              <!--
                 <input type="number" ng-model="goalCtrl.goal.duration" required>
                 <label> jours</label>
+                -->
             </span>
         </div>
 

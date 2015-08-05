@@ -9,7 +9,7 @@ var assert = chai.assert;
 import GoalFactory = require('../../src/goal/GoalFactory');
 import Goal = require('../../src/goal/Goal');
 
-describe("GoalDefinitionFactory test", () => {
+describe("GoalFactory test", () => {
 
     var factory:GoalFactory = new GoalFactory();
     var goal:Goal;
@@ -23,7 +23,7 @@ describe("GoalDefinitionFactory test", () => {
         timeBox.endDate = Date.now() + 10;
         jsonDefinition.timeBox = timeBox;
 
-        jsonDefinition.duration = 1;
+        jsonDefinition.duration = 'day';
 
         var jsonExpression:any = {};
         jsonExpression.comparison = '<';
