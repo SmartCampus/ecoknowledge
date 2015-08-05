@@ -80,13 +80,13 @@ class Goal {
         this.conditionsList.addCondition(expression);
     }
 
-    public evaluate(values:any, goalInstance:Challenge = null):boolean {
+    public evaluate(values:any, challenge:Challenge = null):boolean {
 
-        if (goalInstance != null) {
-            goalInstance.resetProgress();
+        if (challenge != null) {
+            challenge.resetProgress();
         }
 
-        return this.conditionsList.evaluate(values, goalInstance);
+        return this.conditionsList.evaluate(values, challenge);
     }
 
     public getRequired():any {

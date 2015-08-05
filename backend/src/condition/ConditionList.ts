@@ -108,7 +108,7 @@ class ConditionList {
      * @returns {boolean}
      */
 
-    public evaluate(values:any, goalInstance:Challenge):boolean {
+    public evaluate(values:any, challenge:Challenge):boolean {
 
         var result:boolean = true;
 
@@ -117,8 +117,8 @@ class ConditionList {
             result = result && this.conditions[i].evaluate(values);
 
             var conditionDescription:any = this.conditions[i].getDataInJSON();
-            if (goalInstance != null) {
-                goalInstance.addProgress(conditionDescription);
+            if (challenge != null) {
+                challenge.addProgress(conditionDescription);
             }
         }
 
