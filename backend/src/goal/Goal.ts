@@ -1,4 +1,6 @@
 /// <reference path="../../typings/node-uuid/node-uuid.d.ts" />
+/// <reference path="../../typings/moment/moment.d.ts" />
+/// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
 
 import uuid = require('node-uuid');
 
@@ -6,6 +8,11 @@ import ConditionList = require('../condition/ConditionList');
 import Condition = require('../condition/Condition');
 import Challenge = require('../challenge/Challenge');
 import TimeBox = require('../TimeBox');
+import Clock = require('../Clock');
+import RecurringSession = require('./RecurringSession');
+
+var moment = require('moment');
+var moment = require('moment-timezone');
 
 class Goal {
     private id;
@@ -16,10 +23,11 @@ class Goal {
     private endDate:Date;
 
     private durationInDays:number;
+    private recurringSession:RecurringSession;
 
     private badgeID:string;
 
-    constructor(name:string, startDate:Date, endDate:Date, durationInDays:number, badgeID:string, id = null) {
+    constructor(name:string, startDate:Date, endDate:Date, durationInDays:number, badgeID:string, id = null, recurringSession:RecurringSession = new RecurringSession('month')) {
         if (!name) {
             throw new Error('Bad argument : name given is null');
         }
@@ -37,7 +45,18 @@ class Goal {
 
         this.startDate = startDate;
         this.endDate = endDate;
+
+        this.recurringSession = recurringSession;
+
         this.durationInDays = durationInDays;
+    }
+
+    getStartDateOfSession(now) {
+        return this.recurringSession.getCurrentSessionStart(now);
+    }
+
+    getEndDateOfSession(now) {
+        return this.recurringSession.getCurrentSessionEnd(now);
     }
 
     getBadgeID() {

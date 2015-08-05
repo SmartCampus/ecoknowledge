@@ -24,7 +24,7 @@ class User {
     private currentChallenges:string[] = [];
     private finishedBadgesMap:BadgeIDsToNumberOfTimesEarnedMap = {};
 
-    constructor(name:string, id = null, currentChallenges:string[] = null, finishedBadgesMap:BadgeIDsToNumberOfTimesEarnedMap = null) {
+    constructor(name:string, id = null, currentChallenges:string[] = [], finishedBadgesMap:BadgeIDsToNumberOfTimesEarnedMap = {}) {
 
         this.id = (id) ? id : uuid.v4();
 

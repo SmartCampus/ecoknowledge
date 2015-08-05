@@ -12,6 +12,8 @@ import Clock = require('../Clock');
 
 import BadRequestException = require('../exceptions/BadRequestException');
 
+var moment = require('moment');
+
 class GoalInstanceRouter extends RouterItf {
     public static DEMO:boolean = true;
 
@@ -134,7 +136,11 @@ class GoalInstanceRouter extends RouterItf {
             }
         };
 
-        var goalInstance = this.goalInstanceFactory.createGoalInstance(data, this.goalDefinitionRepository, null, date);
+
+        var m = moment(date.getTime());
+
+
+        var goalInstance = this.goalInstanceFactory.createGoalInstance(data, this.goalDefinitionRepository, null, m);
         this.goalInstanceRepository.addGoalInstance(goalInstance);
         this.userRepository.getCurrentUser().addChallenge(goalInstance.getId());
         //TODO if checkdate return null

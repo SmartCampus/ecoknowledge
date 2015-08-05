@@ -4,6 +4,8 @@ import GoalRepository = require('../goal/GoalRepository');
 import UserRepository = require('../user/UserRepository');
 import TimeBoxFactory = require('../TimeBoxFactory');
 import TimeBox = require('../TimeBox');
+import ChallengeStatus = require('../Status');
+
 
 var moment = require('moment');
 var moment_timezone = require('moment-timezone');
@@ -45,19 +47,19 @@ class GoalInstanceFactory {
 
         //  Check if challenge is built from db (startDate and endDate are provided in data parameter)
         //  Or if challengeFactory was called from a 'newChallenge' method
-        var nowDate = moment(now);
+
         var mapGoalsToConditionAndSensors:any = goalJSONDesc.conditions;
 
+        //  We restore it from DB
         if (data.startDate != null) {
-            return this.restoreChallenge(challengeID, data, goal, challengeDescription, goalRepository, mapGoalsToConditionAndSensors, nowDate);
+            return this.restoreChallenge(challengeID, data, goal, challengeDescription, goalRepository, mapGoalsToConditionAndSensors, now);
         }
 
-        /*  TODO check the badge status
-            if(now.isAfter(startDate) && now.isBefore(endDate)) status = BadgeStatus.Run;
-            etc
-            This can be done only when goal will be recurrent (lol)
-        */
+        //  The user just took a new challenge
 
+        var clone = now.clone();
+        var startDate = goal.getStartDateOfSession(clone);
+        var endDate = goal.getEndDateOfSession(clone);
 
         /*
          if(!this.checkDates(goalDefinition,startDate)) {
@@ -66,10 +68,15 @@ class GoalInstanceFactory {
          }
          */
 
-        var endDate:Date = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate() + goal.getDuration(), nowDate.getHours(), nowDate.getMinutes(), nowDate.getSeconds());
+        //  TODO delete date construction
+        var challenge:Challenge = new Challenge(new Date(startDate.valueOf()), new Date(endDate.valueOf()), challengeDescription, goal, mapGoalsToConditionAndSensors, challengeID);
 
-
-        var challenge:Challenge = new Challenge(nowDate, endDate, challengeDescription, goal, mapGoalsToConditionAndSensors, challengeID);
+        if(now.isBefore(startDate)) {
+            challenge.setStatus(ChallengeStatus.WAIT);
+        }
+        if(now.isAfter(startDate) && now.isBefore(endDate)) {
+            challenge.setStatus(ChallengeStatus.RUN);
+        }
 
         // TODO attach badge to user
         // user.addBadgeByDescription(badge);
@@ -88,6 +95,10 @@ class GoalInstanceFactory {
 
         var challenge:Challenge = new Challenge(startDate, endDate, goalInstanceDescription, goalDefinition, mapGoalsToConditionAndSensors, id);
         return challenge;
+    }
+
+    private realignStartAndEndDates(goal:Goal, now:moment.Moment) {
+
     }
 
     /**

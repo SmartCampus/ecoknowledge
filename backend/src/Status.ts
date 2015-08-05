@@ -1,8 +1,8 @@
-enum BadgeStatus{
+enum ChallengeStatus{
     WAIT,
     RUN,
     SUCCESS,
     FAIL
 }
 
-export = BadgeStatus;
+export = ChallengeStatus;

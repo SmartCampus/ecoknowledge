@@ -113,6 +113,10 @@ class Challenge {
         return this.status === badgeStatus;
     }
 
+    public setStatus(badgeStatus:BadgeStatus) {
+        this.status = badgeStatus;
+    }
+
     public getSensors():any {
 
         var result:any = {};
