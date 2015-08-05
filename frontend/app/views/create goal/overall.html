@@ -72,7 +72,21 @@
         </select>
       </div>
 
+      <div>
+        <input type="checkbox" value="all"
+               ng-checked="iteration.filter.periodOfDayFilter.indexOf('all') > -1" ng-click="goalCtrl.togglePeriodOfDayFilter(iteration,'all')">Toute la journée (jour + nuit)
+        <input type="checkbox" value="morning"
+               ng-checked="iteration.filter.periodOfDayFilter.indexOf('morning') > -1 ||
+               iteration.filter.periodOfDayFilter.indexOf('all') > -1" ng-click="goalCtrl.togglePeriodOfDayFilter(iteration,'morning')">Le matin
+        <input type="checkbox" value="afternoon"
+               ng-checked="iteration.filter.periodOfDayFilter.indexOf('afternoon') > -1 ||
+               iteration.filter.periodOfDayFilter.indexOf('all') > -1" ng-click="goalCtrl.togglePeriodOfDayFilter(iteration,'afternoon')">L'après midi
+        <input type="checkbox" value="night"
+               ng-checked="iteration.filter.periodOfDayFilter.indexOf('night') > -1 ||
+               iteration.filter.periodOfDayFilter.indexOf('all') > -1" ng-click="goalCtrl.togglePeriodOfDayFilter(iteration,'night')">La nuit
+      </div>
 
+      <!--
       <div>
         <label>Période de la journée concernées</label>
         <select name="periodOfDayFilter" class="selectpick form-control" ng-model="periodOfDayFilter" ng-change="goalCtrl.changePeriodOfDayFilter(iteration, periodOfDayFilter)" required>
@@ -82,6 +96,7 @@
           <option value="night">La nuit</option>
         </select>
       </div>
+      -->
 
     </div>
 </div>
