@@ -478,7 +478,7 @@ describe('Test AverageOnValueTest', () => {
             var newStartDate:moment.Moment = Clock.getMoment(new Date(Date.UTC(1999, 12, 8)).getTime());
             expression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
             averageOnValue = new AverageOnValue(null,expression,10, newStartDate, dateOfCreation, endDate,moment(new Date(0,0,30,0,0,0,0).getTime()));
-            
+
             var values:any[] = [
 
                 //datas after 1999-12-8

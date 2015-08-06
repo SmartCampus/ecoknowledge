@@ -37,10 +37,10 @@ describe("GoalInstance test", () => {
     var anotherSensorName:string = 'TEMP_444';
 
     var anExpression:GoalExpression = new GoalExpression(new Operand(aSymbolicName, true), '<', new Operand('40', false), 'desc');
-    var anotherExpression:GoalExpression = new GoalExpression(new Operand(anotherSymbolicName, true), '>', new Operand('25', false), 'desc')
+    var anotherExpression:GoalExpression = new GoalExpression(new Operand(anotherSymbolicName, true), '>', new Operand('25', false), 'desc');
 
-    var anAverageCondition:AverageOnValue = new AverageOnValue(null, anExpression, 10, aStartDate, aDateOfCreation, aEndDate, moment(new Date(0,1,0,0,0,0,0).getTime()));
-    var anotherAverageCondition:AverageOnValue = new AverageOnValue(null, anotherExpression, 10, aStartDate, aDateOfCreation, aEndDate, moment(new Date(0,1,0,0,0,0,0).getTime()));
+    var anAverageCondition:AverageOnValue = new AverageOnValue(null, anExpression, 10, aStartDate, aDateOfCreation, aEndDate, Clock.getMoment(new Date(0,1,0,0,0,0,0).getTime()));
+    var anotherAverageCondition:AverageOnValue = new AverageOnValue(null, anotherExpression, 10, aStartDate, aDateOfCreation, aEndDate, Clock.getMoment(new Date(0,1,0,0,0,0,0).getTime()));
 
     beforeEach(() => {
         goalDefinition = new Goal("goal1", aStartDate, aEndDate, 100, null);

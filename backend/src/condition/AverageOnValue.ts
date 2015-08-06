@@ -44,7 +44,7 @@ class AverageOnValue extends Condition {
 
         this.startDate = Clock.getMoment(new Date(this.dateOfCreation.year() - year,
             this.dateOfCreation.month() - month +1,
-            this.dateOfCreation.date() - day  +1,
+            this.dateOfCreation.date() - day,
             this.dateOfCreation.hours(),
             this.dateOfCreation.minutes(),
             this.dateOfCreation.seconds()).getTime());
