@@ -1,0 +1,23 @@
+.goal-container {
+  background-color:#EFF0F0;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0px 5px 5px #DFDFDF;
+  border: 1px solid #6C6C6C;
+  width:70%;
+}
+
+.goal-item {
+  list-style-type: none;
+  margin-top: 10px;
+  text-align: center;
+}
+.goal-button {
+  margin-top:25px;
+}
+
+.goals-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}

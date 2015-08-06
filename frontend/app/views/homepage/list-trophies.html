@@ -1,7 +1,7 @@
 <div class="col-md-4">
     <h2>Tableau de chasse</h2>
-    <ul>
-        <li ng-repeat="trophyInstance in homeCtrl.trophies track by $index">
+    <ul class="trophies-list">
+        <li ng-repeat="trophyInstance in homeCtrl.trophies track by $index" class="badge-item">
             <homepage-trophy></homepage-trophy>
         </li>
     </ul>

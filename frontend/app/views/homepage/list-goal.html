@@ -1,6 +1,7 @@
-<div class="col-md-4"><h2>Objectifs disponibles</h2>
-    <ul>
-        <li class="list-group-item" ng-repeat="goal in homeCtrl.goals">
+<div class="col-md-4">
+  <h2>Objectifs disponibles</h2>
+    <ul class="goals-list">
+        <li ng-repeat="goal in homeCtrl.goals" class="goal-item">
             <homepage-goal></homepage-goal>
         </li>
     </ul>

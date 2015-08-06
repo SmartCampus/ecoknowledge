@@ -1,6 +1,7 @@
-<div class="col-md-4"><h2>Défis en cours</h2>
-    <ul>
-        <li class="badge-list list-group-item badge-status-{{challenge.status}}" ng-repeat="challenge in homeCtrl.goalsInstance">
+<div class="col-md-4">
+  <h2>Défis en cours</h2>
+    <ul class="challenges-list">
+        <li class="challenge-item" ng-repeat="challenge in homeCtrl.goalsInstance">
             <homepage-challenge></homepage-challenge>
         </li>
     </ul>

@@ -101,6 +101,7 @@ var app = angular.module('ecoknowledgeApp')
         console.log('Succeed to remove a goal instance : ', data);
         var index = self.goalsInstance.indexOf(objective);
         self.goalsInstance.splice(index, 1);
+        $window.location.reload();
       }, function(data){
         console.log('Failed to remove a goal',data);
       });

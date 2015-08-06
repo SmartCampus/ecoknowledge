@@ -1,5 +1,5 @@
-<div class="badge-container">
-  <input type="button" value="Enlever ce défi" ng-click="homeCtrl.removeObjective(challenge)">
+<div class="challenge-container challenge-status-{{challenge.status}}">
+  <input class="challenge-btn" type="button" value="Enlever ce défi" ng-click="homeCtrl.removeObjective(challenge)">
   <table>
     <tr>
       <td>

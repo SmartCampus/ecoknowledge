@@ -1,5 +1,12 @@
-<div style="background-color:#80D783;border:1px solid grey;padding:15px;">
-  {{trophyInstance.number}} x {{trophyInstance.badge.name}}
-<br/>
-<b>{{trophyInstance.badge.points}} points</b>
+<div class="badge-container" ng-class="{
+               'bronze':trophyInstance.number==1,
+                'silver':trophyInstance.number==2,
+                'gold':trophyInstance.number >2
+                }">
+  <div class="number-of-badge">
+    <span class="badge">{{trophyInstance.number}}</span>
+  </div>
+  {{trophyInstance.badge.name}}
+  <br/>
+  <b>{{trophyInstance.badge.points}} points</b>
 </div>
