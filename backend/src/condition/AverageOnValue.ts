@@ -29,7 +29,6 @@ class AverageOnValue extends Condition {
         this.newTimeBox = new TimeBox(dateOfCreation, endDate);
 
         this.referencePeriod = referencePeriod;
-        console.log("REEEEEEEEFERENCE PERDIOD", referencePeriod.format());
     }
 
     public setTimeBox(newTimeBox:TimeBox) {

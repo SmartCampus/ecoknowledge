@@ -54,7 +54,7 @@ describe("Add a condition to a goal", () => {
                 startDate: goal.getStartDate(),
                 endDate: goal.getEndDate()
             },
-            duration: goal.getDuration(),
+            duration: 'month',
             conditions: goal.getConditions().getDataInJSON(),
             badgeID: goal.getBadgeID()
         }
