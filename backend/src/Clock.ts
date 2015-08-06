@@ -23,16 +23,20 @@ class Clock {
         return 'Europe/Paris';
     }
 
-    static getMoment(date:number):moment.Moment{
+    static getMoment(date:number):moment.Moment {
         return moment.tz(date, Clock.getTimeZone());
     }
 
-    static getMomentFromString(date:string):moment.Moment{
+    static getMomentFromString(date:string):moment.Moment {
         return moment.tz(date, Clock.getTimeZone());
     }
 
-    static getCurrentMoment():moment.Moment{
-        return moment.tz(Date.now(),Clock.getTimeZone());
+    static getCurrentMoment():moment.Moment {
+        return moment.tz(Date.now(), Clock.getTimeZone());
+    }
+
+    static getCurrentDemoMoment():moment.Moment {
+        return moment.tz(Clock.getNow(), Clock.getTimeZone());
     }
 }
 

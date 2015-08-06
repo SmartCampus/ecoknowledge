@@ -144,6 +144,10 @@ class Challenge {
         this.goalDefinition = goal;
     }
 
+    public haveToStart(now:moment.Moment):boolean {
+        return now.isAfter(this.startDate) && now.isBefore(this.endDate);
+    }
+
     /**
      *
      * @param values

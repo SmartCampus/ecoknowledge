@@ -141,7 +141,7 @@ class Goal {
                 startDate: this.startDate,
                 endDate: this.endDate
             },
-            duration: this.durationInDays,
+            duration: this.recurringSession.getDescription(),
             conditions: this.conditionsList.getDataInJSON(),
             badgeID: this.badgeID
         }

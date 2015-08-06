@@ -29,7 +29,6 @@ class AverageOnValue extends Condition {
         this.newTimeBox = new TimeBox(dateOfCreation, endDate);
 
         this.referencePeriod = referencePeriod;
-        console.log('REFERENCE EPERIOD ICI LA REGARDE CEST TROP BIEN : ', this.referencePeriod.format());
     }
 
     public setTimeBox(newTimeBox:TimeBox) {
@@ -37,7 +36,12 @@ class AverageOnValue extends Condition {
         this.dateOfCreation = newTimeBox.getStartDate();
         this.endDate = newTimeBox.getEndDate();
 
+        console.log("DOC", this.dateOfCreation.format(), "END DATE", this.endDate.format());
+
         var timeOfTheUltimateOriginOfOrigins:moment.Moment = Clock.getMoment(new Date(0, 0, 0, 0, 0, 0, 0).getTime());
+
+        console.log("ORIGINS", timeOfTheUltimateOriginOfOrigins.format());
+
         var year:number = this.referencePeriod.year() - timeOfTheUltimateOriginOfOrigins.year();
 
         var month:number = this.referencePeriod.month() - timeOfTheUltimateOriginOfOrigins.month();
@@ -165,6 +169,7 @@ class AverageOnValue extends Condition {
         var data:any = super.getDataInJSON();
         data.type = 'comparison';
         data.expression.periodOfTime = (''+this.referencePeriod.valueOf());
+
         return data;
     }
 
