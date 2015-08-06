@@ -164,6 +164,7 @@ class AverageOnValue extends Condition {
     public getDataInJSON():any {
         var data:any = super.getDataInJSON();
         data.type = 'comparison';
+        data.expression.periodOfTime = (''+this.referencePeriod.valueOf());
         return data;
     }
 
