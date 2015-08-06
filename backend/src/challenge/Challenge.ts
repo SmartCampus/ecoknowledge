@@ -33,6 +33,9 @@ class Challenge {
 
     constructor(startDate:moment.Moment, endDate:moment.Moment, description:string, goal:Goal,
                 mapGoalToConditionAndSensor:any, id = null) {
+
+        console.log("Building the challenge with startdate", startDate.format(), "and enddate", endDate.format());
+
         this.id = (id) ? id : UUID.v4();
         this.description = description;
 

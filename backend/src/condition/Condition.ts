@@ -130,9 +130,11 @@ class Condition {
     }
 
     setTimeBox(newTimeBox:TimeBox) {
+
         this.timeBox = newTimeBox;
         this.startDate = newTimeBox.getStartDate();
         this.endDate = newTimeBox.getEndDate();
+        console.log("TIMEBOX SET AT", newTimeBox, "So now, condition have", this.startDate.format(), "and", this.endDate.format());
     }
 
     isInTimeBox(date:moment.Moment):boolean {

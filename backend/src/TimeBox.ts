@@ -55,8 +55,8 @@ class TimeBox {
      * @returns {{startDate: string, endDate: string}}
      */
     public getRequired():any {
-        var startDateStr = this.convertTimeForMiddlewareAPI(this.startDate.valueOf());
-        var endDateStr = this.convertTimeForMiddlewareAPI(this.endDate.valueOf());
+        var startDateStr = this.convertTimeForMiddlewareAPI(this.startDate);
+        var endDateStr = this.convertTimeForMiddlewareAPI(this.endDate);
 
         return {
             'startDate':startDateStr,
@@ -74,16 +74,23 @@ class TimeBox {
      *      The given date in the following format : YYYY-MM-DD hh:mm:ss</br>
      *      Uses Date#toISOString method.
      */
-    public convertTimeForMiddlewareAPI(aDateInMillis):string {
-        var m = Clock.getMoment(aDateInMillis);
-        var date:string=m.format();
+    public convertTimeForMiddlewareAPI(aMoment):string {
+        console.log("Conversion du moment pour matcher avec le middleware");
+        var date:string=aMoment.format();
+
+        console.log("date à convertir", date);
+        console.log("date à convertir au format iso", aMoment.toISOString());
 
         var dateWithoutTimeZone:string[] = date.split('+');
         var dateWithoutTail:string[] = dateWithoutTimeZone[0].split('.');
         var headOfDate:string = dateWithoutTail[0];
 
+        console.log("head of date", headOfDate);
+
         var arrayOfHeadOfDate:string[] = headOfDate.split('T');
         var properDate:string= arrayOfHeadOfDate[0] + " " + arrayOfHeadOfDate[1];
+
+        console.log("new date", properDate);
 
         return properDate;
     }
