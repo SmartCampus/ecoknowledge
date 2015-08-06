@@ -1,6 +1,12 @@
 /// <reference path="../../typings/mocha/mocha.d.ts" />
 /// <reference path="../../typings/chai/chai.d.ts" />
 /// <reference path="../../typings/sinon/sinon.d.ts" />
+/// <reference path="../../typings/node/node.d.ts" />
+/// <reference path="../../typings/moment/moment.d.ts" />
+/// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
+
+var moment = require('moment');
+var moment_timezone = require('moment-timezone');
 
 import chai = require('chai');
 import sinon = require('sinon');
@@ -36,7 +42,7 @@ describe("Add a condition to a goal", () => {
 
     it('should be possible to add an expression', () => {
         var comparison:GoalExpression = new GoalExpression(new Operand("Température", true), 'inf', new Operand('10', false), 'desc');
-        var expression:OverallGoalCondition = new OverallGoalCondition(null, comparison, 0, new Date(Date.UTC(2000, 10, 10)), new Date(Clock.getNow()), new Date(Date.UTC(2000, 10, 15)));
+        var expression:OverallGoalCondition = new OverallGoalCondition(null, comparison, 0, moment(new Date(Date.UTC(2000, 10, 10)).getTime()), moment(new Date(Clock.getNow()).getTime()), moment(new Date(Date.UTC(2000, 10, 15)).getTime()));
         chai.expect(goal.addCondition(expression)).not.to.throw;
     });
 

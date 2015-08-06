@@ -1,6 +1,12 @@
 /// <reference path="../../typings/mocha/mocha.d.ts" />
 /// <reference path="../../typings/chai/chai.d.ts" />
 /// <reference path="../../typings/sinon/sinon.d.ts" />
+/// <reference path="../../typings/node/node.d.ts" />
+/// <reference path="../../typings/moment/moment.d.ts" />
+/// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
+
+var moment = require('moment');
+var moment_timezone = require('moment-timezone');
 
 import chai = require('chai');
 import sinon = require('sinon');
@@ -24,12 +30,12 @@ describe('Test OverallGoalCondition', () => {
     var typeOfComparison:string = '>';
     var description:string = 'un test';
 
-    var startDate:Date = new Date(Date.UTC(2000,1,1));
-    var endDate:Date = new Date(Date.UTC(2000,8,1));
+    var startDate:moment.Moment = moment(new Date(Date.UTC(2000,1,1)).getTime());
+    var endDate:moment.Moment = moment(new Date(Date.UTC(2000,8,1)).getTime());
 
     it('should return false if min threshold is absolutely not reached', () => {
         condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
-        overallGoalCondition = new OverallGoalCondition(null, condition, 80, startDate, new Date(Clock.getNow()), endDate);
+        overallGoalCondition = new OverallGoalCondition(null, condition, 80, startDate, moment(new Date(Clock.getNow()).getTime()), endDate);
 
         var data:any = {};
 
@@ -53,7 +59,7 @@ describe('Test OverallGoalCondition', () => {
 
     it('should return false if min threshold is not reached', () => {
         condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
-        overallGoalCondition = new OverallGoalCondition(null, condition, 80, startDate, new Date(Clock.getNow()), endDate);
+        overallGoalCondition = new OverallGoalCondition(null, condition, 80, startDate, moment(new Date(Clock.getNow()).getTime()), endDate);
 
         var data:any = {};
         var values:any[] = [
@@ -78,7 +84,7 @@ describe('Test OverallGoalCondition', () => {
 
     it('should return true if min threshold is just reached', () => {
         condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
-        overallGoalCondition = new OverallGoalCondition(null, condition, 50, startDate, new Date(Clock.getNow()), endDate);
+        overallGoalCondition = new OverallGoalCondition(null, condition, 50, startDate, moment(new Date(Clock.getNow()).getTime()), endDate);
 
         var data:any = {};
 
@@ -104,7 +110,7 @@ describe('Test OverallGoalCondition', () => {
 
     it('should return true if min threshold is reached', () => {
         condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
-        overallGoalCondition = new OverallGoalCondition(null, condition, 50, startDate, new Date(Clock.getNow()), endDate);
+        overallGoalCondition = new OverallGoalCondition(null, condition, 50, startDate, moment(new Date(Clock.getNow()).getTime()), endDate);
 
         var data:any = {};
 

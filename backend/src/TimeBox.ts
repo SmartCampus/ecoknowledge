@@ -1,43 +1,53 @@
+/// <reference path="../typings/node/node.d.ts" />
+/// <reference path="../typings/moment/moment.d.ts" />
+/// <reference path="../typings/moment-timezone/moment-timezone.d.ts" />
+
+var moment = require('moment');
+var moment_timezone = require('moment-timezone');
+
+import Clock = require('./Clock');
+
 class TimeBox {
 
-    private startDate:Date;
-    private endDate:Date;
+    private startDate:moment.Moment;
+    private endDate:moment.Moment;
 
-    constructor(starDate:Date, endDate:Date) {
+    constructor(starDate:moment.Moment, endDate:moment.Moment) {
         this.startDate = starDate;
         this.endDate = endDate;
     }
 
     public isDateInMillisInTimeBox(currentDateInMillis:number):boolean{
-        return currentDateInMillis >= this.startDate.getTime() && currentDateInMillis <= this.endDate.getTime();
+        var currentInMillis:moment.Moment = moment(currentDateInMillis);
+        return currentInMillis.isAfter(this.startDate) && currentInMillis.isBefore(this.endDate);
     }
 
-    public isDateInTimeBox(currentDate:Date):boolean{
-        return this.isDateInMillisInTimeBox(currentDate.getTime());
+    public isDateInTimeBox(currentDate:moment.Moment):boolean{
+        return this.isDateInMillisInTimeBox(currentDate.valueOf());
     }
 
-    public getStartDate():Date {
+    public getStartDate():moment.Moment {
         return this.startDate;
     }
 
     public getStartDateInMillis():number {
-        return this.startDate.getTime();
+        return this.startDate.valueOf();
     }
 
-    public getEndDate():Date {
+    public getEndDate():moment.Moment {
         return this.endDate;
     }
 
     public getEndDateInMillis():number {
-        return this.endDate.getTime();
+        return this.endDate.valueOf();
     }
 
     public getStartDateInStringFormat():string {
-        return this.convertTimeForMiddlewareAPI(this.startDate.getTime());
+        return this.convertTimeForMiddlewareAPI(this.startDate.valueOf());
     }
 
     public getEndDateInStringFormat():string {
-        return this.convertTimeForMiddlewareAPI(this.endDate.getTime());
+        return this.convertTimeForMiddlewareAPI(this.endDate.valueOf());
     }
 
     /**
@@ -45,8 +55,8 @@ class TimeBox {
      * @returns {{startDate: string, endDate: string}}
      */
     public getRequired():any {
-        var startDateStr = this.convertTimeForMiddlewareAPI(this.startDate.getTime());
-        var endDateStr = this.convertTimeForMiddlewareAPI(this.endDate.getTime());
+        var startDateStr = this.convertTimeForMiddlewareAPI(this.startDate.valueOf());
+        var endDateStr = this.convertTimeForMiddlewareAPI(this.endDate.valueOf());
 
         return {
             'startDate':startDateStr,
@@ -65,9 +75,11 @@ class TimeBox {
      *      Uses Date#toISOString method.
      */
     public convertTimeForMiddlewareAPI(aDateInMillis):string {
-        var date:string= new Date(aDateInMillis).toISOString();
+        var m = Clock.getMoment(aDateInMillis);
+        var date:string=m.format();
 
-        var dateWithoutTail:string[] = date.split('.');
+        var dateWithoutTimeZone:string[] = date.split('+');
+        var dateWithoutTail:string[] = dateWithoutTimeZone[0].split('.');
         var headOfDate:string = dateWithoutTail[0];
 
         var arrayOfHeadOfDate:string[] = headOfDate.split('T');

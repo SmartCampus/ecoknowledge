@@ -1,9 +1,16 @@
 /// <reference path="../../typings/node-uuid/node-uuid.d.ts" />
+/// <reference path="../../typings/node/node.d.ts" />
+/// <reference path="../../typings/moment/moment.d.ts" />
+/// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
+
+var moment = require('moment');
+var moment_timezone = require('moment-timezone');
 
 import TimeBox = require('../TimeBox');
 import Filter = require('../filter/Filter');
 import GoalExpression = require('./expression/GoalExpression');
 import UUID = require('node-uuid');
+import Clock = require('../Clock');
 
 class Condition {
     protected id:string;
@@ -11,9 +18,9 @@ class Condition {
     protected expression:GoalExpression;
     protected thresholdRate:number;
 
-    protected startDate:Date;
-    protected dateOfCreation:Date;
-    protected endDate:Date;
+    protected startDate:moment.Moment;
+    protected dateOfCreation:moment.Moment;
+    protected endDate:moment.Moment;
 
     protected timeBox:TimeBox;
 
@@ -42,7 +49,7 @@ class Condition {
      *      The percentage of time elapsed between 'now' and startDate
      */
     constructor(id:string, expression:GoalExpression, thresholdRate:number,
-                startDate:Date, dateOfCreation:Date, endDate:Date,
+                startDate:moment.Moment, dateOfCreation:moment.Moment, endDate:moment.Moment,
                 percentageAchieved:number = 0, percentageOfTimeElapsed:number = 0, filter:Filter = null) {
 
         this.id = (id) ? id : UUID.v4();
@@ -106,19 +113,19 @@ class Condition {
         return this.expression.getComparisonType() === comparisonType;
     }
 
-    getStartDate():Date {
+    getStartDate():moment.Moment {
         return this.startDate;
     }
 
-    setStartDate(newStartDate:Date):void {
+    setStartDate(newStartDate:moment.Moment):void {
         this.startDate = newStartDate;
     }
 
-    getEndDate():Date {
+    getEndDate():moment.Moment {
         return this.endDate;
     }
 
-    setEndDate(newEndDate:Date):void {
+    setEndDate(newEndDate:moment.Moment):void {
         this.endDate = newEndDate;
     }
 
@@ -128,7 +135,7 @@ class Condition {
         this.endDate = newTimeBox.getEndDate();
     }
 
-    isInTimeBox(date:Date):boolean {
+    isInTimeBox(date:moment.Moment):boolean {
         return this.timeBox.isDateInTimeBox(date);
     }
 
@@ -137,14 +144,15 @@ class Condition {
     }
 
     updatePercentageOfTimeElapsed(currentDate:number) {
-        var duration = this.getEndDate().getTime() - this.getStartDate().getTime();
 
-        var durationAchieved = (currentDate - this.getStartDate().getTime()) * 1000;
-
-        if (durationAchieved < 0) {
+        var currentMoment:moment.Moment = Clock.getMoment(currentDate);
+        if (currentMoment.isBefore(this.getStartDate())) {
             throw new Error('Time given is before dateOfCreation !');
         }
 
+        var duration = this.getEndDate().valueOf() - this.getStartDate().valueOf();
+
+        var durationAchieved = currentMoment.valueOf() - this.getStartDate().valueOf();
         this.percentageOfTimeElapsed = durationAchieved * 100 / duration;
     }
 

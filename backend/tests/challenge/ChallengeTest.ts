@@ -1,6 +1,13 @@
 /// <reference path="../../typings/mocha/mocha.d.ts" />
 /// <reference path="../../typings/chai/chai.d.ts" />
 /// <reference path="../../typings/sinon/sinon.d.ts" />
+/// <reference path="../../typings/node/node.d.ts" />
+/// <reference path="../../typings/moment/moment.d.ts" />
+/// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
+
+var moment = require('moment');
+var moment_timezone = require('moment-timezone');
+
 
 import chai = require('chai');
 import sinon = require('sinon');
@@ -12,15 +19,16 @@ import GoalExpression = require('../../src/condition/expression/GoalExpression')
 import Operand = require('../../src/condition/expression/Operand');
 import AverageOnValue = require('../../src/condition/AverageOnValue');
 import TimeBox = require('../../src/TimeBox');
+import Clock = require('../../src/Clock');
 
 describe("GoalInstance test", () => {
 
     var goalInstance:Challenge;
     var goalDefinition:Goal;
 
-    var aStartDate:Date = new Date(Date.UTC(2000, 5, 1));
-    var aDateOfCreation:Date = new Date(Date.UTC(2000, 5, 1));
-    var aEndDate:Date = new Date(Date.UTC(2000, 8, 1));
+    var aStartDate:moment.Moment = Clock.getMomentFromString('2000-05-01T00:00:00');
+    var aDateOfCreation:moment.Moment = Clock.getMomentFromString('2000-05-01T00:00:00');
+    var aEndDate:moment.Moment = Clock.getMomentFromString('2000-08-01T00:00:00');
 
     var aSymbolicName:string = 'Temperature_cli';
     var anotherSymbolicName:string = 'Temperature_ext';
@@ -31,11 +39,11 @@ describe("GoalInstance test", () => {
     var anExpression:GoalExpression = new GoalExpression(new Operand(aSymbolicName, true), '<', new Operand('40', false), 'desc');
     var anotherExpression:GoalExpression = new GoalExpression(new Operand(anotherSymbolicName, true), '>', new Operand('25', false), 'desc')
 
-    var anAverageCondition:AverageOnValue = new AverageOnValue(null, anExpression, 10, aStartDate, aDateOfCreation, aEndDate, new Date(0,1,0,0,0,0,0));
-    var anotherAverageCondition:AverageOnValue = new AverageOnValue(null, anotherExpression, 10, aStartDate, aDateOfCreation, aEndDate, new Date(0,1,0,0,0,0,0));
+    var anAverageCondition:AverageOnValue = new AverageOnValue(null, anExpression, 10, aStartDate, aDateOfCreation, aEndDate, moment(new Date(0,1,0,0,0,0,0).getTime()));
+    var anotherAverageCondition:AverageOnValue = new AverageOnValue(null, anotherExpression, 10, aStartDate, aDateOfCreation, aEndDate, moment(new Date(0,1,0,0,0,0,0).getTime()));
 
     beforeEach(() => {
-        goalDefinition = new Goal("goal1", null, null, 100, null);
+        goalDefinition = new Goal("goal1", aStartDate, aEndDate, 100, null);
 
         goalDefinition.addCondition(anAverageCondition);
         goalDefinition.addCondition(anotherAverageCondition);
@@ -50,13 +58,10 @@ describe("GoalInstance test", () => {
 
     it("should return sensors required correctly", () => {
         var expectedConditionsDescription = {};
-        var theStartDateMinusOneMonth:Date = new Date(Date.UTC(2000, 4, 1));
-
-        var timeBoxObj:TimeBox = new TimeBox(theStartDateMinusOneMonth, aEndDate);
 
         var timeBox:any = {};
-        timeBox.startDate = timeBoxObj.getStartDateInStringFormat();
-        timeBox.endDate = timeBoxObj.getEndDateInStringFormat();
+        timeBox.startDate = "2000-05-01 00:00:00";
+        timeBox.endDate = "2000-08-01 00:00:00";
 
         expectedConditionsDescription[aSensorName] = timeBox;
         expectedConditionsDescription[anotherSensorName] = timeBox;

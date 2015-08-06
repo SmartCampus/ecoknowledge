@@ -22,6 +22,7 @@ class ConditionList {
     }
 
     public setTimeBoxes(newTimeBox:TimeBox) {
+
         for (var currentExpressionIndex in this.conditions) {
             this.conditions[currentExpressionIndex].setTimeBox(newTimeBox);
         }
@@ -51,7 +52,6 @@ class ConditionList {
 
                 //  check if current sensor has already been added
                 if (result[currentSensorName] != null) {
-
                     //  if so, retrieve previous timeBox and current timeBox
                     var currentTimeBox = currentConditionDesc[currentSensorName];
                     var oldTimeBox = result[currentSensorName];

@@ -1,4 +1,10 @@
 /// <reference path="../../typings/node-uuid/node-uuid.d.ts" />
+/// <reference path="../../typings/node/node.d.ts" />
+/// <reference path="../../typings/moment/moment.d.ts" />
+/// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
+
+var moment = require('moment');
+var moment_timezone = require('moment-timezone');
 
 import uuid = require('node-uuid');
 
@@ -12,14 +18,14 @@ class Goal {
     private name:string;
     private conditionsList:ConditionList;
 
-    private startDate:Date;
-    private endDate:Date;
+    private startDate:moment.Moment;
+    private endDate:moment.Moment;
 
     private durationInDays:number;
 
     private badgeID:string;
 
-    constructor(name:string, startDate:Date, endDate:Date, durationInDays:number, badgeID:string, id = null) {
+    constructor(name:string, startDate:moment.Moment, endDate:moment.Moment, durationInDays:number, badgeID:string, id = null) {
         if (!name) {
             throw new Error('Bad argument : name given is null');
         }
@@ -31,7 +37,7 @@ class Goal {
 
         this.id = (id) ? id : uuid.v4();
 
-        if (startDate != null && endDate != null && endDate.getTime() < startDate.getTime()) {
+        if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
             throw new Error('End date is before start date');
         }
 
@@ -60,11 +66,11 @@ class Goal {
         this.conditionsList.setTimeBoxes(newTimeBox);
     }
 
-    public getStartDate():Date {
+    public getStartDate():moment.Moment {
         return this.startDate;
     }
 
-    public getEndDate():Date {
+    public getEndDate():moment.Moment {
         return this.endDate;
     }
 

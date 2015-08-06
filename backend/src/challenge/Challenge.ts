@@ -1,3 +1,10 @@
+/// <reference path="../../typings/node/node.d.ts" />
+/// <reference path="../../typings/moment/moment.d.ts" />
+/// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
+
+var moment = require('moment');
+var moment_timezone = require('moment-timezone');
+
 import UUID = require('node-uuid');
 
 import Goal = require('../goal/Goal');
@@ -11,8 +18,8 @@ class Challenge {
     private id:string;
     private goalDefinition:Goal;
 
-    private startDate:Date;
-    private endDate:Date;
+    private startDate:moment.Moment;
+    private endDate:moment.Moment;
 
     private description:string;
     private status:BadgeStatus;
@@ -24,7 +31,7 @@ class Challenge {
     //  { 'tmp_cli':'ac_443', 'tmp_ext':'TEMP_444', 'door_o':'D_55', ... }
     private mapSymbolicNameToSensor:any = {};
 
-    constructor(startDate:Date, endDate:Date, description:string, goal:Goal,
+    constructor(startDate:moment.Moment, endDate:moment.Moment, description:string, goal:Goal,
                 mapGoalToConditionAndSensor:any, id = null) {
 
 
@@ -43,18 +50,16 @@ class Challenge {
     }
 
     public updateDurationAchieved(currentDate:number) {
-        var duration = this.endDate.getTime() - this.startDate.getTime();
-        var durationAchieved = (currentDate - this.startDate.getTime());
-
-        if (durationAchieved < 0) {
+        var duration:number = this.endDate.valueOf() - this.startDate.valueOf();
+        var current:moment.Moment = Clock.getMoment(currentDate);
+        if (current.isBefore(this.startDate)) {
             throw new Error('Time given is before dateOfCreation !');
         }
+        var durationAchieved:number = current.valueOf() - this.startDate.valueOf();
 
         this.percentageOfTime = durationAchieved * 100 / duration;
-
         //  It can have tiny incorrect decimal values
         this.percentageOfTime = (this.percentageOfTime > 100) ? 100 : this.percentageOfTime;
-
     }
 
     public getTimeProgress():number {
@@ -69,11 +74,11 @@ class Challenge {
         this.progress.push(progressDescription);
     }
 
-    public getStartDate():Date {
+    public getStartDate():moment.Moment {
         return this.startDate;
     }
 
-    public getEndDate():Date {
+    public getEndDate():moment.Moment {
         return this.endDate;
     }
 
@@ -142,12 +147,11 @@ class Challenge {
      * @returns {boolean}
      */
     public evaluate(values:any):boolean {
-
+        console.log('evaluate de challenge');
         //  Check if badge is running. If Waiting or failed, it must be left unchanged
         if(this.status != BadgeStatus.RUN) {
             return false;
         }
-
 
         this.updateDurationAchieved(Clock.getNow());
         var numberOfValues = Object.keys(values).length;
@@ -171,6 +175,7 @@ class Challenge {
             this.status = BadgeStatus.FAIL;
             console.log('Fail!');
         } else {
+            console.log('run');
             this.status = BadgeStatus.RUN;
         }
         return false;
@@ -190,6 +195,7 @@ class Challenge {
     }
 
     public getDataInJSON():any {
+        console.log('time progress : ', this.percentageOfTime);
         return {
             id: this.id,
             name: this.getName(),

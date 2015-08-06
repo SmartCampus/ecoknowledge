@@ -1,5 +1,13 @@
+/// <reference path="../../typings/node/node.d.ts" />
+/// <reference path="../../typings/moment/moment.d.ts" />
+/// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
+
+var moment = require('moment');
+var moment_timezone = require('moment-timezone');
+
 import Goal = require('./Goal');
 import ConditionFactory = require('../condition/factory/ConditionFactory');
+import Clock = require('../Clock');
 
 class GoalFactory {
 
@@ -12,8 +20,8 @@ class GoalFactory {
     public createGoal(data:any):Goal {
         var goalName:string = data.name;
 
-        var startDateOfValidityPeriod:Date = new Date(data.timeBox.startDate);
-        var endDateOfValidityPeriod:Date = new Date(data.timeBox.endDate);
+        var startDateOfValidityPeriod:moment.Moment = Clock.getMoment(new Date(data.timeBox.startDate).valueOf());
+        var endDateOfValidityPeriod:moment.Moment = Clock.getMoment(new Date(data.timeBox.endDate).valueOf());
         var durationAllowed:number = data.duration;
 
         var badge:string = data.badgeID;

@@ -1,9 +1,14 @@
+/// <reference path="../../typings/node/node.d.ts" />
+/// <reference path="../../typings/moment/moment.d.ts" />
+/// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
+
 import Challenge = require('./Challenge');
 import Goal = require('../goal/Goal');
 import GoalRepository = require('../goal/GoalRepository');
 import UserRepository = require('../user/UserRepository');
 import TimeBoxFactory = require('../TimeBoxFactory');
 import TimeBox = require('../TimeBox');
+import Clock = require('../Clock');
 
 var moment = require('moment');
 var moment_timezone = require('moment-timezone');
@@ -45,7 +50,7 @@ class GoalInstanceFactory {
 
         //  Check if challenge is built from db (startDate and endDate are provided in data parameter)
         //  Or if challengeFactory was called from a 'newChallenge' method
-        var nowDate = moment(now);
+        var nowDate:moment.Moment = now;
         var mapGoalsToConditionAndSensors:any = goalJSONDesc.conditions;
 
         if (data.startDate != null) {
@@ -66,7 +71,7 @@ class GoalInstanceFactory {
          }
          */
 
-        var endDate:Date = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate() + goal.getDuration(), nowDate.getHours(), nowDate.getMinutes(), nowDate.getSeconds());
+        var endDate:moment.Moment = moment(new Date(nowDate.year(), nowDate.month(), nowDate.date() + goal.getDuration(), nowDate.hour(), nowDate.minutes(), nowDate.seconds()));
 
 
         var challenge:Challenge = new Challenge(nowDate, endDate, challengeDescription, goal, mapGoalsToConditionAndSensors, challengeID);
@@ -83,8 +88,8 @@ class GoalInstanceFactory {
         var startDateDesc = data.startDate;
         var endDateDesc = data.endDate;
 
-        var startDate = moment(startDateDesc);
-        var endDate = moment(endDateDesc);
+        var startDate = Clock.getMoment(startDateDesc);
+        var endDate = Clock.getMoment(endDateDesc);
 
         var challenge:Challenge = new Challenge(startDate, endDate, goalInstanceDescription, goalDefinition, mapGoalsToConditionAndSensors, id);
         return challenge;
@@ -94,13 +99,13 @@ class GoalInstanceFactory {
      * Check if the goal instance is started today, Date.now + goalDefinition#duration <= goalDefinition#endDate
      * @param goalDefinition
      */
-    public checkDates(goalDefinition:Goal, startDate:Date):boolean {
+    public checkDates(goalDefinition:Goal, startDate:moment.Moment):boolean {
         var durationInDays:number = goalDefinition.getDuration();
 
-        var endDate:Date = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + durationInDays);
-        var endDateOfValidityPeriod = goalDefinition.getEndDate();
+        var endDate:moment.Moment = Clock.getMoment(new Date(startDate.year(), startDate.month(), startDate.day() + durationInDays).getTime());
+        var endDateOfValidityPeriod:moment.Moment = goalDefinition.getEndDate();
 
-        return endDate.getTime() <= endDateOfValidityPeriod.getTime();
+        return endDate.isBefore(endDateOfValidityPeriod);
     }
 }
 

@@ -1,6 +1,12 @@
 /// <reference path="../../typings/mocha/mocha.d.ts" />
 /// <reference path="../../typings/chai/chai.d.ts" />
 /// <reference path="../../typings/sinon/sinon.d.ts" />
+/// <reference path="../../typings/node/node.d.ts" />
+/// <reference path="../../typings/moment/moment.d.ts" />
+/// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
+
+var moment = require('moment');
+var moment_timezone = require('moment-timezone');
 
 import chai = require('chai');
 import sinon = require('sinon');
@@ -35,8 +41,8 @@ describe("GoalInstanceFactory test", () => {
 
     var anotherConditionName:string = 'Temp_ext';
     var anotherSensorName:string = 'TEMP_443';
-    var now = new Date(Clock.getNow());
-    var endDate:Date = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 5, now.getHours(), now.getMinutes(), now.getSeconds());
+    var now:moment.Moment = moment(new Date(Clock.getNow()).valueOf());
+    var endDate:moment.Moment = moment(new Date(now.year(), now.month(), now.date() + 5, now.hours(), now.minutes(), now.seconds()).valueOf());
 
 
     var conditions:any = {};

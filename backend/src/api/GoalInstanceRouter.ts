@@ -1,3 +1,10 @@
+/// <reference path="../../typings/node/node.d.ts" />
+/// <reference path="../../typings/moment/moment.d.ts" />
+/// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
+
+var moment = require('moment');
+var moment_timezone = require('moment-timezone');
+
 import RouterItf = require('./RouterItf');
 
 import ChallengeRepository = require('../challenge/ChallengeRepository');
@@ -65,11 +72,11 @@ class GoalInstanceRouter extends RouterItf {
 
         //  Debug routes only
         this.router.post('/addstub', function (req, res) {
-            self.addStub(req, res)
+            self.addStub(req, res);
         });
 
         this.router.post('/setNow', function (req, res) {
-            self.setNow(req, res)
+            self.setNow(req, res);
         });
 
         this.router.post('/addBadge', function (req, res) {
@@ -85,7 +92,7 @@ class GoalInstanceRouter extends RouterItf {
         var key = data.key;
 
         var valueDesc:any = {};
-        valueDesc.date = Clock.getNow();
+        valueDesc.date = Clock.getMoment(new Date(Clock.getNow()).getTime());
         valueDesc.value = value;
 
         var oldJson:any[] = this.jsonStub[key].values;
@@ -98,11 +105,11 @@ class GoalInstanceRouter extends RouterItf {
 
     setNow(req, res) {
         var data = req.body;
-        var newNow:Date = new Date(data.now);
+        var newNow:moment.Moment = Clock.getMoment(new Date(data.now).getTime());
 
-        console.log("Mise a jour de la date actuelle. Nous sommes maintenant le", newNow);
-        Clock.setNow(newNow.getTime());
-        res.send("New 'now' : " + newNow);
+        console.log("Mise a jour de la date actuelle. Nous sommes maintenant le", newNow.date());
+        Clock.setNow(newNow.valueOf());
+        res.send("New 'now' : " + newNow.date());
     }
 
 
@@ -128,7 +135,7 @@ class GoalInstanceRouter extends RouterItf {
             }
         };
 
-        var goalInstance = this.goalInstanceFactory.createGoalInstance(data, this.goalDefinitionRepository, null, new Date(Clock.getNow()));
+        var goalInstance = this.goalInstanceFactory.createGoalInstance(data, this.goalDefinitionRepository, null, Clock.getMoment(Clock.getNow()));
         this.goalInstanceRepository.addGoalInstance(goalInstance);
         this.userRepository.getCurrentUser().addChallenge(goalInstance.getId());
         res.send({"success": "Objectif ajouté !"});
@@ -192,6 +199,7 @@ class GoalInstanceRouter extends RouterItf {
 
     //  debug only
     private addFinishedBadge(challengeID:string, userID:string) {
+        console.log('add finished badge');
         console.log('user id : ', userID);
         console.log('challenge ID : ', challengeID);
         var user = this.userRepository.getUser(userID);
@@ -202,6 +210,7 @@ class GoalInstanceRouter extends RouterItf {
     }
 
     private evaluateChallenge(goalInstanceToEvaluate:Challenge, goalInstanceID){
+        console.log('evaluateChallenge');
         if (!GoalInstanceRouter.DEMO) {
 
             //TODO move what follow
