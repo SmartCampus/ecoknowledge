@@ -42,14 +42,19 @@ class AverageOnValue extends Condition {
         var month:number = this.referencePeriod.month() - timeOfTheUltimateOriginOfOrigins.month();
         var day:number = this.referencePeriod.date() - timeOfTheUltimateOriginOfOrigins.date();
 
-        this.startDate = Clock.getMoment(new Date(this.dateOfCreation.year() - year,
+        var theDateObj = new Date(this.dateOfCreation.year() - year,
             this.dateOfCreation.month() - month +1,
             this.dateOfCreation.date() - day,
             this.dateOfCreation.hours(),
             this.dateOfCreation.minutes(),
-            this.dateOfCreation.seconds()).getTime());
+            this.dateOfCreation.seconds());
 
-        console.log("START DATE", this.startDate.format());
+        console.log("OBJ date intermediaire", theDateObj.toISOString());
+
+
+        this.startDate = Clock.getMoment(theDateObj.getTime());
+
+        console.log("CONSTRUCTION DE LA CONDITION AVEC START DATE", this.startDate.format());
 
         var timeBox:TimeBox = new TimeBox(this.startDate, this.endDate);
         this.timeBox = timeBox;
