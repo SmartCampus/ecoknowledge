@@ -26,9 +26,9 @@ describe("GoalInstance test", () => {
     var goalInstance:Challenge;
     var goalDefinition:Goal;
 
-    var aStartDate:moment.Moment = Clock.getMomentFromString('2000-05-01T00:00:00');
-    var aDateOfCreation:moment.Moment = Clock.getMomentFromString('2000-05-01T00:00:00');
-    var aEndDate:moment.Moment = Clock.getMomentFromString('2000-08-01T00:00:00');
+    var aStartDate:moment.Moment = Clock.getMomentFromString('2000-05-01T00:00:00+02:00');
+    var aDateOfCreation:moment.Moment = Clock.getMomentFromString('2000-05-01T00:00:00+02:00');
+    var aEndDate:moment.Moment = Clock.getMomentFromString('2000-08-01T00:00:00+02:00');
 
     var aSymbolicName:string = 'Temperature_cli';
     var anotherSymbolicName:string = 'Temperature_ext';
