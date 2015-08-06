@@ -95,8 +95,10 @@ class GoalInstanceRouter extends RouterItf {
         var key = data.key;
 
         var valueDesc:any = {};
-        valueDesc.date = Clock.getMoment(Clock.getNow());
+        valueDesc.date = Clock.getMoment(Clock.getNow()).valueOf();
         valueDesc.value = value;
+
+       // console.log("DATE DU STUB AJOUTE", valueDesc.date);
 
         var oldJson:any[] = this.jsonStub[key].values;
         oldJson.push(valueDesc);
@@ -145,7 +147,7 @@ class GoalInstanceRouter extends RouterItf {
         };
 
 
-        console.log("Je construit un challenge en partant du principe que nous sommes le ", date.toISOString());
+        //console.log("Je construit un challenge en partant du principe que nous sommes le ", date.toISOString());
         var goalInstance = this.goalInstanceFactory.createGoalInstance(data, this.goalDefinitionRepository, null, date);
 
         this.goalInstanceRepository.addGoalInstance(goalInstance);
@@ -211,9 +213,11 @@ class GoalInstanceRouter extends RouterItf {
 
     //  debug only
     private addFinishedBadge(challengeID:string, userID:string) {
+        /*
         console.log('add finished badge');
         console.log('user id : ', userID);
         console.log('challenge ID : ', challengeID);
+        */
         var user = this.userRepository.getUser(userID);
         var badgeID = this.goalInstanceRepository.getBadgeByChallengeID(challengeID);
         user.addFinishedBadge(badgeID);
@@ -268,7 +272,7 @@ class GoalInstanceRouter extends RouterItf {
 
             var result = goalInstanceToEvaluate.evaluate(this.jsonStub);
             if (result && goalInstanceToEvaluate.isFinished()) {
-                console.log("Le challenge est réussi et terminé");
+                //console.log("Le challenge est réussi et terminé");
                 var newChall = self.createGoalInstance(goalInstanceToEvaluate.getGoalDefinition().getUUID(), goalInstanceToEvaluate.getEndDate());
                 this.addFinishedBadge(goalInstanceID, this.userRepository.getCurrentUser().getUUID());
                 if (newChall != null) {
@@ -276,7 +280,7 @@ class GoalInstanceRouter extends RouterItf {
                 }
             }
             else if (!result && goalInstanceToEvaluate.isFinished()) {
-                console.log("Le challenge est FAIL et terminé");
+                //console.log("Le challenge est FAIL et terminé");
                 var newChall = self.createGoalInstance(goalInstanceToEvaluate.getGoalDefinition().getUUID(), goalInstanceToEvaluate.getEndDate());
 
                 var user = this.userRepository.getCurrentUser();

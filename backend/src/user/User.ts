@@ -33,6 +33,10 @@ class User {
         this.finishedBadgesMap = finishedBadgesMap;
     }
 
+    getCurrentChallenges():string []  {
+        return this.currentChallenges;
+    }
+
     public getUUID() {
         return this.id;
     }

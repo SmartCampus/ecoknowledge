@@ -63,16 +63,18 @@ class GoalInstanceFactory {
         //  The user just took a new challenge
 
         var clone = now.clone();
-    console.log("NOW?", clone.format());
+        //console.log("NOW?", clone.format());
 
         var startDate = goal.getStartDateOfSession(clone);
-       console.log("START DATE OF SESSION", startDate.format());
+        var endDate = goal.getEndDateOfSession(clone.clone());
+
+        /*
+        console.log("START DATE OF SESSION", startDate.format());
         console.log("START DATE OF SESSION", startDate.toISOString());
 
-        var endDate = goal.getEndDateOfSession(clone.clone());
         console.log("END DATE OF SESSION", endDate.format());
         console.log("END DATE OF SESSION", endDate.toISOString());
-
+        */
 
         /*
          if(!this.checkDates(goalDefinition,startDate)) {
@@ -86,11 +88,11 @@ class GoalInstanceFactory {
 
 
         if(now.isBefore(startDate)) {
-            console.log("Le challenge est en WAIT");
+            //console.log("Le challenge est en WAIT");
             challenge.setStatus(ChallengeStatus.WAIT);
         }
         if(now.isAfter(startDate) && now.isBefore(endDate)) {
-            console.log("Le challenge est en RUN");
+            ///console.log("Le challenge est en RUN");
             challenge.setStatus(ChallengeStatus.RUN);
         }
 

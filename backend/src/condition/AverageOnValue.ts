@@ -47,7 +47,7 @@ class AverageOnValue extends Condition {
         var month:number = this.referencePeriod.month() - timeOfTheUltimateOriginOfOrigins.month();
         var day:number = this.referencePeriod.date() - timeOfTheUltimateOriginOfOrigins.date();
 
-        var momentObj:moment.Moment = moment.tz( Clock.getTimeZone()).year(this.dateOfCreation.year() - year).month(this.dateOfCreation.month() - month + 1).date(this.dateOfCreation.date() - day).hours(this.dateOfCreation.hour()).minute(this.dateOfCreation.minute())
+        var momentObj:moment.Moment = moment.tz( Clock.getTimeZone()).year(this.dateOfCreation.year() - year).month(this.dateOfCreation.month() - month).date(this.dateOfCreation.date() - day).hours(this.dateOfCreation.hour()).minute(this.dateOfCreation.minute())
             .second(this.dateOfCreation.second()).millisecond(this.dateOfCreation.millisecond());
 
 
@@ -77,6 +77,10 @@ class AverageOnValue extends Condition {
             var newData:number[] = [];
 
             this.separateOldAndNewData(oldAndNewData, oldData, newData);
+
+            console.log("OLD DATA", oldData, "NEW DATA", newData);
+
+            this.percentageAchieved = 0;
             var rate = 0;
 
             if (oldData.length != 0 && newData.length != 0) {
@@ -141,6 +145,9 @@ class AverageOnValue extends Condition {
 
 
             var currentMoment:moment.Moment = Clock.getMoment(parseInt(currentPairDateValue.date));
+
+            //console.log("PROCESSING MOMENT", currentMoment.format());
+            // console.log("START DATE", this.startDate.format(), "END DATE", this.endDate.format());
 
             if (currentMoment.isAfter(this.startDate)
                 && currentMoment.isBefore(this.dateOfCreation)) {

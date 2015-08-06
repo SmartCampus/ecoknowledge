@@ -2,6 +2,8 @@ import RouterItf = require('./RouterItf');
 
 import GoalRepository = require('../goal/GoalRepository');
 import GoalFactory = require('../goal/GoalFactory');
+import UserRepository = require('../user/UserRepository');
+import ChallengeRepository = require('../challenge/ChallengeRepository');
 
 /**
  * GoalDefinitionRouter class</br>
@@ -16,22 +18,26 @@ class GoalDefinitionRouter extends RouterItf {
 
     private goalDefinitionRepository:GoalRepository;
     private goalDefinitionFactory:GoalFactory;
+    private challengeRepository:ChallengeRepository;
+    private userRepository:UserRepository;
 
-    constructor(goalDefinitionRepository:GoalRepository, goalDefinitionFactory:GoalFactory) {
+    constructor(goalDefinitionRepository:GoalRepository, goalDefinitionFactory:GoalFactory, challengeRepository:ChallengeRepository, userRepository:UserRepository) {
         super();
         this.goalDefinitionRepository = goalDefinitionRepository;
         this.goalDefinitionFactory = goalDefinitionFactory;
+        this.challengeRepository = challengeRepository;
+        this.userRepository = userRepository;
     }
 
     buildRouter() {
         var self = this;
-        this.router.get('/all', function(req, res) {
+        this.router.get('/all', function (req, res) {
             self.getAllGoalsDefinition(req, res);
         });
-        this.router.get('/:id', function(req, res) {
-           self.getGoalDefinition(req, res);
+        this.router.get('/:id', function (req, res) {
+            self.getGoalDefinition(req, res);
         });
-        this.router.post('/new', function(req,res) {
+        this.router.post('/new', function (req, res) {
             self.addGoalDefinition(req, res);
         });
     }
@@ -43,7 +49,7 @@ class GoalDefinitionRouter extends RouterItf {
      * @param req
      * @param res
      */
-    getGoalDefinition(req, res){
+    getGoalDefinition(req, res) {
         var result = this.goalDefinitionRepository.getGoal(req.params.id).getDataInJSON();
         res.send(result);
     }
@@ -55,7 +61,7 @@ class GoalDefinitionRouter extends RouterItf {
      * @param res
      */
     getAllGoalsDefinition(req:any, res:any) {
-        var result = this.goalDefinitionRepository.getListOfGoalsInJsonFormat();
+        var result = this.goalDefinitionRepository.getListOfUntakedGoalInJSONFormat(this.userRepository.getCurrentUser(), this.challengeRepository);
         res.send(result);
     }
 
@@ -76,7 +82,7 @@ class GoalDefinitionRouter extends RouterItf {
             this.goalDefinitionRepository.addGoal(newGoal);
             res.send("OK : définition d'objectif créee avec succès");
         }
-        catch(e) {
+        catch (e) {
             res.send(e.toString());
         }
     }

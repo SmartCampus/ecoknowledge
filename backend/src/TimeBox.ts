@@ -75,23 +75,25 @@ class TimeBox {
      *      Uses Date#toISOString method.
      */
     public convertTimeForMiddlewareAPI(aMoment:moment.Moment):string {
-        console.log("Conversion du moment pour matcher avec le middleware");
+        //console.log("Conversion du moment pour matcher avec le middleware");
 
         var date:string=aMoment.format();
 
+        /*
         console.log("date à convertir", date);
         console.log("date à convertir au format iso", aMoment.toISOString());
+        */
 
         var dateWithoutTimeZone:string[] = date.split('+');
         var dateWithoutTail:string[] = dateWithoutTimeZone[0].split('.');
         var headOfDate:string = dateWithoutTail[0];
 
-        console.log("head of date", headOfDate);
+        //console.log("head of date", headOfDate);
 
         var arrayOfHeadOfDate:string[] = headOfDate.split('T');
         var properDate:string= arrayOfHeadOfDate[0] + " " + arrayOfHeadOfDate[1];
 
-        console.log("new date", properDate);
+        //console.log("new date", properDate);
 
         return properDate;
     }

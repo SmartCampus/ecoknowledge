@@ -70,7 +70,7 @@ class Condition {
     }
 
     getStringRepresentation():string {
-        return this.expression.getStringRepresentation() + " - " + this.expression.getDescription();
+        return this.expression.getStringRepresentation() + " - " + this.expression.getDescription() + " filtre " + JSON.stringify(this.filter.getDataInJSON());
     }
 
     /**
@@ -189,7 +189,15 @@ class Condition {
     }
 
     applyFilters(data:any):any {
-        return data;//this.filter.apply(data);
+        var remainingData = this.filter.apply(data);
+        /*
+         console.log("APPLICATION DU FILTRE SUR", JSON.stringify(data));
+         console.log("FILTER?", this.filter.getDataInJSON());
+
+
+         console.log("REMAINING DATA AFTER FITLER", JSON.stringify(remainingData));
+         */
+        return remainingData;
     }
 }
 

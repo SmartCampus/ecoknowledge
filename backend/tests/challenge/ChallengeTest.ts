@@ -60,13 +60,11 @@ describe("GoalInstance test", () => {
         var expectedConditionsDescription = {};
 
         var timeBox:any = {};
-        timeBox.startDate = "2000-05-01 00:00:00";
+        timeBox.startDate = "2000-04-01 00:00:00";
         timeBox.endDate = "2000-08-01 00:00:00";
 
         expectedConditionsDescription[aSensorName] = timeBox;
         expectedConditionsDescription[anotherSensorName] = timeBox;
-
-        console.log("ASTARTDATE", aStartDate.format(), "AN END DATE", aEndDate.format());
 
         var result = goalInstance.getSensors();
 

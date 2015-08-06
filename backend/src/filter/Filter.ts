@@ -28,32 +28,64 @@ class Filter {
     }
 
     apply(data:any):any[] {
-        var result:any[] = [];
+        var result:any = {};
 
-        for (var currentPairOfDateAndValueIndex in data) {
-            var currentPairOfDateAndValue = data[currentPairOfDateAndValueIndex];
+        //console.log("Le Filtre a recu", JSON.stringify(data));
 
-            var currentDateDesc:string = currentPairOfDateAndValue.date;
-            var currentValue:number = currentPairOfDateAndValue.value;
+        for (var currentSensorName in data) {
+            var correctValues:any[] = [];
+            var arrayOfValues = data[currentSensorName].values;
 
-            var currentDateInSecondsSinceEPOCH = parseInt(currentDateDesc);
+            //console.log("Array of values", arrayOfValues);
 
-            var date = moment.tz(currentDateInSecondsSinceEPOCH, Clock.getTimeZone());
+            for(var currentPairOfDateAndValueIndex in arrayOfValues) {
 
-            var applyResult = true;
+                var currentPairOfDateAndValue = arrayOfValues[currentPairOfDateAndValueIndex];
 
-            for (var currentPeriodOfDayFilterIndex in this.hourFilter) {
-                var currentPeriodOfDayFilter = this.hourFilter[currentPeriodOfDayFilterIndex];
-                applyResult = applyResult && currentPeriodOfDayFilter.apply(date);
+                //console.log("Current pair date/valeur", currentPairOfDateAndValue);
+
+                var currentDateDesc:string = currentPairOfDateAndValue.date;
+                var currentValue:number = currentPairOfDateAndValue.value;
+
+                var currentDateInSecondsSinceEPOCH = parseInt(currentDateDesc);
+
+                //console.log("CURRENT MILLIS", currentDateInSecondsSinceEPOCH);
+
+                var date = Clock.getMoment(currentDateInSecondsSinceEPOCH);
+
+                //console.log("DATE A FILTER?", date.format());
+
+                var applyResult = false;
+
+                //console.log("____________________________");
+
+                for (var currentPeriodOfDayFilterIndex in this.hourFilter) {
+                    var currentPeriodOfDayFilter = this.hourFilter[currentPeriodOfDayFilterIndex];
+                    applyResult = applyResult || currentPeriodOfDayFilter.apply(date);
+                }
+
+                //console.log("FILTER HOUR :", applyResult);
+
+                if (this.dayFilter.apply(date) && applyResult) {
+                   // console.log("DAY FILTER PASSED");
+                    correctValues.push({
+                        "date": currentDateDesc,
+                        "value": currentValue
+                    });
+                }
+                else {
+                    //console.log("DAY FILTER NOT PASSED");
+                }
+                //console.log("____________________________");
+
             }
 
-            if (this.dayFilter.apply(date) && applyResult) {
-                result.push({
-                    "date": currentDateDesc,
-                    "value": currentValue
-                });
-            }
+            var correctValuesContainer:any = {};
+            correctValuesContainer.values = correctValues;
+            result[currentSensorName] = correctValuesContainer;
         }
+
+        //console.log("DONC ON GARDE", result);
 
         return result;
     }

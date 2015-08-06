@@ -54,8 +54,12 @@ class ConditionFactory {
     }
 
     public createComparison(data:any):Condition {
+        var dayOfWeekFilterDesc:string = data.filter.dayOfWeekFilter;
+        var periodOfDayFilterDesc:string[] = data.filter.periodOfDayFilter;
+        var filter:Filter = new Filter(dayOfWeekFilterDesc, periodOfDayFilterDesc);
+
         var goalExpression:GoalExpression = this.expressionFactory.createExpression(data.expression);
-        var averageOnValue:AverageOnValue = new AverageOnValue(null, goalExpression, data.threshold, data.startDate, data.dateOfCreation, data.endDate,Clock.getMoment(new Date(parseInt(data.expression.periodOfTime)).getTime()));
+        var averageOnValue:AverageOnValue = new AverageOnValue(null, goalExpression, data.threshold, data.startDate, data.dateOfCreation, data.endDate,Clock.getMoment(new Date(parseInt(data.expression.periodOfTime)).getTime()),0,0,filter);
         return averageOnValue;
     }
 

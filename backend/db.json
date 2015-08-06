@@ -32,7 +32,7 @@
           "percentageOfTimeElapsed": 0,
           "filter": {
             "dayOfWeekFilter": "all",
-            "periodOfDayFilter": ["all"]
+            "periodOfDayFilter": ["morning","afternoon"]
           },
           "type": "comparison"
         }

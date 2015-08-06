@@ -20,8 +20,14 @@ class DayFilter {
 
     filter(date:moment.Moment) {
 
-        return date.day() >= this.startDay
-            && date.day() <= this.endDay;
+
+        /*
+        console.log("date", date.format(),"s'est fait virée", !(((date.day()+6)%7)+1 >= this.startDay
+            && ((date.day()+6)%7)+1 <= this.endDay), "start", this.startDay, "end", this.endDay, "day", date.day(), "for test", ((date.day()+6)%7)+1);
+        */
+
+        return ((date.day()+6)%7)+1 >= this.startDay
+            && ((date.day()+6)%7)+1 <= this.endDay;
     }
 
     getTimeIntervals():number[] {
