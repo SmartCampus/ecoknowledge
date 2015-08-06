@@ -8,8 +8,8 @@ var app = angular.module('ecoknowledgeApp')
     self.goal.conditions = [];
     self.goal.name = '';
     self.goal.timeBox = {};
-    self.goal.timeBox.startDate = new Date();
-    self.goal.timeBox.endDate = new Date();
+    self.goal.timeBox.startDate = new Date().getTime();
+    self.goal.timeBox.endDate = new Date().getTime();
     self.badges = [];
     self.selectedBadge = null;
 
@@ -128,17 +128,17 @@ var app = angular.module('ecoknowledgeApp')
 
     self.week = function(){
         var d = new Date(0,0,7,0,0,0,0);
-        return d;
+        return d.getTime();
     };
 
     self.month = function(){
         var d = new Date(0,1,0,0,0,0,0);
-        return d;
+        return d.getTime();
     };
 
     self.year = function(){
         var d = new Date(1,0,0,0,0,0,0);
-        return d;
+        return d.getTime();
     };
 
     ServiceBadgeV2.get('all',function(data){

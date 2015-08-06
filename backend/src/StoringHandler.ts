@@ -95,7 +95,8 @@ class StoringHandler {
             var currentChallenge = this.backend.goalInstanceFactory.createGoalInstance(currentChallengeDescription,
                 this.backend.goalDefinitionRepository,
                 this.backend.userRepository,
-                moment(Clock.getNow()));
+
+                Clock.getMoment(Clock.getNow()));
 
             this.backend.goalInstanceRepository.addGoalInstance(currentChallenge);
         }

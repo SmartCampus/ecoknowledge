@@ -1,17 +1,25 @@
+/// <reference path="../../typings/node/node.d.ts" />
+/// <reference path="../../typings/node/node.d.ts" />
+/// <reference path="../../typings/moment/moment.d.ts" />
+/// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
+
 import GoalExpression = require('./expression/GoalExpression');
 import Condition = require('./Condition');
 import TimeBox = require('../TimeBox');
 import Clock = require('../Clock');
 import Filter = require('../filter/Filter');
 
+var moment = require('moment');
+var moment_timezone = require('moment-timezone');
+
 class AverageOnValue extends Condition {
 
     private oldTimeBox:TimeBox;
     private newTimeBox:TimeBox;
-    private referencePeriod:Date;
+    private referencePeriod:moment.Moment;
 
     constructor(id:string, condition:GoalExpression, thresholdRate:number,
-                startDate:Date, dateOfCreation:Date, endDate:Date, referencePeriod:Date,
+                startDate:moment.Moment, dateOfCreation:moment.Moment, endDate:moment.Moment, referencePeriod:moment.Moment,
                 percentageAchieved:number = 0, percentageOfTimeElapsed:number = 0, filter:Filter = null) {
 
         super(id, condition, thresholdRate, startDate, dateOfCreation, endDate,
@@ -19,6 +27,7 @@ class AverageOnValue extends Condition {
 
         this.oldTimeBox = new TimeBox(startDate, dateOfCreation);
         this.newTimeBox = new TimeBox(dateOfCreation, endDate);
+
         this.referencePeriod = referencePeriod;
     }
 
@@ -27,13 +36,18 @@ class AverageOnValue extends Condition {
         this.dateOfCreation = newTimeBox.getStartDate();
         this.endDate = newTimeBox.getEndDate();
 
-        var timeOfTheUltimateOriginOfOrigins:Date = new Date(0,0,0,0,0,0,0);
-        var year:number = this.referencePeriod.getFullYear() - timeOfTheUltimateOriginOfOrigins.getFullYear();
-        var month:number = this.referencePeriod.getUTCMonth() - timeOfTheUltimateOriginOfOrigins.getUTCMonth();
-        var day:number = this.referencePeriod.getUTCDate() - timeOfTheUltimateOriginOfOrigins.getUTCDate();
+        var timeOfTheUltimateOriginOfOrigins:moment.Moment = Clock.getMoment(new Date(0,0,0,0,0,0,0).getTime());
+        var year:number = this.referencePeriod.year() - timeOfTheUltimateOriginOfOrigins.year();
 
-        this.startDate = new Date(this.dateOfCreation.getFullYear() - year, this.dateOfCreation.getMonth() - month, this.dateOfCreation.getDate() - day,
-            this.dateOfCreation.getHours(), this.dateOfCreation.getMinutes(), this.dateOfCreation.getSeconds());
+        var month:number = this.referencePeriod.month() - timeOfTheUltimateOriginOfOrigins.month();
+        var day:number = this.referencePeriod.date() - timeOfTheUltimateOriginOfOrigins.date();
+
+        this.startDate = Clock.getMoment(new Date(this.dateOfCreation.year() - year,
+            this.dateOfCreation.month() - month +1,
+            this.dateOfCreation.date() - day,
+            this.dateOfCreation.hours(),
+            this.dateOfCreation.minutes(),
+            this.dateOfCreation.seconds()).getTime());
 
         var timeBox:TimeBox = new TimeBox(this.startDate, this.endDate);
         this.timeBox = timeBox;
@@ -57,7 +71,6 @@ class AverageOnValue extends Condition {
             var newData:number[] = [];
 
             this.separateOldAndNewData(oldAndNewData, oldData, newData);
-
             var rate = 0;
 
             if (oldData.length != 0 && newData.length != 0) {
@@ -81,7 +94,6 @@ class AverageOnValue extends Condition {
                     changeRate = rate - 100;
                 }
 
-
                 this.percentageAchieved = changeRate * 100 / this.thresholdRate;
 
                 //  It can be infinite
@@ -97,18 +109,21 @@ class AverageOnValue extends Condition {
     }
 
     public updateDurationAchieved(currentDate:number) {
-        var duration = this.endDate.getTime() - this.dateOfCreation.getTime();
-        var durationAchieved = (currentDate - this.dateOfCreation.getTime());
+        console.log(this.dateOfCreation.date());
 
-        if (durationAchieved < 0) {
+        var currentMoment:moment.Moment = Clock.getMoment(currentDate);
+        console.log(currentMoment.date());
+        if (currentMoment.isBefore(this.dateOfCreation)) {
             throw new Error('Time given is before dateOfCreation !');
         }
+
+        var duration = this.endDate.valueOf() - this.dateOfCreation.valueOf();
+        var durationAchieved = (currentMoment.valueOf() - this.dateOfCreation.valueOf());
 
         this.percentageOfTimeElapsed = durationAchieved * 100 / duration;
 
         //  It can have tiny incorrect decimal values
         this.percentageOfTimeElapsed = (this.percentageOfTimeElapsed > 100) ? 100 : this.percentageOfTimeElapsed;
-
     }
 
     public separateOldAndNewData(values:any[], oldValues:number[], newValues:number[]) {
@@ -118,13 +133,13 @@ class AverageOnValue extends Condition {
             //  { date : __ , value : __ }
             var currentPairDateValue:any = values[currentValueIndex];
 
-            var currentDate = parseFloat(currentPairDateValue.date);
+            var currentMoment:moment.Moment = Clock.getMomentFromString(currentPairDateValue.date);
 
-            if (currentDate >= this.startDate.getTime()
-                && currentDate <= this.dateOfCreation.getTime()) {
+            if (currentMoment.isAfter(this.startDate)
+        && currentMoment.isBefore(this.dateOfCreation)){
                 oldValues.push(currentPairDateValue.value);
             }
-            else if(currentDate >= this.dateOfCreation.getTime()){
+        else if(currentMoment.isAfter(this.dateOfCreation)){
                 newValues.push(currentPairDateValue.value);
             }
         }

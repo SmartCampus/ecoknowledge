@@ -54,30 +54,30 @@ describe('Challenge integration test', () => {
 
     //  Create fake goal
     var aGoalName = 'Objectif 1';
-    var startDate:Date = new Date("August 03, 2015 00:00:00");
-    var endDate:Date = new Date("September 03, 2015 00:00:00");
+    var startDate:moment.Moment = moment("August 03, 2015 00:00:00");
+    var endDate:moment.Moment = moment("September 03, 2015 00:00:00");
 
     var aGoal = new Goal(aGoalName, startDate, endDate, 5, aBadge.getUuid(), null, new RecurringSession('week'));
     goalRepository.addGoal(aGoal);
 
     it('should have initialized the new challenge status to "RUN" when challenge is created during a working week', () => {
-        var newChallenge = challengeRouter.createGoalInstance(aGoal.getUUID(), new Date("2015-08-05T12:15:00+02:00"));
+        var newChallenge = challengeRouter.createGoalInstance(aGoal.getUUID(), moment("2015-08-05T12:15:00+02:00"));
         chai.expect(newChallenge.getStatus()).to.be.eq(ChallengeStatus.RUN);
     });
 
     it('should have initialized the new challenge status to "WAITING" when challenge is created during week-end', () => {
         //  The goal is recurrent every week (monday-friday). A goal created saturday must be in WAITING status
-        var newChallenge = challengeRouter.createGoalInstance(aGoal.getUUID(), new Date("2015-08-08T12:15:00+02:00"));
+        var newChallenge = challengeRouter.createGoalInstance(aGoal.getUUID(), moment("2015-08-08T12:15:00+02:00"));
         chai.expect(newChallenge.getStatus()).to.be.eq(ChallengeStatus.WAIT);
     });
 
     it('should have set the startDate to monday if goal is "week recurrent"', () => {
-        var newChallenge = challengeRouter.createGoalInstance(aGoal.getUUID(), new Date("2015-08-05T12:15:00+02:00"));
+        var newChallenge = challengeRouter.createGoalInstance(aGoal.getUUID(), moment("2015-08-05T12:15:00+02:00"));
         chai.expect(newChallenge.getStartDate().toISOString()).to.be.eq(startDate.toISOString());
     });
 
     it('should have set the endDate to friday if goal is "week recurrent"', () => {
-        var newChallenge = challengeRouter.createGoalInstance(aGoal.getUUID(), new Date("2015-08-07T23:59:59+02:00"));
+        var newChallenge = challengeRouter.createGoalInstance(aGoal.getUUID(), moment("2015-08-07T23:59:59+02:00"));
         chai.expect(newChallenge.getStartDate().toISOString()).to.be.eq(startDate.toISOString());
     });
 });

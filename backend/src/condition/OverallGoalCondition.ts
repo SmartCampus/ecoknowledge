@@ -1,3 +1,10 @@
+/// <reference path="../../typings/node/node.d.ts" />
+/// <reference path="../../typings/moment/moment.d.ts" />
+/// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
+
+var moment = require('moment');
+var moment_timezone = require('moment-timezone');
+
 import GoalExpression = require('./expression/GoalExpression');
 import Condition = require('./Condition');
 import Clock = require('../Clock');
@@ -9,7 +16,7 @@ class OverallGoalCondition extends Condition {
 
 
     constructor(id:string, condition:GoalExpression, thresholdRate:number,
-                startDate:Date, dateOfCreation:Date, endDate:Date,
+                startDate:moment.Moment, dateOfCreation:moment.Moment, endDate:moment.Moment,
                 percentageAchieved:number = 0, percentageOfTimeElapsed:number = 0, filter:Filter = null) {
 
         super(id, condition, thresholdRate, startDate, dateOfCreation, endDate,
@@ -53,7 +60,7 @@ class OverallGoalCondition extends Condition {
             for (var currentValueIndex in values) {
                 var value = values[currentValueIndex];
 
-                var date:Date = new Date(value.date);
+                var date:moment.Moment = Clock.getMoment(new Date(value.date).getTime());
 
                 if (this.isInTimeBox(date)) {
                     var dataToEvaluate:any = {};

@@ -1,3 +1,10 @@
+/// <reference path="../../../typings/node/node.d.ts" />
+/// <reference path="../../../typings/moment/moment.d.ts" />
+/// <reference path="../../../typings/moment-timezone/moment-timezone.d.ts" />
+
+var moment = require('moment');
+var moment_timezone = require('moment-timezone');
+
 import Condition = require('../Condition');
 import GoalExpression = require('../expression/GoalExpression');
 import OverallGoalCondition = require('../OverallGoalCondition');
@@ -32,8 +39,8 @@ class ConditionFactory {
 
         var goalCondition:GoalExpression = this.expressionFactory.createExpression(data.expression);
 
-        var startDateOfValidityPeriod:Date = new Date(goaltimeBox.startDate);
-        var endDateOfValidityPeriod:Date = new Date(goaltimeBox.endDate);
+        var startDateOfValidityPeriod:moment.Moment = Clock.getMoment(new Date(goaltimeBox.startDate).getTime());
+        var endDateOfValidityPeriod:moment.Moment = Clock.getMoment(new Date(goaltimeBox.endDate).getTime());
 
         var threshold:number = data.threshold;
 
@@ -42,13 +49,13 @@ class ConditionFactory {
 
         var filter:Filter = new Filter(dayOfWeekFilterDesc, periodOfDayFilterDesc);
 
-        var overallCondition:OverallGoalCondition = new OverallGoalCondition(null, goalCondition, threshold, startDateOfValidityPeriod, new Date(Clock.getNow()), endDateOfValidityPeriod, 0, 0, filter);
+        var overallCondition:OverallGoalCondition = new OverallGoalCondition(null, goalCondition, threshold, startDateOfValidityPeriod, Clock.getMoment(Clock.getNow()), endDateOfValidityPeriod, 0, 0, filter);
         return overallCondition;
     }
 
     public createComparison(data:any):Condition {
         var goalExpression:GoalExpression = this.expressionFactory.createExpression(data.expression);
-        var averageOnValue:AverageOnValue = new AverageOnValue(null, goalExpression, data.threshold, data.startDate, data.dateOfCreation, data.endDate,new Date(data.expression.periodOfTime));
+        var averageOnValue:AverageOnValue = new AverageOnValue(null, goalExpression, data.threshold, data.startDate, data.dateOfCreation, data.endDate,Clock.getMoment(new Date(data.expression.periodOfTime).getTime()));
         return averageOnValue;
     }
 

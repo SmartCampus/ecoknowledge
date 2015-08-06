@@ -1,7 +1,15 @@
+/// <reference path="../../typings/node/node.d.ts" />
+/// <reference path="../../typings/moment/moment.d.ts" />
+/// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
+
+var moment = require('moment');
+var moment_timezone = require('moment-timezone');
+
 import Goal = require('./Goal');
 import ConditionFactory = require('../condition/factory/ConditionFactory');
 import BadArgumentException = require('../exceptions/BadArgumentException');
 import RecurringSession = require('./RecurringSession');
+import Clock = require('../Clock');
 
 class GoalFactory {
 
@@ -14,8 +22,8 @@ class GoalFactory {
     public createGoal(data:any):Goal {
         var goalName:string = data.name;
 
-        var startDateOfValidityPeriod:Date = new Date(data.timeBox.startDate);
-        var endDateOfValidityPeriod:Date = new Date(data.timeBox.endDate);
+        var startDateOfValidityPeriod:moment.Moment = Clock.getMoment(new Date(data.timeBox.startDate).valueOf());
+        var endDateOfValidityPeriod:moment.Moment = Clock.getMoment(new Date(data.timeBox.endDate).valueOf());
 
 
         var durationAllowedDesc:string = data.duration;
@@ -35,9 +43,9 @@ class GoalFactory {
                 throw new BadArgumentException('Can not build goal. Given duration allowed' + durationAllowedDesc + ' is unknown');
         }
 
+
         var badge:string = data.badgeID;
         var goalID:string = data.id;
-
 
         var recurringType = new RecurringSession(durationAllowedDesc);
 
