@@ -21,7 +21,8 @@
               "sensor": false
             },
             "comparison": ">",
-            "description": "a desc"
+            "description": "a desc",
+            "periodOfTime": "-2208474000000 "
           },
           "threshold": 25,
           "startDate": "2015-08-01T00:00:00Z",
