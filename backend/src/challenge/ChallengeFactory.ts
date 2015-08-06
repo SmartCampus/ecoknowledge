@@ -114,6 +114,16 @@ class GoalInstanceFactory {
         var endDate = Clock.getMoment(endDateDesc);
 
         var challenge:Challenge = new Challenge(startDate, endDate, goalInstanceDescription, goalDefinition, mapGoalsToConditionAndSensors, id);
+
+        if(now.isBefore(startDate)) {
+            //console.log("Le challenge est en WAIT");
+            challenge.setStatus(ChallengeStatus.WAIT);
+        }
+        if(now.isAfter(startDate) && now.isBefore(endDate)) {
+            ///console.log("Le challenge est en RUN");
+            challenge.setStatus(ChallengeStatus.RUN);
+        }
+
         return challenge;
     }
 
