@@ -8,6 +8,7 @@ var assert = chai.assert;
 
 import GoalFactory = require('../../src/goal/GoalFactory');
 import Goal = require('../../src/goal/Goal');
+import Clock = require('../../src/Clock');
 
 describe("GoalFactory test", () => {
 
@@ -19,8 +20,8 @@ describe("GoalFactory test", () => {
         jsonDefinition.name = "Clim";
 
         var timeBox:any = {};
-        timeBox.startDate = Date.now();
-        timeBox.endDate = Date.now() + 10;
+        timeBox.startDate = Clock.getCurrentMoment();
+        timeBox.endDate = Clock.getCurrentMoment().add(10,'minutes');
         jsonDefinition.timeBox = timeBox;
 
         jsonDefinition.duration = 'day';

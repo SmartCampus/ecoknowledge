@@ -94,7 +94,7 @@ class GoalInstanceRouter extends RouterItf {
         var key = data.key;
 
         var valueDesc:any = {};
-        valueDesc.date = Clock.getMoment(new Date(Clock.getNow()).getTime());
+        valueDesc.date = Clock.getMoment(Clock.getNow());
         valueDesc.value = value;
 
         var oldJson:any[] = this.jsonStub[key].values;
@@ -107,7 +107,7 @@ class GoalInstanceRouter extends RouterItf {
 
     setNow(req, res) {
         var data = req.body;
-        var newNow:moment.Moment = Clock.getMoment(new Date(data.now).getTime());
+        var newNow:moment.Moment = Clock.getMomentFromString(data.now);
 
         console.log("Mise a jour de la date actuelle. Nous sommes maintenant le", newNow.date());
         Clock.setNow(newNow.valueOf());
@@ -122,7 +122,7 @@ class GoalInstanceRouter extends RouterItf {
             res.status(400).send({'error': 'goalID field is missing in request'});
         }
 
-        var newChall:Challenge = this.createGoalInstance(goalID,new Date(Clock.getNow()));
+        var newChall:Challenge = this.createGoalInstance(goalID,Clock.getMoment(Clock.getNow()));
 
         res.send({"success": ("Objectif ajouté !"+newChall.getDataInJSON())});
     }

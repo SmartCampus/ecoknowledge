@@ -60,7 +60,7 @@ class OverallGoalCondition extends Condition {
             for (var currentValueIndex in values) {
                 var value = values[currentValueIndex];
 
-                var date:moment.Moment = Clock.getMoment(new Date(value.date).getTime());
+                var date:moment.Moment = Clock.getMomentFromString(value.date);
 
                 if (this.isInTimeBox(date)) {
                     var dataToEvaluate:any = {};

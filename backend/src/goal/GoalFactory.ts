@@ -22,9 +22,8 @@ class GoalFactory {
     public createGoal(data:any):Goal {
         var goalName:string = data.name;
 
-        var startDateOfValidityPeriod:moment.Moment = Clock.getMoment(new Date(data.timeBox.startDate).valueOf());
-        var endDateOfValidityPeriod:moment.Moment = Clock.getMoment(new Date(data.timeBox.endDate).valueOf());
-
+        var startDateOfValidityPeriod:moment.Moment = Clock.getMomentFromString(data.timeBox.startDate);
+        var endDateOfValidityPeriod:moment.Moment = Clock.getMomentFromString(data.timeBox.endDate);
 
         var durationAllowedDesc:string = data.duration;
         var durationAllowed:number = 0;

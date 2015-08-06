@@ -39,8 +39,8 @@ class ConditionFactory {
 
         var goalCondition:GoalExpression = this.expressionFactory.createExpression(data.expression);
 
-        var startDateOfValidityPeriod:moment.Moment = Clock.getMoment(new Date(goaltimeBox.startDate).getTime());
-        var endDateOfValidityPeriod:moment.Moment = Clock.getMoment(new Date(goaltimeBox.endDate).getTime());
+        var startDateOfValidityPeriod:moment.Moment = goaltimeBox.startDate;
+        var endDateOfValidityPeriod:moment.Moment = goaltimeBox.endDate;
 
         var threshold:number = data.threshold;
 

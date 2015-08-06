@@ -126,7 +126,7 @@ class GoalInstanceFactory {
     public checkDates(goalDefinition:Goal, startDate:moment.Moment):boolean {
         var durationInDays:number = goalDefinition.getDuration();
 
-        var endDate:moment.Moment = Clock.getMoment(new Date(startDate.year(), startDate.month(), startDate.day() + durationInDays).getTime());
+        var endDate:moment.Moment = Clock.getMoment(0).year(startDate.year()).month(startDate.month()).date(startDate.date() + durationInDays);
         var endDateOfValidityPeriod:moment.Moment = goalDefinition.getEndDate();
 
         return endDate.isBefore(endDateOfValidityPeriod);

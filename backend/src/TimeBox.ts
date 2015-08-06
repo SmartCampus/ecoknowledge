@@ -43,11 +43,11 @@ class TimeBox {
     }
 
     public getStartDateInStringFormat():string {
-        return this.convertTimeForMiddlewareAPI(this.startDate.valueOf());
+        return this.convertTimeForMiddlewareAPI(this.startDate);
     }
 
     public getEndDateInStringFormat():string {
-        return this.convertTimeForMiddlewareAPI(this.endDate.valueOf());
+        return this.convertTimeForMiddlewareAPI(this.endDate);
     }
 
     /**
@@ -74,8 +74,9 @@ class TimeBox {
      *      The given date in the following format : YYYY-MM-DD hh:mm:ss</br>
      *      Uses Date#toISOString method.
      */
-    public convertTimeForMiddlewareAPI(aMoment):string {
+    public convertTimeForMiddlewareAPI(aMoment:moment.Moment):string {
         console.log("Conversion du moment pour matcher avec le middleware");
+
         var date:string=aMoment.format();
 
         console.log("date à convertir", date);
