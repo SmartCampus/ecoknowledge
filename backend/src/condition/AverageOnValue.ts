@@ -36,23 +36,17 @@ class AverageOnValue extends Condition {
         this.dateOfCreation = newTimeBox.getStartDate();
         this.endDate = newTimeBox.getEndDate();
 
-        var timeOfTheUltimateOriginOfOrigins:moment.Moment = Clock.getMoment(new Date(0,0,0,0,0,0,0).getTime());
+        var timeOfTheUltimateOriginOfOrigins:moment.Moment = Clock.getMoment(new Date(0, 0, 0, 0, 0, 0, 0).getTime());
         var year:number = this.referencePeriod.year() - timeOfTheUltimateOriginOfOrigins.year();
 
         var month:number = this.referencePeriod.month() - timeOfTheUltimateOriginOfOrigins.month();
         var day:number = this.referencePeriod.date() - timeOfTheUltimateOriginOfOrigins.date();
 
-        var theDateObj = new Date(this.dateOfCreation.year() - year,
-            this.dateOfCreation.month() - month +1,
-            this.dateOfCreation.date() - day,
-            this.dateOfCreation.hours(),
-            this.dateOfCreation.minutes(),
-            this.dateOfCreation.seconds());
-
-        console.log("OBJ date intermediaire", theDateObj.toISOString());
+        var momentObj:moment.Moment = moment.tz( Clock.getTimeZone()).year(this.dateOfCreation.year() - year).month(this.dateOfCreation.month() - month + 1).date(this.dateOfCreation.date() - day).hours(this.dateOfCreation.hour()).minute(this.dateOfCreation.minute())
+            .second(this.dateOfCreation.second()).millisecond(this.dateOfCreation.millisecond());
 
 
-        this.startDate = Clock.getMoment(theDateObj.getTime());
+        this.startDate = momentObj;
 
         console.log("CONSTRUCTION DE LA CONDITION AVEC START DATE", this.startDate.format());
 
@@ -105,7 +99,7 @@ class AverageOnValue extends Condition {
 
                 //  It can be infinite
                 this.percentageAchieved = (this.percentageAchieved > 100) ? 100 : this.percentageAchieved;
-                result = result &&  this.percentageAchieved >= 100;
+                result = result && this.percentageAchieved >= 100;
             }
 
 
@@ -143,10 +137,10 @@ class AverageOnValue extends Condition {
             var currentMoment:moment.Moment = Clock.getMomentFromString(currentPairDateValue.date);
 
             if (currentMoment.isAfter(this.startDate)
-        && currentMoment.isBefore(this.dateOfCreation)){
+                && currentMoment.isBefore(this.dateOfCreation)) {
                 oldValues.push(currentPairDateValue.value);
             }
-        else if(currentMoment.isAfter(this.dateOfCreation)){
+            else if (currentMoment.isAfter(this.dateOfCreation)) {
                 newValues.push(currentPairDateValue.value);
             }
         }
