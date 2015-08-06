@@ -63,15 +63,15 @@ class GoalInstanceFactory {
         //  The user just took a new challenge
 
         var clone = now.clone();
-        //console.log("NOW?", clone.format());
+    console.log("NOW?", clone.format());
 
         var startDate = goal.getStartDateOfSession(clone);
-       // console.log("START DATE OF SESSION", startDate.format());
-        //console.log("START DATE OF SESSION", startDate.toISOString());
+       console.log("START DATE OF SESSION", startDate.format());
+        console.log("START DATE OF SESSION", startDate.toISOString());
 
-        var endDate = goal.getEndDateOfSession(clone);
-        //console.log("END DATE OF SESSION", endDate.format());
-        //console.log("END DATE OF SESSION", endDate.toISOString());
+        var endDate = goal.getEndDateOfSession(clone.clone());
+        console.log("END DATE OF SESSION", endDate.format());
+        console.log("END DATE OF SESSION", endDate.toISOString());
 
 
         /*
@@ -131,6 +131,7 @@ class GoalInstanceFactory {
 
         return endDate.isBefore(endDateOfValidityPeriod);
     }
+
 }
 
 export = GoalInstanceFactory;

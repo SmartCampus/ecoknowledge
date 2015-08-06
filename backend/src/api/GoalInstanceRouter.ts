@@ -11,6 +11,7 @@ import ChallengeRepository = require('../challenge/ChallengeRepository');
 import ChallengeFactory = require('../challenge/ChallengeFactory');
 import GoalRepository = require('../goal/GoalRepository');
 import Challenge = require('../challenge/Challenge');
+import ChallengeStatus = require('../Status');
 import UserRepository = require('../user/UserRepository');
 
 import Middleware = require('../Middleware');
@@ -122,12 +123,12 @@ class GoalInstanceRouter extends RouterItf {
             res.status(400).send({'error': 'goalID field is missing in request'});
         }
 
-        var newChall:Challenge = this.createGoalInstance(goalID,Clock.getMoment(Clock.getNow()));
+        var newChall:Challenge = this.createGoalInstance(goalID, Clock.getMoment(Clock.getNow()));
 
-        res.send({"success": ("Objectif ajouté !"+newChall.getDataInJSON())});
+        res.send({"success": ("Objectif ajouté !" + newChall.getDataInJSON())});
     }
 
-    createGoalInstance(goalID:string,date):Challenge{
+    createGoalInstance(goalID:string, date:moment.Moment):Challenge {
         //  TODO ! stub !
         //  The data object below is a stub to manually
         //  bind a symbolic name to a sensor name.
@@ -144,13 +145,11 @@ class GoalInstanceRouter extends RouterItf {
         };
 
 
-       // console.log("Je construit un challenge en partant du principe que nous sommes le ", date.toISOString());
+        console.log("Je construit un challenge en partant du principe que nous sommes le ", date.toISOString());
         var goalInstance = this.goalInstanceFactory.createGoalInstance(data, this.goalDefinitionRepository, null, date);
-       // console.log("Création de l'instance", goalInstance);
 
         this.goalInstanceRepository.addGoalInstance(goalInstance);
         this.userRepository.getCurrentUser().addChallenge(goalInstance.getId());
-        //TODO if checkdate return null
         return goalInstance;
     }
 
@@ -195,7 +194,7 @@ class GoalInstanceRouter extends RouterItf {
         res.send(this.evaluateChallenge(goalInstanceToEvaluate, goalInstanceID));
     }
 
-    evaluateAll(req:any, res:any){
+    evaluateAll(req:any, res:any) {
         try {
             var challenges = this.userRepository.getCurrentUser().getChallenges();
             for (var challenge in challenges) {
@@ -203,9 +202,9 @@ class GoalInstanceRouter extends RouterItf {
                 var challengeToEvaluate = this.goalInstanceRepository.getGoalInstance(currentChallengeID);
                 this.evaluateChallenge(challengeToEvaluate, currentChallengeID);
             }
-            res.send({success:''});
+            res.send({success: ''});
         }
-        catch(e) {
+        catch (e) {
             res.send(e.toString());
         }
     }
@@ -221,8 +220,8 @@ class GoalInstanceRouter extends RouterItf {
         user.deleteChallenge(challengeID);
     }
 
-    private evaluateChallenge(goalInstanceToEvaluate:Challenge, goalInstanceID){
-        var self=this;
+    private evaluateChallenge(goalInstanceToEvaluate:Challenge, goalInstanceID) {
+        var self = this;
 
         if (!GoalInstanceRouter.DEMO) {
 
@@ -244,9 +243,9 @@ class GoalInstanceRouter extends RouterItf {
                         function () {
                             var result = goalInstanceToEvaluate.evaluate(required);
                             if (result) {
-                                var newChall = self.createGoalInstance(goalInstanceToEvaluate.getGoalDefinition().getUUID(),goalInstanceToEvaluate.getEndDate());
+                                var newChall = self.createGoalInstance(goalInstanceToEvaluate.getGoalDefinition().getUUID(), goalInstanceToEvaluate.getEndDate());
                                 this.addFinishedBadge(goalInstanceID, this.userRepository.getCurrentUser().getUUID());
-                                if(newChall!=null){
+                                if (newChall != null) {
                                     self.evaluateChallenge(newChall, newChall.getId());
                                 }
                             }
@@ -254,30 +253,42 @@ class GoalInstanceRouter extends RouterItf {
                             return goalInstanceToEvaluate.getProgress();
                         },
                         function () {
-                           return {error: "Error occured in middleware"};
+                            return {error: "Error occured in middleware"};
                         });
 
                 })(requiredSensorName[currentSensorName]);
             }
         }
         else {
-            console.log('++++++++++++ \tMODE DEMO\t+++++++++++');
+            console.log('++++++++++++++++++++++ \tMODE DEMO\t+++++++++++++++++++++');
+
+            if(goalInstanceToEvaluate.haveToStart(Clock.getCurrentDemoMoment())) {
+                goalInstanceToEvaluate.setStatus(ChallengeStatus.RUN);
+            }
+
             var result = goalInstanceToEvaluate.evaluate(this.jsonStub);
             if (result && goalInstanceToEvaluate.isFinished()) {
                 console.log("Le challenge est réussi et terminé");
                 var newChall = self.createGoalInstance(goalInstanceToEvaluate.getGoalDefinition().getUUID(), goalInstanceToEvaluate.getEndDate());
                 this.addFinishedBadge(goalInstanceID, this.userRepository.getCurrentUser().getUUID());
-                if(newChall!=null){
+                if (newChall != null) {
                     self.evaluateChallenge(newChall, newChall.getId());
                 }
             }
             else if (!result && goalInstanceToEvaluate.isFinished()) {
                 console.log("Le challenge est FAIL et terminé");
                 var newChall = self.createGoalInstance(goalInstanceToEvaluate.getGoalDefinition().getUUID(), goalInstanceToEvaluate.getEndDate());
-                if(newChall!=null){
-                   // self.evaluateChallenge(newChall, newChall.getId());
+
+                var user = this.userRepository.getCurrentUser();
+                user.deleteChallenge(goalInstanceToEvaluate.getId());
+
+                if (newChall != null) {
+                    // self.evaluateChallenge(newChall, newChall.getId());
                 }
             }
+
+
+
             return goalInstanceToEvaluate.getProgress();
         }
     }
