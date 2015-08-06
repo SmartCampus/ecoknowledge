@@ -134,7 +134,8 @@ class AverageOnValue extends Condition {
             //  { date : __ , value : __ }
             var currentPairDateValue:any = values[currentValueIndex];
 
-            var currentMoment:moment.Moment = Clock.getMomentFromString(currentPairDateValue.date);
+
+            var currentMoment:moment.Moment = Clock.getMoment(parseInt(currentPairDateValue.date));
 
             if (currentMoment.isAfter(this.startDate)
                 && currentMoment.isBefore(this.dateOfCreation)) {

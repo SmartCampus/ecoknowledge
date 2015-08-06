@@ -50,23 +50,23 @@ describe('Test AverageOnValueTest', () => {
 
             var oldValues:any[] = [
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).valueOf() + '' + '',
                     value: '100'
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).valueOf() + '' + '',
                     value: '101'
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).valueOf() + '' + '',
                     value: '99'
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).valueOf() + '' + '',
                     value: '102'
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).valueOf() + '' + '',
                     value: '98'
                 }
             ];
@@ -74,23 +74,23 @@ describe('Test AverageOnValueTest', () => {
 
             var newValues:any[] = [
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).valueOf() + '' + '',
                     value:'89'
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).valueOf() + '' + '',
                     value: '90'
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).valueOf() + '' + '',
                     value: '91'
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 11)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 11)).getTime()).valueOf() + '' + '',
                     value: '70'
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 12)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 12)).getTime()).valueOf() + '' + '',
                     value: '110'
                 }
             ];
@@ -111,38 +111,38 @@ describe('Test AverageOnValueTest', () => {
 
             var oldValues:any[] = [
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).valueOf() + '',
                     value: 100
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).valueOf() + '',
                     value: 101
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).valueOf() + '',
                     value: 99
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).valueOf() + '',
                     value: 102
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).valueOf() + '',
                     value: 98
                 }
             ];
 
             var newValues:any[] = [
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).valueOf() + '',
                     value: 89
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).valueOf() + '',
                     value: 90
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).valueOf() + '',
                     value: 91
                 }
             ];
@@ -162,38 +162,38 @@ describe('Test AverageOnValueTest', () => {
 
             var oldValues:any[] = [
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).valueOf() + '',
                     value: 100
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).valueOf() + '',
                     value: 101
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).valueOf() + '',
                     value: 99
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).valueOf() + '',
                     value: 102
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).valueOf() + '',
                     value: 98
                 }
             ];
 
             var newValues:any[] = [
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).valueOf() + '',
                     value: 89
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).valueOf() + '',
                     value: 91
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).valueOf() + '',
                     value: 91
                 }
             ];
@@ -223,23 +223,23 @@ describe('Test AverageOnValueTest', () => {
                 //  average : 100
                 oldValues = [
                     {
-                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).format(),
+                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).valueOf() + '',
                         value: 100
                     },
                     {
-                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).format(),
+                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).valueOf() + '',
                         value: 101
                     },
                     {
-                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).format(),
+                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).valueOf() + '',
                         value: 99
                     },
                     {
-                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).format(),
+                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).valueOf() + '',
                         value: 102
                     },
                     {
-                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).format(),
+                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).valueOf() + '',
                         value: 98
                     }
                 ];
@@ -249,15 +249,15 @@ describe('Test AverageOnValueTest', () => {
                 //  average : 100
                 newValues = [
                     {
-                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).format(),
+                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).valueOf() + '',
                         value: 100
                     },
                     {
-                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).format(),
+                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).valueOf() + '',
                         value: 101
                     },
                     {
-                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).format(),
+                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).valueOf() + '',
                         value: 99
                     }
                 ];
@@ -275,15 +275,15 @@ describe('Test AverageOnValueTest', () => {
                 //  average : 95
                 newValues = [
                     {
-                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).format(),
+                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).valueOf() + '',
                         value: 90
                     },
                     {
-                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).format(),
+                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).valueOf() + '',
                         value: 100
                     },
                     {
-                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).format(),
+                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).valueOf() + '',
                         value: 95
                     }
                 ];
@@ -300,19 +300,19 @@ describe('Test AverageOnValueTest', () => {
                 //  average : 95
                 newValues = [
                     {
-                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).format(),
+                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).valueOf() + '',
                         value: 85
                     },
                     {
-                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).format(),
+                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).valueOf() + '',
                         value: 95
                     },
                     {
-                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).format(),
+                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).valueOf() + '',
                         value: 91
                     },
                     {
-                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 11)).getTime()).format(),
+                        date: Clock.getMoment(new Date(Date.UTC(2000, 1, 11)).getTime()).valueOf() + '',
                         value: 89
                     }
                 ];
@@ -358,41 +358,41 @@ describe('Test AverageOnValueTest', () => {
 
             var values:any[] = [
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).valueOf() + '',
                     value: 100
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).valueOf() + '',
                     value: 101
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).valueOf() + '',
                     value: 99
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).valueOf() + '',
                     value: 102
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).valueOf() + '',
                     value: 98
                 },
 
                 //   OLD/NEW DATA
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).valueOf() + '',
                     value: 89
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).valueOf() + '',
                     value: 90
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).valueOf() + '',
                     value: 91
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 11)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 11)).getTime()).valueOf() + '',
                     value: 70
                 }
             ];
@@ -416,48 +416,48 @@ describe('Test AverageOnValueTest', () => {
 
             var values:any[] = [
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).valueOf() + '',
                     value: 100
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).valueOf() + '',
                     value: 101
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).valueOf() + '',
                     value: 99
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).valueOf() + '',
                     value: 102
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).valueOf() + '',
                     value: 98
                 },
 
                 //   OLD/NEW DATA
 
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).valueOf() + '',
                     value: 89
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).valueOf() + '',
                     value: 90
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).valueOf() + '',
                     value: 91
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 11)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 11)).getTime()).valueOf() + '',
                     value: 70
                 },
 
                 //too old data, so it won't be in the arrays
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(1999, 12, 17)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(1999, 12, 17)).getTime()).valueOf() + '',
                     value: 42
                 }
             ];
@@ -483,54 +483,54 @@ describe('Test AverageOnValueTest', () => {
 
                 //datas after 1999-12-8
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(1999, 12, 8, 1)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(1999, 12, 8, 1)).getTime()).valueOf() + '',
                     value: 95
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(1999, 12, 12)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(1999, 12, 12)).getTime()).valueOf() + '',
                     value: 105
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(1999, 12, 31)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(1999, 12, 31)).getTime()).valueOf() + '',
                     value: 100
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).valueOf() + '',
                     value: 100
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).valueOf() + '',
                     value: 101
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).valueOf() + '',
                     value: 99
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).valueOf() + '',
                     value: 102
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).valueOf() + '',
                     value: 98
                 },
 
                 //   OLD/NEW DATA
 
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).valueOf() + '',
                     value: 89
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).valueOf() + '',
                     value: 90
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).valueOf() + '',
                     value: 91
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 11)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 11)).getTime()).valueOf() + '',
                     value: 70
                 }
             ];
@@ -576,23 +576,23 @@ describe('Test AverageOnValueTest', () => {
 
             var oldValues:any[] = [
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).valueOf() + '',
                     value: 100
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).valueOf() + '',
                     value: 101
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).valueOf() + '',
                     value: 99
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).valueOf() + '',
                     value: 102
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).valueOf() + '',
                     value: 98
                 }
             ];
@@ -600,23 +600,23 @@ describe('Test AverageOnValueTest', () => {
 
             var newValues:any[] = [
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).valueOf() + '',
                     value: 121
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).valueOf() + '',
                     value: 110
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).valueOf() + '',
                     value: 119
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 11)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 11)).getTime()).valueOf() + '',
                     value: 70
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 12)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 12)).getTime()).valueOf() + '',
                     value: 130
                 }
             ];
@@ -637,38 +637,38 @@ describe('Test AverageOnValueTest', () => {
 
             var oldValues:any[] = [
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).valueOf() + '',
                     value: 100
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).valueOf() + '',
                     value: 101
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).valueOf() + '',
                     value: 99
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).valueOf() + '',
                     value: 102
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).valueOf() + '',
                     value: 98
                 }
             ];
 
             var newValues:any[] = [
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).valueOf() + '',
                     value: 111
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).valueOf() + '',
                     value: 110
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).valueOf() + '',
                     value: 109
                 }
             ];
@@ -688,38 +688,38 @@ describe('Test AverageOnValueTest', () => {
 
             var oldValues:any[] = [
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 2)).getTime()).valueOf() + '',
                     value: 100
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 3)).getTime()).valueOf() + '',
                     value: 101
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 4)).getTime()).valueOf() + '',
                     value: 99
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 5)).getTime()).valueOf() + '',
                     value: 102
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 6)).getTime()).valueOf() + '',
                     value: 98
                 }
             ];
 
             var newValues:any[] = [
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 8)).getTime()).valueOf() + '',
                     value: 111
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 9)).getTime()).valueOf() + '',
                     value: 109
                 },
                 {
-                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).format(),
+                    date: Clock.getMoment(new Date(Date.UTC(2000, 1, 10)).getTime()).valueOf() + '' + '',
                     value: 109
                 }
             ];

@@ -60,7 +60,6 @@ class StoringHandler {
 
         for (var currentGoalDefinitionIndex in goalDefinitions) {
             var currentGoalDefinition = goalDefinitions[currentGoalDefinitionIndex];
-            console.log("==========LES DEFINITIONS SONT ICI=============== : ",currentGoalDefinition.conditions);
             var currentGoal = this.backend.goalDefinitionFactory.createGoal(currentGoalDefinition);
             this.backend.goalDefinitionRepository.addGoal(currentGoal);
         }
