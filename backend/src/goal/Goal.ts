@@ -145,7 +145,8 @@ class Goal {
 
     getStringRepresentation():string {
         return '\n#' + this.id + '\n'
-            + '\t' + this.name + '\t-\t' + this.startDate.toISOString() + ' :: ' + this.endDate.toISOString() + '\n' + this.conditionsList.getStringRepresentation();
+            + '\t' + this.name + '\t-\t' + this.startDate.toISOString() + ' :: ' + this.endDate.toISOString() + '\n' +
+            ' - Récurrent : ' + this.recurringSession.getDescription()  + '\n' + this.conditionsList.getStringRepresentation();
     }
 }
 

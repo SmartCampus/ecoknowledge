@@ -1,6 +1,7 @@
 import Goal = require('./Goal');
 import ConditionFactory = require('../condition/factory/ConditionFactory');
 import BadArgumentException = require('../exceptions/BadArgumentException');
+import RecurringSession = require('./RecurringSession');
 
 class GoalFactory {
 
@@ -37,8 +38,11 @@ class GoalFactory {
         var badge:string = data.badgeID;
         var goalID:string = data.id;
 
+
+        var recurringType = new RecurringSession(durationAllowedDesc);
+
         var newGoal:Goal = new Goal(goalName, startDateOfValidityPeriod, endDateOfValidityPeriod,
-            durationAllowed, badge, goalID);
+            durationAllowed, badge, goalID,recurringType);
 
         var goalConditions:any[] = data.conditions;
         for (var i = 0; i < goalConditions.length; i++) {

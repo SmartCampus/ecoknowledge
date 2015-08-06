@@ -27,6 +27,10 @@ class RecurringSession {
         this.recurringPeriod = this.mapRecurringTypeToObject[recurringType];
     }
 
+    getDescription():string {
+        return this.recurringType;
+    }
+
     getNextSessionStart(now:moment.Moment) {
         return this.recurringPeriod.getNextSessionStart(now);
     }

@@ -139,8 +139,10 @@ class GoalInstanceRouter extends RouterItf {
 
         var m = moment(date.getTime());
 
-
+        console.log("Je construit un challenge en partant du principe que nous sommes le ", date.toISOString());
         var goalInstance = this.goalInstanceFactory.createGoalInstance(data, this.goalDefinitionRepository, null, m);
+        console.log("Création de l'instance", goalInstance);
+
         this.goalInstanceRepository.addGoalInstance(goalInstance);
         this.userRepository.getCurrentUser().addChallenge(goalInstance.getId());
         //TODO if checkdate return null
@@ -254,11 +256,19 @@ class GoalInstanceRouter extends RouterItf {
         else {
             console.log('++++++++++++ \tMODE DEMO\t+++++++++++');
             var result = goalInstanceToEvaluate.evaluate(this.jsonStub);
-            if (result) {
+            if (result && goalInstanceToEvaluate.isFinished()) {
+                console.log("Le challenge est réussi et terminé");
                 var newChall = self.createGoalInstance(goalInstanceToEvaluate.getGoalDefinition().getUUID(), goalInstanceToEvaluate.getEndDate());
                 this.addFinishedBadge(goalInstanceID, this.userRepository.getCurrentUser().getUUID());
                 if(newChall!=null){
                     self.evaluateChallenge(newChall, newChall.getId());
+                }
+            }
+            else if (!result && goalInstanceToEvaluate.isFinished()) {
+                console.log("Le challenge est FAIL et terminé");
+                var newChall = self.createGoalInstance(goalInstanceToEvaluate.getGoalDefinition().getUUID(), goalInstanceToEvaluate.getEndDate());
+                if(newChall!=null){
+                   // self.evaluateChallenge(newChall, newChall.getId());
                 }
             }
             return goalInstanceToEvaluate.getProgress();

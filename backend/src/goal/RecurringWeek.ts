@@ -11,7 +11,14 @@ class RecurringWeek implements RecurringPeriod {
     }
 
     isInASession(now:moment.Moment) {
-        return now.day() >= 1 && now.day() <= 5;
+        var result = true;
+        result = result && now.day() >= 1 && now.day() <= 5;
+
+        if(now.day() == 5 && now.hour() == 23 && now.minute() == 59 && now.second() == 59 && now.millisecond() == 999) {
+            result = false;
+        }
+
+        return result;
     }
 
     getCurrentSessionStart(now:moment.Moment):moment.Moment {
@@ -23,8 +30,11 @@ class RecurringWeek implements RecurringPeriod {
             return this.getNextSessionStart(now);
         }
 
+        var previousMonday = now.day(1).clone().hours(0).minute(0).second(0).millisecond(0);
+        //console.log("CURRENT SESSION START", previousMonday);
+
         //  return previous monday
-        return now.day(1).clone().hours(0).minute(0).second(0).millisecond(0);
+        return previousMonday;
     }
 
     getCurrentSessionEnd(now:moment.Moment):moment.Moment {

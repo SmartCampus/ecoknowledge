@@ -7,7 +7,7 @@
         "startDate": "2015-07-01T06:58:42.000Z",
         "endDate": "2015-08-31T13:01:24.000Z"
       },
-      "duration": "day",
+      "duration": "week",
       "conditions": [
         {
           "id": "35359c1d-58c5-4181-9b8f-62b965514f90",
@@ -24,7 +24,7 @@
             "description": "a desc"
           },
           "threshold": 25,
-          "startDate": null,
+          "startDate": "2015-08-01T00:00:00Z",
           "dateOfCreation": "2015-08-04T12:36:40.453Z",
           "endDate": "2015-08-06T12:36:40.000Z",
           "percentageAchieved": 0,
@@ -45,7 +45,7 @@
         "startDate": "2015-08-04T12:25:57.787Z",
         "endDate": "2015-08-31T12:25:57.787Z"
       },
-      "duration": "day",
+      "duration": "week",
       "conditions": [
         {
           "id": "27839fca-e9e8-4b07-8ce1-1a2bcec5f08c",

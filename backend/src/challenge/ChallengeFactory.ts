@@ -58,8 +58,16 @@ class GoalInstanceFactory {
         //  The user just took a new challenge
 
         var clone = now.clone();
+        console.log("NOW?", clone.format());
+
         var startDate = goal.getStartDateOfSession(clone);
+        console.log("START DATE OF SESSION", startDate.format());
+        console.log("START DATE OF SESSION", startDate.toISOString());
+
         var endDate = goal.getEndDateOfSession(clone);
+        console.log("END DATE OF SESSION", endDate.format());
+        console.log("END DATE OF SESSION", endDate.toISOString());
+
 
         /*
          if(!this.checkDates(goalDefinition,startDate)) {
@@ -69,12 +77,14 @@ class GoalInstanceFactory {
          */
 
         //  TODO delete date construction
-        var challenge:Challenge = new Challenge(new Date(startDate.valueOf()), new Date(endDate.valueOf()), challengeDescription, goal, mapGoalsToConditionAndSensors, challengeID);
+        var challenge:Challenge = new Challenge(new Date(startDate.toISOString()), new Date(endDate.toISOString()), challengeDescription, goal, mapGoalsToConditionAndSensors, challengeID);
 
         if(now.isBefore(startDate)) {
+            console.log("Le challenge est en WAIT");
             challenge.setStatus(ChallengeStatus.WAIT);
         }
         if(now.isAfter(startDate) && now.isBefore(endDate)) {
+            console.log("Le challenge est en RUN");
             challenge.setStatus(ChallengeStatus.RUN);
         }
 
@@ -87,6 +97,8 @@ class GoalInstanceFactory {
     }
 
     private restoreChallenge(id, data:any, goalDefinition:Goal, goalInstanceDescription:string, goalRepository:GoalRepository, mapGoalsToConditionAndSensors, now:moment.Moment):Challenge{
+        console.log("RESTORE CHALLENGE");
+
         var startDateDesc = data.startDate;
         var endDateDesc = data.endDate;
 

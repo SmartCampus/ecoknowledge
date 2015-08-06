@@ -26,8 +26,6 @@ class Challenge {
 
     constructor(startDate:Date, endDate:Date, description:string, goal:Goal,
                 mapGoalToConditionAndSensor:any, id = null) {
-
-
         this.id = (id) ? id : UUID.v4();
         this.description = description;
 
@@ -55,6 +53,10 @@ class Challenge {
         //  It can have tiny incorrect decimal values
         this.percentageOfTime = (this.percentageOfTime > 100) ? 100 : this.percentageOfTime;
 
+    }
+
+    isFinished():boolean {
+        return this.getTimeProgress() >= 100;
     }
 
     public getTimeProgress():number {
@@ -102,6 +104,7 @@ class Challenge {
     }
 
     public getProgress():any {
+        console.log("PROGRESS", JSON.stringify(this.progress));
         return this.progress;
     }
 
@@ -151,7 +154,6 @@ class Challenge {
         if(this.status != BadgeStatus.RUN) {
             return false;
         }
-
 
         this.updateDurationAchieved(Clock.getNow());
         var numberOfValues = Object.keys(values).length;

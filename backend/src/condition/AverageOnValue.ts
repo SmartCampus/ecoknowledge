@@ -45,7 +45,7 @@ class AverageOnValue extends Condition {
 
         var sensorNames:string[] = this.expression.getRequired();
 
-        var result = true;
+        var result = false;
 
         for (var currentSensorNameIndex in sensorNames) {
 
@@ -61,6 +61,8 @@ class AverageOnValue extends Condition {
             var rate = 0;
 
             if (oldData.length != 0 && newData.length != 0) {
+
+                var result = true;
 
                 var oldAverage = this.computeAverageValues(oldData);
                 var newAverage = this.computeAverageValues(newData);
@@ -80,11 +82,11 @@ class AverageOnValue extends Condition {
                 }
 
 
-                result = result && (changeRate >= this.thresholdRate);
                 this.percentageAchieved = changeRate * 100 / this.thresholdRate;
 
                 //  It can be infinite
                 this.percentageAchieved = (this.percentageAchieved > 100) ? 100 : this.percentageAchieved;
+                result = result &&  this.percentageAchieved >= 100;
             }
 
 
