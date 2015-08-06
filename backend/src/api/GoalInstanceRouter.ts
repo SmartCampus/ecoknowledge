@@ -144,9 +144,9 @@ class GoalInstanceRouter extends RouterItf {
         };
 
 
-        console.log("Je construit un challenge en partant du principe que nous sommes le ", date.toISOString());
+       // console.log("Je construit un challenge en partant du principe que nous sommes le ", date.toISOString());
         var goalInstance = this.goalInstanceFactory.createGoalInstance(data, this.goalDefinitionRepository, null, date);
-        console.log("Création de l'instance", goalInstance);
+       // console.log("Création de l'instance", goalInstance);
 
         this.goalInstanceRepository.addGoalInstance(goalInstance);
         this.userRepository.getCurrentUser().addChallenge(goalInstance.getId());

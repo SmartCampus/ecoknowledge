@@ -63,15 +63,15 @@ class GoalInstanceFactory {
         //  The user just took a new challenge
 
         var clone = now.clone();
-        console.log("NOW?", clone.format());
+        //console.log("NOW?", clone.format());
 
         var startDate = goal.getStartDateOfSession(clone);
-        console.log("START DATE OF SESSION", startDate.format());
-        console.log("START DATE OF SESSION", startDate.toISOString());
+       // console.log("START DATE OF SESSION", startDate.format());
+        //console.log("START DATE OF SESSION", startDate.toISOString());
 
         var endDate = goal.getEndDateOfSession(clone);
-        console.log("END DATE OF SESSION", endDate.format());
-        console.log("END DATE OF SESSION", endDate.toISOString());
+        //console.log("END DATE OF SESSION", endDate.format());
+        //console.log("END DATE OF SESSION", endDate.toISOString());
 
 
         /*
@@ -103,7 +103,7 @@ class GoalInstanceFactory {
     }
 
     private restoreChallenge(id, data:any, goalDefinition:Goal, goalInstanceDescription:string, goalRepository:GoalRepository, mapGoalsToConditionAndSensors, now:moment.Moment):Challenge{
-        console.log("RESTORE CHALLENGE");
+        //console.log("RESTORE CHALLENGE");
 
         var startDateDesc = data.startDate;
         var endDateDesc = data.endDate;

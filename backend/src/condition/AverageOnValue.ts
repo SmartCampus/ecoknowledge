@@ -49,6 +49,8 @@ class AverageOnValue extends Condition {
             this.dateOfCreation.minutes(),
             this.dateOfCreation.seconds()).getTime());
 
+        console.log("START DATE", this.startDate.format());
+
         var timeBox:TimeBox = new TimeBox(this.startDate, this.endDate);
         this.timeBox = timeBox;
     }
