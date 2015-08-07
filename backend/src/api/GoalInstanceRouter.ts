@@ -13,7 +13,7 @@ import GoalRepository = require('../goal/GoalRepository');
 import Challenge = require('../challenge/Challenge');
 import ChallengeStatus = require('../Status');
 import UserRepository = require('../user/UserRepository');
-
+import Goal = require('../goal/Goal');
 import Middleware = require('../Middleware');
 
 import Clock = require('../Clock');
@@ -127,6 +127,11 @@ class GoalInstanceRouter extends RouterItf {
 
         var newChall:Challenge = this.createGoalInstance(goalID, Clock.getMoment(Clock.getNow()));
 
+        if(newChall == null) {
+            res.send({'error': 'Can not take this challenge'});
+            return;
+        }
+
         res.send({"success": ("Objectif ajouté !" + newChall.getDataInJSON())});
     }
 
@@ -146,9 +151,14 @@ class GoalInstanceRouter extends RouterItf {
             }
         };
 
+        var goal:Goal = this.goalDefinitionRepository.getGoal(goalID);
 
         //console.log("Je construit un challenge en partant du principe que nous sommes le ", date.toISOString());
         var goalInstance = this.goalInstanceFactory.createGoalInstance(data, this.goalDefinitionRepository, null, date);
+
+        if(goalInstance.getEndDate().isAfter(goal.getEndDate())) {
+            return null;
+        }
 
         this.goalInstanceRepository.addGoalInstance(goalInstance);
         this.userRepository.getCurrentUser().addChallenge(goalInstance.getId());
@@ -280,14 +290,14 @@ class GoalInstanceRouter extends RouterItf {
                 }
             }
             else if (!result && goalInstanceToEvaluate.isFinished()) {
-                //console.log("Le challenge est FAIL et terminé");
+                console.log("Le challenge est FAIL et terminé");
                 var newChall = self.createGoalInstance(goalInstanceToEvaluate.getGoalDefinition().getUUID(), goalInstanceToEvaluate.getEndDate());
 
                 var user = this.userRepository.getCurrentUser();
                 user.deleteChallenge(goalInstanceToEvaluate.getId());
 
                 if (newChall != null) {
-                    // self.evaluateChallenge(newChall, newChall.getId());
+                     self.evaluateChallenge(newChall, newChall.getId());
                 }
             }
 
