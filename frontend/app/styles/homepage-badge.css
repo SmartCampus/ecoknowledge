@@ -1,4 +1,5 @@
 .badge-container {
+  font-size:150%;
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0px 5px 5px #DFDFDF;
@@ -13,7 +14,7 @@
 }
 
 .badge-item .bronze {
-  background-color: #cd7f32;
+  background-color: #E8B479;
 }
 
 .badge-item .silver {
@@ -32,5 +33,6 @@
 
 .badge-container .number-of-badge {
   float:right;
-  top: 0px;
+  margin-top: -10px;
+  margin-right:-10px;
 }

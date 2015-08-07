@@ -5,6 +5,7 @@
   box-shadow: 0px 5px 5px #DFDFDF;
   border: 1px solid #6C6C6C;
   width:70%;
+  font-size:150%;
 }
 
 .goal-item {
@@ -20,4 +21,8 @@
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+.goal-panel .goal-list, .goal-panel h2 {
+  margin-left:5%;
 }

@@ -4,7 +4,11 @@
                 'gold':trophyInstance.number >2
                 }">
   <div class="number-of-badge">
-    <span class="badge">{{trophyInstance.number}}</span>
+    <span class="badge">
+      <span ng-if="trophyInstance.number == 1">Bronze</span>
+      <span ng-if="trophyInstance.number == 2">Argent</span>
+      <span ng-if="trophyInstance.number == 3">Or</span>
+    </span>
   </div>
   {{trophyInstance.badge.name}}
   <br/>
