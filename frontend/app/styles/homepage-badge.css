@@ -1,11 +1,23 @@
 .badge-container {
   font-size:150%;
-  padding: 15px;
+  padding: 5px;
   border-radius: 10px;
   box-shadow: 0px 5px 5px #DFDFDF;
   border: 1px solid #6C6C6C;
   width:70%;
 }
+.badge-medals {
+  padding:20px;
+}
+
+div.medal-container img {
+  width:100%;
+  height:auto;
+}
+div.medal-container {
+  width:50px;
+}
+
 
 .badge-item {
   list-style-type: none;
@@ -22,7 +34,7 @@
 }
 
 .badge-item .gold {
-  background-color: #FFD700;
+  background-color: #FFCF4A;
 }
 
 .trophies-list {

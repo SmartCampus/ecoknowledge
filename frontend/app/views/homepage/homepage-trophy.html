@@ -3,14 +3,38 @@
                 'silver':trophyInstance.number==2,
                 'gold':trophyInstance.number >2
                 }">
-  <div class="number-of-badge">
-    <span class="badge">
-      <span ng-if="trophyInstance.number == 1">Bronze</span>
-      <span ng-if="trophyInstance.number == 2">Argent</span>
-      <span ng-if="trophyInstance.number == 3">Or</span>
-    </span>
-  </div>
-  {{trophyInstance.badge.name}}
-  <br/>
-  <b>{{trophyInstance.badge.points}} points</b>
+
+  <table>
+
+    <tr>
+      <td rowspan="2" class="badge-medals">
+        <div ng-if="trophyInstance.number == 1">
+          <div class="medal-container"><img src="../../images/bronzemedal.png"/></div>
+          <div class="badge"><span>Bronze</span></div>
+        </div>
+        <div ng-if="trophyInstance.number == 2">
+          <div class="medal-container"><img src="../../images/silvermedal.png"/></div>
+          <span class="badge">Argent</span>
+        </div>
+        <div ng-if="trophyInstance.number == 3">
+          <div class="medal-container"><img src="../../images/goldmedal.png"/></div>
+          <span class="badge">Or</span>
+        </div>
+      </td>
+      <td>
+        {{trophyInstance.badge.name}}
+      </td>
+    </tr>
+    <tr>
+      <td>
+      <b>{{trophyInstance.badge.points}} points</b>
+      </td>
+    </tr>
+  </table>
+
 </div>
+<!--
+
+
+
+-->
