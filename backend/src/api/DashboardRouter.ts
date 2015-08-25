@@ -57,6 +57,44 @@ class DashboardRouter extends RouterItf {
         this.router.post('/takeGoal', function (req, res) {
             self.newGoalInstance(req, res);
         });
+
+        //  Debug routes only
+        this.router.post('/addstub', function (req, res) {
+            self.addStub(req, res);
+        });
+
+        this.router.post('/setNow', function (req, res) {
+            self.setNow(req, res);
+        });
+    }
+
+    addStub(req, res) {
+
+        var data = req.body;
+        var value = data.value;
+        var key = data.key;
+
+        var valueDesc:any = {};
+        valueDesc.date = Clock.getMoment(Clock.getNow()).valueOf();
+        valueDesc.value = value;
+
+        // console.log("DATE DU STUB AJOUTE", valueDesc.date);
+
+        var oldJson:any[] = this.jsonStub[key].values;
+        oldJson.push(valueDesc);
+        this.jsonStub[key].values = oldJson;
+
+        res.send('Valeur' + JSON.stringify(valueDesc) + " ajoutee au stub !");
+    }
+
+
+    setNow(req, res) {
+        var data = req.body;
+        var newNow:moment.Moment = Clock.getMomentFromString(data.now);
+
+        console.log("Mise a jour de la date actuelle. Nous sommes maintenant le", newNow.date());
+        Clock.setNow(newNow.valueOf());
+        res.send("New 'now' : " + newNow.date());
     }
 
     newGoalInstance(req:any, res:any) {
@@ -259,6 +297,8 @@ class DashboardRouter extends RouterItf {
         this.userRepository.getCurrentUser().addChallenge(goalInstance.getId());
         return goalInstance;
     }
+
+
 }
 
 export = DashboardRouter;
