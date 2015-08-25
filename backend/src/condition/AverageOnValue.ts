@@ -36,11 +36,7 @@ class AverageOnValue extends Condition {
         this.dateOfCreation = newTimeBox.getStartDate();
         this.endDate = newTimeBox.getEndDate();
 
-        console.log("DOC", this.dateOfCreation.format(), "END DATE", this.endDate.format());
-
         var timeOfTheUltimateOriginOfOrigins:moment.Moment = Clock.getMoment(new Date(0, 0, 0, 0, 0, 0, 0).getTime());
-
-        console.log("ORIGINS", timeOfTheUltimateOriginOfOrigins.format());
 
         var year:number = this.referencePeriod.year() - timeOfTheUltimateOriginOfOrigins.year();
 
@@ -50,10 +46,7 @@ class AverageOnValue extends Condition {
         var momentObj:moment.Moment = moment.tz( Clock.getTimeZone()).year(this.dateOfCreation.year() - year).month(this.dateOfCreation.month() - month).date(this.dateOfCreation.date() - day).hours(this.dateOfCreation.hour()).minute(this.dateOfCreation.minute())
             .second(this.dateOfCreation.second()).millisecond(this.dateOfCreation.millisecond());
 
-
         this.startDate = momentObj;
-
-        console.log("CONSTRUCTION DE LA CONDITION AVEC START DATE", this.startDate.format());
 
         var timeBox:TimeBox = new TimeBox(this.startDate, this.endDate);
         this.timeBox = timeBox;

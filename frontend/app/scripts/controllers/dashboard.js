@@ -9,11 +9,16 @@ app.controller('DashboardCtrl', ['ServiceDashboard', '$window', function (Servic
   self.trophies = {};
   self.challenges = {};
 
+  //  Debug
+  self.request = {};
+
   this.getDashboard = function () {
     console.log('on veut récupérer le dashboard!!');
     ServiceDashboard.get(
-      function (goals, badges, challenges) {
+      function (data, goals, badges, challenges) {
         console.log('Result of dashboard : ', goals, badges, challenges);
+
+        self.request = data;
 
         self.goals = goals;
         self.trophies = badges;
@@ -42,6 +47,8 @@ app.controller('DashboardCtrl', ['ServiceDashboard', '$window', function (Servic
   self.deleteChallenge = function (objective) {
     ServiceDashboard.deleteChallenge(objective.id,
       function (data) {
+        console.log('DashboardCtrl : Delete challenge : data RECEIVED :', data);
+
         var index = self.challenges.indexOf(objective);
         $window.location.reload();
         self.challenges.splice(index, 1);

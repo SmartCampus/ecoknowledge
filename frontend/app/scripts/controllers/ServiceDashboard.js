@@ -15,7 +15,7 @@ app.service('ServiceDashboard', ['$http', function ServiceDashboard($http) {
         var badges = data.data.badges;
         var challenges = data.data.challenges;
 
-        successFunc(goals, badges, challenges);
+        successFunc(data, goals, badges, challenges);
       })
       .error(function (data) {
         failFunc(data);

@@ -3,9 +3,7 @@
  */
 
 import Server = require('./Server');
-import BadgeRouter = require('./api/BadgeRouter');
-import GoalDefinitionRouter = require('./api/GoalDefinitionRouter');
-import GoalInstanceRouter = require('./api/GoalInstanceRouter');
+
 import DashboardRouter = require('./api/DashboardRouter');
 
 import BadgeRepository = require('./badge/BadgeRepository');
@@ -85,10 +83,12 @@ class Backend extends Server {
 
         this.app.use('/dashboard', (new DashboardRouter(self.goalInstanceRepository, self.goalInstanceFactory, self.goalDefinitionRepository, self.userRepository,self.badgeRepository, new Middleware())).getRouter());
 
+        /*
         this.app.use("/badges", (new BadgeRouter(self.badgeRepository, self.badgeFactory, self.userRepository, loginCheck)).getRouter());
         this.app.use("/goals", (new GoalDefinitionRouter(self.goalDefinitionRepository, self.goalDefinitionFactory, self.goalInstanceRepository, self.userRepository)).getRouter());
         this.app.use("/challenges", (new GoalInstanceRouter(self.goalInstanceRepository, self.goalInstanceFactory, self.goalDefinitionRepository, self.userRepository)).getRouter());
-
+        */
+        
         this.app.get('/test', function (req, res) {
             self.storingHandler.save(
                 function (result) {

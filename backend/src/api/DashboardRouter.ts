@@ -106,7 +106,7 @@ class DashboardRouter extends RouterItf {
 
         var newChall:Challenge = this.createGoalInstance(goalID, Clock.getMoment(Clock.getNow()));
 
-        if(newChall == null) {
+        if (newChall == null) {
             res.send({'error': 'Can not take this challenge'});
             return;
         }
@@ -127,10 +127,31 @@ class DashboardRouter extends RouterItf {
     }
 
     getDashboard(req, res) {
-        console.log("GETTING DASHBOARD");
+        console.log("\n=======================================================================\n---> Getting Dashboard\n");
         var result:any = {};
 
-       // try {
+        try {
+
+            //  Third col : Evaluate challenge and return them
+            //  Done before everything to be up to date
+            var challenges = this.userRepository.getCurrentUser().getChallenges();
+            for (var challengeIndex in challenges) {
+                var currentChallengeID = challenges[challengeIndex];
+                var currentChallenge = this.challengeRepository.getGoalInstance(currentChallengeID);
+
+                this.evaluateChallenge(currentChallenge, currentChallengeID);
+            }
+
+            //  Build the description of updated challenges (potential additions/deletions)
+            var descriptionOfChallenges:any[] = [];
+            var challenges = this.userRepository.getCurrentUser().getChallenges();
+            for (var challengeIndex in challenges) {
+                var currentChallengeID = challenges[challengeIndex];
+                var currentChallenge = this.challengeRepository.getGoalInstance(currentChallengeID);
+                var currentChallengeDesc = currentChallenge.getDataInJSON();
+                descriptionOfChallenges.push(currentChallengeDesc);
+            }
+
             //  First col : available goal
             var descriptionOfAvailableGoals = this.goalRepository.getListOfUntakedGoalInJSONFormat(this.userRepository.getCurrentUser(), this.challengeRepository);
 
@@ -148,31 +169,21 @@ class DashboardRouter extends RouterItf {
                 descriptionOfBadges.push(dataTrophy);
             }
 
-            //  Third col : Evaluate challenge and return them
-            var descriptionOfChallenges:any[] = [];
 
-            var challenges = this.userRepository.getCurrentUser().getChallenges();
-            for (var challengeIndex in challenges) {
-                var currentChallengeID = challenges[challengeIndex];
-                var currentChallenge = this.challengeRepository.getGoalInstance(currentChallengeID);
-
-                this.evaluateChallenge(currentChallenge, currentChallengeID);
-
-                var currentChallengeDesc = currentChallenge.getDataInJSON();
-                descriptionOfChallenges.push(currentChallengeDesc);
-            }
-
+            //  Build the response
             result.goals = descriptionOfAvailableGoals;
             result.badges = descriptionOfBadges;
             result.challenges = descriptionOfChallenges;
 
             res.send({success: 'Everything is fine', data: result});
-            /*
+            console.log("\nSending ... \n", JSON.stringify(result));
+            console.log("=======================================================================\n\n");
+
         }
         catch (e) {
             res.send({error: e.toString()});
         }
-        */
+
     }
 
     private evaluateChallenge(challengeToEvaluate:Challenge, challengeID) {
@@ -225,7 +236,7 @@ class DashboardRouter extends RouterItf {
 
             //  Check if the challenge is achieved and finished
             if (result && challengeToEvaluate.isFinished()) {
-                //console.log("Le challenge est réussi et terminé");
+                console.log("Le challenge est réussi et terminé");
 
                 //  Add finished badge to current user
                 this.addFinishedBadge(challengeID, this.userRepository.getCurrentUser().getUUID());
@@ -239,7 +250,7 @@ class DashboardRouter extends RouterItf {
 
             //  Check if the challenge is not achieved but finished
             else if (!result && challengeToEvaluate.isFinished()) {
-                //console.log("Le challenge est FAIL et terminé");
+                console.log("Le challenge est FAIL et terminé");
 
                 var user = this.userRepository.getCurrentUser();
                 user.deleteChallenge(challengeToEvaluate.getId());
@@ -297,8 +308,6 @@ class DashboardRouter extends RouterItf {
         this.userRepository.getCurrentUser().addChallenge(goalInstance.getId());
         return goalInstance;
     }
-
-
 }
 
 export = DashboardRouter;

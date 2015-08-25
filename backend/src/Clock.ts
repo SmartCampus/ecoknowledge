@@ -4,8 +4,6 @@
 
 var moment = require('moment');
 var moment_timezone = require('moment-timezone');
-import GoalInstanceRouter = require('./api/GoalInstanceRouter');
-
 
 class Clock {
 

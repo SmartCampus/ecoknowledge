@@ -26,12 +26,14 @@ import User = require('../../src/user/User');
 import Clock = require('../../src/Clock');
 import ChallengeStatus = require('../../src/Status');
 
-import ChallengeRouter = require('../../src/api/GoalInstanceRouter');
+import Middleware = require('../../src/Middleware');
 
-describe('Challenge integration test', () => {
+ import DashboardRouter = require('../../src/api/DashboardRouter');
+
+ describe('Challenge integration test', () => {
 
     //  Important ! Allow us to set time
-    ChallengeRouter.DEMO = true;
+     DashboardRouter.DEMO = true;
 
     var badgeRepository:BadgeRepository = new BadgeRepository();
     var challengeRepository:ChallengeRepository = new ChallengeRepository();
@@ -45,7 +47,7 @@ describe('Challenge integration test', () => {
     userRepository.setCurrentUser(user);
 
     //  Init the router under test
-    var challengeRouter:ChallengeRouter = new ChallengeRouter(challengeRepository, challengeFactory, goalRepository, userRepository);
+    var dashboardRouter:DashboardRouter = new DashboardRouter(challengeRepository, challengeFactory, goalRepository, userRepository, badgeRepository, new Middleware());
 
     //  Create a fake badge for fake goal
     var aBadgeName = 'Badge 1';
@@ -61,23 +63,23 @@ describe('Challenge integration test', () => {
     goalRepository.addGoal(aGoal);
 
     it('should have initialized the new challenge status to "RUN" when challenge is created during a working week', () => {
-        var newChallenge = challengeRouter.createGoalInstance(aGoal.getUUID(), moment("2015-08-05T12:15:00+02:00"));
+        var newChallenge = dashboardRouter.createGoalInstance(aGoal.getUUID(), moment("2015-08-05T12:15:00+02:00"));
         chai.expect(newChallenge.getStatus()).to.be.eq(ChallengeStatus.RUN);
     });
 
     it('should have initialized the new challenge status to "WAITING" when challenge is created during week-end', () => {
         //  The goal is recurrent every week (monday-friday). A goal created saturday must be in WAITING status
-        var newChallenge = challengeRouter.createGoalInstance(aGoal.getUUID(), moment("2015-08-08T12:15:00+02:00"));
+        var newChallenge = dashboardRouter.createGoalInstance(aGoal.getUUID(), moment("2015-08-08T12:15:00+02:00"));
         chai.expect(newChallenge.getStatus()).to.be.eq(ChallengeStatus.WAIT);
     });
 
     it('should have set the startDate to monday if goal is "week recurrent"', () => {
-        var newChallenge = challengeRouter.createGoalInstance(aGoal.getUUID(), moment("2015-08-05T12:15:00+02:00"));
+        var newChallenge = dashboardRouter.createGoalInstance(aGoal.getUUID(), moment("2015-08-05T12:15:00+02:00"));
         chai.expect(newChallenge.getStartDate().toISOString()).to.be.eq(startDate.toISOString());
     });
 
     it('should have set the endDate to friday if goal is "week recurrent"', () => {
-        var newChallenge = challengeRouter.createGoalInstance(aGoal.getUUID(), moment("2015-08-07T23:59:59+02:00"));
+        var newChallenge = dashboardRouter.createGoalInstance(aGoal.getUUID(), moment("2015-08-07T23:59:59+02:00"));
         chai.expect(newChallenge.getStartDate().toISOString()).to.be.eq(startDate.toISOString());
     });
 });
