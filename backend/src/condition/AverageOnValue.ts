@@ -63,6 +63,8 @@ class AverageOnValue extends Condition {
         var remainingData:any = super.applyFilters(data);
         data = remainingData;
 
+        console.log('Remaining data', data);
+
         var sensorNames:string[] = this.expression.getRequired();
 
         var result = false;

@@ -53,6 +53,7 @@ class GoalInstanceRouter extends RouterItf {
     buildRouter() {
         var self = this;
 
+        /*
         this.router.post('/new', function (req, res) {
             self.newGoalInstance(req, res);
         });
@@ -85,6 +86,7 @@ class GoalInstanceRouter extends RouterItf {
         this.router.post('/addBadge', function (req, res) {
             self.addFinishedBadge(req.challengeID, req.userID);
         });
+        */
     }
 
 

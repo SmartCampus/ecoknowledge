@@ -39,6 +39,19 @@ app.controller('DashboardCtrl', ['ServiceDashboard', '$window', function (Servic
   };
 
 
+  self.deleteChallenge = function (objective) {
+    ServiceDashboard.deleteChallenge(objective.id,
+      function (data) {
+        var index = self.challenges.indexOf(objective);
+        $window.location.reload();
+        self.challenges.splice(index, 1);
+      },
+      function (data) {
+        console.log('Failed to remove a goal', data);
+      });
+
+  };
+
   console.log('Le fichier dshb est bien chargé');
   this.getDashboard();
 }]);

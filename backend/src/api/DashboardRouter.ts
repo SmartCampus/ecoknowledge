@@ -50,6 +50,10 @@ class DashboardRouter extends RouterItf {
             self.getDashboard(req, res);
         });
 
+        this.router.delete('/delete/:id', function (req, res) {
+            self.deleteChallenge(req, res);
+        });
+
         this.router.post('/takeGoal', function (req, res) {
             self.newGoalInstance(req, res);
         });
@@ -70,6 +74,18 @@ class DashboardRouter extends RouterItf {
         }
 
         res.send({"success": ("Objectif ajouté !" + newChall.getDataInJSON())});
+    }
+
+    deleteChallenge(req:any, res:any) {
+        var goalID = req.params.id;
+
+        try {
+            this.userRepository.getCurrentUser().deleteChallenge(goalID);
+            res.send({"success": "Objectif supprimé !"});
+        }
+        catch (e) {
+            res.send({error: e.toString()});
+        }
     }
 
     getDashboard(req, res) {
