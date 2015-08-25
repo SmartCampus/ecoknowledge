@@ -6,6 +6,7 @@ import Server = require('./Server');
 import BadgeRouter = require('./api/BadgeRouter');
 import GoalDefinitionRouter = require('./api/GoalDefinitionRouter');
 import GoalInstanceRouter = require('./api/GoalInstanceRouter');
+import DashboardRouter = require('./api/DashboardRouter');
 
 import BadgeRepository = require('./badge/BadgeRepository');
 import BadgeFactory = require('./badge/BadgeFactory');
@@ -26,6 +27,7 @@ import OverallGoalCondition = require('./condition/OverallGoalCondition');
 import TimeBox = require('./TimeBox');
 
 import StoringHandler = require('./StoringHandler');
+import Middleware = require('./Middleware');
 
 class Backend extends Server {
 
@@ -50,7 +52,9 @@ class Backend extends Server {
      * @param {Array<string>} arguments - Server's command line arguments.
      */
     constructor(listeningPort:number, arguments:Array<string>) {
-        super(listeningPort, arguments);
+        this.userRepository = new UserRepository();
+
+        super(listeningPort, arguments, this.userRepository);
 
         this.badgeRepository = new BadgeRepository();
         this.badgeFactory = new BadgeFactory();
@@ -77,8 +81,11 @@ class Backend extends Server {
      */
     buildAPI() {
         var self = this;
+        var loginCheck = super.requireLogin;
 
-        this.app.use("/badges", (new BadgeRouter(self.badgeRepository, self.badgeFactory, self.userRepository)).getRouter());
+        this.app.use('/dashboard', (new DashboardRouter(self.goalInstanceRepository, self.goalInstanceFactory, self.goalDefinitionRepository, self.userRepository,self.badgeRepository, new Middleware())).getRouter());
+
+        this.app.use("/badges", (new BadgeRouter(self.badgeRepository, self.badgeFactory, self.userRepository, loginCheck)).getRouter());
         this.app.use("/goals", (new GoalDefinitionRouter(self.goalDefinitionRepository, self.goalDefinitionFactory, self.goalInstanceRepository, self.userRepository)).getRouter());
         this.app.use("/challenges", (new GoalInstanceRouter(self.goalInstanceRepository, self.goalInstanceFactory, self.goalDefinitionRepository, self.userRepository)).getRouter());
 

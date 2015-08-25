@@ -47,6 +47,11 @@ var app = angular
           templateUrl: 'views/create-badge-perso.html',
           controller: 'BadgeCtrlV2'
         })
+      .when('/dashboard', {
+        templateUrl: '../views/dashboard.html',
+        controller: 'DashboardCtrl',
+        controllerAs:'Dashboard'
+      })
       .otherwise({
         redirectTo: '/'
       });

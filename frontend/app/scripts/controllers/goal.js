@@ -39,32 +39,24 @@ var app = angular.module('ecoknowledgeApp')
     };
 
     this.changeDayOfWeekFilter = function(iteration, dayOfWeekFilter) {
-      if(iteration.filter == null) {
+      if(iteration.filter === null) {
         iteration.filter = {};
       }
       iteration.filter.dayOfWeekFilter = dayOfWeekFilter;
     };
 
-    this.changePeriodOfDayFilter = function(iteration, periodOfDayFilter) {
-      if(iteration.filter == null) {
-        iteration.filter = {};
-      }
-      iteration.filter.periodOfDayFilter = [];
-    };
-
-
     this.togglePeriodOfDayFilter = function(iteration, periodOfDayFilter) {
-      if(iteration.filter == null) {
+      if(iteration.filter === null) {
         iteration.filter = {};
       }
 
-      if(iteration.filter.periodOfDayFilter == null) {
+      if(iteration.filter.periodOfDayFilter === null) {
         iteration.filter.periodOfDayFilter = [];
       }
 
       var allIndex = iteration.filter.periodOfDayFilter.indexOf('all');
 
-      if(allIndex > -1 && periodOfDayFilter != 'all') {
+      if(allIndex > -1 && periodOfDayFilter !== 'all') {
         iteration.filter.periodOfDayFilter.splice(allIndex,1);
 
         self.togglePeriodOfDayFilter(iteration, 'morning');
@@ -72,7 +64,7 @@ var app = angular.module('ecoknowledgeApp')
         self.togglePeriodOfDayFilter(iteration, 'night');
       }
 
-      if(allIndex == -1 && periodOfDayFilter == 'all') {
+      if(allIndex === -1 && periodOfDayFilter === 'all') {
         iteration.filter.periodOfDayFilter = ['all'];
         return;
       }

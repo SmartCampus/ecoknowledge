@@ -3,7 +3,7 @@
  */
 /// <reference path="../../typings/node/node.d.ts" />
 
-var express : any = require("express");
+var express:any = require("express");
 
 /**
  * Router Interface
@@ -12,18 +12,21 @@ var express : any = require("express");
  */
 class RouterItf {
 
+    protected loginCheckFunc;
+
     /**
      * Router property.
      *
      * @property router
      * @type any
      */
-    router : any;
+    router:any;
 
     /**
      * Constructor.
      */
-    constructor() {
+    constructor(loginCheck = null) {
+        this.loginCheckFunc = loginCheck;
         this.router = express.Router();
 
         // middleware specific to this router
@@ -52,6 +55,8 @@ class RouterItf {
     buildRouter() {
         //Logger.warn("RouterItf - buildRouter : Method need to be implemented.");
     }
+
+
 }
 
 export = RouterItf;

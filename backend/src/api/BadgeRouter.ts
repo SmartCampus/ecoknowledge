@@ -30,8 +30,9 @@ class BadgeRouter extends RouterItf {
      * @param badgeRepository
      *      The badge repository to save and retrieve badges
      */
-    constructor(badgeRepository:BadgeRepository, badgeFactory:BadgeFactory, userRepository:UserRepository) {
-        super();
+    constructor(badgeRepository:BadgeRepository, badgeFactory:BadgeFactory, userRepository:UserRepository, loginCheck) {
+        console.log("LOGIN CHECK", loginCheck);
+        super(loginCheck);
 
         if(!badgeRepository) {
             throw new BadArgumentException('Badge repository is null');
@@ -52,6 +53,15 @@ class BadgeRouter extends RouterItf {
 
     buildRouter() {
         var self = this;
+
+        var loginCheckFunc = self.loginCheckFunc;
+
+        console.log("LOOOL", loginCheckFunc);
+
+        this.router.post('/lol', function(req,res) {
+            console.log("YEAH MAGUEULE");
+            res.send('LOOOL');
+        });
 
         this.router.get('/trophyWall', function(req,res) {
             self.getAllFinishedBadges(req,res);

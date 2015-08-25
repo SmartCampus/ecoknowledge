@@ -11,12 +11,12 @@ import ChallengeRepository = require('../challenge/ChallengeRepository');
 import ChallengeFactory = require('../challenge/ChallengeFactory');
 import GoalRepository = require('../goal/GoalRepository');
 import Challenge = require('../challenge/Challenge');
-import ChallengeStatus = require('../Status');
 import UserRepository = require('../user/UserRepository');
 import Goal = require('../goal/Goal');
 import Middleware = require('../Middleware');
 
 import Clock = require('../Clock');
+import ChallengeStatus = require('../Status');
 
 import BadRequestException = require('../exceptions/BadRequestException');
 
@@ -165,6 +165,9 @@ class GoalInstanceRouter extends RouterItf {
         return goalInstance;
     }
 
+    /**
+     *  ---------------------
+     */
     getAllChallenges(req:any, res:any) {
         var result:any[] = [];
 
@@ -206,11 +209,15 @@ class GoalInstanceRouter extends RouterItf {
         res.send(this.evaluateChallenge(goalInstanceToEvaluate, goalInstanceID));
     }
 
+
+    /**
+     *  ---------------------
+     */
     evaluateAll(req:any, res:any) {
         try {
             var challenges = this.userRepository.getCurrentUser().getChallenges();
-            for (var challenge in challenges) {
-                var currentChallengeID = challenges[challenge];
+            for (var challengeIndex in challenges) {
+                var currentChallengeID = challenges[challengeIndex];
                 var challengeToEvaluate = this.goalInstanceRepository.getGoalInstance(currentChallengeID);
                 this.evaluateChallenge(challengeToEvaluate, currentChallengeID);
             }
@@ -234,13 +241,13 @@ class GoalInstanceRouter extends RouterItf {
         user.deleteChallenge(challengeID);
     }
 
-    private evaluateChallenge(goalInstanceToEvaluate:Challenge, goalInstanceID) {
+    private evaluateChallenge(challengeToEvaluate:Challenge, challengeID) {
         var self = this;
 
         if (!GoalInstanceRouter.DEMO) {
 
             //TODO move what follow
-            var required = goalInstanceToEvaluate.getSensors();
+            var required = challengeToEvaluate.getSensors();
 
             var requiredSensorName = Object.keys(required);
             var numberToLoad:number = requiredSensorName.length;
@@ -255,19 +262,19 @@ class GoalInstanceRouter extends RouterItf {
 
                     this.middleware.getSensorsInfo(required, numberToLoad, dataJsonString, path,
                         function () {
-                            var result = goalInstanceToEvaluate.evaluate(required);
+                            var result = challengeToEvaluate.evaluate(required);
                             if (result) {
-                                var newChall = self.createGoalInstance(goalInstanceToEvaluate.getGoalDefinition().getUUID(), goalInstanceToEvaluate.getEndDate());
-                                this.addFinishedBadge(goalInstanceID, this.userRepository.getCurrentUser().getUUID());
+                                var newChall = self.createGoalInstance(challengeToEvaluate.getGoalDefinition().getUUID(), challengeToEvaluate.getEndDate());
+                                this.addFinishedBadge(challengeID, this.userRepository.getCurrentUser().getUUID());
                                 if (newChall != null) {
                                     self.evaluateChallenge(newChall, newChall.getId());
                                 }
                             }
                             console.log("All data were retrieve properly");
-                            return goalInstanceToEvaluate.getProgress();
+                            return challengeToEvaluate.getProgress();
                         },
                         function () {
-                            return {error: "Error occured in middleware"};
+                            return {error: "Error occurred in middleware"};
                         });
 
                 })(requiredSensorName[currentSensorName]);
@@ -276,34 +283,41 @@ class GoalInstanceRouter extends RouterItf {
         else {
             console.log('++++++++++++++++++++++ \tMODE DEMO\t+++++++++++++++++++++');
 
-            if(goalInstanceToEvaluate.haveToStart(Clock.getCurrentDemoMoment())) {
-                goalInstanceToEvaluate.setStatus(ChallengeStatus.RUN);
+            if(challengeToEvaluate.haveToStart(Clock.getCurrentDemoMoment())) {
+                challengeToEvaluate.setStatus(ChallengeStatus.RUN);
             }
 
-            var result = goalInstanceToEvaluate.evaluate(this.jsonStub);
-            if (result && goalInstanceToEvaluate.isFinished()) {
+            var result = challengeToEvaluate.evaluate(this.jsonStub);
+
+            //  Check if the challenge is achieved and finished
+            if (result && challengeToEvaluate.isFinished()) {
                 //console.log("Le challenge est réussi et terminé");
-                var newChall = self.createGoalInstance(goalInstanceToEvaluate.getGoalDefinition().getUUID(), goalInstanceToEvaluate.getEndDate());
-                this.addFinishedBadge(goalInstanceID, this.userRepository.getCurrentUser().getUUID());
-                if (newChall != null) {
-                    self.evaluateChallenge(newChall, newChall.getId());
+
+                //  Add finished badge to current user
+                this.addFinishedBadge(challengeID, this.userRepository.getCurrentUser().getUUID());
+
+                //  Build the new challenge (recurring) and evaluate it
+                var newChallenge = self.createGoalInstance(challengeToEvaluate.getGoalDefinition().getUUID(), challengeToEvaluate.getEndDate());
+                if (newChallenge != null) {
+                    self.evaluateChallenge(newChallenge, newChallenge.getId());
                 }
             }
-            else if (!result && goalInstanceToEvaluate.isFinished()) {
-                console.log("Le challenge est FAIL et terminé");
-                var newChall = self.createGoalInstance(goalInstanceToEvaluate.getGoalDefinition().getUUID(), goalInstanceToEvaluate.getEndDate());
+
+            //  Check if the challenge is not achieved but finished
+            else if (!result && challengeToEvaluate.isFinished()) {
+                //console.log("Le challenge est FAIL et terminé");
 
                 var user = this.userRepository.getCurrentUser();
-                user.deleteChallenge(goalInstanceToEvaluate.getId());
+                user.deleteChallenge(challengeToEvaluate.getId());
 
-                if (newChall != null) {
-                     self.evaluateChallenge(newChall, newChall.getId());
+                //  Build the new challenge (recurring) and evaluate it
+                var newChallenge = self.createGoalInstance(challengeToEvaluate.getGoalDefinition().getUUID(), challengeToEvaluate.getEndDate());
+                if (newChallenge != null) {
+                     self.evaluateChallenge(newChallenge, newChallenge.getId());
                 }
             }
 
-
-
-            return goalInstanceToEvaluate.getProgress();
+            return challengeToEvaluate.getProgress();
         }
     }
 }
