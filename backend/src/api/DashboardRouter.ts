@@ -49,6 +49,27 @@ class DashboardRouter extends RouterItf {
         this.router.get('/', function (req, res) {
             self.getDashboard(req, res);
         });
+
+        this.router.post('/takeGoal', function (req, res) {
+            self.newGoalInstance(req, res);
+        });
+    }
+
+    newGoalInstance(req:any, res:any) {
+        var goalID = req.body.id;
+
+        if (!goalID) {
+            res.status(400).send({'error': 'goalID field is missing in request'});
+        }
+
+        var newChall:Challenge = this.createGoalInstance(goalID, Clock.getMoment(Clock.getNow()));
+
+        if(newChall == null) {
+            res.send({'error': 'Can not take this challenge'});
+            return;
+        }
+
+        res.send({"success": ("Objectif ajouté !" + newChall.getDataInJSON())});
     }
 
     getDashboard(req, res) {

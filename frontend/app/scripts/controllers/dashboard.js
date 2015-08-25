@@ -2,7 +2,7 @@
 
 var app = angular.module('ecoknowledgeApp');
 
-app.controller('DashboardCtrl', ['ServiceDashboard', function (ServiceDashboard) {
+app.controller('DashboardCtrl', ['ServiceDashboard', '$window', function (ServiceDashboard, $window) {
   var self = this;
 
   self.goals = {};
@@ -23,6 +23,22 @@ app.controller('DashboardCtrl', ['ServiceDashboard', function (ServiceDashboard)
         console.log('ERREUR MA GUEULE', data);
       });
   };
+
+  self.takeGoal = function (goalID) {
+    var toSend = {};
+    toSend.id = goalID;
+
+    ServiceDashboard.takeGoal(toSend,
+      function (data) {
+        console.log('Objectif instancié ', data);
+        $window.location.reload();
+      },
+      function (data) {
+        console.log('Fail sur l\'instanciation de l\'objectif', data);
+      });
+  };
+
+
   console.log('Le fichier dshb est bien chargé');
   this.getDashboard();
 }]);
