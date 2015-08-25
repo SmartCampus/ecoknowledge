@@ -1,9 +1,12 @@
+<blockquote>
+  {{dashboard.goals}}
+</blockquote>
 <div class="col-md-4 goal-panel">
   <h2>Objectifs disponibles</h2>
     <ul class="goals-list">
-        <li ng-repeat="goal in homeCtrl.goals" class="goal-item">
+        <li ng-repeat="goal in dashboard.goals" class="goal-item">
             <homepage-goal></homepage-goal>
         </li>
     </ul>
-    <div ng-show="homeCtrl.goals.length==0">Vous n'avez pas encore d'objectifs de disponible!</div>
+    <div ng-show="dashboard.goals.length==0">Vous n'avez pas encore d'objectifs de disponible!</div>
 </div>

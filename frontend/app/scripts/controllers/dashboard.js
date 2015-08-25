@@ -3,36 +3,37 @@
 var app = angular.module('ecoknowledgeApp');
 
 app.controller('DashboardCtrl', ['ServiceDashboard', function (ServiceDashboard) {
-    var self = this;
+  var self = this;
 
-    self.goals = {};
-    self.badges = {};
-    self.challenges = {};
+  self.goals = {};
+  self.trophies = {};
+  self.challenges = {};
 
-    this.getDashboard = function () {
-      ServiceDashboard.get(
-        function (goals, badges, challenges) {
-          console.log('Result of dashboard : ', goals, badges, challenges);
+  this.getDashboard = function () {
+    console.log('on veut récupérer le dashboard!!');
+    ServiceDashboard.get(
+      function (goals, badges, challenges) {
+        console.log('Result of dashboard : ', goals, badges, challenges);
 
-          self.goals = goals;
-          self.badges = badges;
-          self.challenges = challenges;
-        },
-        function (data) {
-          console.log('ERREUR MA GUEULE', data);
-        });
-    };
-
-    this.getDashboard();
-  }]);
+        self.goals = goals;
+        self.trophies = badges;
+        self.challenges = challenges;
+      },
+      function (data) {
+        console.log('ERREUR MA GUEULE', data);
+      });
+  };
+  console.log('Le fichier dshb est bien chargé');
+  this.getDashboard();
+}]);
 
 
 app.directive('listGoal', function () {
   return {
     restrict: 'E',
     templateUrl: '../../views/homepage/list-goal.html',
-    controller: 'HomeCtrl',
-    controllerAs: 'homeCtrl'
+    controller: 'DashboardCtrl',
+    controllerAs: 'dashboard'
   };
 });
 

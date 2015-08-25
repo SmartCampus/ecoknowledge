@@ -104,10 +104,11 @@ app.controller('HomeCtrl', ['ServiceChallenge', 'ServiceGoal', 'ServiceBadgeV2',
     });
 
   };
-
+/*
   self.getGoals();
   self.getBadges();
   self.getTrophies();
+*/
 }]);
 /*
  app.directive('listGoal', function () {

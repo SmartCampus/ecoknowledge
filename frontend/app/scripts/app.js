@@ -50,7 +50,7 @@ var app = angular
       .when('/dashboard', {
         templateUrl: '../views/dashboard.html',
         controller: 'DashboardCtrl',
-        controllerAs:'Dashboard'
+        controllerAs:'dashboard'
       })
       .otherwise({
         redirectTo: '/'
