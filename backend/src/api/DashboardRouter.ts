@@ -28,6 +28,7 @@ class DashboardRouter extends RouterItf {
 
     private middleware:Middleware;
 
+
     constructor(challengeRepository:ChallengeRepository, challengeFactory:ChallengeFactory, goalRepository:GoalRepository, userRepository:UserRepository, badgeRepository:BadgeRepository, middleware:Middleware) {
         super();
 
@@ -47,6 +48,7 @@ class DashboardRouter extends RouterItf {
         var self = this;
 
         this.router.get('/', function (req, res) {
+            console.log("Getting dashboard");
             self.getDashboard(req, res);
         });
 

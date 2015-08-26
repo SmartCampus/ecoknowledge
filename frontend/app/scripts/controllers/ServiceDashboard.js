@@ -18,6 +18,7 @@ app.service('ServiceDashboard', ['$http', function ServiceDashboard($http) {
         successFunc(data, goals, badges, challenges);
       })
       .error(function (data) {
+        console.error('ServiceDashboard : fail get dashboard', data);
         failFunc(data);
       });
   };

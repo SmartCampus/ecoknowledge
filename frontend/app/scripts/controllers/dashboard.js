@@ -2,7 +2,7 @@
 
 var app = angular.module('ecoknowledgeApp');
 
-app.controller('DashboardCtrl', ['ServiceDashboard', '$window', function (ServiceDashboard, $window) {
+app.controller('DashboardCtrl', ['ServiceDashboard', '$window', '$location', function (ServiceDashboard, $window, $location) {
   var self = this;
 
   self.goals = {};
@@ -13,7 +13,8 @@ app.controller('DashboardCtrl', ['ServiceDashboard', '$window', function (Servic
   self.request = {};
 
   this.getDashboard = function () {
-    console.log('on veut récupérer le dashboard!!');
+    console.log('Angular wanna get the dashboard');
+
     ServiceDashboard.get(
       function (data, goals, badges, challenges) {
         console.log('Result of dashboard : ', goals, badges, challenges);
@@ -25,7 +26,8 @@ app.controller('DashboardCtrl', ['ServiceDashboard', '$window', function (Servic
         self.challenges = challenges;
       },
       function (data) {
-        console.log('ERREUR MA GUEULE', data);
+        console.error("Redirection vers", data.redirectTo);
+        $location.path(data.redirectTo);
       });
   };
 
@@ -59,7 +61,6 @@ app.controller('DashboardCtrl', ['ServiceDashboard', '$window', function (Servic
 
   };
 
-  console.log('Le fichier dshb est bien chargé');
   this.getDashboard();
 }]);
 

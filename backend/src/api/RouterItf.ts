@@ -12,8 +12,6 @@ var express:any = require("express");
  */
 class RouterItf {
 
-    protected loginCheckFunc;
-
     /**
      * Router property.
      *
@@ -25,8 +23,7 @@ class RouterItf {
     /**
      * Constructor.
      */
-    constructor(loginCheck = null) {
-        this.loginCheckFunc = loginCheck;
+    constructor() {
         this.router = express.Router();
 
         // middleware specific to this router

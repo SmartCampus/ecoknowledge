@@ -79,7 +79,6 @@ class Backend extends Server {
      */
     buildAPI() {
         var self = this;
-        var loginCheck = super.requireLogin;
 
         this.app.use('/dashboard', (new DashboardRouter(self.goalInstanceRepository, self.goalInstanceFactory, self.goalDefinitionRepository, self.userRepository,self.badgeRepository, new Middleware())).getRouter());
 
@@ -88,7 +87,7 @@ class Backend extends Server {
         this.app.use("/goals", (new GoalDefinitionRouter(self.goalDefinitionRepository, self.goalDefinitionFactory, self.goalInstanceRepository, self.userRepository)).getRouter());
         this.app.use("/challenges", (new GoalInstanceRouter(self.goalInstanceRepository, self.goalInstanceFactory, self.goalDefinitionRepository, self.userRepository)).getRouter());
         */
-        
+
         this.app.get('/test', function (req, res) {
             self.storingHandler.save(
                 function (result) {

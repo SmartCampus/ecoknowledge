@@ -52,6 +52,11 @@ var app = angular
         controller: 'DashboardCtrl',
         controllerAs:'dashboard'
       })
+      .when('/login', {
+        templateUrl: '../views/login.html',
+        controller: 'LoginCtrl',
+        controllerAs:'loginCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
