@@ -5,10 +5,14 @@ import ChallengeFactory = require('../challenge/ChallengeFactory');
 import GoalRepository = require('../goal/GoalRepository');
 import BadgeRepository = require('../badge/BadgeRepository');
 import UserRepository = require('../user/UserRepository');
+import TeamRepository = require('../user/TeamRepository');
 import Challenge = require('../challenge/Challenge');
 import Clock = require('../Clock');
 import ChallengeStatus = require('../Status');
 import Goal = require('../goal/Goal');
+import User = require('../user/User');
+import Team = require('../user/Team');
+import Entity = require('../user/Entity');
 
 import Middleware = require('../Middleware');
 
@@ -24,12 +28,17 @@ class DashboardRouter extends RouterItf {
 
     private userRepository:UserRepository;
 
+    private teamRepository:TeamRepository;
+
     private badgeRepository:BadgeRepository;
 
     private middleware:Middleware;
 
+    //  TODO DELETE THIS TOKEN WHEN SESSION WILL BE ESTABLISHED
+    private currentUser:Entity;
 
-    constructor(challengeRepository:ChallengeRepository, challengeFactory:ChallengeFactory, goalRepository:GoalRepository, userRepository:UserRepository, badgeRepository:BadgeRepository, middleware:Middleware) {
+    constructor(challengeRepository:ChallengeRepository, challengeFactory:ChallengeFactory, goalRepository:GoalRepository,
+                userRepository:UserRepository, teamRepository:TeamRepository, badgeRepository:BadgeRepository, middleware:Middleware) {
         super();
 
         var fs = require('fs');
@@ -40,15 +49,75 @@ class DashboardRouter extends RouterItf {
         this.challengeFactory = challengeFactory;
         this.goalRepository = goalRepository;
         this.userRepository = userRepository;
+        this.teamRepository = teamRepository;
         this.badgeRepository = badgeRepository;
         this.middleware = middleware;
+
+        this.currentUser = this.userRepository.getCurrentUser();
+        console.log("CURRENT USER", this.currentUser);
     }
 
     buildRouter() {
         var self = this;
 
+        this.router.get('/view/:id/:dashboard?', function (req, res) {
+
+            var userID = req.params.id;
+            var dashboardWanted = req.params.dashboard;
+
+            console.log('UserID : ', userID, 'Dashboard wanted', dashboardWanted);
+
+            var result:any = {};
+
+            var currentUser:User = self.userRepository.getUser(userID);
+            var team:Team = self.teamRepository.getTeam(dashboardWanted);
+
+            if (currentUser == null && team == null) {
+                res.status(404).send('Euh ... Juste, tu n\'existes pas. Désolé. Bisous. Dégage');
+                return;
+            }
+
+            //  User dashboard wanted
+            if (currentUser != null && team == null) {
+                result = self.getPersonalDashboard(currentUser);
+            }
+
+            //  Team dashboard wanted
+            else if (currentUser != null && team != null) {
+                //TODO Check if user is leader or member of team
+
+
+                var currentUserIsLeaderOfTargetedTeam = team.hasLeader(currentUser.getUUID());
+                if (currentUserIsLeaderOfTargetedTeam) {
+                    result = self.getTeamDashboardForALeader(team);
+                }
+                else {
+                    result = self.getTeamDashboardForAMember(team);
+                }
+            }
+            //  TODO extract method
+            //  Build dashboardList, every views possible for current user
+            var dashboardList:any[] = [];
+
+            var teams = self.teamRepository.getTeamsByMember(currentUser.getUUID());
+
+
+            for (var teamIndex in teams) {
+                var currentTeam = teams[teamIndex];
+                var teamDescription:any = {};
+                teamDescription.id = currentTeam.getUUID();
+                teamDescription.name = currentTeam.getName();
+                dashboardList.push(teamDescription);
+            }
+
+            result.dashboardList = dashboardList;
+
+            res.send({data: result});
+        });
+
         this.router.get('/', function (req, res) {
             console.log("Getting dashboard");
+            //  TODO redirect login page
             self.getDashboard(req, res);
         });
 
@@ -106,7 +175,10 @@ class DashboardRouter extends RouterItf {
             res.status(400).send({'error': 'goalID field is missing in request'});
         }
 
-        var newChall:Challenge = this.createGoalInstance(goalID, Clock.getMoment(Clock.getNow()));
+        //  TODO replace currentUser by user in the session
+        var currentUser = this.userRepository.getCurrentUser();
+
+        var newChall:Challenge = this.createGoalInstance(currentUser, goalID, Clock.getMoment(Clock.getNow()));
 
         if (newChall == null) {
             res.send({'error': 'Can not take this challenge'});
@@ -120,7 +192,7 @@ class DashboardRouter extends RouterItf {
         var goalID = req.params.id;
 
         try {
-            this.userRepository.getCurrentUser().deleteChallenge(goalID);
+            this.currentUser.deleteChallenge(goalID);
             res.send({"success": "Objectif supprimé !"});
         }
         catch (e) {
@@ -130,52 +202,50 @@ class DashboardRouter extends RouterItf {
 
     getDashboard(req, res) {
         console.log("\n=======================================================================\n---> Getting Dashboard\n");
+
+        //  TODO replace getCurrentUser by session user
+
         var result:any = {};
 
         try {
+            //  Build dashboardList, every views possible for current user
+            var dashboardList:any[] = [];
 
-            //  Third col : Evaluate challenge and return them
-            //  Done before everything to be up to date
-            var challenges = this.userRepository.getCurrentUser().getChallenges();
-            for (var challengeIndex in challenges) {
-                var currentChallengeID = challenges[challengeIndex];
-                var currentChallenge = this.challengeRepository.getGoalInstance(currentChallengeID);
-
-                this.evaluateChallenge(currentChallenge, currentChallengeID);
+            var teams = this.teamRepository.getTeamsByMember(this.currentUser.getUUID());
+            for (var teamIndex in teams) {
+                var team = teams[teamIndex];
+                var teamDescription:any = {};
+                teamDescription.id = team.getUUID();
+                teamDescription.name = team.getName();
+                dashboardList.push(teamDescription);
             }
 
-            //  Build the description of updated challenges (potential additions/deletions)
-            var descriptionOfChallenges:any[] = [];
-            var challenges = this.userRepository.getCurrentUser().getChallenges();
-            for (var challengeIndex in challenges) {
-                var currentChallengeID = challenges[challengeIndex];
-                var currentChallenge = this.challengeRepository.getGoalInstance(currentChallengeID);
-                var currentChallengeDesc = currentChallenge.getDataInJSON();
-                descriptionOfChallenges.push(currentChallengeDesc);
+            console.log("Dashboard views available : ", dashboardList);
+
+            var typeOfDashboardAsked:string = req.query.typeOfDashboard;
+
+            console.log("Dashboard view asked : ", typeOfDashboardAsked);
+
+            if (typeOfDashboardAsked == undefined || typeOfDashboardAsked === 'personal') {
+                result = this.getPersonalDashboard(this.currentUser);
             }
+            else {
+                var teamDescriptionWanted = this.teamRepository.getTeam(typeOfDashboardAsked);
+                console.log("Team dashboard mode, with team : \n\t", team.getStringDescription());
 
-            //  First col : available goal
-            var descriptionOfAvailableGoals = this.goalRepository.getListOfUntakedGoalInJSONFormat(this.userRepository.getCurrentUser(), this.challengeRepository);
+                //  TODO DELETE THIS TOKEN WHEN SESSION WILL BE ESTABLISHED
+                // this.currentUser = teamDescriptionWanted;
 
-            // Second col : badge description
-            var descriptionOfBadges:any[] = [];
-
-            var badges = this.userRepository.getCurrentUser().getFinishedBadges();
-            for (var currentBadgeIDIndex in badges) {
-                var currentBadge = this.badgeRepository.getBadge(currentBadgeIDIndex).getData();
-                var dataTrophy = {
-                    number: badges[currentBadgeIDIndex],
-                    badge: currentBadge
-                };
-
-                descriptionOfBadges.push(dataTrophy);
+                //  Check if current user is leader of the team
+                var currentUserIsLeaderOfTargetedTeam = teamDescriptionWanted.hasLeader(this.currentUser.getUUID());
+                if (currentUserIsLeaderOfTargetedTeam) {
+                    result = this.getTeamDashboardForALeader(teamDescriptionWanted);
+                }
+                else {
+                    result = this.getTeamDashboardForAMember(teamDescriptionWanted);
+                }
             }
-
-
-            //  Build the response
-            result.goals = descriptionOfAvailableGoals;
-            result.badges = descriptionOfBadges;
-            result.challenges = descriptionOfChallenges;
+            result.dashboardList = dashboardList;
 
             res.send({success: 'Everything is fine', data: result});
             console.log("\nSending ... \n", JSON.stringify(result));
@@ -185,10 +255,121 @@ class DashboardRouter extends RouterItf {
         catch (e) {
             res.send({error: e.toString()});
         }
-
     }
 
-    private evaluateChallenge(challengeToEvaluate:Challenge, challengeID) {
+    getTeamDashboardForAMember(teamDescriptionWanted:Team):any {
+        var result:any = {};
+        //  Evaluate challenge and return them
+        //  Done before everything to be up to date
+        this.evaluateChallengeForGivenEntity(teamDescriptionWanted);
+        // Second col : badge description
+        var descriptionOfBadges:any[] = this.buildBadgesDescriptionForGivenEntity(teamDescriptionWanted);
+
+        //  Third col : Build the description of updated challenges (potential additions/deletions)
+        var descriptionOfChallenges:any[] = this.buildCurrentChallengesDescriptionForGivenEntity(teamDescriptionWanted);
+
+        result.badges = descriptionOfBadges;
+        result.challenges = descriptionOfChallenges;
+
+        return result;
+    }
+
+    getTeamDashboardForALeader(teamDescriptionWanted:Team):any {
+        var result:any = {};
+
+        console.log("Current user is leader of given team");
+
+        //  Evaluate challenge and return them
+        //  Done before everything to be up to date
+        this.evaluateChallengeForGivenEntity(teamDescriptionWanted);
+
+        //  First col : available goal
+        var descriptionOfAvailableGoals = this.goalRepository.getListOfNotTakenGoalInJSONFormat(teamDescriptionWanted, this.challengeRepository);
+
+        // Second col : badge description
+        var descriptionOfBadges:any[] = this.buildBadgesDescriptionForGivenEntity(teamDescriptionWanted);
+
+        //  Third col : Build the description of updated challenges (potential additions/deletions)
+        var descriptionOfChallenges:any[] = this.buildCurrentChallengesDescriptionForGivenEntity(teamDescriptionWanted);
+
+        //  Build the response
+        result.goals = descriptionOfAvailableGoals;
+        result.badges = descriptionOfBadges;
+        result.challenges = descriptionOfChallenges;
+
+        return result;
+    }
+
+    getPersonalDashboard(user:User):any {
+        var result:any = {};
+
+        console.log("Personal Dashboard mode");
+
+        //  Evaluate challenge and return them
+        //  Done before everything to be up to date
+        this.evaluateChallengeForGivenEntity(this.currentUser);
+
+        //  First col : available goal
+        var descriptionOfAvailableGoals = this.goalRepository.getListOfNotTakenGoalInJSONFormat(this.currentUser, this.challengeRepository);
+
+        // Second col : badge description
+        var descriptionOfBadges:any[] = this.buildBadgesDescriptionForGivenEntity(this.currentUser);
+
+        //  Third col : Build the description of updated challenges (potential additions/deletions)
+        var descriptionOfChallenges:any[] = this.buildCurrentChallengesDescriptionForGivenEntity(this.currentUser);
+
+        //  Build the response
+        result.goals = descriptionOfAvailableGoals;
+        result.badges = descriptionOfBadges;
+        result.challenges = descriptionOfChallenges;
+
+        return result;
+    }
+
+    private evaluateChallengeForGivenEntity(entity:Entity):void {
+        var challenges = entity.getChallenges();
+        for (var challengeIndex in challenges) {
+            var currentChallengeID = challenges[challengeIndex];
+            var currentChallenge = this.challengeRepository.getGoalInstance(currentChallengeID);
+
+            this.evaluateChallenge(entity, currentChallenge, currentChallengeID);
+        }
+    }
+
+    private buildCurrentChallengesDescriptionForGivenEntity(entity:Entity):any[] {
+        var descriptionOfChallenges:any[] = [];
+
+        var challenges = entity.getChallenges()
+            ;
+        for (var challengeIndex in challenges) {
+            var currentChallengeID = challenges[challengeIndex];
+            var currentChallenge = this.challengeRepository.getGoalInstance(currentChallengeID);
+            var currentChallengeDesc = currentChallenge.getDataInJSON();
+            descriptionOfChallenges.push(currentChallengeDesc);
+        }
+
+        return descriptionOfChallenges;
+    }
+
+    private buildBadgesDescriptionForGivenEntity(entity:Entity):any[] {
+        var descriptionOfBadges:any[] = [];
+
+        var badges = entity.getFinishedBadges();
+
+        for (var currentBadgeIDIndex in badges) {
+            var currentBadge = this.badgeRepository.getBadge(currentBadgeIDIndex).getData();
+            var dataTrophy = {
+                number: badges[currentBadgeIDIndex],
+                badge: currentBadge
+            };
+
+            descriptionOfBadges.push(dataTrophy);
+        }
+
+        return descriptionOfBadges;
+    }
+
+    private evaluateChallenge(entity, challengeToEvaluate:Challenge, challengeID) {
         var self = this;
 
         if (!DashboardRouter.DEMO) {
@@ -211,10 +392,10 @@ class DashboardRouter extends RouterItf {
                         function () {
                             var result = challengeToEvaluate.evaluate(required);
                             if (result) {
-                                var newChall = self.createGoalInstance(challengeToEvaluate.getGoalDefinition().getUUID(), challengeToEvaluate.getEndDate());
-                                this.addFinishedBadge(challengeID, this.userRepository.getCurrentUser().getUUID());
+                                var newChall = self.createGoalInstance(entity, challengeToEvaluate.getGoalDefinition().getUUID(), challengeToEvaluate.getEndDate());
+                                this.addFinishedBadge(challengeID, entity.getUUID());
                                 if (newChall != null) {
-                                    self.evaluateChallenge(newChall, newChall.getId());
+                                    self.evaluateChallenge(entity, newChall, newChall.getId());
                                 }
                             }
                             console.log("All data were retrieve properly");
@@ -241,12 +422,12 @@ class DashboardRouter extends RouterItf {
                 console.log("Le challenge est réussi et terminé");
 
                 //  Add finished badge to current user
-                this.addFinishedBadge(challengeID, this.userRepository.getCurrentUser().getUUID());
+                this.addFinishedBadge(challengeID, entity.getUUID());
 
                 //  Build the new challenge (recurring) and evaluate it
-                var newChallenge = self.createGoalInstance(challengeToEvaluate.getGoalDefinition().getUUID(), challengeToEvaluate.getEndDate());
+                var newChallenge = self.createGoalInstance(entity, challengeToEvaluate.getGoalDefinition().getUUID(), challengeToEvaluate.getEndDate());
                 if (newChallenge != null) {
-                    self.evaluateChallenge(newChallenge, newChallenge.getId());
+                    self.evaluateChallenge(entity, newChallenge, newChallenge.getId());
                 }
             }
 
@@ -254,13 +435,12 @@ class DashboardRouter extends RouterItf {
             else if (!result && challengeToEvaluate.isFinished()) {
                 console.log("Le challenge est FAIL et terminé");
 
-                var user = this.userRepository.getCurrentUser();
-                user.deleteChallenge(challengeToEvaluate.getId());
+                entity.deleteChallenge(challengeToEvaluate.getId());
 
                 //  Build the new challenge (recurring) and evaluate it
-                var newChallenge = self.createGoalInstance(challengeToEvaluate.getGoalDefinition().getUUID(), challengeToEvaluate.getEndDate());
+                var newChallenge = self.createGoalInstance(entity, challengeToEvaluate.getGoalDefinition().getUUID(), challengeToEvaluate.getEndDate());
                 if (newChallenge != null) {
-                    self.evaluateChallenge(newChallenge, newChallenge.getId());
+                    self.evaluateChallenge(entity, newChallenge, newChallenge.getId());
                 }
             }
 
@@ -281,7 +461,7 @@ class DashboardRouter extends RouterItf {
         user.deleteChallenge(challengeID);
     }
 
-    createGoalInstance(goalID:string, date:moment.Moment):Challenge {
+    createGoalInstance(currentUser:User, goalID:string, date:moment.Moment):Challenge {
         //  TODO ! stub !
         //  The data object below is a stub to manually
         //  bind a symbolic name to a sensor name.
@@ -307,7 +487,7 @@ class DashboardRouter extends RouterItf {
         }
 
         this.challengeRepository.addGoalInstance(goalInstance);
-        this.userRepository.getCurrentUser().addChallenge(goalInstance.getId());
+        currentUser.addChallenge(goalInstance.getId());
         return goalInstance;
     }
 }

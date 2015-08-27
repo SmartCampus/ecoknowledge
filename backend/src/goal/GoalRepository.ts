@@ -59,7 +59,7 @@ class GoalDefinitionRepository {
         return null;
     }
 
-    getListOfUntakedGoalInJSONFormat(user:User, challengeRepository:ChallengeRepository) {
+    getListOfNotTakenGoalInJSONFormat(user:User, challengeRepository:ChallengeRepository) {
         var result = [];
 
         var currentChallengesID:string[] = user.getCurrentChallenges();
@@ -72,8 +72,6 @@ class GoalDefinitionRepository {
         }
 
         var goals:Goal[] = this.diffBetweenTakenGoalsAndAvailableGoals(takenGoals, this.goals);
-
-        var result = [];
 
         for (var goalIndex in goals) {
             var currentGoal = goals[goalIndex];

@@ -50,6 +50,9 @@ class StoringHandler {
         this.fillUsersRepository(data);
         this.backend.userRepository.displayShortState();
 
+        this.fillTeamRepository(data);
+        this.backend.teamRepository.displayShortState();
+
         console.log("___________________________________________________________");
 
         return {success: '+++\tRepositories filled correctly\t+++'};
@@ -83,6 +86,17 @@ class StoringHandler {
             this.backend.userRepository.addUser(currentUser);
             this.backend.userRepository.setCurrentUser(currentUser);
         }
+    }
+
+    fillTeamRepository(data) {
+        var teams = data.teams;
+
+        for (var currentTeamIndex in teams) {
+            var currentTeamDescription = teams[currentTeamIndex];
+            var currentTeam = this.backend.teamFactory.createTeam(currentTeamDescription, this.backend.userRepository);
+            this.backend.teamRepository.addTeam(currentTeam);
+        }
+
     }
 
     fillChallengesRepository(data) {

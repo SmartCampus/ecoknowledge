@@ -103,7 +103,7 @@
   "users": [
     {
       "id": "2cf91e02-a320-4766-aa9f-6efce3142d44",
-      "name": "Jackie!",
+      "name": "Charlie",
       "currentChallenges": [
       ],
       "finishedBadgesMap": {
@@ -111,6 +111,14 @@
         "fde68334-f515-4563-954b-ac91b4a42f88": 1
       }
     }
+  ],
+  "teams": [
+	{
+		"id" : "28aa8108-8830-4f43-abd1-3ab643303d92",
+		"name" : "croquette",
+		"members" : ["2cf91e02-a320-4766-aa9f-6efce3142d44"],
+		"leader":"2cf91e02-a320-4766-aa9f-6efce3142d44"
+	}
   ],
   "challenges": [
     {

@@ -4,18 +4,25 @@ var dashboardBasePath = 'http://localhost:3000/dashboard/';
 
 var app = angular.module('ecoknowledgeApp');
 
-app.service('ServiceDashboard', ['$http', function ServiceDashboard($http) {
+app.service('ServiceDashboard', ['$http', '$rootScope', '$cookies', function ServiceDashboard($http, $rootScope, $cookies) {
 
-  this.get = function (successFunc, failFunc) {
-    console.log('Service dashboard : Get On ', dashboardBasePath);
+  this.get = function (successFunc, failFunc, dashboardWanted) {
 
-    $http.get(dashboardBasePath)
+    console.log('TOKEN???', $cookies.get('token'));
+
+    var path = dashboardBasePath + '/view/' +$cookies.get('token') + '/' +  $cookies.get('dashboardWanted');
+
+    console.log('Service dashboard : Get On ', path);
+
+    $http.get(path)
       .success(function (data) {
         var goals = data.data.goals;
         var badges = data.data.badges;
         var challenges = data.data.challenges;
 
-        successFunc(data, goals, badges, challenges);
+        var dashboardViews = data.data.dashboardList;
+
+        successFunc(data, goals, badges, challenges, dashboardViews);
       })
       .error(function (data) {
         console.error('ServiceDashboard : fail get dashboard', data);

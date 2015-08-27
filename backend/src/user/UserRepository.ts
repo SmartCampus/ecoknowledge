@@ -16,6 +16,17 @@ class UserRepository {
         this.users.push(user);
     }
 
+    public getUserByName(username:string):User {
+        for (var i in this.users) {
+            var currentUser = this.users[i];
+            if (currentUser.hasName(username)) {
+                return currentUser;
+            }
+        }
+
+        return null;
+    }
+
     public getUser(aUUID:string):User {
         for (var i in this.users) {
             var currentUser = this.users[i];

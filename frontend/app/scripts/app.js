@@ -19,6 +19,33 @@ var app = angular
     'datePicker'
   ])
   .config(function ($routeProvider) {
+
+    $routeProvider
+      .when('/', {
+        templateUrl: '../views/login.html',
+        controller: 'LoginCtrl',
+        controllerAs: 'login'
+      })
+      .when('/dashboard/view/', {
+        templateUrl: '../views/dashboard.html',
+        controller: 'DashboardCtrl',
+        controllerAs:'dashboard'
+      })
+      .when('/dashboard/view/:id/', {
+        templateUrl: '../views/dashboard.html',
+        controller: 'DashboardCtrl',
+        controllerAs:'dashboard'
+      })
+      .when('/dashboard/view/:id/:dashboardType', {
+        templateUrl: '../views/dashboard.html',
+        controller: 'DashboardCtrl',
+        controllerAs:'dashboard'
+      })
+      .otherwise({
+        redirectTo: '/lolerreurdansredirectionangulareuuuh/'
+      });
+
+    /*
     $routeProvider
       .when('/', {
         templateUrl: '../views/homepage/homepage.html',
@@ -60,6 +87,7 @@ var app = angular
       .otherwise({
         redirectTo: '/'
       });
+      */
   });
 
 

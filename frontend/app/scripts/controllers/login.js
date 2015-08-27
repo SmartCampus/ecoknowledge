@@ -2,23 +2,23 @@
 
 var app = angular.module('ecoknowledgeApp');
 
-app.controller('LoginCtrl', ['ServiceLogin', function (ServiceLogin) {
-
-  var self = this;
-
-  this.username = ''
-  this.password = '';
+app.controller('LoginCtrl', ['ServiceLogin', '$rootScope', '$location', '$cookies', function (ServiceLogin, $rootScope, $location, $cookies) {
+  this.username = '';
   this.debug = '';
 
+  var self = this;
   this.connect = function () {
-    self.debug = 'ID:' + self.username + ', passwd:' + self.password;
     ServiceLogin.login(self.username,
       function (data) {
         console.log('Login success: data received', data);
+        $cookies.put('token', data.data.token);
+        console.log('Token stored : ', $cookies.get('token'));
+        var pathToDashboard = '/dashboard/view/' + data.data.token;
+        console.log('Redirection vers', pathToDashboard);
+        $location.path(pathToDashboard);
       },
       function (data) {
         console.log('Login fail: data received', data);
-
       });
   };
 

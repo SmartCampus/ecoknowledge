@@ -5,6 +5,7 @@
 import Server = require('./Server');
 
 import DashboardRouter = require('./api/DashboardRouter');
+import LoginRouter = require('./api/LoginRouter');
 
 import BadgeRepository = require('./badge/BadgeRepository');
 import BadgeFactory = require('./badge/BadgeFactory');
@@ -18,6 +19,9 @@ import ChallengeFactory = require('./challenge/ChallengeFactory');
 import UserRepository = require('./user/UserRepository');
 import UserFactory = require('./user/UserFactory');
 import User = require('./user/User');
+
+import TeamRepository = require('./user/TeamRepository');
+import TeamFactory = require('./user/TeamFactory');
 
 import Operand = require('./condition/expression/Operand');
 import GoalExpression = require('./condition/expression/GoalExpression');
@@ -40,6 +44,9 @@ class Backend extends Server {
 
     public userRepository:UserRepository;
     public userFactory:UserFactory;
+
+    public teamRepository:TeamRepository;
+    public teamFactory:TeamFactory;
 
     private storingHandler:StoringHandler;
 
@@ -66,10 +73,13 @@ class Backend extends Server {
         this.userRepository = new UserRepository();
         this.userFactory = new UserFactory();
 
+        this.teamRepository = new TeamRepository();
+        this.teamFactory = new TeamFactory();
+
         this.storingHandler = new StoringHandler(this);
 
-        this.buildAPI();
         this.loadData();
+        this.buildAPI();
     }
 
     /**
@@ -80,13 +90,14 @@ class Backend extends Server {
     buildAPI() {
         var self = this;
 
-        this.app.use('/dashboard', (new DashboardRouter(self.goalInstanceRepository, self.goalInstanceFactory, self.goalDefinitionRepository, self.userRepository,self.badgeRepository, new Middleware())).getRouter());
+        this.app.use('/dashboard', (new DashboardRouter(self.goalInstanceRepository, self.goalInstanceFactory, self.goalDefinitionRepository, self.userRepository, self.teamRepository, self.badgeRepository, new Middleware())).getRouter());
+        this.app.use('/login', (new LoginRouter(self.userRepository)).getRouter());
 
         /*
-        this.app.use("/badges", (new BadgeRouter(self.badgeRepository, self.badgeFactory, self.userRepository, loginCheck)).getRouter());
-        this.app.use("/goals", (new GoalDefinitionRouter(self.goalDefinitionRepository, self.goalDefinitionFactory, self.goalInstanceRepository, self.userRepository)).getRouter());
-        this.app.use("/challenges", (new GoalInstanceRouter(self.goalInstanceRepository, self.goalInstanceFactory, self.goalDefinitionRepository, self.userRepository)).getRouter());
-        */
+         this.app.use("/badges", (new BadgeRouter(self.badgeRepository, self.badgeFactory, self.userRepository, loginCheck)).getRouter());
+         this.app.use("/goals", (new GoalDefinitionRouter(self.goalDefinitionRepository, self.goalDefinitionFactory, self.goalInstanceRepository, self.userRepository)).getRouter());
+         this.app.use("/challenges", (new GoalInstanceRouter(self.goalInstanceRepository, self.goalInstanceFactory, self.goalDefinitionRepository, self.userRepository)).getRouter());
+         */
 
         this.app.get('/test', function (req, res) {
             self.storingHandler.save(
@@ -103,7 +114,7 @@ class Backend extends Server {
     loadData():void {
         var self = this;
         var result = self.storingHandler.load();
-        if(result.success) {
+        if (result.success) {
             console.log(result.success);
         }
         else {

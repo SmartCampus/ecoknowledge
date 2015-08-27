@@ -2,12 +2,15 @@
 
 var app = angular.module('ecoknowledgeApp');
 
-app.controller('DashboardCtrl', ['ServiceDashboard', '$window', '$location', function (ServiceDashboard, $window, $location) {
+app.controller('DashboardCtrl', ['ServiceDashboard', '$window', '$location', '$cookies', function (ServiceDashboard, $window, $location, $cookies) {
   var self = this;
 
   self.goals = {};
   self.trophies = {};
   self.challenges = {};
+
+  self.dashboardViews = [];
+  self.dashboardWanted = '';
 
   //  Debug
   self.request = {};
@@ -16,7 +19,7 @@ app.controller('DashboardCtrl', ['ServiceDashboard', '$window', '$location', fun
     console.log('Angular wanna get the dashboard');
 
     ServiceDashboard.get(
-      function (data, goals, badges, challenges) {
+      function (data, goals, badges, challenges, dashboardViews) {
         console.log('Result of dashboard : ', goals, badges, challenges);
 
         self.request = data;
@@ -24,11 +27,34 @@ app.controller('DashboardCtrl', ['ServiceDashboard', '$window', '$location', fun
         self.goals = goals;
         self.trophies = badges;
         self.challenges = challenges;
+        self.dashboardViews = dashboardViews;
       },
       function (data) {
-        console.error("Redirection vers", data.redirectTo);
-        $location.path(data.redirectTo);
+        console.error('Redirection vers', data.redirectTo);
+        //$location.path(data.redirectTo);
       });
+  };
+
+  this.changeDashboardView = function() {
+    console.log('Angular wanna change the dashboard');
+
+    $cookies.put('dashboardWanted', self.dashboardWanted);
+
+    ServiceDashboard.get(
+      function (data, goals, badges, challenges, dashboardViews) {
+        console.log('Result of dashboard : ', goals, badges, challenges);
+
+        self.request = data;
+
+        self.goals = goals;
+        self.trophies = badges;
+        self.challenges = challenges;
+        self.dashboardViews = dashboardViews;
+      },
+      function (data) {
+        console.error('Redirection vers', data.redirectTo);
+        $location.path(data.redirectTo);
+      }, self.dashboardWanted );
   };
 
   self.takeGoal = function (goalID) {

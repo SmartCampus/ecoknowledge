@@ -21,6 +21,8 @@ import Goal = require('../../src/goal/Goal');
 import RecurringSession = require('../../src/goal/RecurringSession');
 
 import UserRepository = require('../../src/user/UserRepository');
+import TeamRepository = require('../../src/user/TeamRepository');
+
 import User = require('../../src/user/User');
 
 import Clock = require('../../src/Clock');
@@ -28,26 +30,28 @@ import ChallengeStatus = require('../../src/Status');
 
 import Middleware = require('../../src/Middleware');
 
- import DashboardRouter = require('../../src/api/DashboardRouter');
+import DashboardRouter = require('../../src/api/DashboardRouter');
 
- describe('Challenge integration test', () => {
+describe('Challenge integration test', () => {
 
     //  Important ! Allow us to set time
-     DashboardRouter.DEMO = true;
+    DashboardRouter.DEMO = true;
 
     var badgeRepository:BadgeRepository = new BadgeRepository();
     var challengeRepository:ChallengeRepository = new ChallengeRepository();
     var challengeFactory:ChallengeFactory = new ChallengeFactory();
     var goalRepository:GoalRepository = new GoalRepository(badgeRepository);
 
-    //  Build a default user / current user
     var userRepository:UserRepository = new UserRepository();
+    var teamRepository:TeamRepository = new TeamRepository();
+
+    //  Build a default user / current user
     var user:User = new User('Charlie');
     userRepository.addUser(user);
     userRepository.setCurrentUser(user);
 
     //  Init the router under test
-    var dashboardRouter:DashboardRouter = new DashboardRouter(challengeRepository, challengeFactory, goalRepository, userRepository, badgeRepository, new Middleware());
+    var dashboardRouter:DashboardRouter = new DashboardRouter(challengeRepository, challengeFactory, goalRepository, userRepository, teamRepository, badgeRepository, new Middleware());
 
     //  Create a fake badge for fake goal
     var aBadgeName = 'Badge 1';
@@ -63,23 +67,23 @@ import Middleware = require('../../src/Middleware');
     goalRepository.addGoal(aGoal);
 
     it('should have initialized the new challenge status to "RUN" when challenge is created during a working week', () => {
-        var newChallenge = dashboardRouter.createGoalInstance(aGoal.getUUID(), moment("2015-08-05T12:15:00+02:00"));
+        var newChallenge = dashboardRouter.createGoalInstance(user, aGoal.getUUID(), moment("2015-08-05T12:15:00+02:00"));
         chai.expect(newChallenge.getStatus()).to.be.eq(ChallengeStatus.RUN);
     });
 
     it('should have initialized the new challenge status to "WAITING" when challenge is created during week-end', () => {
         //  The goal is recurrent every week (monday-friday). A goal created saturday must be in WAITING status
-        var newChallenge = dashboardRouter.createGoalInstance(aGoal.getUUID(), moment("2015-08-08T12:15:00+02:00"));
+        var newChallenge = dashboardRouter.createGoalInstance(user, aGoal.getUUID(), moment("2015-08-08T12:15:00+02:00"));
         chai.expect(newChallenge.getStatus()).to.be.eq(ChallengeStatus.WAIT);
     });
 
     it('should have set the startDate to monday if goal is "week recurrent"', () => {
-        var newChallenge = dashboardRouter.createGoalInstance(aGoal.getUUID(), moment("2015-08-05T12:15:00+02:00"));
+        var newChallenge = dashboardRouter.createGoalInstance(user, aGoal.getUUID(), moment("2015-08-05T12:15:00+02:00"));
         chai.expect(newChallenge.getStartDate().toISOString()).to.be.eq(startDate.toISOString());
     });
 
     it('should have set the endDate to friday if goal is "week recurrent"', () => {
-        var newChallenge = dashboardRouter.createGoalInstance(aGoal.getUUID(), moment("2015-08-07T23:59:59+02:00"));
+        var newChallenge = dashboardRouter.createGoalInstance(user, aGoal.getUUID(), moment("2015-08-07T23:59:59+02:00"));
         chai.expect(newChallenge.getStartDate().toISOString()).to.be.eq(startDate.toISOString());
     });
 });
