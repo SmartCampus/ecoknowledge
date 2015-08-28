@@ -148,8 +148,7 @@ class Goal {
     }
 
     getStringRepresentation():string {
-        return '\n#' + this.id + '\n'
-            + '\t' + this.name + '\t-\t' + this.startDate.toISOString() + ' :: ' + this.endDate.toISOString() + '\n' +
+        return '\n#' + this.id + '\t' + this.name + '\n-\t' + this.startDate.toISOString() + ' :: ' + this.endDate.toISOString() + '\n' +
             ' - Récurrent : ' + this.recurringSession.getDescription()  + '\n' + this.conditionsList.getStringRepresentation();
     }
 }

@@ -5,6 +5,7 @@ import ChallengeRepository = require('../challenge/ChallengeRepository');
 import Challenge = require('../challenge/Challenge');
 import Badge = require('../badge/Badge');
 import User = require('../user/User');
+import Team = require('../user/Team');
 
 class GoalDefinitionRepository {
 
@@ -59,7 +60,8 @@ class GoalDefinitionRepository {
         return null;
     }
 
-    getListOfNotTakenGoalInJSONFormat(user:User, challengeRepository:ChallengeRepository) {
+    //  TODO DELETE OR
+    getListOfNotTakenGoalInJSONFormat(user:User|Team, challengeRepository:ChallengeRepository) {
         var result = [];
 
         var currentChallengesID:string[] = user.getCurrentChallenges();

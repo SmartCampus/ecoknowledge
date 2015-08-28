@@ -51,6 +51,10 @@ class Entity {
         this.name = name;
     }
 
+    public addChallengeFromGoal(goal:Goal) : Challenge {
+return null;
+    }
+
     public addChallenge(challengeID:string):void {
         if (!challengeID) {
             throw new Error('Can not add a new goal to user ' + this.getName() + ' given goal is null');

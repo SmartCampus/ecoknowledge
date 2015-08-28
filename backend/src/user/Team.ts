@@ -27,7 +27,9 @@ class Team extends Entity {
 
         for (var currentMemberIndex in this.members) {
             var currentMember = this.members[currentMemberIndex];
-            currentMember.addChallenge(challengeID);
+
+            //FIXME
+            currentMember.addChallenge(null, null);
         }
     }
 

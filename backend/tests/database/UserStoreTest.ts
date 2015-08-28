@@ -46,7 +46,7 @@ describe('Test store user class', () => {
         });
 
         it('should have the same finished badges map', () => {
-            chai.expect(userClone.getFinishedBadges()).to.be.eq(finishedBadgesMap);
+            chai.expect(userClone.getBadges()).to.be.eq(finishedBadgesMap);
         });
     });
 });

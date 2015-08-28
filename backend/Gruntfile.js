@@ -119,7 +119,8 @@ module.exports = function (grunt) {
     grunt.registerTask('build', function () {
         grunt.task.run(['clean:build','clean:test']);
 
-        grunt.task.run(['typescript:build', 'typescript:test']);
+        // grunt.task.run(['typescript:build', 'typescript:test']);
+        grunt.task.run(['typescript:build']);
     });
 
     grunt.registerTask('develop', function() {

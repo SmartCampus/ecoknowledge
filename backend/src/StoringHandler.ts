@@ -30,7 +30,7 @@ class StoringHandler {
         result['definitions'] = this.backend.goalDefinitionRepository.getDataInJSON();
         result['badges'] = this.backend.badgeRepository.getDataInJSON();
         result['users'] = this.backend.userRepository.getDataInJSON();
-        result['challenges'] = this.backend.goalInstanceRepository.getDataInJSON();
+        result['challenges'] = this.backend.challengeRepository.getDataInJSON();
 
         this.serializer.save(result, successCallBack, failCallBack);
     }
@@ -44,14 +44,14 @@ class StoringHandler {
         this.fillBadgesRepository(data);
         this.backend.badgeRepository.displayShortState();
 
-        this.fillChallengesRepository(data);
-        this.backend.goalInstanceRepository.displayShortState();
-
         this.fillUsersRepository(data);
         this.backend.userRepository.displayShortState();
 
         this.fillTeamRepository(data);
         this.backend.teamRepository.displayShortState();
+
+        this.fillChallengesRepository(data);
+        this.backend.challengeRepository.displayShortState();
 
         console.log("___________________________________________________________");
 
@@ -82,7 +82,7 @@ class StoringHandler {
 
         for (var currentUserIndex in users) {
             var currentUserDescription = users[currentUserIndex];
-            var currentUser = this.backend.userFactory.createUser(currentUserDescription);
+            var currentUser = this.backend.userFactory.createUser(currentUserDescription, this.backend.challengeFactory);
             this.backend.userRepository.addUser(currentUser);
             this.backend.userRepository.setCurrentUser(currentUser);
         }
@@ -102,16 +102,12 @@ class StoringHandler {
     fillChallengesRepository(data) {
         var challenges = data.challenges;
 
-        for (var currentChallengeIndex = 0 ; currentChallengeIndex < challenges.length ; currentChallengeIndex++) {
+        for (var currentChallengeIndex = 0; currentChallengeIndex < challenges.length; currentChallengeIndex++) {
             var currentChallengeDescription = challenges[currentChallengeIndex];
 
-            var currentChallenge = this.backend.goalInstanceFactory.createGoalInstance(currentChallengeDescription,
-                this.backend.goalDefinitionRepository,
-                this.backend.userRepository,
+            var currentChallenge = this.backend.challengeFactory.restoreChallenge(currentChallengeDescription, this.backend.goalDefinitionRepository, this.backend.userRepository, Clock.getMoment(Clock.getNow()));
 
-                Clock.getMoment(Clock.getNow()));
-
-            this.backend.goalInstanceRepository.addGoalInstance(currentChallenge);
+            this.backend.challengeRepository.addGoalInstance(currentChallenge);
         }
     }
 }

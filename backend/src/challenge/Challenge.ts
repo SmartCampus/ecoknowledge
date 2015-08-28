@@ -16,7 +16,7 @@ import Clock = require('../Clock');
 
 class Challenge {
     private id:string;
-    private goalDefinition:Goal;
+    private goal:Goal;
 
     private startDate:moment.Moment;
     private endDate:moment.Moment;
@@ -25,16 +25,15 @@ class Challenge {
     private status:BadgeStatus;
 
     private progress:any[] = [];
-
     private percentageOfTime:number = 0;
 
     //  { 'tmp_cli':'ac_443', 'tmp_ext':'TEMP_444', 'door_o':'D_55', ... }
     private mapSymbolicNameToSensor:any = {};
 
-    constructor(startDate:moment.Moment, endDate:moment.Moment, description:string, goal:Goal,
-                mapGoalToConditionAndSensor:any, id = null) {
+    private user:User;
 
-        //onsole.log("Building the challenge with startdate", startDate.format(), "and enddate", endDate.format());
+    constructor(goal:Goal, user:User, startDate:moment.Moment, endDate:moment.Moment, description:string='',
+                mapGoalToConditionAndSensor:any={}, id = null) {
 
         this.id = (id) ? id : UUID.v4();
         this.description = description;
@@ -42,23 +41,28 @@ class Challenge {
         this.startDate = startDate;
         this.endDate = endDate;
 
-        this.goalDefinition = goal;
-        this.goalDefinition.setTimeBoxes(new TimeBox(startDate, endDate));
+        this.goal = goal;
+        // TODO DELETE THIS TOKEN
+        this.goal.setTimeBoxes(new TimeBox(startDate, endDate));
 
         this.mapSymbolicNameToSensor = mapGoalToConditionAndSensor;
+        this.user = user;
 
         this.status = BadgeStatus.RUN;
     }
 
     public updateDurationAchieved(currentDate:number) {
-        var duration:number = this.endDate.valueOf() - this.startDate.valueOf();
+
         var current:moment.Moment = Clock.getMoment(currentDate);
+
         if (current.isBefore(this.startDate)) {
             throw new Error('Time given is before dateOfCreation !');
         }
-        var durationAchieved:number = current.valueOf() - this.startDate.valueOf();
 
+        var duration:number = this.endDate.valueOf() - this.startDate.valueOf();
+        var durationAchieved:number = current.valueOf() - this.startDate.valueOf();
         this.percentageOfTime = durationAchieved * 100 / duration;
+
         //  It can have tiny incorrect decimal values
         this.percentageOfTime = (this.percentageOfTime > 100) ? 100 : this.percentageOfTime;
     }
@@ -92,15 +96,15 @@ class Challenge {
     }
 
     public getGoalDefinition():Goal {
-        return this.goalDefinition;
+        return this.goal;
     }
 
     public getBadge():string {
-        return this.goalDefinition.getBadgeID();
+        return this.goal.getBadgeID();
     }
 
     public getName():string {
-        return this.goalDefinition.getName();
+        return this.goal.getName();
     }
 
     public getId():string {
@@ -134,14 +138,14 @@ class Challenge {
 
         for (var currentSymbolicName in this.mapSymbolicNameToSensor) {
             var currentSensor = this.mapSymbolicNameToSensor[currentSymbolicName];
-            result[currentSensor] = this.goalDefinition.getRequired()[currentSymbolicName];
+            result[currentSensor] = this.goal.getRequired()[currentSymbolicName];
         }
 
         return result;
     }
 
     setGoal(goal) {
-        this.goalDefinition = goal;
+        this.goal = goal;
     }
 
     public haveToStart(now:moment.Moment):boolean {
@@ -163,7 +167,7 @@ class Challenge {
     public evaluate(values:any):boolean {
         console.log('evaluate de challenge');
         //  Check if badge is running. If Waiting or failed, it must be left unchanged
-        if(this.status != BadgeStatus.RUN) {
+        if (this.status != BadgeStatus.RUN) {
             return false;
         }
 
@@ -174,14 +178,14 @@ class Challenge {
         var numberOfValuesNeeded = Object.keys(this.mapSymbolicNameToSensor).length;
 
         if (numberOfValues < numberOfValuesNeeded) {
-            throw new Error("Can not evaluate goal " + this.goalDefinition.getName()
+            throw new Error("Can not evaluate goal " + this.goal.getName()
                 + "! There are " + numberOfValuesNeeded + " symbolic names needed and only "
                 + numberOfValues + " values given");
         }
 
         var mapSymbolicNameToValue = this.bindSymbolicNameToValue(values);
 
-        var resultEval = this.goalDefinition.evaluate(mapSymbolicNameToValue, this);
+        var resultEval = this.goal.evaluate(mapSymbolicNameToValue, this);
 
         if (resultEval && this.percentageOfTime >= 100) {
             this.status = BadgeStatus.SUCCESS;
@@ -218,23 +222,30 @@ class Challenge {
             timeProgress: this.percentageOfTime,
             startDate: this.startDate,
             endDate: this.endDate,
-            goal: {
-                id: this.goalDefinition.getUUID(),
-                conditions: this.mapSymbolicNameToSensor
-            },
-            progress: this.progress,
+            goal: this.goal.getUUID(),
+            user: this.user.getUUID(),
             status: this.getStatusAsString()
         }
     }
 
 
     private getStatusAsString():string {
-        switch(this.status){
-            case 0: return 'WAIT'; break;
-            case 1: return 'RUNNING'; break;
-            case 2: return 'SUCCESS'; break;
-            case 3: return 'FAIL'; break;
-            default: return 'UNKNOWN'; break;
+        switch (this.status) {
+            case 0:
+                return 'WAIT';
+                break;
+            case 1:
+                return 'RUNNING';
+                break;
+            case 2:
+                return 'SUCCESS';
+                break;
+            case 3:
+                return 'FAIL';
+                break;
+            default:
+                return 'UNKNOWN';
+                break;
         }
     }
 }

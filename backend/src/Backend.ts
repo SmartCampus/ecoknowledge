@@ -39,8 +39,8 @@ class Backend extends Server {
     public goalDefinitionRepository:GoalRepository;
     public goalDefinitionFactory:GoalFactory;
 
-    public goalInstanceRepository:ChallengeRepository;
-    public goalInstanceFactory:ChallengeFactory;
+    public challengeRepository:ChallengeRepository;
+    public challengeFactory:ChallengeFactory;
 
     public userRepository:UserRepository;
     public userFactory:UserFactory;
@@ -67,8 +67,8 @@ class Backend extends Server {
         this.goalDefinitionRepository = new GoalRepository(this.badgeRepository);
         this.goalDefinitionFactory = new GoalFactory();
 
-        this.goalInstanceRepository = new ChallengeRepository();
-        this.goalInstanceFactory = new ChallengeFactory();
+        this.challengeRepository = new ChallengeRepository();
+        this.challengeFactory = new ChallengeFactory();
 
         this.userRepository = new UserRepository();
         this.userFactory = new UserFactory();
@@ -90,13 +90,13 @@ class Backend extends Server {
     buildAPI() {
         var self = this;
 
-        this.app.use('/dashboard', (new DashboardRouter(self.goalInstanceRepository, self.goalInstanceFactory, self.goalDefinitionRepository, self.userRepository, self.teamRepository, self.badgeRepository, new Middleware())).getRouter());
+        this.app.use('/dashboard', (new DashboardRouter(self.challengeRepository, self.challengeFactory, self.goalDefinitionRepository, self.userRepository, self.teamRepository, self.badgeRepository, new Middleware())).getRouter());
         this.app.use('/login', (new LoginRouter(self.userRepository)).getRouter());
 
         /*
          this.app.use("/badges", (new BadgeRouter(self.badgeRepository, self.badgeFactory, self.userRepository, loginCheck)).getRouter());
-         this.app.use("/goals", (new GoalDefinitionRouter(self.goalDefinitionRepository, self.goalDefinitionFactory, self.goalInstanceRepository, self.userRepository)).getRouter());
-         this.app.use("/challenges", (new GoalInstanceRouter(self.goalInstanceRepository, self.goalInstanceFactory, self.goalDefinitionRepository, self.userRepository)).getRouter());
+         this.app.use("/goals", (new GoalDefinitionRouter(self.goalDefinitionRepository, self.goalDefinitionFactory, self.challengeRepository, self.userRepository)).getRouter());
+         this.app.use("/challenges", (new GoalInstanceRouter(self.challengeRepository, self.challengeFactory, self.goalDefinitionRepository, self.userRepository)).getRouter());
          */
 
         this.app.get('/test', function (req, res) {
@@ -112,13 +112,9 @@ class Backend extends Server {
     }
 
     loadData():void {
-        var self = this;
-        var result = self.storingHandler.load();
+        var result = this.storingHandler.load();
         if (result.success) {
             console.log(result.success);
-        }
-        else {
-            this.userRepository.setCurrentUser(new User('Jackie'));
         }
     }
 }
