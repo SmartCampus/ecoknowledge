@@ -1,6 +1,6 @@
 import Entity = require('./Entity');
 import User = require('./User');
-import ChallengeFactory = require('../challenge/ChallengeFactory');
+import ChallengeFactory = require('../challenge/UserChallengeFactory');
 
 class UserFactory {
     public createUser(data:any, challengeFactory:ChallengeFactory):User {

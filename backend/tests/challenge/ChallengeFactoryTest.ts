@@ -12,7 +12,7 @@ import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
-import ChallengeFactory = require('../../src/challenge/ChallengeFactory');
+import ChallengeFactory = require('../../src/challenge/UserChallengeFactory');
 import GoalRepository = require('../../src/goal/GoalRepository');
 import Goal = require('../../src/goal/Goal');
 import OverallGoalCondition = require('../../src/condition/OverallGoalCondition');

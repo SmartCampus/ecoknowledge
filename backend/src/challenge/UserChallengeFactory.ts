@@ -2,7 +2,7 @@
 /// <reference path="../../typings/moment/moment.d.ts" />
 /// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
 
-import Challenge = require('./Challenge');
+import UserChallenge = require('./UserChallenge');
 import User = require('../user/User');
 import Goal = require('../goal/Goal');
 import GoalRepository = require('../goal/GoalRepository');
@@ -19,7 +19,7 @@ var moment_timezone = require('moment-timezone');
 
 class GoalInstanceFactory {
 
-    restoreChallenge(data:any, goalRepository:GoalRepository, userRepository:UserRepository, now:moment.Moment):Challenge {
+    restoreChallenge(data:any, goalRepository:GoalRepository, userRepository:UserRepository, now:moment.Moment):UserChallenge {
 
         var goalID:string = data.goalID;
         if(goalID == null) {
@@ -47,31 +47,18 @@ class GoalInstanceFactory {
         var startDate = Clock.getMoment(startDateDesc);
         var endDate = Clock.getMoment(endDateDesc);
 
-        var challenge:Challenge = this.createChallenge(goal, user, now, startDate, endDate);
-
-        /*
-         var challenge:Challenge = new Challenge(startDate, endDate, goalInstanceDescription, goalDefinition, mapGoalsToConditionAndSensors, id);
-
-         if (now.isBefore(startDate)) {
-         //console.log("Le challenge est en WAIT");
-         challenge.setStatus(ChallengeStatus.WAIT);
-         }
-         if (now.isAfter(startDate) && now.isBefore(endDate)) {
-         ///console.log("Le challenge est en RUN");
-         challenge.setStatus(ChallengeStatus.RUN);
-         }
-         */
+        var challenge:UserChallenge = this.createChallenge(goal, user, now, startDate, endDate);
 
         return challenge;
     }
 
-    createChallenge(goal:Goal, user:User, now:moment.Moment, startDateSaved = null, endDateSaved = null):Challenge {
+    createChallenge(goal:Goal, user:User, now:moment.Moment, startDateSaved = null, endDateSaved = null):UserChallenge {
         var clone = now.clone();
 
         var startDateOfChallenge = (startDateSaved == null) ? goal.getStartDateOfSession(clone) : startDateSaved;
         var endDateOfChallenge = (endDateSaved == null) ? goal.getEndDateOfSession(clone.clone()) : endDateSaved;
 
-        var newChallenge:Challenge = new Challenge(goal, user, startDateOfChallenge, endDateOfChallenge);
+        var newChallenge:UserChallenge = new UserChallenge(goal, user, startDateOfChallenge, endDateOfChallenge);
 
         if (newChallenge.getEndDate().isAfter(goal.getEndDate())) {
             return null;

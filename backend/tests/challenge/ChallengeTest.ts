@@ -13,7 +13,7 @@ import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
-import Challenge = require('../../src/challenge/Challenge');
+import Challenge = require('../../src/challenge/UserChallenge');
 import Goal = require('../../src/goal/Goal');
 import GoalExpression = require('../../src/condition/expression/GoalExpression');
 import Operand = require('../../src/condition/expression/Operand');

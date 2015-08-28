@@ -1,5 +1,5 @@
-import Challenge = require('./Challenge');
-import ChallengeFactory = require('./ChallengeFactory');
+import Challenge = require('./UserChallenge');
+import ChallengeFactory = require('./UserChallengeFactory');
 import GoalRepository = require('../goal/GoalRepository');
 import UserProvider = require('../user/UserRepository');
 import Badge = require('../badge/Badge');

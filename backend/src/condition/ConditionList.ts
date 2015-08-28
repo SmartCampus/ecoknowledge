@@ -7,7 +7,7 @@ import Condition = require('./Condition');
 import GoalExpression = require('./expression/GoalExpression');
 import TimeBox = require('../TimeBox');
 
-import Challenge = require('../challenge/Challenge');
+import Challenge = require('../challenge/UserChallenge');
 
 class ConditionList {
 

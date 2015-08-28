@@ -11,7 +11,7 @@ import uuid = require('node-uuid');
 
 import ConditionList = require('../condition/ConditionList');
 import Condition = require('../condition/Condition');
-import Challenge = require('../challenge/Challenge');
+import Challenge = require('../challenge/UserChallenge');
 import TimeBox = require('../TimeBox');
 import Clock = require('../Clock');
 import RecurringSession = require('./RecurringSession');

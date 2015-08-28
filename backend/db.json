@@ -123,26 +123,31 @@
 		"leader":"2cf91e02-a320-4766-aa9f-6efce3142d44"
 	}
   ],
-  "challenges": [
-    {
-      "id": "af0947e9-bf85-4233-8d50-2de787bf6021",
-      "name": "Clim",
-      "timeProgress": 100,
-      "startDate": "2015-08-02T22:00:00.000Z",
-      "endDate": "2015-08-07T21:59:59.999Z",
-      "goalID": "3221c575-85ca-447b-86f3-3a4ef39985dc",
-	  "userID":"2cf91e02-a320-4766-aa9f-6efce3142d44",
-      "status": "SUCCESS"
-    },
-    {
-      "id": "f3abd585-b5a2-43d2-bced-738d646921b8",
-      "name": "Clim",
-      "timeProgress": 0,
-      "startDate": "2015-08-09T22:00:00.000Z",
-      "endDate": "2015-08-14T21:59:59.999Z",
-      "goalID": "3221c575-85ca-447b-86f3-3a4ef39985dc",
-	  "userID":"2cf91e02-a320-4766-aa9f-6efce3142d44",
-      "status": "WAIT"
-    }
-  ]
+  "challenges": 
+  {
+	"userChallenges":
+	  [
+		{
+		  "id": "af0947e9-bf85-4233-8d50-2de787bf6021",
+		  "name": "Clim",
+		  "timeProgress": 100,
+		  "startDate": "2015-08-02T22:00:00.000Z",
+		  "endDate": "2015-08-07T21:59:59.999Z",
+		  "goalID": "3221c575-85ca-447b-86f3-3a4ef39985dc",
+		  "userID":"2cf91e02-a320-4766-aa9f-6efce3142d44",
+		  "status": "SUCCESS"
+		},
+		{
+		  "id": "f3abd585-b5a2-43d2-bced-738d646921b8",
+		  "name": "Clim",
+		  "timeProgress": 0,
+		  "startDate": "2015-08-09T22:00:00.000Z",
+		  "endDate": "2015-08-14T21:59:59.999Z",
+		  "goalID": "3221c575-85ca-447b-86f3-3a4ef39985dc",
+		  "userID":"2cf91e02-a320-4766-aa9f-6efce3142d44",
+		  "status": "WAIT"
+		}
+	  ],
+	  "teamChallenges":[]
+  }
 }

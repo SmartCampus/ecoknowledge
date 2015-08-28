@@ -1,7 +1,7 @@
 import uuid = require('node-uuid');
 
 import Goal = require('../goal/Goal');
-import Challenge = require('../challenge/Challenge');
+import Challenge = require('../challenge/UserChallenge');
 import Badge = require('../badge/Badge');
 import BadgeIDsToNumberOfTimesEarnedMap = require('./BadgeIDsToNumberOfTimesEarnedMap');
 
@@ -73,7 +73,7 @@ return null;
             this.currentChallenges.splice(challengeIndex, 1);
         }
 
-        console.log("Challenge deleted ! Current challenges:", this.currentChallenges);
+        console.log("UserChallenge deleted ! Current challenges:", this.currentChallenges);
     }
 
     public getChallenge(challengeID:string):number {

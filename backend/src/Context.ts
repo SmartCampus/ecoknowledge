@@ -1,5 +1,5 @@
 import GoalRepository = require('./goal/GoalRepository');
-import ChallengeRepository = require('./challenge/ChallengeRepository');
+import ChallengeRepository = require('./challenge/UserChallengeRepository');
 import UserRepository = require('./user/UserRepository');
 
 interface Context {

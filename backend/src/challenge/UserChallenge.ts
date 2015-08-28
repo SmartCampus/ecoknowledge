@@ -14,7 +14,7 @@ import BadgeStatus = require('../Status');
 import TimeBox = require('../TimeBox');
 import Clock = require('../Clock');
 
-class Challenge {
+class UserChallenge {
     private id:string;
     private goal:Goal;
 
@@ -250,4 +250,4 @@ class Challenge {
     }
 }
 
-export = Challenge;
+export = UserChallenge;

@@ -13,6 +13,10 @@ class Team extends Entity {
         this.leader = leader;
     }
 
+    getMembers():User[] {
+        return this.members;
+    }
+
     public hasLeader(aUserID:string):boolean {
         return this.leader.hasUUID(aUserID);
     }

@@ -1,12 +1,12 @@
 import RouterItf = require('./RouterItf');
 
-import ChallengeRepository = require('../challenge/ChallengeRepository');
-import ChallengeFactory = require('../challenge/ChallengeFactory');
+import ChallengeRepository = require('../challenge/UserChallengeRepository');
+import ChallengeFactory = require('../challenge/UserChallengeFactory');
 import GoalRepository = require('../goal/GoalRepository');
 import BadgeRepository = require('../badge/BadgeRepository');
 import UserRepository = require('../user/UserRepository');
 import TeamRepository = require('../user/TeamRepository');
-import Challenge = require('../challenge/Challenge');
+import Challenge = require('../challenge/UserChallenge');
 import Clock = require('../Clock');
 import ChallengeStatus = require('../Status');
 import Goal = require('../goal/Goal');
@@ -67,6 +67,7 @@ class DashboardRouter extends RouterItf {
             var result:any = {};
 
             var currentUser:User = self.userRepository.getUser(userID);
+
             var team:Team = self.teamRepository.getTeam(dashboardWanted);
 
             if (currentUser == null && team == null) {
@@ -300,6 +301,9 @@ class DashboardRouter extends RouterItf {
     getPersonalDashboard(user:User):any {
         var result:any = {};
 
+
+        console.log('Current client', user.getName());
+
         console.log("Personal Dashboard mode");
 
         //  Evaluate challenge and return them
@@ -310,10 +314,10 @@ class DashboardRouter extends RouterItf {
         var descriptionOfAvailableGoals = this.goalRepository.getListOfNotTakenGoalInJSONFormat(user, this.challengeRepository);
 
         // Second col : badge description
-        var descriptionOfBadges:any[] = this.buildBadgesDescriptionForGivenEntity(this.currentUser);
+        var descriptionOfBadges:any[] = this.buildBadgesDescriptionForGivenUser(user);
 
         //  Third col : Build the description of updated challenges (potential additions/deletions)
-        var descriptionOfChallenges:any[] = this.buildCurrentChallengesDescriptionForGivenEntity(this.currentUser);
+        var descriptionOfChallenges:any[] = this.buildCurrentChallengesDescriptionForGivenUser(user);
 
         //  Build the response
         result.goals = descriptionOfAvailableGoals;
@@ -333,6 +337,7 @@ class DashboardRouter extends RouterItf {
             this.evaluateChallenge(team, currentChallenge, currentChallengeID);
         }
     }
+
     private evaluateChallengeForGivenUser(user:User):void {
         var challenges = user.getCurrentChallenges();
         for (var challengeIndex in challenges) {
@@ -345,9 +350,7 @@ class DashboardRouter extends RouterItf {
 
     private buildCurrentChallengesDescriptionForGivenEntity(entity:Entity):any[] {
         var descriptionOfChallenges:any[] = [];
-
-        var challenges = entity.getChallenges()
-            ;
+        var challenges = entity.getChallenges();
         for (var challengeIndex in challenges) {
             var currentChallengeID = challenges[challengeIndex];
             var currentChallenge = this.challengeRepository.getGoalInstance(currentChallengeID);
@@ -358,10 +361,45 @@ class DashboardRouter extends RouterItf {
         return descriptionOfChallenges;
     }
 
+
+    private buildCurrentChallengesDescriptionForGivenUser(user:User):any[] {
+        var descriptionOfChallenges:any[] = [];
+
+        var challenges = user.getCurrentChallenges();
+        for (var challengeIndex in challenges) {
+            var currentChallengeID = challenges[challengeIndex];
+            var currentChallenge = this.challengeRepository.getGoalInstance(currentChallengeID);
+            var currentChallengeDesc = currentChallenge.getDataInJSON();
+            descriptionOfChallenges.push(currentChallengeDesc);
+        }
+
+        return descriptionOfChallenges;
+    }
+
+
     private buildBadgesDescriptionForGivenEntity(entity:Entity):any[] {
         var descriptionOfBadges:any[] = [];
 
         var badges = entity.getFinishedBadges();
+
+        for (var currentBadgeIDIndex in badges) {
+            var currentBadge = this.badgeRepository.getBadge(currentBadgeIDIndex).getData();
+            var dataTrophy = {
+                number: badges[currentBadgeIDIndex],
+                badge: currentBadge
+            };
+
+            descriptionOfBadges.push(dataTrophy);
+        }
+
+        return descriptionOfBadges;
+    }
+
+
+    private buildBadgesDescriptionForGivenUser(user:User):any[] {
+        var descriptionOfBadges:any[] = [];
+
+        var badges = user.getBadges();
 
         for (var currentBadgeIDIndex in badges) {
             var currentBadge = this.badgeRepository.getBadge(currentBadgeIDIndex).getData();

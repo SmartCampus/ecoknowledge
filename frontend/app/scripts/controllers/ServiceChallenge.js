@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * File with all the services associated to Challenge (GET, POST)
+ * File with all the services associated to UserChallenge (GET, POST)
  */
 
 var basePath = 'http://localhost:3000/challenges/';
@@ -10,7 +10,7 @@ var app = angular.module('ecoknowledgeApp');
 app.service('ServiceChallenge', ['$http', function ServiceChallenge($http) {
   this.get = function (id, successFunc, failFunc) {
     var path = basePath + 'all/' + id;
-    console.log('Service Challenge : Get On ', path);
+    console.log('Service UserChallenge : Get On ', path);
 
     $http.get(path)
       .success(function (data) {
@@ -43,7 +43,7 @@ app.service('ServiceChallenge', ['$http', function ServiceChallenge($http) {
 
   this.evaluate = function (badgeName, successFunc, failFunc) {
     var path = basePath + 'evaluate/' + (badgeName === 'all' ? 'all' : ('evaluatebadge?badgeName=' + badgeName));
-    console.log('Service Challenge : Get On ', path);
+    console.log('Service UserChallenge : Get On ', path);
 
     $http.get(path)
       .success(function (data) {

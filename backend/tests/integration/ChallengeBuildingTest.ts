@@ -12,9 +12,9 @@ var assert = chai.assert;
 import BadgeRepository = require('../../src/badge/BadgeRepository');
 import Badge = require('../../src/badge/Badge');
 
-import ChallengeRepository = require('../../src/challenge/ChallengeRepository');
-import ChallengeFactory = require('../../src/challenge/ChallengeFactory');
-import Challenge = require('../../src/challenge/Challenge');
+import ChallengeRepository = require('../../src/challenge/UserChallengeRepository');
+import ChallengeFactory = require('../../src/challenge/UserChallengeFactory');
+import Challenge = require('../../src/challenge/UserChallenge');
 
 import GoalRepository = require('../../src/goal/GoalRepository');
 import Goal = require('../../src/goal/Goal');
@@ -32,7 +32,7 @@ import Middleware = require('../../src/Middleware');
 
 import DashboardRouter = require('../../src/api/DashboardRouter');
 
-describe('Challenge integration test', () => {
+describe('UserChallenge integration test', () => {
 
     //  Important ! Allow us to set time
     DashboardRouter.DEMO = true;

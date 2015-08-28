@@ -13,8 +13,8 @@ import BadgeFactory = require('./badge/BadgeFactory');
 import GoalRepository = require('./goal/GoalRepository');
 import GoalFactory = require('./goal/GoalFactory');
 
-import ChallengeRepository = require('./challenge/ChallengeRepository');
-import ChallengeFactory = require('./challenge/ChallengeFactory');
+import UserChallengeRepository = require('./challenge/UserChallengeRepository');
+import UserChallengeFactory = require('./challenge/UserChallengeFactory');
 
 import UserRepository = require('./user/UserRepository');
 import UserFactory = require('./user/UserFactory');
@@ -39,8 +39,8 @@ class Backend extends Server {
     public goalDefinitionRepository:GoalRepository;
     public goalDefinitionFactory:GoalFactory;
 
-    public challengeRepository:ChallengeRepository;
-    public challengeFactory:ChallengeFactory;
+    public challengeRepository:UserChallengeRepository;
+    public challengeFactory:UserChallengeFactory;
 
     public userRepository:UserRepository;
     public userFactory:UserFactory;
@@ -67,8 +67,8 @@ class Backend extends Server {
         this.goalDefinitionRepository = new GoalRepository(this.badgeRepository);
         this.goalDefinitionFactory = new GoalFactory();
 
-        this.challengeRepository = new ChallengeRepository();
-        this.challengeFactory = new ChallengeFactory();
+        this.challengeRepository = new UserChallengeRepository();
+        this.challengeFactory = new UserChallengeFactory();
 
         this.userRepository = new UserRepository();
         this.userFactory = new UserFactory();

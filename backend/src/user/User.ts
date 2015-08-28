@@ -11,9 +11,9 @@ import BadgeIDsToNumberOfTimesEarnedMap = require('./BadgeIDsToNumberOfTimesEarn
 import BadArgumentException = require('../exceptions/BadArgumentException');
 
 import Goal = require('../goal/Goal');
-import Challenge = require('../challenge/Challenge');
+import Challenge = require('../challenge/UserChallenge');
 
-import ChallengeFactory = require('../challenge/ChallengeFactory');
+import ChallengeFactory = require('../challenge/UserChallengeFactory');
 
 class User {
 
@@ -109,7 +109,7 @@ class User {
             this.currentChallenges.splice(challengeIndex, 1);
         }
 
-        console.log("Challenge deleted ! Current challenges:", this.currentChallenges);
+        console.log("UserChallenge deleted ! Current challenges:", this.currentChallenges);
     }
 
     private getChallengeByID(challengeID:string):number {
