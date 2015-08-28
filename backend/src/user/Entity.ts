@@ -23,36 +23,36 @@ class Entity {
         this.finishedBadgesMap = finishedBadgesMap;
     }
 
-    getCurrentChallenges():string []  {
+    getCurrentChallenges():string [] {
         return this.currentChallenges;
     }
 
-    public getUUID() {
+    getUUID() {
         return this.id;
     }
 
-    public hasUUID(aUUID:string):boolean {
+    hasUUID(aUUID:string):boolean {
         return this.id === aUUID;
     }
 
-    public setUUID(aUUID:string):void {
+    setUUID(aUUID:string):void {
         this.id = aUUID;
     }
 
-    public getName():string {
+    getName():string {
         return this.name;
     }
 
-    public hasName(name:string):boolean {
+    hasName(name:string):boolean {
         return this.getName() === name;
     }
 
-    public setName(name:string):void {
+    setName(name:string):void {
         this.name = name;
     }
 
-    public addChallengeFromGoal(goal:Goal) : Challenge {
-return null;
+    public addChallengeFromGoal(goal:Goal):Challenge {
+        return null;
     }
 
     public addChallenge(challengeID:string):void {
