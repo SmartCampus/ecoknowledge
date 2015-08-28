@@ -118,7 +118,10 @@ class ConditionList {
 
             var conditionDescription:any = this.conditions[i].getDataInJSON();
             if (challenge != null) {
+
+                //  TODO delete following call
                 challenge.addProgress(conditionDescription);
+                challenge.addProgressByCondition(this.conditions[i].getID(), this.conditions[i].getPercentageAchieved());
             }
         }
 

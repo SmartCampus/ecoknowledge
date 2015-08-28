@@ -348,9 +348,9 @@ class DashboardRouter extends RouterItf {
         }
     }
 
-    private buildCurrentChallengesDescriptionForGivenEntity(entity:Entity):any[] {
+    private buildCurrentChallengesDescriptionForGivenEntity(team:Team):any[] {
         var descriptionOfChallenges:any[] = [];
-        var challenges = entity.getChallenges();
+        var challenges = team.getCurrentChallenges();
         for (var challengeIndex in challenges) {
             var currentChallengeID = challenges[challengeIndex];
             var currentChallenge = this.challengeRepository.getGoalInstance(currentChallengeID);
@@ -377,10 +377,10 @@ class DashboardRouter extends RouterItf {
     }
 
 
-    private buildBadgesDescriptionForGivenEntity(entity:Entity):any[] {
+    private buildBadgesDescriptionForGivenEntity(team:Team):any[] {
         var descriptionOfBadges:any[] = [];
 
-        var badges = entity.getFinishedBadges();
+        var badges = team.getBadges();
 
         for (var currentBadgeIDIndex in badges) {
             var currentBadge = this.badgeRepository.getBadge(currentBadgeIDIndex).getData();

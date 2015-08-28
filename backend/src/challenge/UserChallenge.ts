@@ -25,6 +25,7 @@ class UserChallenge {
     private status:BadgeStatus;
 
     private progress:any[] = [];
+    private progressDescription:any = {};
     private percentageOfTime:number = 0;
 
     //  { 'tmp_cli':'ac_443', 'tmp_ext':'TEMP_444', 'door_o':'D_55', ... }
@@ -32,8 +33,8 @@ class UserChallenge {
 
     private user:User;
 
-    constructor(goal:Goal, user:User, startDate:moment.Moment, endDate:moment.Moment, description:string='',
-                mapGoalToConditionAndSensor:any={}, id = null) {
+    constructor(goal:Goal, user:User, startDate:moment.Moment, endDate:moment.Moment, description:string = '',
+                mapGoalToConditionAndSensor:any = {}, id = null) {
 
         this.id = (id) ? id : UUID.v4();
         this.description = description;
@@ -71,68 +72,83 @@ class UserChallenge {
         return this.getTimeProgress() >= 100;
     }
 
-    public getTimeProgress():number {
+    getTimeProgress():number {
         return this.percentageOfTime;
     }
 
-    public resetProgress() {
+    resetProgress() {
         this.progress = [];
     }
 
-    public addProgress(progressDescription:any) {
+    //  TODO delete following method
+    addProgress(progressDescription:any) {
         this.progress.push(progressDescription);
     }
 
-    public getStartDate():moment.Moment {
+    addProgressByCondition(conditionID:string, percentageAchieved:number) {
+        this.progressDescription[conditionID] = percentageAchieved;
+    }
+
+    getGlobalProgression():number {
+        var globalProgression:number = 0;
+
+        for (var currentConditionID in this.progressDescription) {
+            var currentConditionProgression = this.progressDescription[currentConditionID];
+            globalProgression += currentConditionProgression;
+        }
+
+        return globalProgression / (Object.keys(this.progressDescription)).length;
+    }
+
+    getStartDate():moment.Moment {
         return this.startDate;
     }
 
-    public getEndDate():moment.Moment {
+    getEndDate():moment.Moment {
         return this.endDate;
     }
 
-    public getDescription():string {
+    getDescription():string {
         return this.description;
     }
 
-    public getGoalDefinition():Goal {
+    getGoalDefinition():Goal {
         return this.goal;
     }
 
-    public getBadge():string {
+    getBadge():string {
         return this.goal.getBadgeID();
     }
 
-    public getName():string {
+    getName():string {
         return this.goal.getName();
     }
 
-    public getId():string {
+    getId():string {
         return this.id;
     }
 
-    public hasUUID(aUUID:string):boolean {
+    hasUUID(aUUID:string):boolean {
         return this.id === aUUID;
     }
 
-    public getProgress():any {
-        console.log("PROGRESS", JSON.stringify(this.progress));
+    getProgress():any {
         return this.progress;
     }
 
-    public getStatus():BadgeStatus {
+    getStatus():BadgeStatus {
         return this.status;
     }
 
-    public hasStatus(badgeStatus:BadgeStatus):boolean {
+    hasStatus(badgeStatus:BadgeStatus):boolean {
         return this.status === badgeStatus;
     }
 
-    public setStatus(badgeStatus:BadgeStatus) {
+    setStatus(badgeStatus:BadgeStatus) {
         this.status = badgeStatus;
     }
 
-    public getSensors():any {
+    getSensors():any {
 
         var result:any = {};
 
@@ -148,7 +164,7 @@ class UserChallenge {
         this.goal = goal;
     }
 
-    public haveToStart(now:moment.Moment):boolean {
+    haveToStart(now:moment.Moment):boolean {
         return now.isAfter(this.startDate) && now.isBefore(this.endDate);
     }
 
@@ -164,7 +180,7 @@ class UserChallenge {
      *  }
      * @returns {boolean}
      */
-    public evaluate(values:any):boolean {
+    evaluate(values:any):boolean {
         console.log('evaluate de challenge');
         //  Check if badge is running. If Waiting or failed, it must be left unchanged
         if (this.status != BadgeStatus.RUN) {
@@ -201,7 +217,7 @@ class UserChallenge {
         return false;
     }
 
-    public bindSymbolicNameToValue(mapSensorToValue:any) {
+    bindSymbolicNameToValue(mapSensorToValue:any) {
         var result:any = {};
 
         for (var currentSymbolicName in this.mapSymbolicNameToSensor) {
@@ -214,7 +230,7 @@ class UserChallenge {
         return result;
     }
 
-    public getDataInJSON():any {
+    getDataInJSON():any {
         console.log('time progress : ', this.percentageOfTime);
         return {
             id: this.id,

@@ -63,6 +63,9 @@ class Team {
         return this.members;
     }
 
+    getBadges():BadgeIDsToNumberOfTimesEarnedMap {
+        return this.badgesMap;
+    }
     hasUUID(aUUID:string):boolean {
         return this.id === aUUID;
     }
@@ -110,6 +113,10 @@ class Team {
         }
 
         return result;
+    }
+
+    getCurrentChallenges():string[] {
+        return this.currentChallenges;
     }
 
     getStringDescription():string {
