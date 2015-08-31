@@ -12,16 +12,17 @@ import AverageOnValue = require('../AverageOnValue');
 import ExpressionFactory = require('./ExpressionFactory');
 import Clock = require('../../Clock');
 import Filter = require('../../filter/Filter');
+import ReferencePeriod = require('../ReferencePeriod');
 
 class ConditionFactory {
     private expressionFactory:ExpressionFactory = new ExpressionFactory();
 
-    public createCondition(data:any, goalTimeBox:any, duration:number):Condition {
+    public createCondition(data:any, goalTimeBox:any):Condition {
         var type:string = data.type;
         var expression = null;
         switch (type) {
             case 'overall':
-                expression = this.createOverall(data, goalTimeBox, duration);
+                expression = this.createOverall(data, goalTimeBox);
                 break;
             case 'comparison':
                 expression = this.createComparison(data);
@@ -33,11 +34,11 @@ class ConditionFactory {
         return expression;
     }
 
-    public createOverall(data:any, goaltimeBox:any, duration:number):Condition {
+    public createOverall(data:any, goaltimeBox:any):Condition {
 
         data.expression.timeBox = goaltimeBox;
 
-        var goalCondition:GoalExpression = this.expressionFactory.createExpression(data.expression);
+        var goalExpression:GoalExpression = this.expressionFactory.createExpression(data.expression);
 
         var startDateOfValidityPeriod:moment.Moment = goaltimeBox.startDate;
         var endDateOfValidityPeriod:moment.Moment = goaltimeBox.endDate;
@@ -48,8 +49,7 @@ class ConditionFactory {
         var periodOfDayFilterDesc:string[] = data.filter.periodOfDayFilter;
 
         var filter:Filter = new Filter(dayOfWeekFilterDesc, periodOfDayFilterDesc);
-
-        var overallCondition:OverallGoalCondition = new OverallGoalCondition(null, goalCondition, threshold, startDateOfValidityPeriod, Clock.getMoment(Clock.getNow()), endDateOfValidityPeriod, 0, 0, filter);
+        var overallCondition:OverallGoalCondition = new OverallGoalCondition(null, '', goalExpression, threshold, filter);
         return overallCondition;
     }
 
@@ -58,8 +58,11 @@ class ConditionFactory {
         var periodOfDayFilterDesc:string[] = data.filter.periodOfDayFilter;
         var filter:Filter = new Filter(dayOfWeekFilterDesc, periodOfDayFilterDesc);
 
+        var referencePeriodDesc = data.referencePeriod;
+        var referencePeriod:ReferencePeriod = new ReferencePeriod(referencePeriodDesc.numberOfUnitToSubtract, referencePeriodDesc.unitToSubtract);
+
         var goalExpression:GoalExpression = this.expressionFactory.createExpression(data.expression);
-        var averageOnValue:AverageOnValue = new AverageOnValue(null, goalExpression, data.threshold, data.startDate, data.dateOfCreation, data.endDate,Clock.getMoment(new Date(parseInt(data.expression.periodOfTime)).getTime()),0,0,filter);
+        var averageOnValue:AverageOnValue = new AverageOnValue(null, '', goalExpression, data.threshold, filter, referencePeriod);
         return averageOnValue;
     }
 

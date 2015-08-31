@@ -14,61 +14,98 @@ var assert = chai.assert;
 
 
 import Goal = require('../../src/goal/Goal');
-import ConditionList = require('../../src/condition/ConditionList');
 import GoalExpression = require('../../src/condition/expression/GoalExpression');
 import OverallGoalCondition = require('../../src/condition/OverallGoalCondition');
 import Operand = require('../../src/condition/expression/Operand');
 import Clock = require('../../src/Clock');
+import RecurringSession = require('../../src/goal/RecurringSession');
+import ExpressionFactory = require('../../src/condition/factory/ExpressionFactory');
 
-describe("Build a goal", function () {
-    var goal:Goal;
+describe('Goal Test', () => {
+    var aGoalID:string = "5d34ae6e-e9ca-4352-9a67-3fdf205cce26";
+    var aGoalName:string = "goal 1";
+    var aBadgeID:string = 'badge 1';
 
-    it("should have given name", () => {
-        goal = new Goal("aName", null, null, 0, null);
-        assert.equal(goal.getName(), "aName");
-    });
-});
+    var now:moment.Moment = moment('2015-08-26T00:00:00');
+    var startDate:moment.Moment = moment("2015-08-17T:00:00:00");
+    var endDate:moment.Moment = moment("2015-09-17T:23:59:59");
 
-describe("Add a condition to a goal", () => {
-    var goal:Goal;
+    var aRecurringSession:RecurringSession = new RecurringSession('week');
 
-    beforeEach(() => {
-        goal = new Goal("aGoal", null, null, 0, null);
-    });
+    var goal:Goal = new Goal(aGoalID, aGoalName, aBadgeID, now, endDate, aRecurringSession);
 
-    it('should have its own uuid', () => {
-        chai.expect(goal.hasUUID(goal.getUUID())).to.be.true;
-    });
+    describe("Build a goal", function () {
 
-    it('should be possible to add an expression', () => {
-        var comparison:GoalExpression = new GoalExpression(new Operand("Température", true), 'inf', new Operand('10', false), 'desc');
-        var expression:OverallGoalCondition = new OverallGoalCondition(null, comparison, 0, moment(new Date(Date.UTC(2000, 10, 10)).getTime()), moment(new Date(Clock.getNow()).getTime()), moment(new Date(Date.UTC(2000, 10, 15)).getTime()));
-        chai.expect(goal.addCondition(expression)).not.to.throw;
-    });
+        it("should have given name", () => {
+            assert.equal(goal.getName(), aGoalName);
+        });
 
-    it("should return the proper json", () => {
-        var expected:any = {
-            id: goal.getUUID(),
-            name: goal.getName(),
-            timeBox: {
-                startDate: goal.getStartDate(),
-                endDate: goal.getEndDate()
-            },
-            duration: 'month',
-            conditions: goal.getConditions().getDataInJSON(),
-            badgeID: goal.getBadgeID()
-        }
+        it("should have given id", () => {
+            assert.equal(goal.getUUID(), aGoalID);
+        });
 
-        var actual = goal.getDataInJSON();
+        it("should have given badgeID", () => {
+            assert.equal(goal.getBadgeID(), aBadgeID);
+        });
 
-        chai.expect(expected).to.be.eqls(actual);
+        it("should have given beginningOfValidityPeriod", () => {
+            assert.equal(goal.getBeginningOfValidityPeriod().toISOString(), now.toISOString());
+        });
+
+        it("should have given endOfValidityPeriod", () => {
+            assert.equal(goal.getEndOfValidityPeriod().toISOString(), endDate.toISOString());
+        });
     });
 
-    it("should call conditionsList evaluate on evaluate call", () => {
-        var goalStubObj = sinon.stub(goal.getConditions(), "evaluate");
-        goalStubObj.onFirstCall().returns(true);
-        goal.evaluate({'a': null, 'b': null});
-        chai.assert(goalStubObj.calledOnce);
+    describe("Add a condition to a goal", () => {
+        it('should be possible to add an expression', () => {
+            var aSymbolicName:string = 'Temp_cli';
+
+            var expression:GoalExpression;
+            var expressionDescription:any = {
+                valueLeft: {
+                    value: aSymbolicName,
+                    symbolicName: true
+                },
+                valueRight: {
+                    value: "15",
+                    symbolicName: false
+                },
+                comparison: ">"
+            };
+
+            var expressionFactory:ExpressionFactory = new ExpressionFactory();
+
+            var aConditionID = "id1";
+            var aConditionDescription = "a desc";
+            var aThresholdRate = 80;
+
+            expression = expressionFactory.createExpression(expressionDescription);
+            var condition = new OverallGoalCondition(aConditionID, aConditionDescription, expression, aThresholdRate, null);
+
+            goal.addCondition(condition);
+
+            chai.expect(goal.getConditions().length).to.be.eql(1);
+        });
+
+        it("should return the proper json", () => {
+            var expected:any = {
+                id: goal.getUUID(),
+                name: goal.getName(),
+                timeBox: {
+                    startDate: goal.getBeginningOfValidityPeriod(),
+                    endDate: goal.getEndOfValidityPeriod()
+                },
+                duration: 'month',
+                conditions: goal.getDataOfConditionsInJSON(),
+                badgeID: goal.getBadgeID()
+            };
+
+            var actual = goal.getDataInJSON();
+
+            chai.expect(expected).to.be.eqls(actual);
+        });
+
     });
 });
 

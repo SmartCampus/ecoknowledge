@@ -4,41 +4,56 @@ import Operand = require('../expression/Operand');
 
 import TimeBox = require('../../TimeBox');
 
+import BadArgumentException = require('../../exceptions/BadArgumentException');
 
 class ExpressionFactory {
 
-    static REQUIRED_JSON_FIELD:string[] = ['comparison', 'valueLeft', 'valueRight', 'description'];
+    public createExpression(data:any):GoalExpression {
+        this.checksData(data);
 
-    public createExpression(expression:any):GoalExpression {
-        for (var currentRequiredFieldIndex in ExpressionFactory.REQUIRED_JSON_FIELD) {
-            var currentRequiredField = ExpressionFactory.REQUIRED_JSON_FIELD[currentRequiredFieldIndex];
-
-            if (!expression[currentRequiredField] || expression[currentRequiredField] === "undefined") {
-                throw new Error('Can not build expression ! Field '
-                    + currentRequiredField + ' is missing');
-            }
-        }
-
-        var leftOperandName = expression.valueLeft.value;
-        var leftOperandRequired = expression.valueLeft.sensor;
+        var leftOperandName = data.valueLeft.value;
+        var leftOperandRequired = data.valueLeft.symbolicName;
         var leftOperand:Operand = new Operand(leftOperandName, leftOperandRequired);
 
-        var rightOperandName = expression.valueRight.value;
-        var rightOperandRequired = expression.valueRight.sensor;
+        var rightOperandName = data.valueRight.value;
+        var rightOperandRequired = data.valueRight.symbolicName;
         var rightOperand:Operand = new Operand(rightOperandName, rightOperandRequired);
 
-        var typeOfComparison:string = expression.comparison;
-        var description:string = expression.description;
+        var typeOfComparison:string = data.comparison;
 
-        /*FIXME
-        var timeBox:any = expression.timeBox;
-        var startDate:number = timeBox.startDate;
-        var endDate:number = timeBox.endDate;
+        var newExpression:GoalExpression = new GoalExpression(leftOperand, typeOfComparison, rightOperand);
+        return newExpression;
+    }
 
-        var timeBoxObj:TimeBox = new TimeBox(startDate, endDate);
-*/
-        var newGoalCondition:GoalExpression = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
-        return newGoalCondition;
+    private checksData(data:any) {
+        if(data.valueLeft == null) {
+            throw new BadArgumentException('Can not build expression, field "valueLeft" is null');
+        }
+
+        if(data.valueLeft.value == null) {
+            throw new BadArgumentException('Can not build expression, field "valueLeft.value" is null');
+        }
+
+        if(data.valueLeft.symbolicName == null) {
+            throw new BadArgumentException('Can not build expression, field "valueLeft.symbolicName" is null');
+        }
+
+        if(data.valueRight == null) {
+            throw new BadArgumentException('Can not build expression, field "valueRight" is null');
+        }
+
+        if(data.valueRight.value == null) {
+            throw new BadArgumentException('Can not build expression, field "valueRight.value" is null');
+        }
+
+        if(data.valueRight.symbolicName == null) {
+            throw new BadArgumentException('Can not build expression, field "valueRight.symbolicName" is null');
+        }
+
+        if(data.comparison == null) {
+            throw new BadArgumentException('Can not build expression, field "comparison" is null');
+        }
+
     }
 }
 

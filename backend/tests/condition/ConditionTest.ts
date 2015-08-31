@@ -94,21 +94,26 @@ describe('Test Condition', () => {
 
     describe('KeepUsefulValues method', () => {
         it('should keep nothing if nothing is in the timeBox', () => {
-            var expected:any[] = [];
-            var data:any[] = [
+            var expected:any = {};
+            expected[aSymbolicName] = [];
+
+            var data:any = {};
+            data[aSymbolicName] = [
                 {date: "2000-09-01T00:00:00", value: 10},
                 {date: "2000-09-01T00:00:00", value: 10},
                 {date: "2000-09-01T00:00:00", value: 10},
                 {date: "2000-09-01T00:00:00", value: 10}
             ];
+
+
             var result:any[] = condition.keepUsefulValues(data, conditionDescription);
 
             chai.expect(result).to.be.eqls(expected);
         });
 
         it('should keep everything if everything is in the timeBox', () => {
-            var expected:any[] = [];
-            var data:any[] = [
+            var data:any = {};
+            data[aSymbolicName] = [
                 {date: "2000-02-01T00:00:00", value: 10},
                 {date: "2000-02-01T00:00:00", value: 10},
                 {date: "2000-02-01T00:00:00", value: 10},
@@ -116,12 +121,20 @@ describe('Test Condition', () => {
             ];
             var result:any[] = condition.keepUsefulValues(data, conditionDescription);
 
-            chai.expect(result).to.be.eqls(expected);
+            chai.expect(result).to.be.eqls(data);
         });
 
         it('should keep what is in the timeBox', () => {
-            var expected:any[] = [];
-            var data:any[] = [
+            var expected:any = {};
+            expected[aSymbolicName] = [
+                {date: "2000-02-01T00:00:00", value: 10},
+                {date: "2000-02-01T00:00:00", value: 10},
+                {date: "2000-02-01T00:00:00", value: 10},
+                {date: "2000-02-01T00:00:00", value: 10}
+            ];
+
+            var data:any = {};
+            data[aSymbolicName] = [
                 {date: "1999-01-01T00:00:00", value: 10},
                 {date: "2000-02-01T00:00:00", value: 10},
                 {date: "2000-02-01T00:00:00", value: 10},
@@ -146,7 +159,7 @@ describe('Test Condition', () => {
                     end: anEnd
                 }
             };
-            var result = condition.getRequiredByCondition(aStart, anEnd, null);
+            var result = condition.getRequiredByCondition(aStart, anEnd);
             chai.expect(result).to.be.eqls(expected);
         });
     });

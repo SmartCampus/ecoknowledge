@@ -5,24 +5,17 @@ import Comparator = require('./Comparator');
 import BadArgumentException = require('../../exceptions/BadArgumentException');
 
 class GoalExpression {
-    private description:string;
-
     private leftOperand:Operand;
     private rightOperand:Operand;
 
     private comparator:Comparator;
 
-    constructor(leftOperand:Operand, typeOfComparison:string, rightOperand:Operand, description:string) {
-        this.description = description;
+    constructor(leftOperand:Operand, typeOfComparison:string, rightOperand:Operand) {
 
         this.leftOperand = leftOperand;
         this.rightOperand = rightOperand;
 
         this.comparator = new Comparator(typeOfComparison);
-    }
-
-    public getDescription():string {
-        return this.description;
     }
 
     public getComparisonType():string {
@@ -126,8 +119,7 @@ class GoalExpression {
                 value: this.rightOperand.getStringDescription(),
                 sensor: this.rightOperand.hasToBeDefined()
             },
-            comparison: this.comparator.getTypeOfComparison(),
-            description: this.description,
+            comparison: this.comparator.getTypeOfComparison()
         };
     }
 }

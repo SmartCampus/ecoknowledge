@@ -19,10 +19,10 @@ class User {
 
     private id;
     private name:string;
-    private mapSymbolicNameToSensor:any = {};
     private currentChallenges:string[] = [];
     private badgesMap:BadgeIDsToNumberOfTimesEarnedMap = {};
 
+    private mapSymbolicNameToSensor:any = {};
     private challengeFactory:ChallengeFactory;
 
     constructor(name:string, mapSymbolicNameToSensor:any, currentChallenges:string[],
@@ -91,7 +91,7 @@ class User {
         var newChallenge = this.challengeFactory.createChallenge(goal, this, now);
 
         //  Check if we try
-        if (newChallenge.getEndDate().isAfter(goal.getEndDate())) {
+        if (newChallenge.getEndDate().isAfter(goal.getEndOfValidityPeriod())) {
             return null;
         }
 

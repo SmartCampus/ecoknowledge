@@ -380,7 +380,7 @@ class DashboardRouter extends RouterItf {
     private buildBadgesDescriptionForGivenEntity(team:Team):any[] {
         var descriptionOfBadges:any[] = [];
 
-        var badges = team.getBadges();
+        var badges = team.getBadgesID();
 
         for (var currentBadgeIDIndex in badges) {
             var currentBadge = this.badgeRepository.getBadge(currentBadgeIDIndex).getData();
@@ -437,7 +437,7 @@ class DashboardRouter extends RouterItf {
                         function () {
                             var result = challengeToEvaluate.evaluate(required);
                             if (result) {
-                                var newChall = self.createGoalInstance(entity, challengeToEvaluate.getGoalDefinition().getUUID(), challengeToEvaluate.getEndDate());
+                                var newChall = self.createGoalInstance(entity, challengeToEvaluate.getGoal().getUUID(), challengeToEvaluate.getEndDate());
                                 this.addBadge(challengeID, entity.getUUID());
                                 if (newChall != null) {
                                     self.evaluateChallenge(entity, newChall, newChall.getId());
@@ -470,7 +470,7 @@ class DashboardRouter extends RouterItf {
                 this.addFinishedBadge(challengeID, entity.getUUID());
 
                 //  Build the new challenge (recurring) and evaluate it
-                var newChallenge = self.createGoalInstance(entity, challengeToEvaluate.getGoalDefinition().getUUID(), challengeToEvaluate.getEndDate());
+                var newChallenge = self.createGoalInstance(entity, challengeToEvaluate.getGoal().getUUID(), challengeToEvaluate.getEndDate());
                 if (newChallenge != null) {
                     self.evaluateChallenge(entity, newChallenge, newChallenge.getId());
                 }
@@ -483,7 +483,7 @@ class DashboardRouter extends RouterItf {
                 entity.deleteChallenge(challengeToEvaluate.getId());
 
                 //  Build the new challenge (recurring) and evaluate it
-                var newChallenge = self.createGoalInstance(entity, challengeToEvaluate.getGoalDefinition().getUUID(), challengeToEvaluate.getEndDate());
+                var newChallenge = self.createGoalInstance(entity, challengeToEvaluate.getGoal().getUUID(), challengeToEvaluate.getEndDate());
                 if (newChallenge != null) {
                     self.evaluateChallenge(entity, newChallenge, newChallenge.getId());
                 }

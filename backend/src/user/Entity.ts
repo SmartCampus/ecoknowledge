@@ -12,20 +12,18 @@ class Entity {
     private id;
     private name:string;
     private currentChallenges:string[] = [];
-    private finishedBadgesMap:BadgeIDsToNumberOfTimesEarnedMap = {};
+    private badgesMap:BadgeIDsToNumberOfTimesEarnedMap = {};
 
-    constructor(name:string, id = null, currentChallenges:string[] = [], finishedBadgesMap:BadgeIDsToNumberOfTimesEarnedMap = {}) {
+    constructor(id:string, name:string, currentChallenges:string[],
+                finishedBadgesMap:BadgeIDsToNumberOfTimesEarnedMap) {
 
-        this.id = (id) ? id : uuid.v4();
+        this.id = id;
 
         this.name = name;
         this.currentChallenges = currentChallenges;
-        this.finishedBadgesMap = finishedBadgesMap;
+        this.badgesMap = finishedBadgesMap;
     }
 
-    getCurrentChallenges():string [] {
-        return this.currentChallenges;
-    }
 
     getUUID() {
         return this.id;
@@ -51,7 +49,11 @@ class Entity {
         this.name = name;
     }
 
-    public addChallengeFromGoal(goal:Goal):Challenge {
+    getCurrentChallenges():string [] {
+        return this.currentChallenges;
+    }
+
+    addChallengeFromGoal(goal:Goal):Challenge {
         return null;
     }
 
@@ -88,35 +90,31 @@ class Entity {
         return result;
     }
 
-    public getChallenges():string[] {
-        return this.currentChallenges;
-    }
-
     public setChallenges(challenges:string[]):void {
         this.currentChallenges = challenges;
     }
 
-    public getFinishedBadges():BadgeIDsToNumberOfTimesEarnedMap {
-        return this.finishedBadgesMap;
+    public getBadges():BadgeIDsToNumberOfTimesEarnedMap {
+        return this.badgesMap;
     }
 
-    public getFinishedBadgesID():string[] {
-        return Object.keys(this.finishedBadgesMap);
+    public getBadgesID():string[] {
+        return Object.keys(this.badgesMap);
     }
 
-    public setFinishedBadges(finishedBadges:BadgeIDsToNumberOfTimesEarnedMap) {
-        this.finishedBadgesMap = finishedBadges;
+    public setBadges(finishedBadges:BadgeIDsToNumberOfTimesEarnedMap) {
+        this.badgesMap = finishedBadges;
     }
 
-    public addFinishedBadge(badgeID:string) {
+    public addBadge(badgeID:string) {
         if (!badgeID) {
             throw new BadArgumentException('Can not add given badge to user' + this.getName() + '. Badge given is null');
         }
 
-        if (this.finishedBadgesMap.hasOwnProperty(badgeID)) {
-            this.finishedBadgesMap[badgeID]++;
+        if (this.badgesMap.hasOwnProperty(badgeID)) {
+            this.badgesMap[badgeID]++;
         } else {
-            this.finishedBadgesMap[badgeID] = 1;
+            this.badgesMap[badgeID] = 1;
         }
     }
 
@@ -125,7 +123,7 @@ class Entity {
             id: this.id,
             name: this.name,
             currentChallenges: this.currentChallenges,
-            finishedBadgesMap: this.finishedBadgesMap
+            finishedBadgesMap: this.badgesMap
         }
     }
 }

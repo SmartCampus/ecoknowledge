@@ -9,7 +9,6 @@ var moment_timezone = require('moment-timezone');
 
 import uuid = require('node-uuid');
 
-import ConditionList = require('../condition/ConditionList');
 import Condition = require('../condition/Condition');
 import Challenge = require('../challenge/UserChallenge');
 import TimeBox = require('../TimeBox');
@@ -20,39 +19,35 @@ import RecurringSession = require('./RecurringSession');
 class Goal {
     private id;
     private name:string;
-    private conditionsList:ConditionList;
-
-    private startDate:moment.Moment;
-    private endDate:moment.Moment;
-
-    private durationInDays:number;
-    private recurringSession:RecurringSession;
-
     private badgeID:string;
 
+    private conditionsArray:Condition[] = [];
 
-    constructor(name:string, startDate:moment.Moment, endDate:moment.Moment, durationInDays:number, badgeID:string, id = null, recurringSession:RecurringSession = new RecurringSession('month')) {
-        if (!name) {
-            throw new Error('Bad argument : name given is null');
-        }
+    private beginningOfValidityPeriod:moment.Moment;
+    private endOfValidityPeriod:moment.Moment;
 
-        this.conditionsList = new ConditionList();
+    private recurringSession:RecurringSession;
 
-        this.badgeID = badgeID;
+    constructor(id:string, name:string, badgeID:string, beginningOfValidityPeriod:moment.Moment,
+                endOfValidityPeriod:moment.Moment, recurringSession:RecurringSession) {
+        this.id = id;
         this.name = name;
+        this.badgeID = badgeID;
+        
 
-        this.id = (id) ? id : uuid.v4();
-
-        if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
-            throw new Error('End date is before start date');
-        }
-
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.beginningOfValidityPeriod = beginningOfValidityPeriod;
+        this.endOfValidityPeriod = endOfValidityPeriod;
 
         this.recurringSession = recurringSession;
+    }
 
-        this.durationInDays = durationInDays;
+
+    getBeginningOfValidityPeriod():moment.Moment {
+        return this.beginningOfValidityPeriod;
+    }
+
+    getEndOfValidityPeriod():moment.Moment {
+        return this.endOfValidityPeriod;
     }
 
     getStartDateOfSession(now) {
@@ -67,70 +62,62 @@ class Goal {
         return this.badgeID;
     }
 
-    public getUUID() {
+    getUUID() {
         return this.id;
     }
 
-    public hasUUID(aUUID:string):boolean {
+    hasUUID(aUUID:string):boolean {
         return this.id === aUUID;
     }
 
-    public setUUID(aUUID) {
+    setUUID(aUUID) {
         this.id = aUUID;
     }
 
-    public setTimeBoxes(newTimeBox:TimeBox) {
-        this.conditionsList.setTimeBoxes(newTimeBox);
-    }
 
-    public getStartDate():moment.Moment {
-        return this.startDate;
-    }
-
-    public getEndDate():moment.Moment {
-        return this.endDate;
-    }
-
-    public getDuration():number {
-        return this.durationInDays;
-    }
-
-    public getName():string {
+    getName():string {
         return this.name;
     }
 
-    public addCondition(expression:Condition) {
-        this.conditionsList.addCondition(expression);
+    public addCondition(condition:Condition) {
+        this.conditionsArray.push(condition);
     }
 
-    public evaluate(values:any, challenge:Challenge = null):boolean {
+    public evaluate(values:any, challenge:Challenge):boolean {
 
-        if (challenge != null) {
-            challenge.resetProgress();
+        challenge.resetProgress();
+
+        var result:boolean = true;
+        for (var i = 0; i < this.conditionsArray.length; i++) {
+            var currentCondition:Condition = this.conditionsArray[i];
+
+            var currentConditionDescription:any = challenge.getConditionDescriptionByID(currentCondition.getID());
+            var currentConditionState = currentCondition.evaluate(values,currentConditionDescription);
+
+            result = result && currentConditionState.finished;
+
+            challenge.addProgressByCondition(currentCondition.getID(), currentConditionState.percentageAchieved);
         }
 
-        return this.conditionsList.evaluate(values, challenge);
+        return result;
     }
 
-    public getRequired():any {
-        return this.conditionsList.getRequired();
-    }
+    public getRequired(startDateOfChallenge, endDateOfChallenge):any {
 
-    public getConditions():ConditionList {
-        return this.conditionsList;
-    }
-
-    public getData():any {
-        return {
-            "name": this.name,
-            "conditions": this.conditionsList.getDataInJSON(),
-            "timeBox": {
-                "startDate": this.startDate,
-                "endDate": this.endDate
-            },
-            "durationInDays": this.durationInDays,
-            "badge": this.badgeID
+        var result:any = {};
+        for(var conditionIndex in this.conditionsArray) {
+            var currentCondition = this.conditionsArray[conditionIndex];
+            var currentConditionID = currentCondition.getID();
+            var currentConditionRequired = currentCondition.getRequiredByCondition(startDateOfChallenge, endDateOfChallenge);
+            result[currentConditionID] = currentConditionRequired;
         }
+
+
+        return result;
+    }
+
+    public getConditions():Condition[] {
+        return this.conditionsArray;
     }
 
     public getDataInJSON():any {
@@ -138,18 +125,41 @@ class Goal {
             id: this.id,
             name: this.name,
             timeBox: {
-                startDate: this.startDate,
-                endDate: this.endDate
+                startDate: this.beginningOfValidityPeriod,
+                endDate: this.endOfValidityPeriod
             },
             duration: this.recurringSession.getDescription(),
-            conditions: this.conditionsList.getDataInJSON(),
+            conditions: this.getDataOfConditionsInJSON(),
             badgeID: this.badgeID
         }
     }
 
+    public getDataOfConditionsInJSON():any {
+        var result:any[] = [];
+
+        for (var i = 0; i < this.conditionsArray.length; i++) {
+            result.push(this.conditionsArray[i].getDataInJSON());
+        }
+
+        return result;
+    }
+
+
     getStringRepresentation():string {
-        return '\n#' + this.id + '\t' + this.name + '\n-\t' + this.startDate.toISOString() + ' :: ' + this.endDate.toISOString() + '\n' +
-            ' - Récurrent : ' + this.recurringSession.getDescription()  + '\n' + this.conditionsList.getStringRepresentation();
+        return '\n#' + this.id + '\t' + this.name + '\n-\t' + this.beginningOfValidityPeriod.toISOString() + ' :: ' + this.endOfValidityPeriod.toISOString() + '\n' +
+            ' - Récurrent : ' + this.recurringSession.getDescription() + '\n' + this.getStringRepresentationOfCondition();
+    }
+
+
+    getStringRepresentationOfCondition():string {
+        var result:string = '';
+
+        for(var currentConditionIndex in this.conditionsArray) {
+            var currentCondition = this.conditionsArray[currentConditionIndex];
+            result += '\t|\t\t' + currentCondition.getStringRepresentation();
+        }
+
+        return result;
     }
 }
 

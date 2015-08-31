@@ -70,7 +70,7 @@ class GoalDefinitionRepository {
         for (var currentChallengeIDIndex in currentChallengesID) {
             var currentChallengeID:string = currentChallengesID[currentChallengeIDIndex];
             var currentChallenge:Challenge = challengeRepository.getGoalInstance(currentChallengeID);
-            takenGoals.push(currentChallenge.getGoalDefinition());
+            takenGoals.push(currentChallenge.getGoal());
         }
 
         var goals:Goal[] = this.diffBetweenTakenGoalsAndAvailableGoals(takenGoals, this.goals);
@@ -93,7 +93,7 @@ class GoalDefinitionRepository {
 
         for (var currentAvailableGoalIndex in availableGoals) {
             var currentAvailableGoal = availableGoals[currentAvailableGoalIndex];
-            if(!this.goalExistsIn(currentAvailableGoal.getUUID(), takenGoals)) {
+            if (!this.goalExistsIn(currentAvailableGoal.getUUID(), takenGoals)) {
                 result.push(currentAvailableGoal);
             }
         }
@@ -125,19 +125,6 @@ class GoalDefinitionRepository {
         }
 
         return result;
-    }
-
-    public evaluateGoal(data:any):boolean {
-        var goalID:string = data.id;
-        var goal:Goal = this.getGoal(goalID);
-
-        var goalValues:any[] = data.values;
-        var values = [];
-        for (var i = 0; i < goalValues.length; i++) {
-            values.push(goalValues[i].value);
-        }
-
-        return goal.evaluate(values);
     }
 
     public getDataInJSON():any {

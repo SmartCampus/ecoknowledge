@@ -15,13 +15,16 @@ describe("GoalFactory test", () => {
     var factory:GoalFactory = new GoalFactory();
     var goal:Goal;
 
+    var start = Clock.getMomentFromString("2000-01-01T00:00:00");
+    var end = Clock.getMomentFromString("2000-08-01T00:00:00");
+
     beforeEach(() => {
         var jsonDefinition:any = {};
         jsonDefinition.name = "Clim";
 
         var timeBox:any = {};
-        timeBox.startDate = Clock.getCurrentMoment();
-        timeBox.endDate = Clock.getCurrentMoment().add(10,'minutes');
+        timeBox.startDate = start.toISOString();
+        timeBox.endDate = end.toISOString();
         jsonDefinition.timeBox = timeBox;
 
         jsonDefinition.duration = 'day';
@@ -53,6 +56,6 @@ describe("GoalFactory test", () => {
     });
 
     it("should build a goal with non null conditions", () => {
-        chai.expect(goal.getRequired()).to.be.not.null;
+        chai.expect(goal.getRequired(start, end)).to.be.not.null;
     });
 });

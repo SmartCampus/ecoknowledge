@@ -19,119 +19,124 @@ import TimeBox = require('../../src/TimeBox');
 import Clock = require('../../src/Clock');
 import TimeBoxFactory = require('../../src/TimeBoxFactory');
 
+import ExpressionFactory = require('../../src/condition/factory/ExpressionFactory');
+import Filter = require('../../src/filter/Filter');
+
 describe('Test OverallGoalCondition', () => {
 
-    var overallGoalCondition:OverallGoalCondition;
+    var aSymbolicName = "TMP_CLI";
+    var expression:GoalExpression;
+    var expressionDescription:any = {
+        valueLeft: {
+            value: aSymbolicName,
+            symbolicName: true
+        },
+        valueRight: {
+            value: "15",
+            symbolicName: false
+        },
+        comparison: ">"
+    };
 
-    var condition:GoalExpression;
+    var expressionFactory:ExpressionFactory = new ExpressionFactory();
 
-    var leftOperand:Operand = new Operand('TMP_Cli', true);
-    var rightOperand:Operand = new Operand('15', false);
-    var typeOfComparison:string = '>';
-    var description:string = 'un test';
+    var aConditionID = "id1";
+    var aConditionDescription = "a desc";
+    var aThresholdRate = 80;
+    var filterOfCondition:Filter = new Filter('all', ['all']);
 
-    var startDate:moment.Moment = moment(new Date(Date.UTC(2000,1,1)).getTime());
-    var endDate:moment.Moment = moment(new Date(Date.UTC(2000,8,1)).getTime());
+    expression = expressionFactory.createExpression(expressionDescription);
+    var condition = new OverallGoalCondition(aConditionID, aConditionDescription, expression, aThresholdRate, filterOfCondition);
+    var conditionDescription:any = {
+        symbolicNames: ["TMP_CLI"],
+        timeBox: {
+            start: Clock.getMomentFromString("2000-01-01T00:00:00"),
+            end: Clock.getMomentFromString("2000-08-01T00:00:00")
+        }
+    };
 
     it('should return false if min threshold is absolutely not reached', () => {
-        condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
-        overallGoalCondition = new OverallGoalCondition(null, condition, 80, startDate, moment(new Date(Clock.getNow()).getTime()), endDate);
-
         var data:any = {};
 
         var values:any[] = [
-            {date:null,value:10},
-            {date:null,value:10},
-            {date:null,value:10},
-            {date:null,value:10},
-            {date:null,value:10},
-            {date:null,value:16},
-            {date:null,value:18}
+            {date: "2000-02-01T00:00:00", value: 10},
+            {date: "2000-02-01T00:00:00", value: 10},
+            {date: "2000-02-01T00:00:00", value: 10},
+            {date: "2000-02-01T00:00:00", value: 10},
+            {date: "2000-02-01T00:00:00", value: 10},
+            {date: "2000-02-01T00:00:00", value: 16},
+            {date: "2000-02-01T00:00:00", value: 18}
         ];
 
-        var valuesDesc:any = {};
-        valuesDesc['values'] = values;
+        data[aSymbolicName] = values;
 
-        data['TMP_Cli'] = valuesDesc;
-
-        chai.expect(overallGoalCondition.evaluate(data)).to.be.false;
+        var result = condition.evaluate(data, conditionDescription);
+        chai.expect(result.finished).to.be.false;
     });
 
     it('should return false if min threshold is not reached', () => {
-        condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
-        overallGoalCondition = new OverallGoalCondition(null, condition, 80, startDate, moment(new Date(Clock.getNow()).getTime()), endDate);
-
         var data:any = {};
         var values:any[] = [
-            {date:null,value:18},
-            {date:null,value:18},
-            {date:null,value:18},
-            {date:null,value:18},
-            {date:null,value:18},
-            {date:null,value:18},
-            {date:null,value:18},
-            {date:null,value:10},
-            {date:null,value:10},
-            {date:null,value:10}
+            {date: "2000-02-01T00:00:00", value: 18},
+            {date: "2000-02-01T00:00:00", value: 18},
+            {date: "2000-02-01T00:00:00", value: 18},
+            {date: "2000-02-01T00:00:00", value: 18},
+            {date: "2000-02-01T00:00:00", value: 18},
+            {date: "2000-02-01T00:00:00", value: 18},
+            {date: "2000-02-01T00:00:00", value: 18},
+            {date: "2000-02-01T00:00:00", value: 10},
+            {date: "2000-02-01T00:00:00", value: 10},
+            {date: "2000-02-01T00:00:00", value: 10}
         ];
 
-        var valuesDesc:any = {};
-        valuesDesc['values'] = values;
+        data[aSymbolicName] = values;
 
-        data['TMP_Cli'] = valuesDesc;
-        chai.expect(overallGoalCondition.evaluate(data)).to.be.false;
+        var result = condition.evaluate(data, conditionDescription);
+        chai.expect(result.finished).to.be.false;
     });
 
     it('should return true if min threshold is just reached', () => {
-        condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
-        overallGoalCondition = new OverallGoalCondition(null, condition, 50, startDate, moment(new Date(Clock.getNow()).getTime()), endDate);
-
         var data:any = {};
 
         var values:any[] = [
-            {date:null,value:17},
-            {date:null,value:16},
-            {date:null,value:16},
-            {date:null,value:17},
-            {date:null,value:18},
-            {date:null,value:19},
-            {date:null,value:18},
-            {date:null,value:17},
-            {date:null,value:10},
-            {date:null,value:10}
+            {date: "2000-02-01T00:00:00", value: 17},
+            {date: "2000-02-01T00:00:00", value: 16},
+            {date: "2000-02-01T00:00:00", value: 16},
+            {date: "2000-02-01T00:00:00", value: 17},
+            {date: "2000-02-01T00:00:00", value: 18},
+            {date: "2000-02-01T00:00:00", value: 19},
+            {date: "2000-02-01T00:00:00", value: 18},
+            {date: "2000-02-01T00:00:00", value: 17},
+            {date: "2000-02-01T00:00:00", value: 10},
+            {date: "2000-02-01T00:00:00", value: 10}
         ];
 
-        var valuesDesc:any = {};
-        valuesDesc['values'] = values;
+        data[aSymbolicName] = values;
 
-        data['TMP_Cli'] = valuesDesc;
-        // FIXME DATE NULL chai.expect(overallGoalCondition.evaluate(data)).to.be.true;
+        var result = condition.evaluate(data, conditionDescription);
+        chai.expect(result.finished).to.be.true;
     });
 
-    it('should return true if min threshold is reached', () => {
-        condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
-        overallGoalCondition = new OverallGoalCondition(null, condition, 50, startDate, moment(new Date(Clock.getNow()).getTime()), endDate);
 
+    it('should return true if min threshold is reached', () => {
         var data:any = {};
 
         var values:any[] = [
-            {date:null,value:16},
-            {date:null,value:17},
-            {date:null,value:18},
-            {date:null,value:19},
-            {date:null,value:18},
-            {date:null,value:18},
-            {date:null,value:17},
-            {date:null,value:18},
-            {date:null,value:16},
-            {date:null,value:17}
+            {date: "2000-02-01T00:00:00", value: 16},
+            {date: "2000-02-01T00:00:00", value: 17},
+            {date: "2000-02-01T00:00:00", value: 18},
+            {date: "2000-02-01T00:00:00", value: 19},
+            {date: "2000-02-01T00:00:00", value: 18},
+            {date: "2000-02-01T00:00:00", value: 18},
+            {date: "2000-02-01T00:00:00", value: 17},
+            {date: "2000-02-01T00:00:00", value: 18},
+            {date: "2000-02-01T00:00:00", value: 16},
+            {date: "2000-02-01T00:00:00", value: 17}
         ];
 
-        var valuesDesc:any = {};
-        valuesDesc['values'] = values;
+        data[aSymbolicName] = values;
 
-        data['TMP_Cli'] = valuesDesc;
-
-        // FIXME DATE NULL chai.expect(overallGoalCondition.evaluate(data)).to.be.true;
+        var result = condition.evaluate(data, conditionDescription);
+        chai.expect(result.finished).to.be.true;
     });
 });

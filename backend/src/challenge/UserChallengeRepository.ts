@@ -65,7 +65,7 @@ class BadgeProvider {
             var currentBadgeDesc:any = {};
             currentBadgeDesc.name = this.goalInstancesArray[i].getName();
             currentBadgeDesc.id = this.goalInstancesArray[i].getId();
-            currentBadgeDesc.desc = this.goalInstancesArray[i].getDescription();
+            currentBadgeDesc.desc = this.goalInstancesArray[i].getGoal().getName();
             currentBadgeDesc.progress = this.goalInstancesArray[i].getProgress();
 
             currentBadgeDesc.startDate = this.goalInstancesArray[i].getStartDate();
