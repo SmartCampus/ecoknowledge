@@ -18,7 +18,7 @@ class OverallGoalCondition extends Condition {
         super(id, description, condition, thresholdRate, filter);
     }
 
-    public evaluate(data:any, conditionDescription:any) {
+    public evaluate(data:any, conditionDescription:any):any {
 
         var remainingData:any = super.keepUsefulValues(data, conditionDescription);
 
@@ -51,19 +51,19 @@ class OverallGoalCondition extends Condition {
 
                 //  Check value by value if internal condition is satisfied
                 if (this.expression.evaluate(dataToEvaluate)) {
+                    console.log("OK");
                     ++numberOfCorrectValues;
                 }
 
             }
         }
 
-
         var percentageAchieved = ((numberOfCorrectValues * 100 / numberOfValues) * 100) / this.thresholdRate;
         percentageAchieved = (percentageAchieved > 100) ? 100 : percentageAchieved;
 
-        var finished:boolean = percentageAchieved === 100;
+        var achieved:boolean = percentageAchieved === 100;
 
-        return {percentageAchieved: percentageAchieved, finished: finished};
+        return {description: this.description, percentageAchieved: percentageAchieved, achieved: achieved};
     }
 
     public getDataInJSON():any {

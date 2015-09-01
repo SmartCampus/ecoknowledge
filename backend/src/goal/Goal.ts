@@ -83,21 +83,31 @@ class Goal {
         this.conditionsArray.push(condition);
     }
 
-    public evaluate(values:any, challenge:Challenge):boolean {
+    public evaluate(data:any, challenge:Challenge):any {
 
-        challenge.resetProgress();
+        var result:any = {};
 
-        var result:boolean = true;
+        var numberOfConditions:number = 0;
+        var numberOfConditionsAchieved:number = 0;
+
+        var achieved:boolean = true;
+
         for (var i = 0; i < this.conditionsArray.length; i++) {
             var currentCondition:Condition = this.conditionsArray[i];
 
-            var currentConditionDescription:any = challenge.getConditionDescriptionByID(currentCondition.getID());
-            var currentConditionState = currentCondition.evaluate(values,currentConditionDescription);
+            var currentConditionDescription:any = data[currentCondition.getID()];
+            var currentConditionState = currentCondition.evaluate(currentConditionDescription.values, currentConditionDescription);
 
-            result = result && currentConditionState.finished;
+            achieved = achieved && currentConditionState.achieved;
+            result[currentCondition.getID()] = currentConditionState;
 
-            challenge.addProgressByCondition(currentCondition.getID(), currentConditionState.percentageAchieved);
+            numberOfConditions++;
+            numberOfConditionsAchieved = (currentConditionState.achieved)?numberOfConditionsAchieved+1 : numberOfConditionsAchieved;
         }
+
+        var percentageAchieved:number = (numberOfConditionsAchieved * 100) / numberOfConditions;
+        result['percentageAchieved'] = percentageAchieved;
+        result['achieved'] = achieved;
 
         return result;
     }

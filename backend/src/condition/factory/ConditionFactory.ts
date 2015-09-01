@@ -4,6 +4,7 @@
 
 var moment = require('moment');
 var moment_timezone = require('moment-timezone');
+import UUID = require('node-uuid');
 
 import Condition = require('../Condition');
 import GoalExpression = require('../expression/GoalExpression');
@@ -35,7 +36,8 @@ class ConditionFactory {
     }
 
     public createOverall(data:any):Condition {
-
+        var id = (data.id == null) ? UUID.v4() : data.id;
+        var description:string = data.description;
 
         var goalExpression:GoalExpression = this.expressionFactory.createExpression(data.expression);
 
@@ -44,12 +46,16 @@ class ConditionFactory {
         var dayOfWeekFilterDesc:string = data.filter.dayOfWeekFilter;
         var periodOfDayFilterDesc:string[] = data.filter.periodOfDayFilter;
 
+
         var filter:Filter = new Filter(dayOfWeekFilterDesc, periodOfDayFilterDesc);
-        var overallCondition:OverallGoalCondition = new OverallGoalCondition(null, '', goalExpression, threshold, filter);
+        var overallCondition:OverallGoalCondition = new OverallGoalCondition(id, description, goalExpression, threshold, filter);
         return overallCondition;
     }
 
     public createComparison(data:any):Condition {
+        var id = (data.id == null) ? UUID.v4() : data.id;
+        var description:string = data.description;
+
         var dayOfWeekFilterDesc:string = data.filter.dayOfWeekFilter;
         var periodOfDayFilterDesc:string[] = data.filter.periodOfDayFilter;
         var filter:Filter = new Filter(dayOfWeekFilterDesc, periodOfDayFilterDesc);
@@ -58,7 +64,7 @@ class ConditionFactory {
         var referencePeriod:ReferencePeriod = new ReferencePeriod(referencePeriodDesc.numberOfUnitToSubtract, referencePeriodDesc.unitToSubtract);
 
         var goalExpression:GoalExpression = this.expressionFactory.createExpression(data.expression);
-        var averageOnValue:AverageOnValue = new AverageOnValue(null, '', goalExpression, data.threshold, filter, referencePeriod);
+        var averageOnValue:AverageOnValue = new AverageOnValue(id, description, goalExpression, data.threshold, filter, referencePeriod);
         return averageOnValue;
     }
 

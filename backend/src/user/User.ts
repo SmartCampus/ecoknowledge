@@ -79,6 +79,10 @@ class User {
         return this.currentChallenges;
     }
 
+    wipeCurrentChallenges():void {
+        this.currentChallenges = [];
+    }
+
     addChallenge(goal:Goal, now:moment.Moment):Challenge {
         var newChallenge = this.challengeFactory.createChallenge(goal, this, now);
 

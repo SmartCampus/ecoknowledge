@@ -5,6 +5,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-express-server');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-typescript');
     grunt.loadNpmTasks('grunt-mocha-test');
 
@@ -56,12 +57,12 @@ module.exports = function (grunt) {
             },
             build: {
                 options: {
-                    script: 'build/Backend.js'
+                    script: 'build/Context.js'
                 }
             },
             dist: {
                 options: {
-                    script: 'dist/Backend.js',
+                    script: 'dist/Context.js',
                     node_env: 'production'
                 }
             }
@@ -73,7 +74,7 @@ module.exports = function (grunt) {
 // ---------------------------------------------
         watch: {
             express: {
-                files:  [ 'build/Backend.js' ],
+                files:  [ 'build/Context.js' ],
                 tasks:  [ 'express:build' ],
                 options: {
                     spawn: false
@@ -109,8 +110,29 @@ module.exports = function (grunt) {
             dist: ['dist/'],
             test: ['buildTests/'],
             all:['src/**/*.js', 'src/**/*js.map','tests/**/*.js', 'tests/**/*js.map']
-        }
+        },
 // ---------------------------------------------
+
+
+// ---------------------------------------------
+//                                    copy task
+// ---------------------------------------------
+        copy: {
+            testFiles: {
+                files: [{
+                    expand: true,
+                    src: ['db_test.json', 'stub_values_test.json', 'db.json', 'stub_values.json'],
+                    dest: 'buildTests/'
+                }]
+            },
+            prodFiles: {
+                files: [{
+                    expand: true,
+                    src: ['db_test.json', 'stub_values_test.json', 'db.json', 'stub_values.json'],
+                    dest: 'build/'
+                }]
+            }
+        }
     });
 
     // register tasks
@@ -119,8 +141,8 @@ module.exports = function (grunt) {
     grunt.registerTask('build', function () {
         grunt.task.run(['clean:build','clean:test']);
 
-        grunt.task.run(['typescript:build', 'typescript:test']);
-        // grunt.task.run(['typescript:build']);
+        grunt.task.run(['typescript:build','typescript:test', 'copy:prodFiles']);
+        //grunt.task.run(['typescript:build']);
     });
 
     grunt.registerTask('develop', function() {
@@ -136,7 +158,7 @@ module.exports = function (grunt) {
     grunt.registerTask('test', function() {
         grunt.task.run(['clean:test']);
 
-        grunt.task.run(['typescript:test', 'mochaTest:test']);
+        grunt.task.run(['copy:testFiles','typescript:test', 'mochaTest:test']);
     });
 
 }

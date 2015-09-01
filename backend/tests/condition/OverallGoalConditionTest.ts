@@ -71,7 +71,7 @@ describe('Test OverallGoalCondition', () => {
         data[aSymbolicName] = values;
 
         var result = condition.evaluate(data, conditionDescription);
-        chai.expect(result.finished).to.be.false;
+        chai.expect(result.achieved).to.be.false;
     });
 
     it('should return false if min threshold is not reached', () => {
@@ -92,7 +92,7 @@ describe('Test OverallGoalCondition', () => {
         data[aSymbolicName] = values;
 
         var result = condition.evaluate(data, conditionDescription);
-        chai.expect(result.finished).to.be.false;
+        chai.expect(result.achieved).to.be.false;
     });
 
     it('should return true if min threshold is just reached', () => {
@@ -114,7 +114,7 @@ describe('Test OverallGoalCondition', () => {
         data[aSymbolicName] = values;
 
         var result = condition.evaluate(data, conditionDescription);
-        chai.expect(result.finished).to.be.true;
+        chai.expect(result.achieved).to.be.true;
     });
 
 
@@ -137,6 +137,6 @@ describe('Test OverallGoalCondition', () => {
         data[aSymbolicName] = values;
 
         var result = condition.evaluate(data, conditionDescription);
-        chai.expect(result.finished).to.be.true;
+        chai.expect(result.achieved).to.be.true;
     });
 });

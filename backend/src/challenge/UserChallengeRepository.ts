@@ -25,14 +25,14 @@ class BadgeProvider {
     }
 
     public getBadgeByChallengeID(challengeID:string):string {
-        return this.getGoalInstance(challengeID).getBadge();
+        return this.getChallengeByID(challengeID).getBadge();
     }
 
     public addGoalInstance(aChallenge:Challenge) {
         this.goalInstancesArray.push(aChallenge);
     }
 
-    public getGoalInstance(challengeID:string):Challenge {
+    public getChallengeByID(challengeID:string):Challenge {
         for (var i in this.goalInstancesArray) {
             var currentBadge = this.goalInstancesArray[i];
             if (currentBadge.hasUUID(challengeID)) {
@@ -66,7 +66,7 @@ class BadgeProvider {
             currentBadgeDesc.name = this.goalInstancesArray[i].getName();
             currentBadgeDesc.id = this.goalInstancesArray[i].getId();
             currentBadgeDesc.desc = this.goalInstancesArray[i].getGoal().getName();
-            currentBadgeDesc.progress = this.goalInstancesArray[i].getProgress();
+            currentBadgeDesc.progress = this.goalInstancesArray[i].getGlobalProgression();
 
             currentBadgeDesc.startDate = this.goalInstancesArray[i].getStartDate();
             currentBadgeDesc.endDate = this.goalInstancesArray[i].getEndDate();

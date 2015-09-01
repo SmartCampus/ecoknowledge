@@ -21,9 +21,7 @@ class UserChallenge {
 
     private status:BadgeStatus;
 
-    private progress:any[] = [];
-    private progressDescription:any = {};
-    private percentageOfTime:number = 0;
+    private progress:any = {};
 
     //  { A_CONDITION_ID : { symbolic_name: tmp_cli, timeBox: { startDate:..., endDate } } }
     private mapConditionIDToSensorAndTimeBoxRequired:any = {};
@@ -47,13 +45,16 @@ class UserChallenge {
 
         this.mapConditionIDToSensorAndTimeBoxRequired = mapConditionIDToSensorAndTimeBoxRequired;
         this.mapSymbolicNameToSensor = this.user.getMapSymbolicNameToSensor();
+
+        this.buildRequired();
+
     }
 
     getConditionDescriptionByID(conditionID:string) {
         return this.mapConditionIDToSensorAndTimeBoxRequired[conditionID];
     }
 
-    public updateDurationAchieved(currentDate:number) {
+    public updateDurationAchieved(currentDate:number):number {
 
         var current:moment.Moment = Clock.getMoment(currentDate);
 
@@ -63,41 +64,16 @@ class UserChallenge {
 
         var duration:number = this.endDate.valueOf() - this.startDate.valueOf();
         var durationAchieved:number = current.valueOf() - this.startDate.valueOf();
-        this.percentageOfTime = durationAchieved * 100 / duration;
+        var percentageOfTime = durationAchieved * 100 / duration;
 
         //  It can have tiny incorrect decimal values
-        this.percentageOfTime = (this.percentageOfTime > 100) ? 100 : this.percentageOfTime;
+        percentageOfTime = (percentageOfTime > 100) ? 100 : percentageOfTime;
+
+        return percentageOfTime;
     }
 
     getUser():User {
         return this.user;
-    }
-
-    isFinished():boolean {
-        return this.getTimeProgress() >= 100;
-    }
-
-    getTimeProgress():number {
-        return this.percentageOfTime;
-    }
-
-    resetProgress() {
-        this.progress = [];
-    }
-
-    addProgressByCondition(conditionID:string, percentageAchieved:number) {
-        this.progressDescription[conditionID] = percentageAchieved;
-    }
-
-    getGlobalProgression():number {
-        var globalProgression:number = 0;
-
-        for (var currentConditionID in this.progressDescription) {
-            var currentConditionProgression = this.progressDescription[currentConditionID];
-            globalProgression += currentConditionProgression;
-        }
-
-        return globalProgression / (Object.keys(this.progressDescription)).length;
     }
 
     getStartDate():moment.Moment {
@@ -128,10 +104,6 @@ class UserChallenge {
         return this.id === aUUID;
     }
 
-    getProgress():any {
-        this.progress['global'] = this.getGlobalProgression();
-        return this.progress;
-    }
 
     getStatus():BadgeStatus {
         return this.status;
@@ -146,13 +118,18 @@ class UserChallenge {
     }
 
     getSensors():any {
+        return this.mapConditionIDToSensorAndTimeBoxRequired;
+    }
 
-        for(var conditionID in this.mapConditionIDToSensorAndTimeBoxRequired) {
+    private buildRequired():any {
+
+        for (var conditionID in this.mapConditionIDToSensorAndTimeBoxRequired) {
             var sensors:string[] = [];
 
             var currentConditionDescription = this.mapConditionIDToSensorAndTimeBoxRequired[conditionID];
             var symbolicNames:string[] = currentConditionDescription.symbolicNames;
-            for(var symbolicNamesIndex in symbolicNames) {
+
+            for (var symbolicNamesIndex in symbolicNames) {
                 var currentSymbolicName = symbolicNames[symbolicNamesIndex];
                 var currentSensor = this.mapSymbolicNameToSensor[currentSymbolicName];
                 sensors.push(currentSensor);
@@ -176,64 +153,66 @@ class UserChallenge {
     /**
      *
      * @param values
-     *
-     *  - describing a required of a condition
+     * {
+     *  <conditionid> :
      *  {
-     *      'name' : <string>           - symbolic name of the required field, eg : 'Temp_cli',
-     *      'sensor' : 'sensor_id ',    - sensor id bound to achieve current goal condition, eg : 'AC_443',
-     *      'value' : <number>          - current value of specified sensor
+     *      symbolicNames:[...],
+     *      <sensor> : [ <data> ]
      *  }
-     * @returns {boolean}
+     * }
+     * @returns {any}
      */
-    evaluate(values:any):boolean {
-        console.log('evaluate de challenge');
+    evaluate(values:any):any {
+
+        for(var currentConditionID in values) {
+            var currentConditionDesc = values[currentConditionID];
+            currentConditionDesc['values'] = {};
+            for(var currentSymbolicNameIndex in currentConditionDesc.symbolicNames) {
+                var currentSymbolicName = currentConditionDesc.symbolicNames[currentSymbolicNameIndex];
+                var sensorNameBound = this.mapSymbolicNameToSensor[currentSymbolicName];
+                if(sensorNameBound == null) continue;
+                var dataForCurrentSensor  = currentConditionDesc[sensorNameBound];
+                currentConditionDesc['values'][currentSymbolicName] = dataForCurrentSensor;
+            }
+        }
+
         //  Check if badge is running. If Waiting or failed, it must be left unchanged
         if (this.status != BadgeStatus.RUN) {
             return false;
         }
 
-        this.resetProgress();
+        var resultEval = this.goal.evaluate(values, this);
 
-        this.updateDurationAchieved(Clock.getNow());
-        var numberOfValues = Object.keys(values).length;
-        var numberOfValuesNeeded = Object.keys(this.mapSymbolicNameToSensor).length;
+        var durationAchieved:number = this.updateDurationAchieved(Clock.getNow());
+        resultEval['durationAchieved'] = durationAchieved;
 
-        if (numberOfValues < numberOfValuesNeeded) {
-            throw new Error("Can not evaluate goal " + this.goal.getName()
-                + "! There are " + numberOfValuesNeeded + " symbolic names needed and only "
-                + numberOfValues + " values given");
-        }
+        var finished:boolean = (durationAchieved === 100) ? true : false;
+        resultEval['finished'] = finished;
 
-        var mapSymbolicNameToValue = this.bindSymbolicNameToValue(values);
+        var achieved:boolean = resultEval['achieved'];
 
-
-        // TODO
-        //  Il faut ajouter une indirection
-        //  MapSymbolicNameTOValue ne fait que TMP_CLI => [val1, val2]
-        //  Il faut en fait faire CONDITION_ID => { TMP_CLI => [val1] }
-        //  Seul moyen pour que ça fonctionne !
-        //  Le merge de timebox s'est fait ; il faut rajouter un
-        // "isInTimeBox" dans bindSNTV pour reconstuire le schéma
-        //  cID => SN => Vals
-
-
-
-
-
-        var resultEval = this.goal.evaluate(mapSymbolicNameToValue, this);
-
-        if (resultEval && this.percentageOfTime >= 100) {
+        if (achieved && finished) {
             this.status = BadgeStatus.SUCCESS;
             console.log('success!');
             return true;
-        } else if (this.percentageOfTime >= 100) {
+        } else if (!achieved && finished) {
             this.status = BadgeStatus.FAIL;
             console.log('Fail!');
         } else {
             console.log('run');
             this.status = BadgeStatus.RUN;
         }
-        return false;
+
+        this.progress = resultEval;
+
+        return resultEval;
+    }
+    getGlobalProgression():any {
+        return this.progress;
+    }
+
+    getTimeProgress():any {
+        return this.progress['durationAchieved'];
     }
 
     bindSymbolicNameToValue(mapSensorToValue:any) {
@@ -250,9 +229,7 @@ class UserChallenge {
     }
 
 
-
     getDataInJSON():any {
-        console.log('time progress : ', this.percentageOfTime);
         return {
             id: this.id,
             startDate: this.startDate,

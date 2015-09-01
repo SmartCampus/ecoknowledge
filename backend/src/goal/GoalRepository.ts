@@ -69,7 +69,7 @@ class GoalDefinitionRepository {
         var takenGoals:Goal[] = [];
         for (var currentChallengeIDIndex in currentChallengesID) {
             var currentChallengeID:string = currentChallengesID[currentChallengeIDIndex];
-            var currentChallenge:Challenge = challengeRepository.getGoalInstance(currentChallengeID);
+            var currentChallenge:Challenge = challengeRepository.getChallengeByID(currentChallengeID);
             takenGoals.push(currentChallenge.getGoal());
         }
 

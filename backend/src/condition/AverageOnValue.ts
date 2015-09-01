@@ -84,7 +84,7 @@ class AverageOnValue extends Condition {
 
         }
         var finished:boolean = percentageAchieved === 100;
-        var result:any = {percentageAchieved: percentageAchieved, finished: finished};
+        var result:any = {description: this.description, percentageAchieved: percentageAchieved, finished: finished};
 
 
         return result;

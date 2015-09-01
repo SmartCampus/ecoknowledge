@@ -7,48 +7,17 @@ import Server = require('./Server');
 import DashboardRouter = require('./api/DashboardRouter');
 import LoginRouter = require('./api/LoginRouter');
 
-import BadgeRepository = require('./badge/BadgeRepository');
-import BadgeFactory = require('./badge/BadgeFactory');
-
-import GoalRepository = require('./goal/GoalRepository');
-import GoalFactory = require('./goal/GoalFactory');
-
-import UserChallengeRepository = require('./challenge/UserChallengeRepository');
-import UserChallengeFactory = require('./challenge/UserChallengeFactory');
-
-import UserRepository = require('./user/UserRepository');
-import UserFactory = require('./user/UserFactory');
-import User = require('./user/User');
-
-import TeamRepository = require('./user/TeamRepository');
-import TeamFactory = require('./user/TeamFactory');
-
-import Operand = require('./condition/expression/Operand');
-import GoalExpression = require('./condition/expression/GoalExpression');
-import OverallGoalCondition = require('./condition/OverallGoalCondition');
-import TimeBox = require('./TimeBox');
+import Context = require('./Context');
 
 import StoringHandler = require('./StoringHandler');
 import Middleware = require('./Middleware');
 
 class Backend extends Server {
 
-    public badgeRepository:BadgeRepository;
-    public badgeFactory:BadgeFactory;
+    private context:Context;
 
-    public goalDefinitionRepository:GoalRepository;
-    public goalDefinitionFactory:GoalFactory;
-
-    public challengeRepository:UserChallengeRepository;
-    public challengeFactory:UserChallengeFactory;
-
-    public userRepository:UserRepository;
-    public userFactory:UserFactory;
-
-    public teamRepository:TeamRepository;
-    public teamFactory:TeamFactory;
-
-    private storingHandler:StoringHandler;
+    public static PATH_TO_DB:string = "./db.json";
+    public static PATH_TO_STUB:string = "./stub_values.json";
 
     /**
      * Constructor.
@@ -57,26 +26,10 @@ class Backend extends Server {
      * @param {Array<string>} arguments - Server's command line arguments.
      */
     constructor(listeningPort:number, arguments:Array<string>) {
-        this.userRepository = new UserRepository();
+        super(listeningPort, arguments);
 
-        super(listeningPort, arguments, this.userRepository);
+        this.context = new Context(Backend.PATH_TO_DB, Backend.PATH_TO_STUB);
 
-        this.badgeRepository = new BadgeRepository();
-        this.badgeFactory = new BadgeFactory();
-
-        this.goalDefinitionRepository = new GoalRepository(this.badgeRepository);
-        this.goalDefinitionFactory = new GoalFactory();
-
-        this.challengeRepository = new UserChallengeRepository();
-        this.challengeFactory = new UserChallengeFactory();
-
-        this.userRepository = new UserRepository();
-        this.userFactory = new UserFactory();
-
-        this.teamRepository = new TeamRepository();
-        this.teamFactory = new TeamFactory();
-
-        this.storingHandler = new StoringHandler(this);
 
         this.loadData();
         this.buildAPI();
@@ -90,8 +43,8 @@ class Backend extends Server {
     buildAPI() {
         var self = this;
 
-        this.app.use('/dashboard', (new DashboardRouter(self.challengeRepository, self.challengeFactory, self.goalDefinitionRepository, self.userRepository, self.teamRepository, self.badgeRepository, new Middleware())).getRouter());
-        this.app.use('/login', (new LoginRouter(self.userRepository)).getRouter());
+        this.app.use('/dashboard', (new DashboardRouter(self.context, new Middleware())).getRouter());
+        this.app.use('/login', (new LoginRouter(self.context)).getRouter());
 
         /*
          this.app.use("/badges", (new BadgeRouter(self.badgeRepository, self.badgeFactory, self.userRepository, loginCheck)).getRouter());
@@ -99,8 +52,8 @@ class Backend extends Server {
          this.app.use("/challenges", (new GoalInstanceRouter(self.challengeRepository, self.challengeFactory, self.goalDefinitionRepository, self.userRepository)).getRouter());
          */
 
-        this.app.get('/test', function (req, res) {
-            self.storingHandler.save(
+        this.app.get('/save', function (req, res) {
+            self.context.saveData(
                 function (result) {
                     console.log(result.success);
                 },
@@ -112,17 +65,14 @@ class Backend extends Server {
     }
 
     loadData():void {
-        var result = this.storingHandler.load();
-        if (result.success) {
-            console.log(result.success);
-        }
+        var result = this.context.loadData();
     }
 }
 
 export = Backend;
 
 /**
- * Server's Backend listening port.
+ * Server's Context listening port.
  *
  * @property _BackendListeningPort
  * @type number
@@ -131,7 +81,7 @@ export = Backend;
 var _BackendListeningPort:number = 3000;
 
 /**
- * Server's Backend command line arguments.
+ * Server's Context command line arguments.
  *
  * @property _BackendArguments
  * @type Array<string>

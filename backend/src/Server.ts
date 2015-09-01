@@ -42,7 +42,6 @@ class Server {
      */
     httpServer:any;
 
-    userRepository:UserRepository;
 
     /**
      * Constructor.
@@ -50,10 +49,9 @@ class Server {
      * @param {number} listeningPort - Listening port.
      * @param {Array<string>} arguments - Command line arguments.
      */
-    constructor(listeningPort:number, arguments:Array<string>, userRepository:UserRepository) {
+    constructor(listeningPort:number, arguments:Array<string>) {
         this.listeningPort = listeningPort;
         this._buildServer();
-        this.userRepository = userRepository;
     }
 
     /**

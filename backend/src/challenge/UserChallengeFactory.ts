@@ -63,7 +63,8 @@ class GoalInstanceFactory {
             var currentCondition = goalConditions[conditionIndex];
             var conditionID = currentCondition.getID();
             var symbolicNamesAndTimeBoxRequired = currentCondition.getRequiredByCondition(startDateOfChallenge, endDateOfChallenge);
-            mapConditionIDToSensorAndTimeBoxRequired[conditionID] = symbolicNamesAndTimeBoxRequired;
+
+            mapConditionIDToSensorAndTimeBoxRequired[conditionID]  = symbolicNamesAndTimeBoxRequired;
 
         }
 

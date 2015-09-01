@@ -5,13 +5,14 @@
 /// <reference path="../../typings/moment/moment.d.ts" />
 /// <reference path="../../typings/moment-timezone/moment-timezone.d.ts" />
 
-var moment = require('moment');
-var moment_timezone = require('moment-timezone');
 
 import chai = require('chai');
 import sinon = require('sinon');
 var assert = chai.assert;
 
+
+var moment = require('moment');
+var moment_timezone = require('moment-timezone');
 
 import Goal = require('../../src/goal/Goal');
 import GoalExpression = require('../../src/condition/expression/GoalExpression');
@@ -26,9 +27,9 @@ describe('Goal Test', () => {
     var aGoalName:string = "goal 1";
     var aBadgeID:string = 'badge 1';
 
-    var now:moment.Moment = moment('2015-08-26T00:00:00');
-    var startDate:moment.Moment = moment("2015-08-17T:00:00:00");
-    var endDate:moment.Moment = moment("2015-09-17T:23:59:59");
+    var now:moment.Moment = moment('2015-08-26T00:00:00.000');
+    var startDate:moment.Moment = moment("2015-08-17T00:00:00.000");
+    var endDate:moment.Moment = moment("2015-09-17T23:59:59.000");
 
     var aRecurringSession:RecurringSession = new RecurringSession('week');
 

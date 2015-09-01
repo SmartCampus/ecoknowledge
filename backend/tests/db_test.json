@@ -4,14 +4,13 @@
       "id": "3221c575-85ca-447b-86f3-3a4ef39985dc",
       "name": "Clim",
       "validityPeriod": {
-        "start": "2015-07-01T06:58:42.000Z",
-        "end": "2015-09-30T13:01:24.000Z"
+        "start": "2015-08-03T22:00:00.000Z",
+        "end": "2015-09-03T22:00:00.000Z"
       },
       "recurringPeriod": "week",
       "conditions": [
         {
           "id": "ab72f9b4-a368-4ea2-8adb-738ea0e6f30b",
-		  "description":"a desc",
           "expression": {
             "valueLeft": {
               "value": "TMP_CLI",
@@ -22,13 +21,14 @@
               "symbolicName": false
             },
             "comparison": ">",
+            "description": "a desc",
             "periodOfTime": "-2208474000000"
           },
           "threshold": 25,
-			"referencePeriod" :{
-				"numberOfUnitToSubtract":1,
-				"unitToSubtract":"week"
-			},
+          "referencePeriod": {
+            "numberOfUnitToSubtract": 1,
+            "unitToSubtract": "week"
+          },
           "filter": {
             "dayOfWeekFilter": "all",
             "periodOfDayFilter": [
@@ -52,7 +52,6 @@
       "conditions": [
         {
           "id": "7713cb13-e86d-40d0-a39f-c4ad5a33546d",
-		  "description": "tmp_cli > 1",
           "expression": {
             "valueLeft": {
               "value": "TMP_CLI",
@@ -62,7 +61,8 @@
               "value": 1,
               "symbolicName": false
             },
-            "comparison": ">"
+            "comparison": ">",
+            "description": "tmp_cli > 1"
           },
           "threshold": 100,
           "filter": {
@@ -80,18 +80,8 @@
   "badges": [
     {
       "id": "44bb8108-8830-4f43-abd1-3ef643303d92",
-      "name": "Un challenge de démo !",
+      "name": "Un challenge de d\u00e9mo !",
       "points": 100
-    },
-    {
-      "id": "fde68334-f515-4563-954b-ac91b4a42f88",
-      "name": "Pas froid aux yeux",
-      "points": "100"
-    },
-	{
-      "id": "faa78334-f515-4563-954b-ac91b4a42f88",
-      "name": "Pas chiche de tout fermer !",
-      "points": "100"
     }
   ],
   "users": [
@@ -99,29 +89,51 @@
       "id": "2cf91e02-a320-4766-aa9f-6efce3142d44",
       "name": "Charlie",
       "currentChallenges": [
+        
       ],
       "finishedBadgesMap": {
-        "44bb8108-8830-4f43-abd1-3ef643303d92": 1,
-        "fde68334-f515-4563-954b-ac91b4a42f88": 1
+        
       },
-	  "mapSymbolicNameToSensor": {
-		"TMP_CLI":"TEMP_443V"
-	  }
+      "mapSymbolicNameToSensor": {
+        "TMP_CLI": "TEMP_443V"
+      }
+    },
+	    {
+      "id": "2cf91e02-a320-4766-aa9f-6efce3142d44",
+      "name": "Gégé",
+      "currentChallenges": [
+        
+      ],
+      "finishedBadgesMap": {
+        
+      },
+      "mapSymbolicNameToSensor": {
+        "TMP_CLI": "TEMP_352"
+      }
     }
   ],
   "teams": [
-	{
-		"id" : "28aa8108-8830-4f43-abd1-3ab643303d92",
-		"name" : "croquette",
-		"members" : ["2cf91e02-a320-4766-aa9f-6efce3142d44"],
-		"leader":"2cf91e02-a320-4766-aa9f-6efce3142d44"
-	}
+    {
+      "id": "28aa8108-8830-4f43-abd1-3ab643303d92",
+      "name": "croquette",
+      "members": [
+        "2cf91e02-a320-4766-aa9f-6efce3142d44"
+      ],
+      "leader": "2cf91e02-a320-4766-aa9f-6efce3142d44",
+      "currentChallenges": [
+        
+      ],
+      "finishedBadgesMap": {
+        
+      }
+    }
   ],
-  "challenges": 
-  {
-	"userChallenges":
-	  [
-	  ],
-	  "teamChallenges":[]
+  "challenges": {
+    "userChallenges": [
+      
+    ],
+    "teamChallenges": [
+      
+    ]
   }
 }
