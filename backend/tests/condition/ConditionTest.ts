@@ -79,11 +79,11 @@ describe('Test Condition', () => {
             var expected:any = {
                 valueLeft: {
                     value: aSymbolicName,
-                    sensor: true
+                    symbolicName: true
                 },
                 valueRight: {
                     value: aValue,
-                    sensor: false
+                    symbolicName: false
                 },
                 comparison: aComparison
             };

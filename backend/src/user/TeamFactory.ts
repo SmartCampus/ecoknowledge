@@ -49,7 +49,8 @@ class TeamFactory {
         var leaderID:string = data.leader;
         var leader = userRepository.getUser(leaderID);
 
-        var team:Team = new Team(teamID, teamName, leader, members, currentChallenges, finishedBadgesMap);
+        //TODO FIX NULL
+        var team:Team = new Team(teamID, teamName, leader, members, currentChallenges, finishedBadgesMap, null);
         return team;
     }
 }

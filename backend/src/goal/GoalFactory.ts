@@ -29,6 +29,8 @@ class GoalFactory {
 
     public createGoal(data:any):Goal {
 
+        this.checkData(data);
+
         var goalID = (data.id == null) ? UUID.v4() : data.id;
         var goalName:string = data.name;
         var badge:string = data.badgeID;
@@ -43,7 +45,7 @@ class GoalFactory {
 
         var goalConditions:any[] = data.conditions;
         for (var i = 0; i < goalConditions.length; i++) {
-            var currentExpression = this.conditionFactory.createCondition(goalConditions[i], data.timeBox);
+            var currentExpression = this.conditionFactory.createCondition(goalConditions[i]);
             newGoal.addCondition(currentExpression);
         }
         //  console.log("Creation de l'objectif", goalName, "valide du", startDateOfValidityPeriod, "au", endDateOfValidityPeriod, "avec le badge", newGoal.getBadgeID());
@@ -65,7 +67,7 @@ class GoalFactory {
         }
 
         if (data.recurringPeriod == null) {
-            throw new BadArgumentException('Can not create given goal because array "recurringPeriod" is null');
+            throw new BadArgumentException('Can not create given goal because field "recurringPeriod" is null');
         }
 
         if (data.validityPeriod == null) {

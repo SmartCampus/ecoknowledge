@@ -18,14 +18,18 @@ describe("GoalFactory test", () => {
     var start = Clock.getMomentFromString("2000-01-01T00:00:00");
     var end = Clock.getMomentFromString("2000-08-01T00:00:00");
 
+    console.log("START ?", start.toISOString());
+
     beforeEach(() => {
         var jsonDefinition:any = {};
         jsonDefinition.name = "Clim";
+        jsonDefinition.badgeID = "badgeID";
+        jsonDefinition.recurringPeriod = "week";
 
-        var timeBox:any = {};
-        timeBox.startDate = start.toISOString();
-        timeBox.endDate = end.toISOString();
-        jsonDefinition.timeBox = timeBox;
+        var validityPeriod:any = {};
+        validityPeriod.start = start.toISOString();
+        validityPeriod.end = end.toISOString();
+        jsonDefinition.validityPeriod = validityPeriod;
 
         jsonDefinition.duration = 'day';
 
@@ -33,8 +37,8 @@ describe("GoalFactory test", () => {
         jsonExpression.comparison = '<';
         jsonExpression.type = 'number';
         jsonExpression.description = 'description blabla ..';
-        jsonExpression.valueLeft = {'value': 'TEMP_CLI', 'sensor': true};
-        jsonExpression.valueRight = {'value': '15', 'sensor': false};
+        jsonExpression.valueLeft = {'value': 'TEMP_CLI', 'symbolicName': true};
+        jsonExpression.valueRight = {'value': '15', 'symbolicName': false};
 
         var aJsonCondition:any = {};
         aJsonCondition.type = 'overall';

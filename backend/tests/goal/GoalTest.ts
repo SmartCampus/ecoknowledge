@@ -96,7 +96,7 @@ describe('Goal Test', () => {
                     startDate: goal.getBeginningOfValidityPeriod(),
                     endDate: goal.getEndOfValidityPeriod()
                 },
-                duration: 'month',
+                duration: aRecurringSession.getDescription(),
                 conditions: goal.getDataOfConditionsInJSON(),
                 badgeID: goal.getBadgeID()
             };

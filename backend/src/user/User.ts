@@ -27,15 +27,7 @@ class User {
 
     constructor(name:string, mapSymbolicNameToSensor:any, currentChallenges:string[],
                 finishedBadgesMap:BadgeIDsToNumberOfTimesEarnedMap, challengeFactory:ChallengeFactory, id = null) {
-        if (name == null) {
-            throw new BadArgumentException('Can not build user because given name is null');
-        }
-
-        if (mapSymbolicNameToSensor == null) {
-            throw new BadArgumentException('Can not build user ' + name + ' because given map of symbolic name to sensor is null');
-        }
-
-        this.id = (id) ? id : uuid.v4();
+        this.id = id;
 
         this.name = name;
         this.mapSymbolicNameToSensor = mapSymbolicNameToSensor;
@@ -71,7 +63,7 @@ class User {
         return this.badgesMap;
     }
 
-    public addBadge(badgeID:string) {
+    addBadge(badgeID:string) {
         if (!badgeID) {
             throw new BadArgumentException('Can not add given badge to user' + this.getName() + '. Badge given is null');
         }

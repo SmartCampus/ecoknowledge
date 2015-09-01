@@ -36,8 +36,7 @@ describe('Test store GoalCondition class', () => {
             value: rightOperand.getStringDescription(),
             symbolicName: rightOperand.hasToBeDefined()
         },
-        comparison: typeOfComparison,
-        description: description
+        comparison: typeOfComparison
     };
 
     it('should return the proper json object', () => {

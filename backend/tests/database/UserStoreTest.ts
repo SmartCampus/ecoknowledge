@@ -36,7 +36,7 @@ describe('Test store user class', () => {
     });
 
     describe('build with its own description', () => {
-        var userClone:User = new User(expected.name,expected.mapSymbolicNameToSensor,expected.currentChallenges, expected.finishedBadgesMap,  expected.id);
+        var userClone:User = new User(expected.name,expected.mapSymbolicNameToSensor,expected.currentChallenges, expected.finishedBadgesMap,null,  expected.id);
 
         it('should have the same name', () => {
             chai.expect(userClone.getName()).to.be.eq(aName);

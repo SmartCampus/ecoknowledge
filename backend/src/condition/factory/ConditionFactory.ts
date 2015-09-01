@@ -17,12 +17,12 @@ import ReferencePeriod = require('../ReferencePeriod');
 class ConditionFactory {
     private expressionFactory:ExpressionFactory = new ExpressionFactory();
 
-    public createCondition(data:any, goalTimeBox:any):Condition {
+    public createCondition(data:any):Condition {
         var type:string = data.type;
         var expression = null;
         switch (type) {
             case 'overall':
-                expression = this.createOverall(data, goalTimeBox);
+                expression = this.createOverall(data);
                 break;
             case 'comparison':
                 expression = this.createComparison(data);
@@ -34,14 +34,10 @@ class ConditionFactory {
         return expression;
     }
 
-    public createOverall(data:any, goaltimeBox:any):Condition {
+    public createOverall(data:any):Condition {
 
-        data.expression.timeBox = goaltimeBox;
 
         var goalExpression:GoalExpression = this.expressionFactory.createExpression(data.expression);
-
-        var startDateOfValidityPeriod:moment.Moment = goaltimeBox.startDate;
-        var endDateOfValidityPeriod:moment.Moment = goaltimeBox.endDate;
 
         var threshold:number = data.threshold;
 

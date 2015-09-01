@@ -11,7 +11,7 @@ class Entity {
 
     private id;
     private name:string;
-    private currentChallenges:string[] = [];
+    protected currentChallenges:string[] = [];
     private badgesMap:BadgeIDsToNumberOfTimesEarnedMap = {};
 
     constructor(id:string, name:string, currentChallenges:string[],

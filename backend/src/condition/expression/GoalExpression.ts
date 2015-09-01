@@ -113,11 +113,11 @@ class GoalExpression {
         return {
             valueLeft: {
                 value: this.leftOperand.getStringDescription(),
-                sensor: this.leftOperand.hasToBeDefined()
+                symbolicName: this.leftOperand.hasToBeDefined()
             },
             valueRight: {
                 value: this.rightOperand.getStringDescription(),
-                sensor: this.rightOperand.hasToBeDefined()
+                symbolicName: this.rightOperand.hasToBeDefined()
             },
             comparison: this.comparator.getTypeOfComparison()
         };
