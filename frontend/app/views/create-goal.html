@@ -1,20 +1,28 @@
-<div class="container jumbotron" ng-controller="GoalCtrl as goalCtrl">
-    <div class="page-header text-center">
-        <h1>Créer un objectif</h1>
+<div class="well create-goal-container" ng-controller="GoalCtrl as goalCtrl">
+  <div class="page-header text-center">
+    <h1>Créer un objectif</h1>
+  </div>
+
+  <form name="goalCreateForm" class="form-horizontal" ng-submit="goalCreateForm.$valid && goalCtrl.addGoal()"
+        novalidate>
+
+    <label for="goal-name">Nom</label>
+    <input name="goalName" type="text" class="form-control " id="goal-name" placeholder="Nom de l'objectif"
+           ng-model="goalCtrl.goal.name" required>
+
+    <div id="create-goal-date">
+    <div style="display:inline-block; min-height:290px;">
+      <p style="text-align:center">Date du début de la validité de l'objectif</p>
+      <datepicker ng-model="goalCtrl.goal.timeBox.startDate" min-date="minDate" show-weeks="true"
+                  class="well"></datepicker>
     </div>
-    <form name="goalCreateForm" class="form" ng-submit="goalCreateForm.$valid && goalCtrl.addGoal()" novalidate>
-        <div class="form-group text-left">
-            <label for="goal-name">Nom</label>
-            <input name="goalName" type="text" class="form-control " id="goal-name" placeholder="Nom de l'objectif"
-                   ng-model="goalCtrl.goal.name" required>
-        </div>
-
-        <date-validity-goal></date-validity-goal>
-
-        <br/>
-        <br/>
-
-        <div>
+    <div style="display:inline-block; min-height:290px;float:right;">
+      <p style="text-align:center">Date de la fin de la validité de l'objectif</p>
+      <datepicker ng-model="goalCtrl.goal.timeBox.endDate" min-date="minDate" show-weeks="true"
+                  class="well well-sm"></datepicker>
+    </div>
+    </div>
+    <div>
             <span>
                 <label>Temps pour compléter l'objectif : </label>
 
@@ -22,7 +30,9 @@
                     <option value="day" selected>Jour (récurrent)</option>
                     <option value="week">Semaine (récurrent)</option>
                     <option value="month">Mois (récurrent)</option>
-                    <option value="all" disabled>Du {{goalCtrl.goal.timeBox.startDate | date:'dd/MM/yyyy'}} au {{goalCtrl.goal.timeBox.endDate | date:'dd/MM/yyyy'}} (non disponible)</option>
+                    <option value="all" disabled>Du {{goalCtrl.goal.timeBox.startDate | date:'dd/MM/yyyy'}} au
+                      {{goalCtrl.goal.timeBox.endDate | date:'dd/MM/yyyy'}} (non disponible)
+                    </option>
                   </select>
 
 
@@ -31,31 +41,31 @@
                 <label> jours</label>
                 -->
             </span>
-        </div>
+    </div>
 
-        <br/>
-        <br/>
+    <br/>
+    <br/>
 
-        <ul>
-            <conditions></conditions>
+    <ul>
+      <conditions></conditions>
 
-            <li class="list-group-item">
-                <div class="input-group">
+      <li class="list-group-item">
+        <div class="input-group">
                     <span>
                         <input type="button" ng-click="goalCtrl.addComparison()" value="Ajouter une comparaison">
                         <input type="button" ng-click="goalCtrl.addOverall()" value="Ajouter un overall">
                     </span>
-                </div>
-            </li>
+        </div>
+      </li>
 
-            <add-badges></add-badges>
+      <add-badges></add-badges>
 
-            <li class="list-group-item">
-                <div class="center-block">
-                    <input type="submit" class="btn btn-default" ng-disabled="!goalCreateForm.$valid" value="Créer l'objectif"/>
-                </div>
-            </li>
-        </ul>
+      <li class="list-group-item">
+        <div class="center-block">
+          <input type="submit" class="btn btn-default" ng-disabled="!goalCreateForm.$valid" value="Créer l'objectif"/>
+        </div>
+      </li>
+    </ul>
 
-    </form>
+  </form>
 </div>

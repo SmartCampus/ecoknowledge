@@ -14,7 +14,9 @@ var app = angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngAnimate',
+    'ngTouch',
+    'ui.bootstrap'
   ])
   .config(function ($routeProvider) {
 
@@ -38,6 +40,10 @@ var app = angular
         templateUrl: '../views/dashboard.html',
         controller: 'DashboardCtrl',
         controllerAs:'dashboard'
+      })
+      .when('/create-goal', {
+        templateUrl: '../views/create-goal.html',
+        controller: 'GoalCtrl'
       })
       .otherwise({
         redirectTo: '/lolerreurdansredirectionangulareuuuh/'
