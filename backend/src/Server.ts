@@ -7,7 +7,6 @@
 var http:any = require("http");
 var express:any = require("express");
 var bodyParser:any = require("body-parser");
-var session = require('client-sessions');
 
 import UserRepository = require('./user/UserRepository');
 

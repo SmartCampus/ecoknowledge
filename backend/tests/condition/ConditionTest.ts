@@ -99,10 +99,10 @@ describe('Test Condition', () => {
 
             var data:any = {};
             data[aSymbolicName] = [
-                {date: "2000-09-01T00:00:00", value: 10},
-                {date: "2000-09-01T00:00:00", value: 10},
-                {date: "2000-09-01T00:00:00", value: 10},
-                {date: "2000-09-01T00:00:00", value: 10}
+                {date: "967766400000", value: 10},
+                {date: "967766400000", value: 10},
+                {date: "967766400000", value: 10},
+                {date: "967766400000", value: 10}
             ];
 
 
@@ -114,10 +114,10 @@ describe('Test Condition', () => {
         it('should keep everything if everything is in the timeBox', () => {
             var data:any = {};
             data[aSymbolicName] = [
-                {date: "2000-02-01T00:00:00", value: 10},
-                {date: "2000-02-01T00:00:00", value: 10},
-                {date: "2000-02-01T00:00:00", value: 10},
-                {date: "2000-02-01T00:00:00", value: 10}
+                {date: "949363200000", value: 10},
+                {date: "949363200000", value: 10},
+                {date: "949363200000", value: 10},
+                {date: "949363200000", value: 10}
             ];
             var result:any[] = condition.keepUsefulValues(data, conditionDescription);
 
@@ -127,20 +127,20 @@ describe('Test Condition', () => {
         it('should keep what is in the timeBox', () => {
             var expected:any = {};
             expected[aSymbolicName] = [
-                {date: "2000-02-01T00:00:00", value: 10},
-                {date: "2000-02-01T00:00:00", value: 10},
-                {date: "2000-02-01T00:00:00", value: 10},
-                {date: "2000-02-01T00:00:00", value: 10}
+                {date: "949363200000", value: 10},
+                {date: "949363200000", value: 10},
+                {date: "949363200000", value: 10},
+                {date: "949363200000", value: 10}
             ];
 
             var data:any = {};
             data[aSymbolicName] = [
-                {date: "1999-01-01T00:00:00", value: 10},
-                {date: "2000-02-01T00:00:00", value: 10},
-                {date: "2000-02-01T00:00:00", value: 10},
-                {date: "2000-02-01T00:00:00", value: 10},
-                {date: "2000-02-01T00:00:00", value: 10},
-                {date: "2000-09-01T00:00:00", value: 10},
+                {date: "915148800000", value: 10},
+                {date: "949363200000", value: 10},
+                {date: "949363200000", value: 10},
+                {date: "949363200000", value: 10},
+                {date: "949363200000", value: 10},
+                {date: "967766400000", value: 10},
             ];
             var result:any[] = condition.keepUsefulValues(data, conditionDescription);
 

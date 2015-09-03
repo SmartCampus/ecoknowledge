@@ -96,7 +96,7 @@ class UserChallenge {
         return this.goal.getName();
     }
 
-    getId():string {
+    getID():string {
         return this.id;
     }
 
@@ -118,6 +118,56 @@ class UserChallenge {
     }
 
     getSensors():any {
+
+        var required:any = {};
+
+        for (var conditionID in this.mapConditionIDToSensorAndTimeBoxRequired) {
+            var currentConditionDescription = this.mapConditionIDToSensorAndTimeBoxRequired[conditionID];
+            var sensorsOfCurrentCondition = currentConditionDescription.sensors;
+
+            for(var currentSensorIndex in sensorsOfCurrentCondition) {
+                var currentSensor:string = sensorsOfCurrentCondition[currentSensorIndex];
+
+                if(required[currentSensor] == null) {
+                    required[currentSensor] = currentConditionDescription.timeBox;
+                }
+                else {
+                    var oldTimeBox = required[currentSensor];
+                    var oldStartDate:moment.Moment = oldTimeBox.start;
+                    var oldEndDate:moment.Moment = oldTimeBox.end;
+
+                    var currentTimeBox = currentConditionDescription.timeBox;
+                    var currentStartDate:moment.Moment = currentTimeBox.start;
+                    var currentEndDate:moment.Moment = currentTimeBox.end;
+
+                    var newStartDate:moment.Moment = null;
+                    var newEndDate:moment.Moment = null;
+
+                    if(currentStartDate.isBefore(oldStartDate)) {
+                        newStartDate = currentStartDate;
+                    }
+                    else {
+                        newStartDate = oldStartDate;
+                    }
+
+                    if(currentEndDate.isAfter(oldEndDate)) {
+                        newEndDate = currentEndDate;
+                    }
+                    else {
+                        newEndDate = oldEndDate;
+                    }
+
+                    var newTimeBox:any = {
+                        start:newStartDate,
+                        end:newEndDate
+                    };
+
+                    required[currentSensor] = newTimeBox;
+                }
+            }
+
+        }
+
         return this.mapConditionIDToSensorAndTimeBoxRequired;
     }
 
@@ -150,30 +200,42 @@ class UserChallenge {
         return now.isAfter(this.startDate) && now.isBefore(this.endDate);
     }
 
+    retrieveSymbolicNameFromSensor(sensorName:string):string {
+        for(var currentSymbolicName in this.mapSymbolicNameToSensor) {
+
+            var sensorNameBound = this.mapSymbolicNameToSensor[currentSymbolicName];
+
+            if(sensorNameBound == sensorName) {
+                return currentSymbolicName;
+            }
+        }
+
+        return null;
+    }
+
     /**
      *
      * @param values
      * {
-     *  <conditionid> :
-     *  {
-     *      symbolicNames:[...],
-     *      <sensor> : [ <data> ]
-     *  }
+     *  <sensor> : [ { date:"time in millis", value:__}, ... ]
      * }
      * @returns {any}
      */
     evaluate(values:any):any {
 
-        for(var currentConditionID in values) {
-            var currentConditionDesc = values[currentConditionID];
-            currentConditionDesc['values'] = {};
-            for(var currentSymbolicNameIndex in currentConditionDesc.symbolicNames) {
-                var currentSymbolicName = currentConditionDesc.symbolicNames[currentSymbolicNameIndex];
-                var sensorNameBound = this.mapSymbolicNameToSensor[currentSymbolicName];
-                if(sensorNameBound == null) continue;
-                var dataForCurrentSensor  = currentConditionDesc[sensorNameBound];
-                currentConditionDesc['values'][currentSymbolicName] = dataForCurrentSensor;
+
+        for (var conditionID in this.mapConditionIDToSensorAndTimeBoxRequired) {
+            var currentConditionDescription = this.mapConditionIDToSensorAndTimeBoxRequired[conditionID];
+
+            currentConditionDescription['values'] = {};
+
+            var sensorsRequired = currentConditionDescription.sensors;
+            for(var currentSensorRequiredIndex in sensorsRequired) {
+                var currentSensorRequired = sensorsRequired[currentSensorRequiredIndex];
+                var symbolicNameBound = this.retrieveSymbolicNameFromSensor(currentSensorRequired);
+                currentConditionDescription['values'][symbolicNameBound] = values[currentSensorRequired];
             }
+
         }
 
         //  Check if badge is running. If Waiting or failed, it must be left unchanged
@@ -181,7 +243,8 @@ class UserChallenge {
             return false;
         }
 
-        var resultEval = this.goal.evaluate(values, this);
+        var resultEval = this.goal.evaluate(this.mapConditionIDToSensorAndTimeBoxRequired, this);
+
 
         var durationAchieved:number = this.updateDurationAchieved(Clock.getNow());
         resultEval['durationAchieved'] = durationAchieved;
@@ -204,6 +267,7 @@ class UserChallenge {
         }
 
         this.progress = resultEval;
+        console.log('Résultat de l\'évaluation du challenge : achieved', resultEval.achieved, 'finished', resultEval.finished);
 
         return resultEval;
     }
@@ -235,7 +299,21 @@ class UserChallenge {
             startDate: this.startDate,
             endDate: this.endDate,
             goal: this.goal.getUUID(),
-            user: this.user.getUUID()
+            user: this.user.getUUID(),
+            progress: this.progress
+        }
+    }
+
+    getDataForClient():any {
+        return {
+            id: this.id,
+            type:'user',
+            startDate: this.startDate,
+            endDate: this.endDate,
+            goal: this.goal.getName(),
+            user: this.user.getName(),
+            progress: this.progress,
+            status:this.status
         }
     }
 

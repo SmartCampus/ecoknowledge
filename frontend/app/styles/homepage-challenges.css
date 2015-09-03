@@ -1,36 +1,42 @@
-.challenges-list{
+.challenges-list {
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
+
 .challenge-btn {
-  float:right;
+  float: right;
 }
+
 .challenge-item {
   list-style-type: none;
   margin-top: 10px;
   text-align: center;
-  font-size:150%;
+  font-size: 150%;
 }
+
 .challenge-name {
-  text-align:center;
+  text-align: center;
 }
 
 .challenge-container {
-  width:70%;
-  background-color:#F5F6F6;
-  margin-bottom : 35px;
-  width:550px;
-  padding:15px;
+  width: 70%;
+  margin-bottom: 35px;
+  width: 550px;
+  padding: 15px;
+}
+
+.user {
+  background-color: #5ECD6D;
 }
 
 .challenge-container table {
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: 100%;
 }
 
 .challenge-container .challenge-name, .challenge-container .challenge-points {
-  margin-bottom:15px;
+  margin-bottom: 15px;
 }
 
 .challenge-container .challenge-desc {
@@ -49,19 +55,23 @@
 }
 
 .challenge-status-WAIT {
-  background-color:grey;
+  background-color: grey;
   opacity: 0.5;
 }
 
 .challenge-status-RUNNING {
-  background-color:#28a4c9;
+  background-color: #28a4c9;
 }
 
 .challenge-status-SUCCESS {
-  background-color:green;
+  background-color: green;
 }
 
 .challenge-status-FAIL {
-  background-color:red;
+  background-color: red;
+}
+
+.challenge-date {
+  font-size:80%;
 }
 

@@ -91,7 +91,7 @@ class User {
             return null;
         }
 
-        this.currentChallenges.push(newChallenge.getId());
+        this.currentChallenges.push(newChallenge.getID());
         return newChallenge;
     }
 

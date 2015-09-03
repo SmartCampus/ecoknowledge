@@ -6,6 +6,8 @@ import BadgeIDsToNumberOfTimesEarnedMap = require('./BadgeIDsToNumberOfTimesEarn
 import User = require('./User');
 import Goal = require('../goal/Goal');
 import TeamChallengeFactory = require('../challenge/TeamChallengeFactory');
+import TeamChallenge = require('../challenge/TeamChallenge');
+import UserChallengeRepository = require('../challenge/UserChallengeRepository');
 
 class Team  {
     private id;
@@ -60,8 +62,8 @@ class Team  {
         return this.currentChallenges;
     }
 
-    addChallenge(goal:Goal, now:moment.Moment):TeamChallengeFactory {
-        var newChallenge = this.challengeFactory.createTeamChallenge(this, goal, now);
+    addChallenge(goal:Goal, userChallengeRepository:UserChallengeRepository, now:moment.Moment):TeamChallenge {
+        var newChallenge = this.challengeFactory.createTeamChallenge(this, goal,userChallengeRepository, now);
 
         /*FIXME
         //  Check if we try
@@ -69,11 +71,12 @@ class Team  {
             return null;
         }
 
-        this.currentChallenges.push(newChallenge.getId());
+        this.currentChallenges.push(newChallenge.getID());
         return newChallenge;
         */
 
-        return null;
+        this.currentChallenges.push(newChallenge.getID());
+        return newChallenge;
     }
 
     deleteChallenge(challengeID:string):void {
@@ -141,6 +144,10 @@ class Team  {
 
     getBadgesID():string[] {
         return Object.keys(this.badgesMap);
+    }
+
+    getBadges():BadgeIDsToNumberOfTimesEarnedMap {
+        return this.badgesMap;
     }
 
     public getDataInJSON():any {

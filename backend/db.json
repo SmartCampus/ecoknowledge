@@ -107,14 +107,32 @@
 	  "mapSymbolicNameToSensor": {
 		"TMP_CLI":"TEMP_443V"
 	  }
+    },
+	{
+      "id": "6efce3142d44-a320-4766-4766-2cf91e02",
+      "name": "Gégé",
+      "currentChallenges": [
+      ],
+      "finishedBadgesMap": {
+        "44bb8108-8830-4f43-abd1-3ef643303d92": 1,
+        "fde68334-f515-4563-954b-ac91b4a42f88": 1
+      },
+	  "mapSymbolicNameToSensor": {
+		"TMP_CLI":"AC_555V"
+	  }
     }
   ],
   "teams": [
 	{
 		"id" : "28aa8108-8830-4f43-abd1-3ab643303d92",
 		"name" : "croquette",
-		"members" : ["2cf91e02-a320-4766-aa9f-6efce3142d44"],
-		"leader":"2cf91e02-a320-4766-aa9f-6efce3142d44"
+		"members" : ["2cf91e02-a320-4766-aa9f-6efce3142d44", "6efce3142d44-a320-4766-4766-2cf91e02"],
+		"leader":"2cf91e02-a320-4766-aa9f-6efce3142d44",
+		 "currentChallenges": [
+      ],
+      "finishedBadgesMap": {
+        "44bb8108-8830-4f43-abd1-3ef643303d92": 2
+      }
 	}
   ],
   "challenges": 

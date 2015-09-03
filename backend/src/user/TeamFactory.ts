@@ -4,7 +4,7 @@ import Entity = require('./Entity');
 import Team = require('./Team');
 import User = require('./User');
 import UserRepository = require('./UserRepository');
-
+import TeamChallengeFactory = require ('../challenge/TeamChallengeFactory');
 /*
 
  if (name == null) {
@@ -28,7 +28,7 @@ import UserRepository = require('./UserRepository');
  }
  */
 class TeamFactory {
-    public createTeam(data:any, userRepository:UserRepository):Team {
+    public createTeam(data:any, userRepository:UserRepository, teamChallengeFactory:TeamChallengeFactory):Team {
         var teamID:string = data.id;
         teamID = (teamID == null) ? uuid.v4() : teamID;
 
@@ -49,8 +49,7 @@ class TeamFactory {
         var leaderID:string = data.leader;
         var leader = userRepository.getUser(leaderID);
 
-        //TODO FIX NULL
-        var team:Team = new Team(teamID, teamName, leader, members, currentChallenges, finishedBadgesMap, null);
+        var team:Team = new Team(teamID, teamName, leader, members, currentChallenges, finishedBadgesMap, teamChallengeFactory);
         return team;
     }
 }

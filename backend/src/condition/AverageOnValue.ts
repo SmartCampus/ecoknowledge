@@ -83,9 +83,8 @@ class AverageOnValue extends Condition {
             percentageAchieved = (percentageAchieved > 100) ? 100 : percentageAchieved;
 
         }
-        var finished:boolean = percentageAchieved === 100;
-        var result:any = {description: this.description, percentageAchieved: percentageAchieved, finished: finished};
-
+        var achieved:boolean = percentageAchieved === 100;
+        var result:any = {description: this.description, percentageAchieved: percentageAchieved, achieved: achieved};
 
         return result;
     }
@@ -95,7 +94,7 @@ class AverageOnValue extends Condition {
         for (var currentValueIndex in values) {
 
             var currentPairDateValue:any = values[currentValueIndex];
-            var currentMoment:moment.Moment = Clock.getMomentFromString(currentPairDateValue.date);
+            var currentMoment:moment.Moment = Clock.getMomentFromUnixTimeInMillis(parseInt(currentPairDateValue.date));
 
             if (currentMoment.isAfter(dateOfCreation)) {
                 newValues.push(currentPairDateValue.value);

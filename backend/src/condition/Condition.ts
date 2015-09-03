@@ -56,7 +56,7 @@ class Condition {
      *      }
      * @returns {any[]}
      */
-    keepUsefulValues(data:any, conditionDescription:any):any {
+     keepUsefulValues(data:any, conditionDescription:any):any {
         var result:any = {};
 
         var startDate:moment.Moment = conditionDescription.timeBox.start;
@@ -69,7 +69,9 @@ class Condition {
             var currentDataArray:any = data[currentSymbolicName];
             for (var currentDataIndex in currentDataArray) {
                 var currentData:any = currentDataArray[currentDataIndex];
-                var date:moment.Moment = Clock.getMomentFromString(currentData.date);
+                var date:moment.Moment = Clock.getMomentFromUnixTimeInMillis(parseInt(currentData.date));
+
+
                 if (date.isAfter(startDate) && date.isBefore(endDate)) {
                     currentResult.push(currentData);
                 }

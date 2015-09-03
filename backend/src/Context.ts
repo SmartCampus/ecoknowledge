@@ -7,6 +7,9 @@ import GoalFactory = require('./goal/GoalFactory');
 import UserChallengeRepository = require('./challenge/UserChallengeRepository');
 import UserChallengeFactory = require('./challenge/UserChallengeFactory');
 
+import TeamChallengeRepository = require('./challenge/TeamChallengeRepository');
+import TeamChallengeFactory = require('./challenge/TeamChallengeFactory');
+
 import UserRepository = require('./user/UserRepository');
 import UserFactory = require('./user/UserFactory');
 import User = require('./user/User');
@@ -30,6 +33,9 @@ class Context {
 
     private _userChallengeRepository:UserChallengeRepository;
     private _userChallengeFactory:UserChallengeFactory;
+
+    private _teamChallengeRepository:TeamChallengeRepository;
+    private _teamChallengeFactory:TeamChallengeFactory;
 
     private _userRepository:UserRepository;
     private _userFactory:UserFactory;
@@ -56,6 +62,9 @@ class Context {
 
         this._userChallengeRepository = new UserChallengeRepository();
         this._userChallengeFactory = new UserChallengeFactory();
+
+        this._teamChallengeRepository = new TeamChallengeRepository();
+        this._teamChallengeFactory = new TeamChallengeFactory();
 
         this._userRepository = new UserRepository();
         this._userFactory = new UserFactory();
@@ -133,7 +142,7 @@ class Context {
 
         for (var currentTeamIndex in teams) {
             var currentTeamDescription = teams[currentTeamIndex];
-            var currentTeam = this._teamFactory.createTeam(currentTeamDescription, this._userRepository);
+            var currentTeam = this._teamFactory.createTeam(currentTeamDescription, this._userRepository, this._teamChallengeFactory);
             this._teamRepository.addTeam(currentTeam);
         }
 
@@ -142,6 +151,7 @@ class Context {
     fillChallengesRepository(data) {
         var challenges = data.challenges;
         this.fillUserChallengeRepository(challenges);
+        this.fillTeamChallengeRepository(data);
     }
 
     fillUserChallengeRepository(data) {
@@ -152,8 +162,13 @@ class Context {
 
             var currentChallenge = this._userChallengeFactory.restoreChallenge(currentChallengeDescription, this._goalRepository, this._userRepository, Clock.getMoment(Clock.getNow()));
 
-            this._userChallengeRepository.addGoalInstance(currentChallenge);
+            this._userChallengeRepository.addUserChallenge(currentChallenge);
         }
+    }
+
+    // TODO
+    fillTeamChallengeRepository(data) {
+
     }
 
     public getBadgeRepository():BadgeRepository {
@@ -178,6 +193,14 @@ class Context {
 
     public getUserChallengeFactory():UserChallengeFactory {
         return this._userChallengeFactory;
+    }
+
+    public getTeamChallengeRepository():TeamChallengeRepository {
+        return this._teamChallengeRepository;
+    }
+
+    public getTeamChallengeFactory():TeamChallengeFactory {
+        return this._teamChallengeFactory;
     }
 
     public getUserRepository():UserRepository {

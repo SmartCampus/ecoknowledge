@@ -46,7 +46,7 @@ describe('UserChallenge integration test', () => {
     var loginRouter:LoginRouter = new LoginRouter(context);
 
     var aUsername:string = 'Charlie';
-    var aGoalID:string = '9bddaf87-5065-4df7-920a-d1d249c9171d';
+    var aGoalID:string = '3221c575-85ca-447b-86f3-3a4ef39985dc';
 
 
     var requestForLogin:any = {
@@ -74,41 +74,35 @@ describe('UserChallenge integration test', () => {
         });
 
         it('should not throw', () => {
-            dashboardRouter.createChallenge(token, aGoalID, Clock.getMomentFromString("2015-08-05T12:15:00"));
+            dashboardRouter.createUserChallenge(token, aGoalID, Clock.getMomentFromString("2015-08-05T12:15:00"));
         });
 
         it('should have added given challenge to current user', () => {
-            var challenge = dashboardRouter.createChallenge(token, aGoalID,Clock.getMomentFromString("2015-08-05T12:15:00"));
-            var expected = [challenge.getId()];
+            var challenge = dashboardRouter.createUserChallenge(token, aGoalID,Clock.getMomentFromString("2015-08-05T12:15:00"));
+            var expected = [challenge.getID()];
             var result = user.getCurrentChallenges();
             chai.expect(result).to.be.eqls(expected);
         });
 
         it('should have initialized the new challenge status to "RUN" when challenge is created during a working week', () => {
-            var newChallenge = dashboardRouter.createChallenge(token, aGoalID, Clock.getMomentFromString("2015-08-05T12:15:00"));
+            var newChallenge = dashboardRouter.createUserChallenge(token, aGoalID, Clock.getMomentFromString("2015-08-05T12:15:00"));
             chai.expect(newChallenge.getStatus()).to.be.eq(ChallengeStatus.RUN);
         });
 
         it('should have initialized the new challenge status to "WAITING" when challenge is created during week-end', () => {
-            var newChallenge = dashboardRouter.createChallenge(token, aGoalID, Clock.getMomentFromString("2015-08-08T12:15:00"));
+            var newChallenge = dashboardRouter.createUserChallenge(token, aGoalID, Clock.getMomentFromString("2015-08-08T12:15:00"));
             chai.expect(newChallenge.getStatus()).to.be.eq(ChallengeStatus.WAIT);
         });
 
         it('should have set the startDate to monday if goal is "week recurrent"', () => {
-            var newChallenge = dashboardRouter.createChallenge(token, aGoalID, Clock.getMomentFromString("2015-08-07T12:15:00"));
+            var newChallenge = dashboardRouter.createUserChallenge(token, aGoalID, Clock.getMomentFromString("2015-08-07T12:15:00"));
             chai.expect(newChallenge.getStartDate().toISOString()).to.be.eq(Clock.getMomentFromString("2015-08-03T00:00:00.000").toISOString());
         });
 
         it('should have set the endDate to friday if goal is "week recurrent"', () => {
-            var newChallenge = dashboardRouter.createChallenge(token, aGoalID, Clock.getMomentFromString("2015-08-07T12:15:00"));
+            var newChallenge = dashboardRouter.createUserChallenge(token, aGoalID, Clock.getMomentFromString("2015-08-07T12:15:00"));
             chai.expect(newChallenge.getEndDate().toISOString()).to.be.eq(Clock.getMomentFromString("2015-08-07T23:59:59.999").toISOString());
         });
     });
 
-    describe('Evaluate a challenge', () => {
-        var user = loginRouter.checkUserProfile(requestForLogin);
-        var challenge = dashboardRouter.createChallenge(user.getUUID(), aGoalID, Clock.getMomentFromString("2015-08-03T12:15:00"));
-        var result:any = dashboardRouter.evaluateChallengesForGivenUser(user);
-
-    });
 });

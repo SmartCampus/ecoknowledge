@@ -3,17 +3,11 @@
   <div class="container pull-right">
 
     <div class="span6 pull-right" style="text-align:left; margin-right:8px;margin-top:-80px;">
-{{dashboard.dashboardViews}}
       <select name="typeOfDashboard" class="selectpicker form-control"
               ng-model="dashboard.dashboardWanted"
               ng-change="dashboard.changeDashboardView()">
         <option value="personal" selected>Personnel</option>
         <option ng-repeat="option in dashboard.dashboardViews" value="{{option.id}}">{{option.name}}</option>
-      </select>
-
-
-      <select name="typeOfDashboard" class="selectpick form-control" required>
-        <option value="personal" selected>Personnel</option>
       </select>
     </div>
 

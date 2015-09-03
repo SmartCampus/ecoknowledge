@@ -10,13 +10,11 @@
  */
 var app = angular
   .module('ecoknowledgeApp', [
-    'ngAnimate',
     'ngCookies',
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch',
-    'datePicker'
+    'ngTouch'
   ])
   .config(function ($routeProvider) {
 

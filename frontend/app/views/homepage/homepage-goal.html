@@ -1,4 +1,4 @@
 <div class="goal-container">
     <div><a ng-href="#/view-goal/{{goal.id}}" class="goal-name">{{goal.name}}</a></div>
-  <input class="goal-button" type="button" value="Relever le défi!" ng-click="dashboard.takeGoal(goal.id)">
+  <input ng-show="dashboard.canTakeChallenge" class="goal-button" type="button" value="Relever le défi!" ng-click="dashboard.takeGoal(goal.id)">
 </div>

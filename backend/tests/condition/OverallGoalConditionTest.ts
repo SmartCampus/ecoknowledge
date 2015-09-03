@@ -59,13 +59,13 @@ describe('Test OverallGoalCondition', () => {
         var data:any = {};
 
         var values:any[] = [
-            {date: "2000-02-01T00:00:00", value: 10},
-            {date: "2000-02-01T00:00:00", value: 10},
-            {date: "2000-02-01T00:00:00", value: 10},
-            {date: "2000-02-01T00:00:00", value: 10},
-            {date: "2000-02-01T00:00:00", value: 10},
-            {date: "2000-02-01T00:00:00", value: 16},
-            {date: "2000-02-01T00:00:00", value: 18}
+            {date: "949363200000", value: 10},
+            {date: "949363200000", value: 10},
+            {date: "949363200000", value: 10},
+            {date: "949363200000", value: 10},
+            {date: "949363200000", value: 10},
+            {date: "949363200000", value: 16},
+            {date: "949363200000", value: 18}
         ];
 
         data[aSymbolicName] = values;
@@ -77,16 +77,16 @@ describe('Test OverallGoalCondition', () => {
     it('should return false if min threshold is not reached', () => {
         var data:any = {};
         var values:any[] = [
-            {date: "2000-02-01T00:00:00", value: 18},
-            {date: "2000-02-01T00:00:00", value: 18},
-            {date: "2000-02-01T00:00:00", value: 18},
-            {date: "2000-02-01T00:00:00", value: 18},
-            {date: "2000-02-01T00:00:00", value: 18},
-            {date: "2000-02-01T00:00:00", value: 18},
-            {date: "2000-02-01T00:00:00", value: 18},
-            {date: "2000-02-01T00:00:00", value: 10},
-            {date: "2000-02-01T00:00:00", value: 10},
-            {date: "2000-02-01T00:00:00", value: 10}
+            {date: "949363200000", value: 18},
+            {date: "949363200000", value: 18},
+            {date: "949363200000", value: 18},
+            {date: "949363200000", value: 18},
+            {date: "949363200000", value: 18},
+            {date: "949363200000", value: 18},
+            {date: "949363200000", value: 18},
+            {date: "949363200000", value: 10},
+            {date: "949363200000", value: 10},
+            {date: "949363200000", value: 10}
         ];
 
         data[aSymbolicName] = values;
@@ -99,16 +99,16 @@ describe('Test OverallGoalCondition', () => {
         var data:any = {};
 
         var values:any[] = [
-            {date: "2000-02-01T00:00:00", value: 17},
-            {date: "2000-02-01T00:00:00", value: 16},
-            {date: "2000-02-01T00:00:00", value: 16},
-            {date: "2000-02-01T00:00:00", value: 17},
-            {date: "2000-02-01T00:00:00", value: 18},
-            {date: "2000-02-01T00:00:00", value: 19},
-            {date: "2000-02-01T00:00:00", value: 18},
-            {date: "2000-02-01T00:00:00", value: 17},
-            {date: "2000-02-01T00:00:00", value: 10},
-            {date: "2000-02-01T00:00:00", value: 10}
+            {date: "949363200000", value: 17},
+            {date: "949363200000", value: 16},
+            {date: "949363200000", value: 16},
+            {date: "949363200000", value: 17},
+            {date: "949363200000", value: 18},
+            {date: "949363200000", value: 19},
+            {date: "949363200000", value: 18},
+            {date: "949363200000", value: 17},
+            {date: "949363200000", value: 10},
+            {date: "949363200000", value: 10}
         ];
 
         data[aSymbolicName] = values;
@@ -122,16 +122,16 @@ describe('Test OverallGoalCondition', () => {
         var data:any = {};
 
         var values:any[] = [
-            {date: "2000-02-01T00:00:00", value: 16},
-            {date: "2000-02-01T00:00:00", value: 17},
-            {date: "2000-02-01T00:00:00", value: 18},
-            {date: "2000-02-01T00:00:00", value: 19},
-            {date: "2000-02-01T00:00:00", value: 18},
-            {date: "2000-02-01T00:00:00", value: 18},
-            {date: "2000-02-01T00:00:00", value: 17},
-            {date: "2000-02-01T00:00:00", value: 18},
-            {date: "2000-02-01T00:00:00", value: 16},
-            {date: "2000-02-01T00:00:00", value: 17}
+            {date: "949363200000", value: 16},
+            {date: "949363200000", value: 17},
+            {date: "949363200000", value: 18},
+            {date: "949363200000", value: 19},
+            {date: "949363200000", value: 18},
+            {date: "949363200000", value: 18},
+            {date: "949363200000", value: 17},
+            {date: "949363200000", value: 18},
+            {date: "949363200000", value: 16},
+            {date: "949363200000", value: 17}
         ];
 
         data[aSymbolicName] = values;

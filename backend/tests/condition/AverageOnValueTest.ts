@@ -78,6 +78,128 @@ describe('Test AverageOnValueTest', () => {
         });
     });
 
+    describe('separate data', () => {
+
+        it('should separate data correctly', () => {
+
+            var values:any[] = [
+                {
+                    date: "946771200000",
+                    value: 100
+                },
+                {
+                    date: "946857600000",
+                    value: 101
+                },
+                {
+                    date: "946944000000",
+                    value: 99
+                },
+                {
+                    date: "947030400000",
+                    value: 102
+                },
+                {
+                    date: "947116800000",
+                    value: 98
+                },
+
+                //   OLD/NEW DATA
+                {
+                    date: "947289600000",
+                    value: 89
+                },
+                {
+                    date: "947376000000",
+                    value: 90
+                },
+                {
+                    date: "947462400000",
+                    value: 91
+                },
+                {
+                    date: "947548800000",
+                    value: 70
+                }
+            ];
+
+
+            var expectedOldValues:number[] = [100, 101, 99, 102, 98];
+            var expectedNewValues:number[] = [89, 90, 91, 70];
+
+            var actualOldValues:number[] = [];
+            var actualNewValues:number[] = [];
+
+            averageOnValue.separateOldAndNewData(values, actualOldValues, actualNewValues, Clock.getMomentFromString("2000-01-07T00:00:00"));
+            chai.expect(actualOldValues).to.be.eqls(expectedOldValues);
+            chai.expect(actualNewValues).to.be.eqls(expectedNewValues);
+        });
+
+
+        it('should separate data even if these are older than start date', () => {
+            var values:any[] = [
+                {
+                    date: "946771200000",
+                    value: 100
+                },
+                {
+                    date: "946857600000",
+                    value: 101
+                },
+                {
+                    date: "946944000000",
+                    value: 99
+                },
+                {
+                    date: "947030400000",
+                    value: 102
+                },
+                {
+                    date: "947116800000",
+                    value: 98
+                },
+
+                //   OLD/NEW DATA
+                {
+                    date: "947289600000",
+                    value: 89
+                },
+                {
+                    date: "947376000000",
+                    value: 90
+                },
+                {
+                    date: "947462400000",
+                    value: 91
+                },
+                {
+                    date: "947548800000",
+                    value: 70
+                },
+
+                //too old data, so it won't be in the arrays
+                {
+                    date: "942796800000",
+                    value: 42
+                }
+            ];
+
+
+            var expectedOldValues:number[] = [100, 101, 99, 102, 98, 42];
+            var expectedNewValues:number[] = [89, 90, 91, 70];
+
+            var actualOldValues:number[] = [];
+            var actualNewValues:number[] = [];
+
+            averageOnValue.separateOldAndNewData(values, actualOldValues, actualNewValues, conditionDescription.timeBox.dateOfCreation);
+            chai.expect(actualOldValues).to.be.eqls(expectedOldValues);
+            chai.expect(actualNewValues).to.be.eqls(expectedNewValues);
+        });
+
+
+    });
+
+    /*
     describe('evaluate method decrease', () => {
 
         it('should return true if threshold is reached', () => {
@@ -86,23 +208,23 @@ describe('Test AverageOnValueTest', () => {
 
             var oldValues:any[] = [
                 {
-                    date: "2000-01-02T00:00:00",
+                    date: "946771200000",
                     value: '100'
                 },
                 {
-                    date: "2000-01-03T00:00:00",
+                    date: "946857600000",
                     value: '101'
                 },
                 {
-                    date: "2000-01-04T00:00:00",
+                    date: "946944000000",
                     value: '99'
                 },
                 {
-                    date: "2000-01-05T00:00:00",
+                    date: "947030400000",
                     value: '102'
                 },
                 {
-                    date: "2000-01-06T00:00:00",
+                    date: "947116800000",
                     value: '98'
                 }
             ];
@@ -110,23 +232,23 @@ describe('Test AverageOnValueTest', () => {
 
             var newValues:any[] = [
                 {
-                    date: "2000-01-08T00:00:00",
+                    date: "947289600000",
                     value: '89'
                 },
                 {
-                    date: "2000-01-09T00:00:00",
+                    date: "947376000000",
                     value: '90'
                 },
                 {
-                    date: "2000-01-10T00:00:00",
+                    date: "947462400000",
                     value: '91'
                 },
                 {
-                    date: "2000-01-11T00:00:00",
+                    date: "947548800000",
                     value: '70'
                 },
                 {
-                    date: "2000-01-12T00:00:00",
+                    date: "947635200000",
                     value: '110'
                 }
             ];
@@ -135,7 +257,7 @@ describe('Test AverageOnValueTest', () => {
             data[aSymbolicName] = oldValues.concat(newValues);
 
             var result:any = averageOnValue.evaluate(data, conditionDescription);
-            chai.expect(result.finished).to.be.true;
+            chai.expect(result.achieved).to.be.true;
         });
 
         it('should return true if threshold is reached with different number of measures', () => {
@@ -143,38 +265,38 @@ describe('Test AverageOnValueTest', () => {
 
             var oldValues:any[] = [
                 {
-                    date: "2000-01-02T00:00:00",
+                    date: "946771200000",
                     value: '100'
                 },
                 {
-                    date: "2000-01-03T00:00:00",
+                    date: "946857600000",
                     value: '101'
                 },
                 {
-                    date: "2000-01-04T00:00:00",
+                    date: "946944000000",
                     value: '99'
                 },
                 {
-                    date: "2000-01-05T00:00:00",
+                    date: "947030400000",
                     value: '102'
                 },
                 {
-                    date: "2000-01-06T00:00:00",
+                    date: "947116800000",
                     value: '98'
                 }
             ];
 
             var newValues:any[] = [
                 {
-                    date: "2000-01-08T00:00:00",
+                    date: "947289600000",
                     value: '89'
                 },
                 {
-                    date: "2000-01-09T00:00:00",
+                    date: "947376000000",
                     value: '90'
                 },
                 {
-                    date: "2000-01-10T00:00:00",
+                    date: "947462400000",
                     value: '91'
                 }
             ];
@@ -183,7 +305,7 @@ describe('Test AverageOnValueTest', () => {
             data[aSymbolicName] = oldValues.concat(newValues);
 
             var result:any = averageOnValue.evaluate(data, conditionDescription);
-            chai.expect(result.finished).to.be.true;
+            chai.expect(result.achieved).to.be.true;
         });
 
         it('should return false if threshold is close but not reached', () => {
@@ -192,23 +314,23 @@ describe('Test AverageOnValueTest', () => {
 
             var oldValues:any[] = [
                 {
-                    date: "2000-01-02T00:00:00",
+                    date: "946771200000",
                     value: '100'
                 },
                 {
-                    date: "2000-01-03T00:00:00",
+                    date: "946857600000",
                     value: '101'
                 },
                 {
-                    date: "2000-01-04T00:00:00",
+                    date: "946944000000",
                     value: '99'
                 },
                 {
-                    date: "2000-01-05T00:00:00",
+                    date: "947030400000",
                     value: '102'
                 },
                 {
-                    date: "2000-01-06T00:00:00",
+                    date: "947116800000",
                     value: '98'
                 }
             ];
@@ -216,15 +338,15 @@ describe('Test AverageOnValueTest', () => {
 
             var newValues:any[] = [
                 {
-                    date: "2000-01-08T00:00:00",
+                    date: "947289600000",
                     value: '89'
                 },
                 {
-                    date: "2000-01-09T00:00:00",
+                    date: "947376000000",
                     value: '91'
                 },
                 {
-                    date: "2000-01-10T00:00:00",
+                    date: "947462400000",
                     value: '91'
                 }
             ];
@@ -233,7 +355,7 @@ describe('Test AverageOnValueTest', () => {
 
             var result:any = averageOnValue.evaluate(data, conditionDescription);
 
-            chai.expect(result.finished).to.be.false;
+            chai.expect(result.achieved).to.be.false;
         });
 
     });
@@ -252,23 +374,23 @@ describe('Test AverageOnValueTest', () => {
                 //  average : 100
                 oldValues = [
                     {
-                        date: "2000-01-02T00:00:00",
+                        date: "946771200000",
                         value: 100
                     },
                     {
-                        date: "2000-01-03T00:00:00",
+                        date: "946857600000",
                         value: 101
                     },
                     {
-                        date: "2000-01-04T00:00:00",
+                        date: "946944000000",
                         value: 99
                     },
                     {
-                        date: "2000-01-05T00:00:00",
+                        date: "947030400000",
                         value: 102
                     },
                     {
-                        date: "2000-01-06T00:00:00",
+                        date: "947116800000",
                         value: 98
                     }
                 ];
@@ -278,15 +400,15 @@ describe('Test AverageOnValueTest', () => {
                 //  average : 100
                 newValues = [
                     {
-                        date: "2000-01-08T00:00:00",
+                        date: "947289600000",
                         value: 100
                     },
                     {
-                        date: "2000-01-09T00:00:00",
+                        date: "947376000000",
                         value: 101
                     },
                     {
-                        date: "2000-01-10T00:00:00",
+                        date: "947462400000",
                         value: 99
                     }
                 ];
@@ -305,15 +427,15 @@ describe('Test AverageOnValueTest', () => {
                 //  average : 95
                 newValues = [
                     {
-                        date: "2000-01-08T00:00:00",
+                        date: "947289600000",
                         value: 90
                     },
                     {
-                        date: "2000-01-09T00:00:00",
+                        date: "947376000000",
                         value: 100
                     },
                     {
-                        date: "2000-01-10T00:00:00",
+                        date: "947462400000",
                         value: 95
                     }
                 ];
@@ -336,15 +458,15 @@ describe('Test AverageOnValueTest', () => {
                 //  average : 95
                 newValues = [
                     {
-                        date: "2000-01-08T00:00:00",
+                        date: "947289600000",
                         value: 90
                     },
                     {
-                        date: "2000-01-09T00:00:00",
+                        date: "947376000000",
                         value: 100
                     },
                     {
-                        date: "2000-01-10T00:00:00",
+                        date: "947462400000",
                         value: 95
                     }
                 ];
@@ -363,19 +485,19 @@ describe('Test AverageOnValueTest', () => {
                 //85.95.91.89
                 newValues = [
                     {
-                        date: "2000-01-08T00:00:00",
+                        date: "947289600000",
                         value: '85'
                     },
                     {
-                        date: "2000-01-09T00:00:00",
+                        date: "947376000000",
                         value: '95'
                     },
                     {
-                        date: "2000-01-10T00:00:00",
+                        date: "947462400000",
                         value: '91'
                     },
                     {
-                        date: "2000-01-11T00:00:00",
+                        date: "947548800000",
                         value: '89'
                     }
                 ];
@@ -389,128 +511,6 @@ describe('Test AverageOnValueTest', () => {
         });
 
     });
-
-    describe('separate data', () => {
-
-        it('should separate data correctly', () => {
-
-            var values:any[] = [
-                {
-                    date: "2000-01-02T00:00:00",
-                    value: 100
-                },
-                {
-                    date: "2000-01-03T00:00:00",
-                    value: 101
-                },
-                {
-                    date: "2000-01-04T00:00:00",
-                    value: 99
-                },
-                {
-                    date: "2000-01-05T00:00:00",
-                    value: 102
-                },
-                {
-                    date: "2000-01-06T00:00:00",
-                    value: 98
-                },
-
-                //   OLD/NEW DATA
-                {
-                    date: "2000-01-08T00:00:00",
-                    value: 89
-                },
-                {
-                    date: "2000-01-09T00:00:00",
-                    value: 90
-                },
-                {
-                    date: "2000-01-10T00:00:00",
-                    value: 91
-                },
-                {
-                    date: "2000-01-11T00:00:00",
-                    value: 70
-                }
-            ];
-
-
-            var expectedOldValues:number[] = [100, 101, 99, 102, 98];
-            var expectedNewValues:number[] = [89, 90, 91, 70];
-
-            var actualOldValues:number[] = [];
-            var actualNewValues:number[] = [];
-
-            averageOnValue.separateOldAndNewData(values, actualOldValues, actualNewValues, Clock.getMomentFromString("2000-01-07T00:00:00"));
-            chai.expect(actualOldValues).to.be.eqls(expectedOldValues);
-            chai.expect(actualNewValues).to.be.eqls(expectedNewValues);
-        });
-
-
-        it('should separate data even if these are older than start date', () => {
-            var values:any[] = [
-                {
-                    date: "2000-01-02T00:00:00",
-                    value: 100
-                },
-                {
-                    date: "2000-01-03T00:00:00",
-                    value: 101
-                },
-                {
-                    date: "2000-01-04T00:00:00",
-                    value: 99
-                },
-                {
-                    date: "2000-01-05T00:00:00",
-                    value: 102
-                },
-                {
-                    date: "2000-01-06T00:00:00",
-                    value: 98
-                },
-
-                //   OLD/NEW DATA
-                {
-                    date: "2000-01-08T00:00:00",
-                    value: 89
-                },
-                {
-                    date: "2000-01-09T00:00:00",
-                    value: 90
-                },
-                {
-                    date: "2000-01-10T00:00:00",
-                    value: 91
-                },
-                {
-                    date: "2000-01-11T00:00:00",
-                    value: 70
-                },
-
-                //too old data, so it won't be in the arrays
-                {
-                    date: "1999-11-17T00:00:00",
-                    value: 42
-                }
-            ];
-
-
-            var expectedOldValues:number[] = [100, 101, 99, 102, 98, 42];
-            var expectedNewValues:number[] = [89, 90, 91, 70];
-
-            var actualOldValues:number[] = [];
-            var actualNewValues:number[] = [];
-
-            averageOnValue.separateOldAndNewData(values, actualOldValues, actualNewValues, conditionDescription.timeBox.dateOfCreation);
-            chai.expect(actualOldValues).to.be.eqls(expectedOldValues);
-            chai.expect(actualNewValues).to.be.eqls(expectedNewValues);
-        });
-
-
-    });
-
 
     describe('evaluate method increase', () => {
 
@@ -536,23 +536,23 @@ describe('Test AverageOnValueTest', () => {
 
             var oldValues:any[] = [
                 {
-                    date: "2000-01-02T00:00:00",
+                    date: "946771200000",
                     value: '100'
                 },
                 {
-                    date: "2000-01-03T00:00:00",
+                    date: "946857600000",
                     value: '101'
                 },
                 {
-                    date: "2000-01-04T00:00:00",
+                    date: "946944000000",
                     value: '99'
                 },
                 {
-                    date: "2000-01-05T00:00:00",
+                    date: "947030400000",
                     value: '102'
                 },
                 {
-                    date: "2000-01-06T00:00:00",
+                    date: "947116800000",
                     value: '98'
                 }
             ];
@@ -560,23 +560,23 @@ describe('Test AverageOnValueTest', () => {
 
             var newValues:any[] = [
                 {
-                    date: "2000-01-08T00:00:00",
+                    date: "947289600000",
                     value: 121
                 },
                 {
-                    date: "2000-01-09T00:00:00",
+                    date: "947376000000",
                     value: 110
                 },
                 {
-                    date: "2000-01-10T00:00:00",
+                    date: "947462400000",
                     value: 119
                 },
                 {
-                    date: "2000-01-11T00:00:00",
+                    date: "947548800000",
                     value: 70
                 },
                 {
-                    date: "2000-01-12T00:00:00",
+                    date: "947635200000",
                     value: 130
                 }
             ];
@@ -585,7 +585,7 @@ describe('Test AverageOnValueTest', () => {
             data[aSymbolicName] = oldValues.concat(newValues);
 
             var result:any = averageOnValue.evaluate(data, conditionDescription);
-            chai.expect(result.finished).to.be.true;
+            chai.expect(result.achieved).to.be.true;
         });
 
         it('should return true if threshold is reached with different number of measures', () => {
@@ -593,38 +593,38 @@ describe('Test AverageOnValueTest', () => {
 
             var oldValues:any[] = [
                 {
-                    date: "2000-01-02T00:00:00",
+                    date: "946771200000",
                     value: 100
                 },
                 {
-                    date: "2000-01-03T00:00:00",
+                    date: "946857600000",
                     value: 101
                 },
                 {
-                    date: "2000-01-04T00:00:00",
+                    date: "946944000000",
                     value: 99
                 },
                 {
-                    date: "2000-01-05T00:00:00",
+                    date: "947030400000",
                     value: 102
                 },
                 {
-                    date: "2000-01-06T00:00:00",
+                    date: "947116800000",
                     value: 98
                 }
             ];
 
             var newValues:any[] = [
                 {
-                    date: "2000-01-08T00:00:00",
+                    date: "947289600000",
                     value: 111
                 },
                 {
-                    date: "2000-01-09T00:00:00",
+                    date: "947376000000",
                     value: 110
                 },
                 {
-                    date: "2000-01-10T00:00:00",
+                    date: "947462400000",
                     value: 109
                 }
             ];
@@ -632,7 +632,7 @@ describe('Test AverageOnValueTest', () => {
             data[aSymbolicName] = oldValues.concat(newValues);
 
             var result:any = averageOnValue.evaluate(data, conditionDescription);
-            chai.expect(result.finished).to.be.true;
+            chai.expect(result.achieved).to.be.true;
         });
 
         it('should return false if threshold is close but not reached', () => {
@@ -640,38 +640,38 @@ describe('Test AverageOnValueTest', () => {
 
             var oldValues:any[] = [
                 {
-                    date: "2000-01-02T00:00:00",
+                    date: "946771200000",
                     value: 100
                 },
                 {
-                    date: "2000-01-03T00:00:00",
+                    date: "946857600000",
                     value: 101
                 },
                 {
-                    date: "2000-01-04T00:00:00",
+                    date: "946944000000",
                     value: 99
                 },
                 {
-                    date: "2000-01-05T00:00:00",
+                    date: "947030400000",
                     value: 102
                 },
                 {
-                    date: "2000-01-06T00:00:00",
+                    date: "947116800000",
                     value: 98
                 }
             ];
 
             var newValues:any[] = [
                 {
-                    date: "2000-01-08T00:00:00",
+                    date: "947289600000",
                     value: 111
                 },
                 {
-                    date: "2000-01-09T00:00:00",
+                    date: "947376000000",
                     value: 109
                 },
                 {
-                    date: "2000-01-10T00:00:00" + '',
+                    date: "947462400000" + '',
                     value: 109
                 }
             ];
@@ -680,10 +680,11 @@ describe('Test AverageOnValueTest', () => {
             data[aSymbolicName] = oldValues.concat(newValues);
 
             var result:any = averageOnValue.evaluate(data, conditionDescription);
-            chai.expect(result.finished).to.be.false;
+            chai.expect(result.achieved).to.be.false;
         });
 
     });
 
+    */
 
 });

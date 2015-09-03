@@ -1,8 +1,9 @@
 import Goal = require('./Goal');
 import GoalFactory = require('./GoalFactory');
 import BadgeRepository = require('../badge/BadgeRepository');
-import ChallengeRepository = require('../challenge/UserChallengeRepository');
-import Challenge = require('../challenge/UserChallenge');
+import UserChallengeRepository = require('../challenge/UserChallengeRepository');
+import TeamChallengeRepository = require('../challenge/TeamChallengeRepository');
+import UserChallenge = require('../challenge/UserChallenge');
 import Badge = require('../badge/Badge');
 import User = require('../user/User');
 import Team = require('../user/Team');
@@ -61,7 +62,7 @@ class GoalDefinitionRepository {
     }
 
     //  TODO DELETE OR
-    getListOfNotTakenGoalInJSONFormat(user:User|Team, challengeRepository:ChallengeRepository) {
+    getListOfNotTakenGoalInJSONFormat(user:User|Team, challengeRepository:UserChallengeRepository|TeamChallengeRepository) {
         var result = [];
 
         var currentChallengesID:string[] = user.getCurrentChallenges();
@@ -69,7 +70,7 @@ class GoalDefinitionRepository {
         var takenGoals:Goal[] = [];
         for (var currentChallengeIDIndex in currentChallengesID) {
             var currentChallengeID:string = currentChallengesID[currentChallengeIDIndex];
-            var currentChallenge:Challenge = challengeRepository.getChallengeByID(currentChallengeID);
+            var currentChallenge = challengeRepository.getChallengeByID(currentChallengeID);
             takenGoals.push(currentChallenge.getGoal());
         }
 

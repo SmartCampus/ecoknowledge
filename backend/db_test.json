@@ -11,7 +11,8 @@
       "conditions": [
         {
           "id": "ab72f9b4-a368-4ea2-8adb-738ea0e6f30b",
-          "expression": {
+		  "description":"a desc",
+			"expression": {
             "valueLeft": {
               "value": "TMP_CLI",
               "symbolicName": true
@@ -21,7 +22,6 @@
               "symbolicName": false
             },
             "comparison": ">",
-            "description": "a desc",
             "periodOfTime": "-2208474000000"
           },
           "threshold": 25,

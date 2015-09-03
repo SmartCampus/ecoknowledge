@@ -5,6 +5,7 @@ var app = angular.module('ecoknowledgeApp');
 app.controller('DashboardCtrl', ['ServiceDashboard', '$window', '$location', '$cookies', function (ServiceDashboard, $window, $location, $cookies) {
   var self = this;
 
+  self.canTakeChallenge = true;
   self.goals = {};
   self.trophies = {};
   self.challenges = {};
@@ -15,19 +16,23 @@ app.controller('DashboardCtrl', ['ServiceDashboard', '$window', '$location', '$c
   //  Debug
   self.request = {};
 
+  self.debug = {};
+
   this.getDashboard = function () {
-    console.log('Angular wanna get the dashboard');
+    console.log('\n------------------------------------------------------------\nAngular wanna get the dashboard');
 
     ServiceDashboard.get(
-      function (data, goals, badges, challenges, dashboardViews) {
-        console.log('Result of dashboard : ', goals, badges, challenges);
+      function (data, canTake, goals, badges, challenges, dashboardViews) {
 
         self.request = data;
 
+        self.canTakeChallenge = canTake;
         self.goals = goals;
         self.trophies = badges;
         self.challenges = challenges;
         self.dashboardViews = dashboardViews;
+
+        self.debug = challenges;
       },
       function (data) {
         console.error('Redirection vers', data.redirectTo);
@@ -35,17 +40,18 @@ app.controller('DashboardCtrl', ['ServiceDashboard', '$window', '$location', '$c
       });
   };
 
-  this.changeDashboardView = function() {
+  this.changeDashboardView = function () {
     console.log('Angular wanna change the dashboard');
 
     $cookies.put('dashboardWanted', self.dashboardWanted);
 
     ServiceDashboard.get(
-      function (data, goals, badges, challenges, dashboardViews) {
+      function (data, cantTake, goals, badges, challenges, dashboardViews) {
         console.log('Result of dashboard : ', goals, badges, challenges);
 
         self.request = data;
 
+        self.canTakeChallenge = cantTake;
         self.goals = goals;
         self.trophies = badges;
         self.challenges = challenges;
@@ -54,12 +60,17 @@ app.controller('DashboardCtrl', ['ServiceDashboard', '$window', '$location', '$c
       function (data) {
         console.error('Redirection vers', data.redirectTo);
         $location.path(data.redirectTo);
-      }, self.dashboardWanted );
+      }, self.dashboardWanted);
   };
 
   self.takeGoal = function (goalID) {
-    var toSend = {};
-    toSend.id = goalID;
+
+    var toSend = {
+      goalID: goalID,
+      userID: $cookies.get('token'),
+      target: $cookies.get('dashboardWanted')
+    };
+
 
     ServiceDashboard.takeGoal(toSend,
       function (data) {
