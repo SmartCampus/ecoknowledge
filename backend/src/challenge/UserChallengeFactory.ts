@@ -46,7 +46,7 @@ class GoalInstanceFactory {
         return challenge;
     }
 
-    createChallenge(goal:Goal, user:User, now:moment.Moment):UserChallenge {
+    createChallenge(goal:Goal, user:User, now:moment.Moment, takenBy = null):UserChallenge {
         this.checkDataFromCreate(goal, user, now);
 
         var challengeID = UUID.v4();
@@ -68,13 +68,13 @@ class GoalInstanceFactory {
 
         }
 
-        var result = this.newChallenge(challengeID, goal, user, mapConditionIDToSensorAndTimeBoxRequired, startDateOfChallenge, endDateOfChallenge, now);
+        var result = this.newChallenge(challengeID, goal, user, mapConditionIDToSensorAndTimeBoxRequired, startDateOfChallenge, endDateOfChallenge, now, takenBy);
 
         return result;
     }
 
-    private newChallenge(challengeID, goal, user, mapConditionIDToSymbolicNamesAndTimeBoxesRequired, startDate, endDate, now):UserChallenge {
-        var newChallenge:UserChallenge = new UserChallenge(challengeID, goal, user, startDate, endDate, mapConditionIDToSymbolicNamesAndTimeBoxesRequired);
+    private newChallenge(challengeID, goal, user, mapConditionIDToSymbolicNamesAndTimeBoxesRequired, startDate, endDate, now, takenBy = null):UserChallenge {
+        var newChallenge:UserChallenge = new UserChallenge(challengeID, goal, user, startDate, endDate, mapConditionIDToSymbolicNamesAndTimeBoxesRequired, takenBy);
 
         if (newChallenge.getEndDate().isAfter(goal.getEndOfValidityPeriod())) {
             return null;

@@ -17,9 +17,13 @@ class TeamChallengeFactory {
 
         for(var currentMemberIndex in members) {
             var currentMember:User = members[currentMemberIndex];
-            var currentUserChallenge:UserChallenge = currentMember.addChallenge(goal, now);
+
+            var currentUserChallenge:UserChallenge = currentMember.addChallenge(goal, now, team.getName());
+
             userChallengeRepository.addUserChallenge(currentUserChallenge);
+
             membersChallenges.push(currentUserChallenge);
+
             console.log("Le user", currentMember.getName(), "has this challenge added", currentUserChallenge.getID());
         }
         var id = uuid.v4();

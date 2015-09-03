@@ -83,8 +83,8 @@ class User {
         this.currentChallenges = [];
     }
 
-    addChallenge(goal:Goal, now:moment.Moment):Challenge {
-        var newChallenge = this.challengeFactory.createChallenge(goal, this, now);
+    addChallenge(goal:Goal, now:moment.Moment, takenBy = null):Challenge {
+        var newChallenge = this.challengeFactory.createChallenge(goal, this, now, takenBy);
 
         //  Check if we try
         if (newChallenge.getEndDate().isAfter(goal.getEndOfValidityPeriod())) {

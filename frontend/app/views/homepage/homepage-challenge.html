@@ -1,9 +1,9 @@
-<div class="challenge-container challenge-status-{{challenge.status}}" ng-class="{'user':challenge.type == 'user'}">
+<div class="challenge-container challenge-status-{{challenge.status}}" ng-class="{'user':challenge.type == 'personal', 'team': challenge.type=='team'}">
   <input class="challenge-btn" type="button" value="Enlever ce défi" ng-click="dashboard.deleteChallenge(challenge)">
   <table>
     <tr>
       <td>
-        <p>Objectif de {{challenge.user}}</p>
+        <p ng-show="challenge.takenBy != null">Objectif de {{challenge.takenBy}}</p>
         <span class="badge-name">{{challenge.goal}} </span> -  <span class="challenge-date">
           {{challenge.startDate | date:'dd/MM/yyyy - HH:mm'}} au {{challenge.endDate | date:'dd/MM/yyyy - HH:mm'}}
           </span>

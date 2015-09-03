@@ -31,8 +31,9 @@ class UserChallenge {
     private mapSymbolicNameToSensor:any = {};
     private user:User;
 
+    private takenBy:string;
 
-    constructor(id:string, goal:Goal, user:User, startDate:moment.Moment, endDate:moment.Moment, mapConditionIDToSensorAndTimeBoxRequired:any) {
+    constructor(id:string, goal:Goal, user:User, startDate:moment.Moment, endDate:moment.Moment, mapConditionIDToSensorAndTimeBoxRequired:any, takenBy = null) {
 
         this.id = id;
 
@@ -42,6 +43,7 @@ class UserChallenge {
         this.goal = goal;
 
         this.user = user;
+        this.takenBy = (takenBy == null) ? this.user.getName() : takenBy;
 
         this.mapConditionIDToSensorAndTimeBoxRequired = mapConditionIDToSensorAndTimeBoxRequired;
         this.mapSymbolicNameToSensor = this.user.getMapSymbolicNameToSensor();
@@ -309,13 +311,17 @@ class UserChallenge {
     }
 
     getDataForClient():any {
+
+        var type = (this.takenBy == this.user.getName()) ? 'personal' : 'team';
+
         return {
             id: this.id,
-            type:'personal',
+            type:type,
             startDate: this.startDate,
             endDate: this.endDate,
             goal: this.goal.getName(),
             user: this.user.getName(),
+            takenBy:this.takenBy,
             progress: this.progress,
             status:this.status
         }
