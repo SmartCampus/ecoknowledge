@@ -18,7 +18,7 @@ class JSONSerializer {
         return {success: '+++\tDatabase loaded correctly !\t+++', data: JSON.parse(data)};
     }
 
-    public save(data:any, pathToFile:string, successCallBack:Function, failCallBack:Function):void {
+    public save(pathToFile:string,data:any, successCallBack:Function, failCallBack:Function):void {
 
         fs.writeFile(pathToFile, JSON.stringify(data, null, 2), function (err) {
             if (err) {

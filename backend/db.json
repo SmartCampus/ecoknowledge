@@ -11,7 +11,7 @@
       "conditions": [
         {
           "id": "ab72f9b4-a368-4ea2-8adb-738ea0e6f30b",
-		  "description":"a desc",
+          "description": "a desc",
           "expression": {
             "valueLeft": {
               "value": "TMP_CLI",
@@ -21,14 +21,13 @@
               "value": "15",
               "symbolicName": false
             },
-            "comparison": ">",
-            "periodOfTime": "-2208474000000"
+            "comparison": ">"
           },
           "threshold": 25,
-			"referencePeriod" :{
-				"numberOfUnitToSubtract":1,
-				"unitToSubtract":"week"
-			},
+          "referencePeriod": {
+            "numberOfUnitToSubtract": 1,
+            "unitToSubtract": "week"
+          },
           "filter": {
             "dayOfWeekFilter": "all",
             "periodOfDayFilter": [
@@ -37,6 +36,29 @@
             ]
           },
           "type": "comparison"
+        },
+		{
+          "id": "7713cb13-e86d-40d0-a39f-c4ad5a33546d",
+          "description": "tmp_cli > 1",
+          "expression": {
+            "valueLeft": {
+              "value": "TMP_CLI",
+              "symbolicName": true
+            },
+            "valueRight": {
+              "value": 28,
+              "symbolicName": false
+            },
+            "comparison": ">"
+          },
+          "threshold": 50,
+          "filter": {
+            "dayOfWeekFilter": "all",
+            "periodOfDayFilter": [
+              "all"
+            ]
+          },
+          "type": "overall"
         }
       ],
       "badgeID": "44bb8108-8830-4f43-abd1-3ef643303d92"
@@ -52,7 +74,7 @@
       "conditions": [
         {
           "id": "7713cb13-e86d-40d0-a39f-c4ad5a33546d",
-		  "description": "tmp_cli > 1",
+          "description": "tmp_cli > 1",
           "expression": {
             "valueLeft": {
               "value": "TMP_CLI",
@@ -80,7 +102,7 @@
   "badges": [
     {
       "id": "44bb8108-8830-4f43-abd1-3ef643303d92",
-      "name": "Un challenge de démo !",
+      "name": "Un challenge de d\u00e9mo !",
       "points": 100
     },
     {
@@ -88,7 +110,7 @@
       "name": "Pas froid aux yeux",
       "points": "100"
     },
-	{
+    {
       "id": "faa78334-f515-4563-954b-ac91b4a42f88",
       "name": "Pas chiche de tout fermer !",
       "points": "100"
@@ -98,48 +120,55 @@
     {
       "id": "2cf91e02-a320-4766-aa9f-6efce3142d44",
       "name": "Charlie",
+	  "mapSymbolicNameToSensor": {
+        "TMP_CLI": "TEMP_443V"
+      },
       "currentChallenges": [
+        
       ],
       "finishedBadgesMap": {
         "44bb8108-8830-4f43-abd1-3ef643303d92": 1,
         "fde68334-f515-4563-954b-ac91b4a42f88": 1
-      },
-	  "mapSymbolicNameToSensor": {
-		"TMP_CLI":"TEMP_443V"
-	  }
+      }
     },
-	{
+    {
       "id": "6efce3142d44-a320-4766-4766-2cf91e02",
-      "name": "Gégé",
+      "name": "G\u00e9g\u00e9",
+      "mapSymbolicNameToSensor": {
+        "TMP_CLI": "AC_555V"
+      },
       "currentChallenges": [
+       
       ],
       "finishedBadgesMap": {
         "44bb8108-8830-4f43-abd1-3ef643303d92": 1,
         "fde68334-f515-4563-954b-ac91b4a42f88": 1
-      },
-	  "mapSymbolicNameToSensor": {
-		"TMP_CLI":"AC_555V"
-	  }
+      }
     }
   ],
   "teams": [
-	{
-		"id" : "28aa8108-8830-4f43-abd1-3ab643303d92",
-		"name" : "croquette",
-		"members" : ["2cf91e02-a320-4766-aa9f-6efce3142d44", "6efce3142d44-a320-4766-4766-2cf91e02"],
-		"leader":"2cf91e02-a320-4766-aa9f-6efce3142d44",
-		 "currentChallenges": [
+    {
+      "id": "28aa8108-8830-4f43-abd1-3ab643303d92",
+      "name": "croquette",
+      "members": [
+        "2cf91e02-a320-4766-aa9f-6efce3142d44",
+        "6efce3142d44-a320-4766-4766-2cf91e02"
+      ],
+      "leader": "2cf91e02-a320-4766-aa9f-6efce3142d44",
+      "currentChallenges": [
+        
       ],
       "finishedBadgesMap": {
         "44bb8108-8830-4f43-abd1-3ef643303d92": 2
       }
-	}
+    }
   ],
-  "challenges": 
-  {
-	"userChallenges":
-	  [
-	  ],
-	  "teamChallenges":[]
+  "challenges": {
+    "userChallenges": [
+      
+    ],
+    "teamChallenges": [
+      
+    ]
   }
 }

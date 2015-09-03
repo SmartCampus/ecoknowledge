@@ -143,11 +143,11 @@ class Goal {
         return {
             id: this.id,
             name: this.name,
-            timeBox: {
-                startDate: this.beginningOfValidityPeriod,
-                endDate: this.endOfValidityPeriod
+            validityPeriod: {
+                start: this.beginningOfValidityPeriod,
+                end: this.endOfValidityPeriod
             },
-            duration: this.recurringSession.getDescription(),
+            recurringPeriod: this.recurringSession.getDescription(),
             conditions: this.getDataOfConditionsInJSON(),
             badgeID: this.badgeID
         }

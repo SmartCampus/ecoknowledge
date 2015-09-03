@@ -145,13 +145,12 @@ class Context {
             var currentTeam = this._teamFactory.createTeam(currentTeamDescription, this._userRepository, this._teamChallengeFactory);
             this._teamRepository.addTeam(currentTeam);
         }
-
     }
 
     fillChallengesRepository(data) {
         var challenges = data.challenges;
         this.fillUserChallengeRepository(challenges);
-        this.fillTeamChallengeRepository(data);
+        this.fillTeamChallengeRepository(challenges);
     }
 
     fillUserChallengeRepository(data) {
@@ -166,9 +165,16 @@ class Context {
         }
     }
 
-    // TODO
     fillTeamChallengeRepository(data) {
+        var challenges = data.teamChallenges;
 
+        for (var currentChallengeIndex = 0; currentChallengeIndex < challenges.length; currentChallengeIndex++) {
+            var currentChallengeDescription = challenges[currentChallengeIndex];
+
+            var currentChallenge = this._teamChallengeFactory.restoreTeamChallenge(currentChallengeDescription, this._teamRepository,this._goalRepository, this._userChallengeRepository, Clock.getMoment(Clock.getNow()));
+
+            this._teamChallengeRepository.addTeamChallenge(currentChallenge);
+        }
     }
 
     public getBadgeRepository():BadgeRepository {

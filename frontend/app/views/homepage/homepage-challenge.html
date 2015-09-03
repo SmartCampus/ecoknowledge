@@ -1,5 +1,5 @@
 <div class="challenge-container challenge-status-{{challenge.status}}" ng-class="{'user':challenge.type == 'personal', 'team': challenge.type=='team'}">
-  <input class="challenge-btn" type="button" value="Enlever ce défi" ng-click="dashboard.deleteChallenge(challenge)">
+  <input class="challenge-btn" type="button" ng-show="challenge.takenBy == null" value="Enlever ce défi" ng-click="dashboard.deleteChallenge(challenge)">
   <table>
     <tr>
       <td>

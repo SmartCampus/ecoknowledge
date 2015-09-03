@@ -298,14 +298,19 @@ class UserChallenge {
         return result;
     }
 
+    isAPersonalChallenge():boolean {
+        return this.takenBy == this.getUser().getName();
+    }
 
     getDataInJSON():any {
         return {
             id: this.id,
             startDate: this.startDate,
             endDate: this.endDate,
-            goal: this.goal.getUUID(),
-            user: this.user.getUUID(),
+            goalID: this.goal.getUUID(),
+            userID: this.user.getUUID(),
+            takenBy:this.takenBy,
+            mapConditionIDToSensorAndTimeBoxRequired: this.mapConditionIDToSensorAndTimeBoxRequired,
             progress: this.progress
         }
     }

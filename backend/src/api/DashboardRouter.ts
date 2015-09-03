@@ -589,8 +589,13 @@ class DashboardRouter extends RouterItf {
             if (challengeToEvaluate.getStatus() == ChallengeStatus.SUCCESS) {
                 console.log("Le challenge est réussi et terminé");
 
-                //  Add finished badge to current user
-                this.addFinishedBadge(challengeID, entity.getUUID());
+
+                if(challengeToEvaluate.isAPersonalChallenge()) {
+                    //  Add finished badge to current user
+                    this.addFinishedBadge(challengeID, entity.getUUID());
+                }
+                entity.deleteChallenge(challengeToEvaluate.getID());
+
 
                 //  Build the new challenge (recurring) and evaluate it
                 var newChallenge = self.createUserChallenge(entity.getUUID(), challengeToEvaluate.getGoal().getUUID(), challengeToEvaluate.getEndDate());

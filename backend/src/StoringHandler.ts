@@ -30,8 +30,10 @@ class StoringHandler {
         result['definitions'] = this.context.getGoalRepository().getDataInJSON();
         result['badges'] = this.context.getBadgeRepository().getDataInJSON();
         result['users'] = this.context.getUserRepository().getDataInJSON();
+        result['teams'] = this.context.getTeamRepository().getDataInJSON();
         result['challenges'] = {};
         result['challenges']['userChallenges'] = this.context.getUserChallengeRepository().getDataInJSON();
+        result['challenges']['teamChallenges'] = this.context.getTeamChallengeRepository().getDataInJSON();
 
         this.serializer.save(pathToFile, result, successCallBack, failCallBack);
     }

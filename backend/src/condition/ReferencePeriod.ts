@@ -20,6 +20,13 @@ class ReferencePeriod {
         dateOfCreation = dateOfCreation.subtract(this.numberOfUnitToSubtract, this.unitToSubtract);
         return dateOfCreation;
     }
+
+    getDataInJSON():any {
+        return {
+            numberOfUnitToSubtract: this.numberOfUnitToSubtract,
+            unitToSubtract:this.unitToSubtract
+        }
+    }
 }
 
 export = ReferencePeriod;
