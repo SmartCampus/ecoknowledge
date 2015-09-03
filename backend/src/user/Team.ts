@@ -79,6 +79,18 @@ class Team  {
         return newChallenge;
     }
 
+    addBadge(badgeID:string) {
+        if (!badgeID) {
+            throw new BadArgumentException('Can not add given badge to team' + this.getName() + '. Badge given is null');
+        }
+
+        if (this.badgesMap.hasOwnProperty(badgeID)) {
+            this.badgesMap[badgeID]++;
+        } else {
+            this.badgesMap[badgeID] = 1;
+        }
+    }
+
     deleteChallenge(challenge:TeamChallenge):void {
 
         var challengeIndex:number = this.getChallengeByID(challenge.getID());

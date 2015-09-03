@@ -44,6 +44,17 @@ class TeamChallenge {
         this.checkChildrenTimeBoxes();
     }
 
+    getChildUserChallengeByID(userChallengeID:string):UserChallenge {
+        for(var currentChildIndex in this.childChallenges) {
+            var currentChild = this.childChallenges[currentChildIndex];
+            if(currentChild.getID() == userChallengeID) {
+                return currentChild;
+            }
+        }
+
+        return null;
+    }
+
     getID():string {
         return this.id;
     }
@@ -54,6 +65,10 @@ class TeamChallenge {
 
     getName():string {
         return this.childChallenges[0].getName();
+    }
+
+    getTeam():Team {
+        return this.team;
     }
 
     getBadge() {
@@ -146,7 +161,8 @@ class TeamChallenge {
 
             var childResult = currentChild.evaluate(data);
 
-            achieved = achieved && currentChild.getStatus() == Status.SUCCESS;
+            console.log("SON RESULT\n", childResult, '\n\n');
+            achieved = achieved && childResult.achieved;
 
             var currentChildGlobalProgression:number = childResult.percentageAchieved;
             childProgress += currentChildGlobalProgression;
@@ -161,10 +177,11 @@ class TeamChallenge {
 
         }
         this.durationAchieved = this.childChallenges[0].getTimeProgress();
-        this.progress['percentageAchieved'] = childProgress / this.childChallenges.length;
+        var percentageAchieved = childProgress / this.childChallenges.length;
+        this.progress['percentageAchieved'] = percentageAchieved;
         this.progress['durationAchieved'] = this.durationAchieved;
         this.progress['finished'] = this.durationAchieved == 100;
-        this.progress['achieved'] = achieved;
+        this.progress['achieved'] = achieved || percentageAchieved == 100;
         this.progress['conditions'] = childProgressDescription;
 
         return this.progress;

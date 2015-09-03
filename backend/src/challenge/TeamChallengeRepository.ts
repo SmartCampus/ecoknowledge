@@ -22,9 +22,20 @@ class TeamChallengeRepository {
 
     getChallengeByID(challengeID:string):TeamChallenge {
         for (var i in this.teamChallengesArray) {
-            var currentBadge = this.teamChallengesArray[i];
-            if (currentBadge.hasUUID(challengeID)) {
-                return currentBadge;
+            var currentChallenge = this.teamChallengesArray[i];
+            if (currentChallenge.hasUUID(challengeID)) {
+                return currentChallenge;
+            }
+        }
+
+        return null;
+    }
+
+    getTeamChallengeFromUserChallengeID(userChallengeID:string):TeamChallenge {
+        for (var i in this.teamChallengesArray) {
+            var currentChallenge = this.teamChallengesArray[i];
+            if (currentChallenge.getChildUserChallengeByID(userChallengeID) != null) {
+                return currentChallenge;
             }
         }
 

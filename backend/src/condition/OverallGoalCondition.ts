@@ -51,7 +51,6 @@ class OverallGoalCondition extends Condition {
 
                 //  Check value by value if internal condition is satisfied
                 if (this.expression.evaluate(dataToEvaluate)) {
-                    console.log("OK");
                     ++numberOfCorrectValues;
                 }
 
@@ -60,6 +59,11 @@ class OverallGoalCondition extends Condition {
 
         var percentageAchieved = ((numberOfCorrectValues * 100 / numberOfValues) * 100) / this.thresholdRate;
         percentageAchieved = (percentageAchieved > 100) ? 100 : percentageAchieved;
+
+        //  If there is no values yet
+        if(isNaN(percentageAchieved)) {
+            percentageAchieved = 0;
+        }
 
         var achieved:boolean = percentageAchieved === 100;
 

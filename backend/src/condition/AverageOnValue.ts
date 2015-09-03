@@ -82,6 +82,11 @@ class AverageOnValue extends Condition {
             //  It can be infinite
             percentageAchieved = (percentageAchieved > 100) ? 100 : percentageAchieved;
 
+            //  If there is no values yet
+            if(isNaN(percentageAchieved)) {
+                percentageAchieved = 0;
+            }
+
         }
         var achieved:boolean = percentageAchieved === 100;
         var result:any = {description: this.description, percentageAchieved: percentageAchieved, achieved: achieved};

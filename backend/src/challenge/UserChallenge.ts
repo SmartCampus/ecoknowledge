@@ -263,7 +263,6 @@ class UserChallenge {
         if (achieved && finished) {
             this.status = BadgeStatus.SUCCESS;
             console.log('success!');
-            return true;
         } else if (!achieved && finished) {
             this.status = BadgeStatus.FAIL;
             console.log('Fail!');

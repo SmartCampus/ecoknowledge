@@ -292,7 +292,7 @@ class DashboardRouter extends RouterItf {
         this.evaluateChallengeForGivenTeam(teamDescriptionWanted);
 
         //  First col : available goal
-        var descriptionOfAvailableGoals = this.goalRepository.getListOfNotTakenGoalInJSONFormat(teamDescriptionWanted, this.userChallengeRepository);
+        var descriptionOfAvailableGoals = this.goalRepository.getListOfNotTakenGoalInJSONFormat(teamDescriptionWanted, this.teamChallengeRepository);
 
         // Second col : badge description
         var descriptionOfBadges:any[] = this.buildBadgesDescriptionForGivenTeam(teamDescriptionWanted);
@@ -441,48 +441,27 @@ class DashboardRouter extends RouterItf {
             var currentChallengeID = challenges[challengeIndex];
             var currentChallenge = this.userChallengeRepository.getChallengeByID(currentChallengeID);
 
-            this.evaluateChallenge(user, currentChallenge, currentChallengeID);
+            if(currentChallenge.isAPersonalChallenge()) {
+                this.evaluateUserChallenge(user, currentChallenge, currentChallengeID);
+            }
+            else {
+                //  Retrieve related TeamChallenge
+                var teamChallenge:TeamChallenge = this.teamChallengeRepository.getTeamChallengeFromUserChallengeID(currentChallengeID);
+
+                //  Retrieve team linked
+                var team:Team = teamChallenge.getTeam();
+
+                //  Evaluate team challenge
+                this.evaluateTeamChallenge(team, teamChallenge, teamChallenge.getID());
+            }
         }
     }
 
-    private evaluateTeamChallenge(entity, challengeToEvaluate:TeamChallenge, challengeID) {
+    private evaluateTeamChallenge(entity:Team, challengeToEvaluate:TeamChallenge, challengeID) {
         var self = this;
 
         if (!DashboardRouter.DEMO) {
 
-            //TODO move what follow
-            var required = challengeToEvaluate.getSensors();
-
-            var requiredSensorName = Object.keys(required);
-            var numberToLoad:number = requiredSensorName.length;
-
-            for (var currentSensorName in requiredSensorName) {
-                (function (currentSensorName) {
-                    var startDate:string = '' + required[currentSensorName].startDate;
-                    var endDate:string = '' + required[currentSensorName].endDate;
-
-                    var path = 'http://smartcampus.unice.fr/sensors/' + currentSensorName + '/data?date=' + startDate + '/' + endDate;
-                    var dataJsonString = "";
-
-                    this.middleware.getSensorsInfo(required, numberToLoad, dataJsonString, path,
-                        function () {
-                            var result = challengeToEvaluate.evaluate(required);
-                            if (result) {
-                                var newChall = self.createUserChallenge(entity, challengeToEvaluate.getGoal().getUUID(), challengeToEvaluate.getEndDate());
-                                this.addBadge(challengeID, entity.getUUID());
-                                if (newChall != null) {
-                                    self.evaluateChallenge(entity, newChall, newChall.getID());
-                                }
-                            }
-                            console.log("All data were retrieve properly");
-                            return challengeToEvaluate;
-                        },
-                        function () {
-                            return {error: "Error occurred in middleware"};
-                        });
-
-                })(requiredSensorName[currentSensorName]);
-            }
         }
         else {
             console.log('++++++++++++++++++++++ \tMODE DEMO\t+++++++++++++++++++++');
@@ -500,10 +479,14 @@ class DashboardRouter extends RouterItf {
 
             //  Check if the challenge is achieved and finished
             if (result.achieved && result.finished) {
-                console.log("Le challenge est réussi et terminé");
+                console.log("Le challenge de team est réussi et terminé");
 
-                //  Add finished badge to current user
-                this.addFinishedBadge(challengeID, entity.getUUID());
+                var badgeID:string = challengeToEvaluate.getBadge();
+
+                //  Add finished badge to current team
+                this.addFinishedBadgeToTeam(badgeID, entity);
+
+                entity.deleteChallenge(challengeToEvaluate);
 
                 /*
                  //  Build the new challenge (recurring) and evaluate it
@@ -516,9 +499,9 @@ class DashboardRouter extends RouterItf {
 
             //  Check if the challenge is not achieved but finished
             else if (!result.achieved && result.finished) {
-                console.log("Le challenge est FAIL et terminé");
+                console.log("Le challenge de team est FAIL et terminé");
 
-                entity.deleteChallenge(challengeToEvaluate.getID());
+                entity.deleteChallenge(challengeToEvaluate);
 
                 /*
                  //  Build the new challenge (recurring) and evaluate it
@@ -534,7 +517,7 @@ class DashboardRouter extends RouterItf {
     }
 
 
-    private evaluateChallenge(entity, challengeToEvaluate:UserChallenge, challengeID) {
+    private evaluateUserChallenge(entity, challengeToEvaluate:UserChallenge, challengeID) {
         var self = this;
 
         if (!DashboardRouter.DEMO) {
@@ -560,7 +543,7 @@ class DashboardRouter extends RouterItf {
                                 var newChall = self.createUserChallenge(entity, challengeToEvaluate.getGoal().getUUID(), challengeToEvaluate.getEndDate());
                                 this.addBadge(challengeID, entity.getUUID());
                                 if (newChall != null) {
-                                    self.evaluateChallenge(entity, newChall, newChall.getID());
+                                    self.evaluateUserChallenge(entity, newChall, newChall.getID());
                                 }
                             }
                             console.log("All data were retrieve properly");
@@ -589,18 +572,16 @@ class DashboardRouter extends RouterItf {
             if (challengeToEvaluate.getStatus() == ChallengeStatus.SUCCESS) {
                 console.log("Le challenge est réussi et terminé");
 
+                 //  Add finished badge to current user
+                    this.addFinishedBadgeToUser(challengeID, entity.getUUID());
 
-                if(challengeToEvaluate.isAPersonalChallenge()) {
-                    //  Add finished badge to current user
-                    this.addFinishedBadge(challengeID, entity.getUUID());
-                }
                 entity.deleteChallenge(challengeToEvaluate.getID());
 
 
                 //  Build the new challenge (recurring) and evaluate it
                 var newChallenge = self.createUserChallenge(entity.getUUID(), challengeToEvaluate.getGoal().getUUID(), challengeToEvaluate.getEndDate());
                 if (newChallenge != null) {
-                    self.evaluateChallenge(entity, newChallenge, newChallenge.getID());
+                    self.evaluateUserChallenge(entity, newChallenge, newChallenge.getID());
                 }
             }
 
@@ -613,7 +594,7 @@ class DashboardRouter extends RouterItf {
                 //  Build the new challenge (recurring) and evaluate it
                 var newChallenge = self.createUserChallenge(entity.getUUID(), challengeToEvaluate.getGoal().getUUID(), challengeToEvaluate.getEndDate());
                 if (newChallenge != null) {
-                    self.evaluateChallenge(entity, newChallenge, newChallenge.getID());
+                    self.evaluateUserChallenge(entity, newChallenge, newChallenge.getID());
                 }
             }
 
@@ -622,7 +603,7 @@ class DashboardRouter extends RouterItf {
     }
 
     //  debug only
-    private addFinishedBadge(challengeID:string, userID:string) {
+    private addFinishedBadgeToUser(challengeID:string, userID:string) {
         /*
          console.log('add finished badge');
          console.log('user id : ', userID);
@@ -632,6 +613,15 @@ class DashboardRouter extends RouterItf {
         var badgeID = this.userChallengeRepository.getBadgeByChallengeID(challengeID);
         user.addBadge(badgeID);
         user.deleteChallenge(challengeID);
+    }
+
+    private addFinishedBadgeToTeam(badgeID:string, team:Team) {
+        /*
+         console.log('add finished badge');
+         console.log('user id : ', userID);
+         console.log('challenge ID : ', challengeID);
+         */
+        team.addBadge(badgeID);
     }
 
 

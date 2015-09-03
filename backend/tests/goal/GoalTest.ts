@@ -93,11 +93,11 @@ describe('Goal Test', () => {
             var expected:any = {
                 id: goal.getUUID(),
                 name: goal.getName(),
-                timeBox: {
-                    startDate: goal.getBeginningOfValidityPeriod(),
-                    endDate: goal.getEndOfValidityPeriod()
+                validityPeriod: {
+                    start: goal.getBeginningOfValidityPeriod(),
+                    end: goal.getEndOfValidityPeriod()
                 },
-                duration: aRecurringSession.getDescription(),
+                recurringPeriod: aRecurringSession.getDescription(),
                 conditions: goal.getDataOfConditionsInJSON(),
                 badgeID: goal.getBadgeID()
             };
