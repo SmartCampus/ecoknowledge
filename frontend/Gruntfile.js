@@ -410,6 +410,7 @@ module.exports = function (grunt) {
     grunt.task.run(['serve:' + target]);
   });
 
+  /*
   grunt.registerTask('test', [
     'clean:server',
     'wiredep',
@@ -418,6 +419,7 @@ module.exports = function (grunt) {
     'connect:test',
     'karma'
   ]);
+*/
 
   grunt.registerTask('build', [
     'clean:dist',
