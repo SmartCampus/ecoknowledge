@@ -11,27 +11,28 @@
            ng-model="goalCtrl.goal.name" required>
 
     <div id="create-goal-date">
-    <div style="display:inline-block; min-height:290px;">
-      <p style="text-align:center">Date du début de la validité de l'objectif</p>
-      <datepicker ng-model="goalCtrl.goal.timeBox.startDate" min-date="minDate" show-weeks="true"
-                  class="well"></datepicker>
-    </div>
-    <div style="display:inline-block; min-height:290px;float:right;">
-      <p style="text-align:center">Date de la fin de la validité de l'objectif</p>
-      <datepicker ng-model="goalCtrl.goal.timeBox.endDate" min-date="minDate" show-weeks="true"
-                  class="well well-sm"></datepicker>
-    </div>
+      <div style="display:inline-block; min-height:290px;">
+        <p style="text-align:center">Date du début de la validité de l'objectif</p>
+        <datepicker ng-model="goalCtrl.goal.validityPeriod.start" min-date="minDate" show-weeks="true"
+                    class="well"></datepicker>
+      </div>
+      <div style="display:inline-block; min-height:290px;float:right;">
+        <p style="text-align:center">Date de la fin de la validité de l'objectif</p>
+        <datepicker ng-model="goalCtrl.goal.validityPeriod.end" min-date="minDate" show-weeks="true"
+                    class="well well-sm"></datepicker>
+      </div>
     </div>
     <div>
             <span>
                 <label>Temps pour compléter l'objectif : </label>
 
-                  <select name="duration" class="selectpick form-control" ng-model="goalCtrl.goal.duration" required>
+                  <select name="recurringPeriod" class="selectpick form-control"
+                          ng-model="goalCtrl.goal.recurringPeriod" required>
                     <option value="day" selected>Jour (récurrent)</option>
                     <option value="week">Semaine (récurrent)</option>
                     <option value="month">Mois (récurrent)</option>
-                    <option value="all" disabled>Du {{goalCtrl.goal.timeBox.startDate | date:'dd/MM/yyyy'}} au
-                      {{goalCtrl.goal.timeBox.endDate | date:'dd/MM/yyyy'}} (non disponible)
+                    <option value="all" disabled>Du {{goalCtrl.goal.validityPeriod.start | date:'dd/MM/yyyy'}} au
+                      {{goalCtrl.goal.validityPeriod.end | date:'dd/MM/yyyy'}} (non disponible)
                     </option>
                   </select>
 

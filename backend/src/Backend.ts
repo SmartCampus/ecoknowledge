@@ -6,6 +6,8 @@ import Server = require('./Server');
 
 import DashboardRouter = require('./api/DashboardRouter');
 import LoginRouter = require('./api/LoginRouter');
+import BadgeRouter = require('./api/BadgeRouter');
+import GoalRouter = require('./api/GoalRouter');
 
 import Context = require('./Context');
 
@@ -46,9 +48,9 @@ class Backend extends Server {
         this.app.use('/dashboard', (new DashboardRouter(self.context, new Middleware())).getRouter());
         this.app.use('/login', (new LoginRouter(self.context)).getRouter());
 
+         this.app.use("/badges", (new BadgeRouter(self.context)).getRouter());
+         this.app.use("/goals", (new GoalRouter(self.context)).getRouter());
         /*
-         this.app.use("/badges", (new BadgeRouter(self.badgeRepository, self.badgeFactory, self.userRepository, loginCheck)).getRouter());
-         this.app.use("/goals", (new GoalDefinitionRouter(self.goalDefinitionRepository, self.goalDefinitionFactory, self.challengeRepository, self.userRepository)).getRouter());
          this.app.use("/challenges", (new GoalInstanceRouter(self.challengeRepository, self.challengeFactory, self.goalDefinitionRepository, self.userRepository)).getRouter());
          */
 

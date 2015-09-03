@@ -37,7 +37,7 @@ app.service('ServiceGoal', ['$http', function ServiceGoal($http) {
 
   this.post = function (goal, successFunc, failFunc) {
     var path = basePathGoal + 'new';
-    console.log('Service Goal : Get On', path);
+    console.log('Service Goal : Post On', path);
 
     $http.post(path, goal)
       .success(function () {
