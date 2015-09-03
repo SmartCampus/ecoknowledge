@@ -4,6 +4,7 @@ import Goal = require('../goal/Goal');
 import UserChallenge = require('../challenge/UserChallenge');
 import TeamChallenge = require('../challenge/TeamChallenge');
 import UserChallengeRepository = require('../challenge/UserChallengeRepository');
+import uuid = require('node-uuid');
 
 class TeamChallengeFactory {
     createTeamChallenge(team:Team, goal:Goal, userChallengeRepository:UserChallengeRepository, now) {
@@ -21,8 +22,9 @@ class TeamChallengeFactory {
             membersChallenges.push(currentUserChallenge);
             console.log("Le user", currentMember.getName(), "has this challenge added", currentUserChallenge.getID());
         }
+        var id = uuid.v4();
 
-        return new TeamChallenge(team, membersChallenges);
+        return new TeamChallenge(id, team, membersChallenges, userChallengeRepository);
     }
 
     restoreTeamChallenge() {

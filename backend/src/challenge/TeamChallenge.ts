@@ -9,6 +9,7 @@ var moment_timezone = require('moment-timezone');
 
 import Status= require('../Status');
 import UserChallenge= require('./UserChallenge');
+import UserChallengeRepository= require('./UserChallengeRepository');
 import Team= require('../user/Team');
 import BadArgumentException = require('../exceptions/BadArgumentException');
 
@@ -18,6 +19,7 @@ class TeamChallenge {
 
     private team:Team;
     private childChallenges:UserChallenge[];
+    private userChallengeRepository:UserChallengeRepository;
 
     private status:Status;
 
@@ -27,15 +29,17 @@ class TeamChallenge {
     private durationAchieved:number;
     private progress:any = {};
 
-    constructor(team:Team, childChallenges:UserChallenge[], id = null) {
+    constructor(id, team:Team, childChallenges:UserChallenge[], userChallengeRepository:UserChallengeRepository) {
         if (childChallenges.length == 0) {
             throw new BadArgumentException('Can not build team challenge because there is no child challenges to attach');
         }
 
-        this.id = (id == null) ? uuid.v4() : id;
+        this.id = id;
 
         this.team = team;
         this.childChallenges = childChallenges;
+        this.userChallengeRepository = userChallengeRepository;
+
         this.status = this.getStatus();
         this.checkChildrenTimeBoxes();
     }
@@ -74,6 +78,13 @@ class TeamChallenge {
 
     haveToStart(now):boolean {
         return this.childChallenges[0].haveToStart(now);
+    }
+
+    removeFromMembers() {
+        for(var currentUserChallengeIndex in this.childChallenges) {
+            var currentUserChallenge:UserChallenge = this.childChallenges[currentUserChallengeIndex];
+            currentUserChallenge.removeFromInternalUser();
+        }
     }
 
     getStatus():Status {

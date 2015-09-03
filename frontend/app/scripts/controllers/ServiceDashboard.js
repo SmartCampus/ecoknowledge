@@ -47,8 +47,8 @@ app.service('ServiceDashboard', ['$http', '$rootScope', '$cookies', function Ser
       });
   };
 
-  this.deleteChallenge = function (idGoal, successFunc, failFunc) {
-    var path = dashboardBasePath + 'delete/' + $cookies.get('token') + '/'+ idGoal;
+  this.deleteChallenge = function (idGoal, target, successFunc, failFunc) {
+    var path = dashboardBasePath + 'delete/' + $cookies.get('token') + '/'+ idGoal + '/' + $cookies.get('dashboardWanted');
     console.log('ServiceDashboard : Delete challenge ', path);
 
     $http.delete(path)

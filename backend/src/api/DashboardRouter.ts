@@ -160,7 +160,7 @@ class DashboardRouter extends RouterItf {
         });
 
 
-        this.router.delete('/delete/:id/:challengeID', function (req, res) {
+        this.router.delete('/delete/:id/:challengeID/:target', function (req, res) {
             self.deleteChallenge(req, res);
         });
 
@@ -243,9 +243,29 @@ class DashboardRouter extends RouterItf {
         var challengeID = req.params.challengeID;
         var userID = req.params.id;
 
-        var user:User = null;
+        var target = req.params.target;
+
+        console.log("TARGET", target);
+
         try {
-            user = this.checkUserID(userID);
+            if (target == 'personal') {
+
+                var user:User = null;
+                user = this.checkUserID(userID);
+
+                user.deleteChallenge(challengeID);
+                res.send({"success": "Objectif supprimé !"});
+            }
+            else {
+
+                var team:Team = null;
+                team = this.checkTeamID(target);
+
+                var challengeToDelete = this.teamChallengeRepository.getChallengeByID(challengeID);
+
+                team.deleteChallenge(challengeToDelete);
+                res.send({"success": "Objectif supprimé !"});
+            }
         }
         catch (e) {
             if (e instanceof BadRequestException) {
@@ -262,14 +282,6 @@ class DashboardRouter extends RouterItf {
                 res.status(500).send({error: e.getMessage()});
                 return;
             }
-        }
-
-        try {
-            user.deleteChallenge(challengeID);
-            res.send({"success": "Objectif supprimé !"});
-        }
-        catch (e) {
-            res.send({error: e.toString()});
         }
     }
 
@@ -494,12 +506,12 @@ class DashboardRouter extends RouterItf {
                 this.addFinishedBadge(challengeID, entity.getUUID());
 
                 /*
-                //  Build the new challenge (recurring) and evaluate it
-                var newChallenge = self.createTeamChallenge(entity.getUUID(), challengeToEvaluate.getGoal().getUUID(), challengeToEvaluate.getEndDate());
-                if (newChallenge != null) {
-                    self.evaluateTeamChallenge(entity, newChallenge, newChallenge.getID());
-                }
-                */
+                 //  Build the new challenge (recurring) and evaluate it
+                 var newChallenge = self.createTeamChallenge(entity.getUUID(), challengeToEvaluate.getGoal().getUUID(), challengeToEvaluate.getEndDate());
+                 if (newChallenge != null) {
+                 self.evaluateTeamChallenge(entity, newChallenge, newChallenge.getID());
+                 }
+                 */
             }
 
             //  Check if the challenge is not achieved but finished
@@ -509,12 +521,12 @@ class DashboardRouter extends RouterItf {
                 entity.deleteChallenge(challengeToEvaluate.getID());
 
                 /*
-                //  Build the new challenge (recurring) and evaluate it
-                var newChallenge = self.createTeamChallenge(entity.getUUID(), challengeToEvaluate.getGoal().getUUID(), challengeToEvaluate.getEndDate());
-                if (newChallenge != null) {
-                    self.evaluateTeamChallenge(entity, newChallenge, newChallenge.getID());
-                }
-                */
+                 //  Build the new challenge (recurring) and evaluate it
+                 var newChallenge = self.createTeamChallenge(entity.getUUID(), challengeToEvaluate.getGoal().getUUID(), challengeToEvaluate.getEndDate());
+                 if (newChallenge != null) {
+                 self.evaluateTeamChallenge(entity, newChallenge, newChallenge.getID());
+                 }
+                 */
             }
 
             return challengeToEvaluate;
@@ -639,8 +651,7 @@ class DashboardRouter extends RouterItf {
         var goal:Goal = this.goalRepository.getGoal(goalID);
 
 
-
-        var newChallenge = team.addChallenge(goal,this.userChallengeRepository, date);
+        var newChallenge = team.addChallenge(goal, this.userChallengeRepository, date);
 
         if (newChallenge == null) {
             return null;
@@ -650,6 +661,15 @@ class DashboardRouter extends RouterItf {
         return newChallenge;
     }
 
+
+    checkTeamID(teamID):Team {
+        var currentTeam:Team = this.teamRepository.getTeam(teamID);
+        if (currentTeam == null) {
+            throw new BadArgumentException('Given team can not be found');
+        }
+
+        return currentTeam;
+    }
 
     checkUserID(userID):User {
 

@@ -84,7 +84,7 @@ app.controller('DashboardCtrl', ['ServiceDashboard', '$window', '$location', '$c
 
 
   self.deleteChallenge = function (objective) {
-    ServiceDashboard.deleteChallenge(objective.id,
+    ServiceDashboard.deleteChallenge(objective.id,objective.type,
       function (data) {
         console.log('DashboardCtrl : Delete challenge : data RECEIVED :', data);
 

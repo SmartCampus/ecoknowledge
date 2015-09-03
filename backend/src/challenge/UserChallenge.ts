@@ -117,6 +117,10 @@ class UserChallenge {
         this.status = badgeStatus;
     }
 
+    removeFromInternalUser() {
+        this.user.deleteChallenge(this.getID());
+    }
+
     getSensors():any {
 
         var required:any = {};
@@ -307,7 +311,7 @@ class UserChallenge {
     getDataForClient():any {
         return {
             id: this.id,
-            type:'user',
+            type:'personal',
             startDate: this.startDate,
             endDate: this.endDate,
             goal: this.goal.getName(),

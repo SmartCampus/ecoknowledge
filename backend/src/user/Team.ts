@@ -79,17 +79,22 @@ class Team  {
         return newChallenge;
     }
 
-    deleteChallenge(challengeID:string):void {
+    deleteChallenge(challenge:TeamChallenge):void {
 
-        var challengeIndex:number = this.getChallengeByID(challengeID);
+        var challengeIndex:number = this.getChallengeByID(challenge.getID());
+
         if (challengeIndex == -1) {
             throw new BadArgumentException('Can not find given challenge ID');
         }
-        else {
-            this.currentChallenges.splice(challengeIndex, 1);
-        }
 
-        console.log("UserChallenge deleted ! Current challenges:", this.currentChallenges);
+        //  Remove team challenge from team
+        this.currentChallenges.splice(challengeIndex, 1);
+
+        //  Remove challenges from team's members
+        challenge.removeFromMembers();
+
+
+        console.log("TeamChallenge deleted ! Current challenges:", this.currentChallenges);
     }
 
     private getChallengeByID(challengeID:string):number {
