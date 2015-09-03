@@ -34,6 +34,7 @@
       <td>
         <table ng-repeat="condition in challenge.progress.conditions">
           <td>
+
             {{condition.description}}
           </td>
           </tr>
@@ -43,7 +44,7 @@
                 <div class="progress-bar" style="min-width: 1em;width:{{condition.percentageAchieved}}%;" role="progressbar"
                      aria-valuenow="{{condition.percentageAchieved}}"
                      aria-valuemin="0" aria-valuemax="100" >
-                  {{condition.percentageAchieved}}%
+                  {{condition.percentageAchieved | number}}%
                 </div>
               </div>
             </td>
@@ -53,5 +54,4 @@
     </tr>
 
   </table>
-
 </div>

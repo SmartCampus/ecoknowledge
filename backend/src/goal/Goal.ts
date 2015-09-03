@@ -90,6 +90,8 @@ class Goal {
         var numberOfConditions:number = 0;
         var numberOfConditionsAchieved:number = 0;
 
+        var globalPercentageAchieved:number = 0;
+
         var achieved:boolean = true;
 
         var conditionsDescription:any[] =[];
@@ -101,8 +103,9 @@ class Goal {
             var currentConditionState = currentCondition.evaluate(currentConditionDescription.values, currentConditionDescription);
             conditionsDescription.push(currentConditionState);
 
-
             achieved = achieved && currentConditionState.achieved;
+            globalPercentageAchieved += currentConditionState.percentageAchieved;
+
             result[currentCondition.getID()] = currentConditionState;
 
             numberOfConditions++;
@@ -111,7 +114,7 @@ class Goal {
 
         result['conditions'] = conditionsDescription;
 
-        var percentageAchieved:number = (numberOfConditionsAchieved * 100) / numberOfConditions;
+        var percentageAchieved:number = (globalPercentageAchieved) / numberOfConditions;
         result['percentageAchieved'] = percentageAchieved;
         result['achieved'] = achieved;
 
