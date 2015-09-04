@@ -332,7 +332,7 @@ class UserChallenge {
     }
 
 
-    private getStatusAsString():string {
+    getStatusAsString():string {
         switch (this.status) {
             case 0:
                 return 'WAIT';

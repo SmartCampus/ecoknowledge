@@ -13,6 +13,8 @@ app.controller('DashboardCtrl', ['ServiceDashboard', '$window', '$location', '$c
   self.dashboardViews = [];
   self.dashboardWanted = '';
 
+  self.user = {};
+
   //  Debug
   self.request = {};
 
@@ -22,9 +24,10 @@ app.controller('DashboardCtrl', ['ServiceDashboard', '$window', '$location', '$c
     console.log('\n------------------------------------------------------------\nAngular wanna get the dashboard');
 
     ServiceDashboard.get(
-      function (data, canTake, goals, badges, challenges, dashboardViews) {
+      function (data, user, canTake, goals, badges, challenges, dashboardViews) {
 
         self.request = data;
+        self.user = user;
 
         self.canTakeChallenge = canTake;
         self.goals = goals;
@@ -46,10 +49,11 @@ app.controller('DashboardCtrl', ['ServiceDashboard', '$window', '$location', '$c
     $cookies.put('dashboardWanted', self.dashboardWanted);
 
     ServiceDashboard.get(
-      function (data, cantTake, goals, badges, challenges, dashboardViews) {
+      function (data, user, cantTake, goals, badges, challenges, dashboardViews) {
         console.log('Result of dashboard : ', goals, badges, challenges);
 
         self.request = data;
+        self.user = user;
 
         self.canTakeChallenge = cantTake;
         self.goals = goals;

@@ -103,14 +103,18 @@ class TeamChallenge {
     }
 
     getStatus():Status {
-        var succeed:boolean = false;
-        var stillRunning:boolean = false;
+        var succeed:boolean = true;
+        var stillRunning:boolean = true;
 
         for (var currentChildIndex in this.childChallenges) {
             var currentChild = this.childChallenges[currentChildIndex];
             var currentChildStatus = currentChild.getStatus();
 
-            console.log("Current child status", currentChildStatus);
+            console.log("Current child status", currentChild.getStatusAsString());
+
+            if(currentChildStatus == Status.WAIT) {
+                return Status.WAIT;
+            }
 
             stillRunning = stillRunning && (currentChildStatus == Status.RUN);
             if (stillRunning) {
@@ -183,6 +187,7 @@ class TeamChallenge {
         this.progress['finished'] = this.durationAchieved == 100;
         this.progress['achieved'] = achieved || percentageAchieved == 100;
         this.progress['conditions'] = childProgressDescription;
+        this.progress['status'] = this.getStatusAsString();
 
         return this.progress;
     }
@@ -206,6 +211,26 @@ class TeamChallenge {
         }
 
         return result;
+    }
+
+    getStatusAsString():string {
+        switch (this.getStatus()) {
+            case 0:
+                return 'WAIT';
+                break;
+            case 1:
+                return 'RUNNING';
+                break;
+            case 2:
+                return 'SUCCESS';
+                break;
+            case 3:
+                return 'FAIL';
+                break;
+            default:
+                return 'UNKNOWN';
+                break;
+        }
     }
 
     getDataInJSON():any {
@@ -235,7 +260,7 @@ class TeamChallenge {
             goal: this.childChallenges[0].getGoal().getName(),
             user: this.getName(),
             progress: this.progress,
-            status: this.status
+            status: this.getStatusAsString()
         }
     }
 }

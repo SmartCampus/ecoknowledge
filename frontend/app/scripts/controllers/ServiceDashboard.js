@@ -18,6 +18,7 @@ app.service('ServiceDashboard', ['$http', '$rootScope', '$cookies', function Ser
       .success(function (data) {
         console.log("DATA RECEIVED BY SERVICE DASHBOARD", data);
 
+        var user = data.data.user;
         var canTake = data.data.goals.canTakeGoal;
         var goals = data.data.goals.goalsData;
         var badges = data.data.badges;
@@ -26,7 +27,7 @@ app.service('ServiceDashboard', ['$http', '$rootScope', '$cookies', function Ser
         var dashboardViews = data.data.dashboardList;
 
 
-        successFunc(data, canTake, goals, badges, challenges, dashboardViews);
+        successFunc(data,user, canTake, goals, badges, challenges, dashboardViews);
       })
       .error(function (data) {
         console.error('ServiceDashboard : fail get dashboard', data);

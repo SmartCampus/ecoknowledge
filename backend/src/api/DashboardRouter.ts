@@ -113,7 +113,10 @@ class DashboardRouter extends RouterItf {
                     teamDescription.name = currentTeam.getName();
                     dashboardList.push(teamDescription);
                 }
-
+                result.user = {
+                    username : currentUser.getName(),
+                    dashboard:'Personnel'
+                };
                 result.dashboardList = dashboardList;
             }
 
@@ -151,6 +154,10 @@ class DashboardRouter extends RouterItf {
                     teamDescription.name = currentTeam.getName();
                     dashboardList.push(teamDescription);
                 }
+
+                result.user = {
+                    username : currentUser.getName(),
+                    dashboard:team.getName()                };
 
                 result.dashboardList = dashboardList;
             }
@@ -471,6 +478,11 @@ class DashboardRouter extends RouterItf {
                 challengeToEvaluate.setStatus(ChallengeStatus.RUN);
             }
 
+            if(challengeToEvaluate.getStatus() == ChallengeStatus.FAIL) {
+                console.log("Le challenge est fail, ça sert à rien de l'évaluer");
+                return challengeToEvaluate;
+            }
+
 
             var result:any = challengeToEvaluate.evaluate(this.jsonStub);
 
@@ -501,7 +513,7 @@ class DashboardRouter extends RouterItf {
             else if (!result.achieved && result.finished) {
                 console.log("Le challenge de team est FAIL et terminé");
 
-                entity.deleteChallenge(challengeToEvaluate);
+                //entity.deleteChallenge(challengeToEvaluate);
 
                 /*
                  //  Build the new challenge (recurring) and evaluate it
@@ -612,7 +624,6 @@ class DashboardRouter extends RouterItf {
         var user = this.userRepository.getUser(userID);
         var badgeID = this.userChallengeRepository.getBadgeByChallengeID(challengeID);
         user.addBadge(badgeID);
-        user.deleteChallenge(challengeID);
     }
 
     private addFinishedBadgeToTeam(badgeID:string, team:Team) {

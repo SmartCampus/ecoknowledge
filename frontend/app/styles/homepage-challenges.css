@@ -72,10 +72,24 @@
 }
 
 .challenge-status-FAIL {
-  background-color: red;
+  background-color: #E14545;
 }
 
 .challenge-date {
   font-size:80%;
 }
 
+/*
+.condition-achieved-true {
+  background-color: #5cb85c;
+}
+*/
+
+.condition-achieved-false {
+  background-color:red;
+}
+
+.condition-achieved-false-username {
+  font-weight: bold;
+  font-size:150%;
+}
