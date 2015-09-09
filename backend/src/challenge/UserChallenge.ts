@@ -332,6 +332,8 @@ class UserChallenge {
     }
 
 
+    setTakenBy(teamName:string) {this.takenBy = teamName;}
+
     getStatusAsString():string {
         switch (this.status) {
             case 0:

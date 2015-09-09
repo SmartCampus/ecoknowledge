@@ -45,6 +45,8 @@ class TeamChallengeFactory {
         for(var currentChildIDIndex in childrenIDs) {
             var currentChildID = childrenIDs[currentChildIDIndex];
             var currentChild = userChallengeRepository.getChallengeByID(currentChildID);
+            currentChild.setTakenBy(team.getName());
+
             children.push(currentChild);
         }
 

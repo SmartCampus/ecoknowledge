@@ -1,7 +1,7 @@
 'use strict';
 
 var app = angular.module('ecoknowledgeApp')
-    .controller('GoalCtrl', ['ServiceGoal','ServiceBadgeV2', function (ServiceGoal, ServiceBadgeV2) {
+    .controller('GoalCtrl', ['ServiceGoal','ServiceBadge', function (ServiceGoal, ServiceBadgeV2) {
 
     var self = this;
     self.goal = {};

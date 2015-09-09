@@ -1,11 +1,10 @@
 <link rel="stylesheet" href="styles/login.css">
 
-<div class="container jumbotron">
+<div class="jumbotron" style="width:500px;margin-left:auto;margin-right:auto;">
 
   <div class="page-header text-center">
     <h1>Connexion</h1>
   </div>
-  {{login}}
   <form name="loginForm"  role="form" class="form-horizontal" accept-charset="utf-8" ng-submit="loginForm.$valid && login.connect()" novalidate>
       <div class="form-group">
         <div ><input  placeholder="Idenfiant" class="form-control" type="text" ng-model="login.username" required/></div>
