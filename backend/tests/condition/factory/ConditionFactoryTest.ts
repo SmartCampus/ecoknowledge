@@ -20,8 +20,8 @@ describe("ConditionFactory test", () => {
         jsonExpression.type = 'number';
         jsonExpression.description = 'description blabla ..';
 
-        jsonExpression.valueLeft = {'value' : 'TEMP_CLI', 'sensor':true};
-        jsonExpression.valueRight = {'value' : '15', 'sensor':false};
+        jsonExpression.valueLeft = {'value' : 'TEMP_CLI', 'symbolicName':true};
+        jsonExpression.valueRight = {'value' : '15', 'symbolicName':false};
 
         expression = factory.createExpression(jsonExpression);
 

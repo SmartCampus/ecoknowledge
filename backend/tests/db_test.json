@@ -1,0 +1,139 @@
+{
+  "definitions": [
+    {
+      "id": "3221c575-85ca-447b-86f3-3a4ef39985dc",
+      "name": "Clim",
+      "validityPeriod": {
+        "start": "2015-08-03T22:00:00.000Z",
+        "end": "2015-09-03T22:00:00.000Z"
+      },
+      "recurringPeriod": "week",
+      "conditions": [
+        {
+          "id": "ab72f9b4-a368-4ea2-8adb-738ea0e6f30b",
+          "expression": {
+            "valueLeft": {
+              "value": "TMP_CLI",
+              "symbolicName": true
+            },
+            "valueRight": {
+              "value": "15",
+              "symbolicName": false
+            },
+            "comparison": ">",
+            "description": "a desc",
+            "periodOfTime": "-2208474000000"
+          },
+          "threshold": 25,
+          "referencePeriod": {
+            "numberOfUnitToSubtract": 1,
+            "unitToSubtract": "week"
+          },
+          "filter": {
+            "dayOfWeekFilter": "all",
+            "periodOfDayFilter": [
+              "morning",
+              "afternoon"
+            ]
+          },
+          "type": "comparison"
+        }
+      ],
+      "badgeID": "44bb8108-8830-4f43-abd1-3ef643303d92"
+    },
+    {
+      "id": "9bddaf87-5065-4df7-920a-d1d249c9171d",
+      "name": "Obj1",
+      "validityPeriod": {
+        "start": "2015-08-04T12:25:57.787Z",
+        "end": "2015-08-31T12:25:57.787Z"
+      },
+      "recurringPeriod": "week",
+      "conditions": [
+        {
+          "id": "7713cb13-e86d-40d0-a39f-c4ad5a33546d",
+          "expression": {
+            "valueLeft": {
+              "value": "TMP_CLI",
+              "symbolicName": true
+            },
+            "valueRight": {
+              "value": 1,
+              "symbolicName": false
+            },
+            "comparison": ">",
+            "description": "tmp_cli > 1"
+          },
+          "threshold": 100,
+          "filter": {
+            "dayOfWeekFilter": "working-week",
+            "periodOfDayFilter": [
+              "all"
+            ]
+          },
+          "type": "overall"
+        }
+      ],
+      "badgeID": "fde68334-f515-4563-954b-ac91b4a42f88"
+    }
+  ],
+  "badges": [
+    {
+      "id": "44bb8108-8830-4f43-abd1-3ef643303d92",
+      "name": "Un challenge de d\u00e9mo !",
+      "points": 100
+    }
+  ],
+  "users": [
+    {
+      "id": "2cf91e02-a320-4766-aa9f-6efce3142d44",
+      "name": "Charlie",
+      "currentChallenges": [
+        
+      ],
+      "finishedBadgesMap": {
+        
+      },
+      "mapSymbolicNameToSensor": {
+        "TMP_CLI": "TEMP_443V"
+      }
+    },
+	    {
+      "id": "2cf91e02-a320-4766-aa9f-6efce3142d44",
+      "name": "Gégé",
+      "currentChallenges": [
+        
+      ],
+      "finishedBadgesMap": {
+        
+      },
+      "mapSymbolicNameToSensor": {
+        "TMP_CLI": "TEMP_352"
+      }
+    }
+  ],
+  "teams": [
+    {
+      "id": "28aa8108-8830-4f43-abd1-3ab643303d92",
+      "name": "croquette",
+      "members": [
+        "2cf91e02-a320-4766-aa9f-6efce3142d44"
+      ],
+      "leader": "2cf91e02-a320-4766-aa9f-6efce3142d44",
+      "currentChallenges": [
+        
+      ],
+      "finishedBadgesMap": {
+        
+      }
+    }
+  ],
+  "challenges": {
+    "userChallenges": [
+      
+    ],
+    "teamChallenges": [
+      
+    ]
+  }
+}

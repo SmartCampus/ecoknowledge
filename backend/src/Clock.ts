@@ -4,26 +4,33 @@
 
 var moment = require('moment');
 var moment_timezone = require('moment-timezone');
-import GoalInstanceRouter = require('./api/GoalInstanceRouter');
-
 
 class Clock {
 
-    private static now:number = Date.now();
+    private static now:moment.Moment = moment();
 
     static getNow():number {
-        return Clock.now;
+        return Clock.now.valueOf();
     }
 
     static setNow(newNow:number) {
-        Clock.now = newNow;
+        Clock.now = moment.tz(newNow, Clock.getTimeZone());
     }
+
+    static setNowByString(newNow:string) {
+        Clock.now = moment.tz(newNow, Clock.getTimeZone());
+    }
+
 
     static getTimeZone():string {
         return 'Europe/Paris';
     }
 
     static getMoment(date:number):moment.Moment {
+        return moment.tz(date, Clock.getTimeZone());
+    }
+
+    static getMomentFromUnixTimeInMillis(date:number):moment.Moment {
         return moment.tz(date, Clock.getTimeZone());
     }
 

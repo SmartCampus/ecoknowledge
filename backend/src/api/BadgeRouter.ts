@@ -1,12 +1,10 @@
-/**
- * @author Christian Brel <ch.brel@gmail.com>
- */
 
 import RouterItf = require('./RouterItf');
 
 import BadgeRepository = require('../badge/BadgeRepository');
 import BadgeFactory = require('../badge/BadgeFactory');
 import UserRepository = require('../user/UserRepository');
+import Context = require('../Context');
 
 import BadArgumentException = require('../exceptions/BadArgumentException');
 
@@ -30,64 +28,27 @@ class BadgeRouter extends RouterItf {
      * @param badgeRepository
      *      The badge repository to save and retrieve badges
      */
-    constructor(badgeRepository:BadgeRepository, badgeFactory:BadgeFactory, userRepository:UserRepository) {
+    constructor(context:Context) {
         super();
-
-        if(!badgeRepository) {
-            throw new BadArgumentException('Badge repository is null');
-        }
-
-        if(!badgeFactory) {
-            throw new BadArgumentException('Badge factory is null');
-        }
-
-        if(!userRepository) {
-            throw new BadArgumentException('User repository is null');
-        }
-
-        this.badgeRepository = badgeRepository;
-        this.badgeFactory = badgeFactory;
-        this.userRepository = userRepository;
+        this.badgeRepository = context.getBadgeRepository();
+        this.badgeFactory = context.getBadgeFactory();
+        this.userRepository = context.getUserRepository();
     }
 
     buildRouter() {
         var self = this;
 
-        this.router.get('/trophyWall', function(req,res) {
-            self.getAllFinishedBadges(req,res);
-        });
         this.router.post('/new', function(req,res) {
             self.newBadge(req,res);
         });
+
         this.router.get('/all', function(req,res) {
-           self.getAllBadges(req,res);
+            self.getAllBadges(req,res);
         });
+
         this.router.get('/:id', function(req, res) {
-           self.getBadge(req, res);
+            self.getBadge(req, res);
         });
-    }
-
-    /**
-     *  This method will return all badges
-     *  from the trophy wall of a user
-     *  using badgeRepository#getBadge
-     * @param req
-     * @param res
-     */
-    getAllFinishedBadges(req:any, res:any) {
-        var badges = this.userRepository.getCurrentUser().getFinishedBadges();
-        var result:any[] = [];
-
-        for(var currentBadgeIDIndex in badges) {
-            var currentBadge = this.badgeRepository.getBadge(currentBadgeIDIndex).getData();
-            var dataTrophy = {
-                number:badges[currentBadgeIDIndex],
-                badge:currentBadge
-            };
-
-            result.push(dataTrophy);
-        }
-        res.send(result);
     }
 
     /**

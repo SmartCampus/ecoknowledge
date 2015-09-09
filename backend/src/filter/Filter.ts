@@ -34,7 +34,7 @@ class Filter {
 
         for (var currentSensorName in data) {
             var correctValues:any[] = [];
-            var arrayOfValues = data[currentSensorName].values;
+            var arrayOfValues = data[currentSensorName];
 
             //console.log("Array of values", arrayOfValues);
 
@@ -80,9 +80,7 @@ class Filter {
 
             }
 
-            var correctValuesContainer:any = {};
-            correctValuesContainer.values = correctValues;
-            result[currentSensorName] = correctValuesContainer;
+            result[currentSensorName] = correctValues;
         }
 
         //console.log("DONC ON GARDE", result);

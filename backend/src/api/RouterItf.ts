@@ -3,7 +3,7 @@
  */
 /// <reference path="../../typings/node/node.d.ts" />
 
-var express : any = require("express");
+var express:any = require("express");
 
 /**
  * Router Interface
@@ -18,7 +18,7 @@ class RouterItf {
      * @property router
      * @type any
      */
-    router : any;
+    router:any;
 
     /**
      * Constructor.
@@ -52,6 +52,8 @@ class RouterItf {
     buildRouter() {
         //Logger.warn("RouterItf - buildRouter : Method need to be implemented.");
     }
+
+
 }
 
 export = RouterItf;

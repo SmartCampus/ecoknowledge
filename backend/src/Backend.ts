@@ -3,45 +3,23 @@
  */
 
 import Server = require('./Server');
+
+import DashboardRouter = require('./api/DashboardRouter');
+import LoginRouter = require('./api/LoginRouter');
 import BadgeRouter = require('./api/BadgeRouter');
-import GoalDefinitionRouter = require('./api/GoalDefinitionRouter');
-import GoalInstanceRouter = require('./api/GoalInstanceRouter');
+import GoalRouter = require('./api/GoalRouter');
 
-import BadgeRepository = require('./badge/BadgeRepository');
-import BadgeFactory = require('./badge/BadgeFactory');
-
-import GoalRepository = require('./goal/GoalRepository');
-import GoalFactory = require('./goal/GoalFactory');
-
-import ChallengeRepository = require('./challenge/ChallengeRepository');
-import ChallengeFactory = require('./challenge/ChallengeFactory');
-
-import UserRepository = require('./user/UserRepository');
-import UserFactory = require('./user/UserFactory');
-import User = require('./user/User');
-
-import Operand = require('./condition/expression/Operand');
-import GoalExpression = require('./condition/expression/GoalExpression');
-import OverallGoalCondition = require('./condition/OverallGoalCondition');
-import TimeBox = require('./TimeBox');
+import Context = require('./Context');
 
 import StoringHandler = require('./StoringHandler');
+import Middleware = require('./Middleware');
 
 class Backend extends Server {
 
-    public badgeRepository:BadgeRepository;
-    public badgeFactory:BadgeFactory;
+    private context:Context;
 
-    public goalDefinitionRepository:GoalRepository;
-    public goalDefinitionFactory:GoalFactory;
-
-    public goalInstanceRepository:ChallengeRepository;
-    public goalInstanceFactory:ChallengeFactory;
-
-    public userRepository:UserRepository;
-    public userFactory:UserFactory;
-
-    private storingHandler:StoringHandler;
+    public static PATH_TO_DB:string = "./db.json";
+    public static PATH_TO_STUB:string = "./stub_values.json";
 
     /**
      * Constructor.
@@ -52,22 +30,11 @@ class Backend extends Server {
     constructor(listeningPort:number, arguments:Array<string>) {
         super(listeningPort, arguments);
 
-        this.badgeRepository = new BadgeRepository();
-        this.badgeFactory = new BadgeFactory();
+        this.context = new Context(Backend.PATH_TO_DB, Backend.PATH_TO_STUB);
 
-        this.goalDefinitionRepository = new GoalRepository(this.badgeRepository);
-        this.goalDefinitionFactory = new GoalFactory();
 
-        this.goalInstanceRepository = new ChallengeRepository();
-        this.goalInstanceFactory = new ChallengeFactory();
-
-        this.userRepository = new UserRepository();
-        this.userFactory = new UserFactory();
-
-        this.storingHandler = new StoringHandler(this);
-
-        this.buildAPI();
         this.loadData();
+        this.buildAPI();
     }
 
     /**
@@ -78,12 +45,17 @@ class Backend extends Server {
     buildAPI() {
         var self = this;
 
-        this.app.use("/badges", (new BadgeRouter(self.badgeRepository, self.badgeFactory, self.userRepository)).getRouter());
-        this.app.use("/goals", (new GoalDefinitionRouter(self.goalDefinitionRepository, self.goalDefinitionFactory, self.goalInstanceRepository, self.userRepository)).getRouter());
-        this.app.use("/challenges", (new GoalInstanceRouter(self.goalInstanceRepository, self.goalInstanceFactory, self.goalDefinitionRepository, self.userRepository)).getRouter());
+        this.app.use('/dashboard', (new DashboardRouter(self.context, new Middleware())).getRouter());
+        this.app.use('/login', (new LoginRouter(self.context)).getRouter());
 
-        this.app.get('/test', function (req, res) {
-            self.storingHandler.save(
+         this.app.use("/badges", (new BadgeRouter(self.context)).getRouter());
+         this.app.use("/goals", (new GoalRouter(self.context)).getRouter());
+        /*
+         this.app.use("/challenges", (new GoalInstanceRouter(self.challengeRepository, self.challengeFactory, self.goalDefinitionRepository, self.userRepository)).getRouter());
+         */
+
+        this.app.get('/save', function (req, res) {
+            self.context.saveData(
                 function (result) {
                     console.log(result.success);
                 },
@@ -95,21 +67,14 @@ class Backend extends Server {
     }
 
     loadData():void {
-        var self = this;
-        var result = self.storingHandler.load();
-        if(result.success) {
-            console.log(result.success);
-        }
-        else {
-            this.userRepository.setCurrentUser(new User('Jackie'));
-        }
+        var result = this.context.loadData();
     }
 }
 
 export = Backend;
 
 /**
- * Server's Backend listening port.
+ * Server's Context listening port.
  *
  * @property _BackendListeningPort
  * @type number
@@ -118,7 +83,7 @@ export = Backend;
 var _BackendListeningPort:number = 3000;
 
 /**
- * Server's Backend command line arguments.
+ * Server's Context command line arguments.
  *
  * @property _BackendArguments
  * @type Array<string>

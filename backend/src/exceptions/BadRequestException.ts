@@ -6,6 +6,10 @@ class BadRequestException implements Error {
         this.name = "BadRequestException";
         this.message = message;
     }
+
+    getMessage():string {
+        return this.message;
+    }
 }
 
 export = BadRequestException;

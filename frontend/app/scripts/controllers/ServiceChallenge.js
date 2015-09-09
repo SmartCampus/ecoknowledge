@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * File with all the services associated to Challenge (GET, POST)
+ * File with all the services associated to UserChallenge (GET, POST)
  */
 
 var basePath = 'http://localhost:3000/challenges/';
@@ -9,8 +9,10 @@ var basePath = 'http://localhost:3000/challenges/';
 var app = angular.module('ecoknowledgeApp');
 app.service('ServiceChallenge', ['$http', function ServiceChallenge($http) {
   this.get = function (id, successFunc, failFunc) {
-    console.log("BASEPATH", basePath);
-    $http.get(basePath + 'all/' + id)
+    var path = basePath + 'all/' + id;
+    console.log('Service UserChallenge : Get On ', path);
+
+    $http.get(path)
       .success(function (data) {
         successFunc(data);
       })
@@ -18,6 +20,7 @@ app.service('ServiceChallenge', ['$http', function ServiceChallenge($http) {
         failFunc(data);
       });
   };
+
   this.post = function (badge, successFunc, failFunc) {
     $http.post(basePath + 'new', badge)
       .success(function (data) {
@@ -39,9 +42,10 @@ app.service('ServiceChallenge', ['$http', function ServiceChallenge($http) {
   };
 
   this.evaluate = function (badgeName, successFunc, failFunc) {
-    var pathEval = basePath + 'evaluate/'+(badgeName==='all'?'all':('evaluatebadge?badgeName=' + badgeName));
-    console.log('path eval trophy : ',pathEval);
-    $http.get(pathEval)
+    var path = basePath + 'evaluate/' + (badgeName === 'all' ? 'all' : ('evaluatebadge?badgeName=' + badgeName));
+    console.log('Service UserChallenge : Get On ', path);
+
+    $http.get(path)
       .success(function (data) {
         successFunc(data);
       })
@@ -50,16 +54,16 @@ app.service('ServiceChallenge', ['$http', function ServiceChallenge($http) {
       });
   };
 
-  this.delete = function(idGoal, successFunc, failFunc){
-    console.log("DELETE : path", basePath+'delete/'+idGoal);
+  this.delete = function (idGoal, successFunc, failFunc) {
+    console.log('DELETE : path', basePath + 'delete/' + idGoal);
     var path = basePath + 'delete/' + idGoal;
     $http.delete(path)
-      .success(function(data){
-        console.log("OK?3");
+      .success(function (data) {
+        console.log('OK?3');
         successFunc(data);
       })
-      .error(function(data){
-        console.log("FAIL MA KE PASSA?",data);
+      .error(function (data) {
+        console.log('FAIL MA KE PASSA?', data);
         failFunc(data);
       });
   };

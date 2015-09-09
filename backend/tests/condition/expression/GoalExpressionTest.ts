@@ -25,42 +25,42 @@ describe('Test GoalExpression', () => {
         var description:string = 'un test';
 
         it('should not have required', () => {
-            goalExpression = new GoalExpression(leftOperandNotRequired, typeOfComparison, rightOperandNotRequired, description);
+            goalExpression = new GoalExpression(leftOperandNotRequired, typeOfComparison, rightOperandNotRequired);
             var expected:string[] = [];
             chai.expect(goalExpression.getRequired()).to.be.eqls(expected);
         });
 
         it('should have proper required on left operand', () => {
-            goalExpression = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandNotRequired, description);
+            goalExpression = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandNotRequired);
             var expected:string[] = ['TMP_Cli'];
             chai.expect(goalExpression.getRequired()).to.be.eqls(expected);
         });
 
         it('should have proper required on right operand', () => {
-            goalExpression = new GoalExpression(leftOperandNotRequired, typeOfComparison, rightOperandRequired, description);
+            goalExpression = new GoalExpression(leftOperandNotRequired, typeOfComparison, rightOperandRequired);
             var expected:string[] = ['10'];
             chai.expect(goalExpression.getRequired()).to.be.eqls(expected);
         });
 
         it('should have proper required on both operand', () => {
-            goalExpression = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
+            goalExpression = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandRequired);
             var expected:string[] = ['TMP_Cli', '10'];
 
             chai.expect(goalExpression.getRequired()).to.be.eqls(expected);
         });
 
         it('should have proper left operand', () => {
-            goalExpression = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
+            goalExpression = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandRequired);
             chai.expect(goalExpression.hasLeftOperand('TMP_Cli')).to.be.true;
         });
 
         it('should have proper right operand', () => {
-            goalExpression = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
+            goalExpression = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandRequired);
             chai.expect(goalExpression.hasRightOperand('10')).to.be.true;
         });
 
         it('should have proper type of comparison', () => {
-            goalExpression = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandRequired, description);
+            goalExpression = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandRequired);
             chai.expect(goalExpression.getComparisonType()).to.be.eq(typeOfComparison);
         });
 
@@ -79,7 +79,7 @@ describe('Test GoalExpression', () => {
             typeOfComparison = '<';
             description = 'un test';
 
-            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand);
         });
 
         it('should evaluate basic boolean comparison should not throw error', () => {
@@ -201,7 +201,7 @@ describe('Test GoalExpression', () => {
             typeOfComparison = '>';
             description = 'un test';
 
-            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand);
         });
 
         describe('Evaluate with >', () => {
@@ -289,7 +289,7 @@ describe('Test GoalExpression', () => {
             typeOfComparison = '<';
             description = 'un test';
 
-            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand);
         });
 
         describe('Evaluate with <', () => {
@@ -307,7 +307,7 @@ describe('Test GoalExpression', () => {
         describe('Evaluate with >', () => {
             beforeEach(() => {
                 typeOfComparison = '>';
-                condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+                condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand);
             });
 
             it('should evaluate at true with 10', () => {
@@ -324,7 +324,7 @@ describe('Test GoalExpression', () => {
         describe('Evaluate with ==', () => {
             beforeEach(() => {
                 typeOfComparison = '==';
-                condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+                condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand);
             });
 
             it('should evaluate at true with 15', () => {
@@ -341,7 +341,7 @@ describe('Test GoalExpression', () => {
         describe('Evaluate with !=', () => {
             beforeEach(() => {
                 typeOfComparison = '!=';
-                condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+                condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand);
             });
 
             it('should evaluate at true with 10', () => {
@@ -358,7 +358,7 @@ describe('Test GoalExpression', () => {
         describe('Evaluate with a UNKNOWN field tagged as non required', () => {
             it('should throw an error when evaluate with 15<TMP_CLIM', () => {
                 rightOperand = new Operand('TMP_CLIM', false);
-                condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+                condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand);
                 chai.expect(() => condition.evaluate([])).to.throw(Error);
             });
         });
@@ -377,7 +377,7 @@ describe('Test GoalExpression', () => {
             typeOfComparison = '>';
             description = 'un test';
 
-            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand);
         });
 
         it('should evaluate at true when 20,10 are passed', () => {
@@ -412,7 +412,7 @@ describe('Test GoalExpression', () => {
             typeOfComparison = '>';
             description = 'un test';
 
-            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand, description);
+            condition = new GoalExpression(leftOperand, typeOfComparison, rightOperand);
         });
 
         it('should throw an error if left operand is required and not provided', () => {
@@ -422,7 +422,7 @@ describe('Test GoalExpression', () => {
         });
 
         it('should throw an error if right operand is required and not provided', () => {
-            condition = new GoalExpression(rightOperand, typeOfComparison, leftOperand, description);
+            condition = new GoalExpression(rightOperand, typeOfComparison, leftOperand);
             chai.expect(() => {
                 condition.evaluate({TMP_CLIIIIIIIII: 20})
             }).to.throw(BadArgumentException);
@@ -444,7 +444,7 @@ describe('Test GoalExpression', () => {
         var typeOfComparison:string = '<';
         var description:string = 'un test';
 
-        condition = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandNotRequired, description);
+        condition = new GoalExpression(leftOperandRequired, typeOfComparison, rightOperandNotRequired);
 
         it('should return correct protocol', () => {
             var expected:string[] = ['TMP_CLI'];

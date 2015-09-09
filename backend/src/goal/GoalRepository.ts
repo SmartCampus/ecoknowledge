@@ -1,10 +1,12 @@
 import Goal = require('./Goal');
 import GoalFactory = require('./GoalFactory');
 import BadgeRepository = require('../badge/BadgeRepository');
-import ChallengeRepository = require('../challenge/ChallengeRepository');
-import Challenge = require('../challenge/Challenge');
+import UserChallengeRepository = require('../challenge/UserChallengeRepository');
+import TeamChallengeRepository = require('../challenge/TeamChallengeRepository');
+import UserChallenge = require('../challenge/UserChallenge');
 import Badge = require('../badge/Badge');
 import User = require('../user/User');
+import Team = require('../user/Team');
 
 class GoalDefinitionRepository {
 
@@ -59,7 +61,8 @@ class GoalDefinitionRepository {
         return null;
     }
 
-    getListOfUntakedGoalInJSONFormat(user:User, challengeRepository:ChallengeRepository) {
+    //  TODO DELETE OR
+    getListOfNotTakenGoalInJSONFormat(user:User|Team, challengeRepository:UserChallengeRepository|TeamChallengeRepository) {
         var result = [];
 
         var currentChallengesID:string[] = user.getCurrentChallenges();
@@ -67,13 +70,11 @@ class GoalDefinitionRepository {
         var takenGoals:Goal[] = [];
         for (var currentChallengeIDIndex in currentChallengesID) {
             var currentChallengeID:string = currentChallengesID[currentChallengeIDIndex];
-            var currentChallenge:Challenge = challengeRepository.getGoalInstance(currentChallengeID);
-            takenGoals.push(currentChallenge.getGoalDefinition());
+            var currentChallenge = challengeRepository.getChallengeByID(currentChallengeID);
+            takenGoals.push(currentChallenge.getGoal());
         }
 
         var goals:Goal[] = this.diffBetweenTakenGoalsAndAvailableGoals(takenGoals, this.goals);
-
-        var result = [];
 
         for (var goalIndex in goals) {
             var currentGoal = goals[goalIndex];
@@ -93,7 +94,7 @@ class GoalDefinitionRepository {
 
         for (var currentAvailableGoalIndex in availableGoals) {
             var currentAvailableGoal = availableGoals[currentAvailableGoalIndex];
-            if(!this.goalExistsIn(currentAvailableGoal.getUUID(), takenGoals)) {
+            if (!this.goalExistsIn(currentAvailableGoal.getUUID(), takenGoals)) {
                 result.push(currentAvailableGoal);
             }
         }
@@ -125,19 +126,6 @@ class GoalDefinitionRepository {
         }
 
         return result;
-    }
-
-    public evaluateGoal(data:any):boolean {
-        var goalID:string = data.id;
-        var goal:Goal = this.getGoal(goalID);
-
-        var goalValues:any[] = data.values;
-        var values = [];
-        for (var i = 0; i < goalValues.length; i++) {
-            values.push(goalValues[i].value);
-        }
-
-        return goal.evaluate(values);
     }
 
     public getDataInJSON():any {

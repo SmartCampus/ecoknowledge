@@ -14,78 +14,60 @@ import BadArgumentException = require('../exceptions/BadArgumentException');
 
 class OverallGoalCondition extends Condition {
 
-
-    constructor(id:string, condition:GoalExpression, thresholdRate:number,
-                startDate:moment.Moment, dateOfCreation:moment.Moment, endDate:moment.Moment,
-                percentageAchieved:number = 0, percentageOfTimeElapsed:number = 0, filter:Filter = null) {
-
-        super(id, condition, thresholdRate, startDate, dateOfCreation, endDate,
-            percentageAchieved, percentageOfTimeElapsed, filter);
+    constructor(id:string, description:string, condition:GoalExpression, thresholdRate:number, filter:Filter) {
+        super(id, description, condition, thresholdRate, filter);
     }
 
-    /**
-     *
-     * @param values
-     *  {
-     *      <sensor-name:string> : { timebox { start:_, end:_ }, values : [ {date:_, value:_}, ... ] }
-     *      ...
-     *  }
-     */
+    public evaluate(data:any, conditionDescription:any):any {
 
-    public evaluate(data:any) {
+        var remainingData:any = super.keepUsefulValues(data, conditionDescription);
 
-        var remainingData:any = super.applyFilters(data);
+        remainingData = super.applyFilters(remainingData);
+
         data = remainingData;
 
         var conditionDesc:string[] = this.expression.getRequired();
 
         //  For each sensors required by internal condition
-        for (var currentSensorNameIndex in conditionDesc) {
-            var currentSensorName:string = conditionDesc[currentSensorNameIndex];
+        for (var currentSymbolicNameIndex in conditionDesc) {
+            var currentSymbolicName:string = conditionDesc[currentSymbolicNameIndex];
 
             //  Retrieve values associated
-            var currentConditionDesc = data[currentSensorName];
+            var values:any[] = data[currentSymbolicName];
 
-            if(!currentConditionDesc) {
-                throw new BadArgumentException('Can not evaluate condition ! Proper argument were not provided. Field' + currentSensorName + ' is missing');
+            if (values == null) {
+                throw new BadArgumentException('Can not evaluate condition ! Proper argument were not provided. Field' + currentSymbolicName + ' is missing');
             }
-
-
-            var values:any[] = currentConditionDesc.values;
 
             var numberOfValues:number = (values).length;
             var numberOfCorrectValues:number = 0;
 
             //  Check how many values are correct
-            for (var currentValueIndex in values) {
-                var value = values[currentValueIndex];
+            for (var currentPairDateValueIndex in values) {
+                var currentPairDateValue = values[currentPairDateValueIndex];
 
-                var date:moment.Moment = Clock.getMomentFromString(value.date);
+                var dataToEvaluate:any = {};
+                dataToEvaluate[currentSymbolicName] = currentPairDateValue.value;
 
-                if (this.isInTimeBox(date)) {
-                    var dataToEvaluate:any = {};
-                    dataToEvaluate[currentSensorName] = value.value;
-
-                    //  Check value by value if internal condition is satisfied
-                    if (this.expression.evaluate(dataToEvaluate)) {
-                        ++numberOfCorrectValues;
-                    }
-                }
-                else {
-                    numberOfValues--;
+                //  Check value by value if internal condition is satisfied
+                if (this.expression.evaluate(dataToEvaluate)) {
+                    ++numberOfCorrectValues;
                 }
 
             }
         }
 
+        var percentageAchieved = ((numberOfCorrectValues * 100 / numberOfValues) * 100) / this.thresholdRate;
+        percentageAchieved = (percentageAchieved > 100) ? 100 : percentageAchieved;
 
-        this.percentageAchieved = ((numberOfCorrectValues * 100 / numberOfValues) * 100) / this.thresholdRate;
+        //  If there is no values yet
+        if(isNaN(percentageAchieved)) {
+            percentageAchieved = 0;
+        }
 
-        this.percentageAchieved = (this.percentageAchieved > 100) ? 100 : this.percentageAchieved;
+        var achieved:boolean = percentageAchieved === 100;
 
-        this.updatePercentageOfTimeElapsed(Clock.getNow());
-
-        return (numberOfCorrectValues * 100 / numberOfValues) >= this.thresholdRate;
+        return {description: this.description, percentageAchieved: percentageAchieved, achieved: achieved};
     }
 
     public getDataInJSON():any {

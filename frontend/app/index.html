@@ -9,7 +9,7 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/angular-datepicker/dist/index.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -52,7 +52,7 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a ng-href="#/create-goal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Créer objectif</a></li>
-                    <li><a ng-href="#/create-badge-perso"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Créer badge</a></li>
+                    <li><a ng-href="#/create-badge"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Créer badge</a></li>
                 </ul>
             </div>
         </div>
@@ -62,14 +62,14 @@
 <div class="container-fluid">
     <div ng-view=""></div>
 </div>
-
+<!--
 <footer class="footer">
     <div class="container">
         <p><span class="glyphicon glyphicon-education"></span> ecoknowledge - a SmartCampus project</p>
     </div>
 </footer>
 
-
+-->
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
 <script>
     !function (A, n, g, u, l, a, r) {
@@ -88,29 +88,27 @@
 <script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-<script src="bower_components/angular-animate/angular-animate.js"></script>
 <script src="bower_components/angular-cookies/angular-cookies.js"></script>
 <script src="bower_components/angular-resource/angular-resource.js"></script>
 <script src="bower_components/angular-route/angular-route.js"></script>
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
 <script src="bower_components/angular-touch/angular-touch.js"></script>
-<script src="bower_components/angular-datepicker/dist/index.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 <script src="scripts/app.js"></script>
-<script src="scripts/controllers/main.js"></script>
-<script src="scripts/controllers/about.js"></script>
+<script src="ui-bootstrap-tpls-0.9.0.min.js"></script>
 <script src="scripts/controllers/goal.js"></script>
-<script src="scripts/controllers/home.js"></script>
 <script src="scripts/controllers/badge.js"></script>
+<script src="scripts/controllers/dashboard.js"></script>
+<script src="scripts/controllers/login.js"></script>
 <script src="scripts/controllers/ServiceGoal.js"></script>
 <script src="scripts/controllers/ServiceChallenge.js"></script>
-<script src="scripts/controllers/viewGoal.js"></script>
-<script src="scripts/controllers/ServiceSensor.js"></script>
-<script src="scripts/controllers/badgeV2.js"></script>
-<script src="scripts/controllers/ServiceBadgeV2.js"></script>
+<script src="scripts/controllers/ServiceBadge.js"></script>
+<script src="scripts/controllers/ServiceDashboard.js"></script>
+<script src="scripts/controllers/ServiceLogin.js"></script>
 <!-- endbuild -->
 </body>
 </html>

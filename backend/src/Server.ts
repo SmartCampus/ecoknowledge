@@ -8,10 +8,7 @@ var http:any = require("http");
 var express:any = require("express");
 var bodyParser:any = require("body-parser");
 
-import Badge = require('./badge/Badge');
-import Operand = require('./condition/expression/Operand');
-import GoalCondition = require('./condition/Condition');
-import TimeBox = require('./TimeBox');
+import UserRepository = require('./user/UserRepository');
 
 /**
  * Represents a Server managing Namespaces.
@@ -44,6 +41,7 @@ class Server {
      */
     httpServer:any;
 
+
     /**
      * Constructor.
      *
@@ -72,8 +70,10 @@ class Server {
             res.header("Access-Control-Allow-Methods", "POST, GET, DELETE");
             next();
         });
+
         this.httpServer = http.createServer(this.app);
     }
+
 
     /**
      * Runs the Server.
