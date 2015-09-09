@@ -1,49 +1,75 @@
-<div class="challenge-container challenge-status-{{challenge.status}}">
-  <input class="challenge-btn" type="button" value="Enlever ce défi" ng-click="dashboard.deleteChallenge(challenge)">
+<div class="challenge-container" ng-class="{'user':challenge.type == 'personal', 'team': challenge.type=='team'}">
+
+  <img src="../../images/fail.png" style="width:50%" ng-show="challenge.status == 'FAIL'">
+
+  <input class="challenge-btn" type="button" ng-show="challenge.takenBy == null || challenge.type=='personal'" value="Enlever ce défi" ng-click="dashboard.deleteChallenge(challenge)">
   <table>
     <tr>
       <td>
-        <h3 class="badge-name">{{challenge.name}}</h3>
+        <p ng-show="challenge.takenBy != null">Objectif de {{challenge.takenBy}}</p>
+        <span class="badge-name">{{challenge.goal}} </span> -  <span class="challenge-date">
+          {{challenge.startDate | date:'dd/MM/yyyy - HH:mm'}} au {{challenge.endDate | date:'dd/MM/yyyy - HH:mm'}}
+          </span>
       </td>
     </tr>
-    <tr>
-      <td>
-        Du {{challenge.startDate | date:'dd/MM/yyyy - HH:mm'}} au {{challenge.endDate | date:'dd/MM/yyyy - HH:mm'}}
-      </td>
-    </tr>
+
     <tr>
       <td>
         <div class="progress">
           <div class="progress-bar"
                ng-class="{
-               'progress-bar-danger':challenge.timeProgress > 80,
-                'progress-bar-warning':challenge.timeProgress > 30 && challenge.timeProgress < 80,
-                'progress-bar-success':challenge.timeProgress < 30
-                }" role="progressbar" aria-valuenow="{{100-challenge.timeProgress}}"
-               aria-valuemin="0" aria-valuemax="100" style="width:{{100-challenge.timeProgress}}%">
+               'progress-bar-danger':challenge.progress.durationAchieved > 80,
+                'progress-bar-warning':challenge.progress.durationAchieved > 30 && challenge.progress.durationAchieved < 80,
+                'progress-bar-success':challenge.progress.durationAchieved < 30
+                }" role="progressbar" aria-valuenow="{{100-challenge.progress.durationAchieved}}"
+               aria-valuemin="100" aria-valuemax="0" style="width:{{100-challenge.progress.durationAchieved}}%">
           </div>
         </div>
       </td>
-
+    </tr>
     <tr>
-      <table ng-repeat="condition in challenge.progress">
-        <td>
-          {{condition.expression.description}}
-        </td>
-        </tr>
-        <tr >
+      <td>
+        Détails de la progression
+        <hr>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <table ng-repeat="condition in challenge.progress.conditions" ng-class="{'condition-achieved-{{condition.achieved}}':challenge.status == 'FAIL'}"  style="padding:5px;">
+
+
+
+          <tr  style="padding:5px;">
+
+
+            <td rowspan="2"  ng-show="!condition.achieved && challenge.status == 'FAIL'" style="width:100px">
+              <!-- <img src="../../images/youfail.png" style="width:10%"> -->
+              <img src="../../images/shame.jpg" style="width:100%">
+              <!-- <img src="../../images/down.png" style="width:10%"> -->
+            </td>
+
+
           <td>
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" aria-valuenow="{{condition.percentageAchieved}}"
-                   aria-valuemin="0" aria-valuemax="100" style="width:{{condition.percentageAchieved}}%">
-                {{condition.percentageAchieved}}%
-              </div>
-            </div>
+            <span ng-class="{'condition-achieved-{{condition.achieved}}-username':challenge.status == 'FAIL'}">
+            {{condition.description}}
+              </span>
           </td>
-        </tr>
-      </table>
+          </tr>
+
+          <tr>
+            <td  style="padding:5px;">
+              <div class="progress">
+                <div class="progress-bar" ng-class="{'progress-bar-success':condition.achieved, 'progress-bar-danger':!condition.achieved}" style="min-width: 1em;width:{{condition.percentageAchieved}}%;" role="progressbar"
+                     aria-valuenow="{{condition.percentageAchieved}}"
+                     aria-valuemin="0" aria-valuemax="100" >
+                  {{condition.percentageAchieved | number}}%
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
     </tr>
 
   </table>
-
 </div>

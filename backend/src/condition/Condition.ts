@@ -14,92 +14,93 @@ import Clock = require('../Clock');
 
 class Condition {
     protected id:string;
+    protected description:string;
 
     protected expression:GoalExpression;
     protected thresholdRate:number;
 
-    protected startDate:moment.Moment;
-    protected dateOfCreation:moment.Moment;
-    protected endDate:moment.Moment;
-
-    protected timeBox:TimeBox;
-
-    protected percentageAchieved:number;
-    protected percentageOfTimeElapsed:number;
-
     protected filter:Filter;
 
-    /**
-     * Constructor of base class Condition, it allows you to build a goal condition
-     * @param id
-     *      The id of the condition. If null, the id will be generated.
-     * @param expression
-     *      The expression object, for instance 'TMP_Cli > 25'
-     * @param thresholdRate
-     *      This value represents the threshold rate when the condition must be verified
-     * @param startDate
-     *      The start of the application of the current condition - for instance start date of the goal instance
-     * @param dateOfCreation
-     *      The date of creation of the parent goal
-     * @param endDate
-     *      The end of the application of the current condition - for instance end date of the goal instance
-     * @param percentageAchieved
-     *      The percentage of progression achieved
-     * @param percentageOfTimeElapsed
-     *      The percentage of time elapsed between 'now' and startDate
-     */
-    constructor(id:string, expression:GoalExpression, thresholdRate:number,
-                startDate:moment.Moment, dateOfCreation:moment.Moment, endDate:moment.Moment,
-                percentageAchieved:number = 0, percentageOfTimeElapsed:number = 0, filter:Filter = null) {
+    constructor(id:string, description:string, expression:GoalExpression, thresholdRate:number, filter:Filter = null) {
 
-        this.id = (id) ? id : UUID.v4();
+        this.id = id;
+
+        this.description = description;
 
         this.expression = expression;
         this.thresholdRate = thresholdRate;
 
-        this.startDate = startDate;
-        this.dateOfCreation = dateOfCreation;
-        this.endDate = endDate;
-
-        this.timeBox = new TimeBox(this.startDate, this.endDate);
-
-        this.percentageAchieved = percentageAchieved;
-        this.percentageOfTimeElapsed = percentageOfTimeElapsed;
-
         this.filter = (filter) ? filter : new Filter('all', ['all']);
     }
 
-    getStringRepresentation():string {
-        return this.expression.getStringRepresentation() + " - " + this.expression.getDescription() + " filtre " + JSON.stringify(this.filter.getDataInJSON());
+
+    getTimeBoxRequired(startDateOfChallenge:moment.Moment, endDateOfChallenge:moment.Moment):any {
+
+        //  Must be overridden by any condition that need more time than
+        //  start date and end date of challenge (caller)
+        return {start: startDateOfChallenge, end: endDateOfChallenge};
     }
 
     /**
-     * This method will return the id of the current condition
-     * @returns {string}
-     *      The id of the current condition
+     *
+     * @param data
+     *      {
+     *          <ASymbolicName> : [  {date : ., value : .},  ...  ]
+     *      }
+     * @param conditionDescription
+     *      {
+     *          timeBox: {
+     *              start: .,
+     *              end: .
+     *          }
+     *      }
+     * @returns {any[]}
      */
-    getID():string {
-        return this.id;
-    }
-
-    /**
-     * This method will return the field required by its expression,
-     * the symbolic name(s) of the expression.
-     * See GoalExpression#getRequired method
-     * @returns {string[]}
-     *      The array of symbolic names in the expression
-     */
-    getRequired():any {
+     keepUsefulValues(data:any, conditionDescription:any):any {
         var result:any = {};
-        var sensorRequired:string[] = this.expression.getRequired();
 
-        for (var currentSensorRequiredIndex in sensorRequired) {
-            var currentSensorRequired:string = sensorRequired[currentSensorRequiredIndex];
-            result[currentSensorRequired] = this.timeBox.getRequired();
+        var startDate:moment.Moment = conditionDescription.timeBox.start;
+        var endDate:moment.Moment = conditionDescription.timeBox.end;
+
+        //  For each symbolic names in data
+        for (var currentSymbolicName in data) {
+            var currentResult:any[] =[];
+
+            var currentDataArray:any = data[currentSymbolicName];
+            for (var currentDataIndex in currentDataArray) {
+                var currentData:any = currentDataArray[currentDataIndex];
+                var date:moment.Moment = Clock.getMomentFromUnixTimeInMillis(parseInt(currentData.date));
+
+
+                if (date.isAfter(startDate) && date.isBefore(endDate)) {
+                    currentResult.push(currentData);
+                }
+            }
+
+            result[currentSymbolicName] = currentResult;
         }
 
         return result;
     }
+
+    getRequiredByCondition(startDate, endDate) {
+        var result:any = {};
+        var symbolicNames:string[] = this.expression.getRequired();
+
+        result.symbolicNames = symbolicNames;
+        result.timeBox = this.getTimeBoxRequired(startDate, endDate);
+
+        return result;
+    }
+
+    getStringRepresentation():string {
+        return this.expression.getStringRepresentation() + " - filtre " + JSON.stringify(this.filter.getDataInJSON());
+    }
+
+    getID():string {
+        return this.id;
+    }
+
 
     hasLeftOperand(operandName:string):boolean {
         return this.expression.hasLeftOperand(operandName);
@@ -113,90 +114,35 @@ class Condition {
         return this.expression.getComparisonType() === comparisonType;
     }
 
-    getStartDate():moment.Moment {
-        return this.startDate;
-    }
-
-    setStartDate(newStartDate:moment.Moment):void {
-        this.startDate = newStartDate;
-    }
-
-    getEndDate():moment.Moment {
-        return this.endDate;
-    }
-
-    setEndDate(newEndDate:moment.Moment):void {
-        this.endDate = newEndDate;
-    }
-
-    setTimeBox(newTimeBox:TimeBox) {
-
-        this.timeBox = newTimeBox;
-        this.startDate = newTimeBox.getStartDate();
-        this.endDate = newTimeBox.getEndDate();
-        console.log("TIMEBOX SET AT", newTimeBox, "So now, condition have", this.startDate.format(), "and", this.endDate.format());
-    }
-
-    isInTimeBox(date:moment.Moment):boolean {
-        return this.timeBox.isDateInTimeBox(date);
-    }
-
-    setPercentageAchieved(newPercentageAchieved:number) {
-        this.percentageAchieved = newPercentageAchieved;
-    }
-
-    updatePercentageOfTimeElapsed(currentDate:number) {
-
-        var currentMoment:moment.Moment = Clock.getMoment(currentDate);
-        if (currentMoment.isBefore(this.getStartDate())) {
-            throw new Error('Time given is before dateOfCreation !');
-        }
-
-        var duration = this.getEndDate().valueOf() - this.getStartDate().valueOf();
-
-        var durationAchieved = currentMoment.valueOf() - this.getStartDate().valueOf();
-        this.percentageOfTimeElapsed = durationAchieved * 100 / duration;
-    }
-
-    getPercentageOfTimeElapsed():number {
-        return this.percentageOfTimeElapsed;
-    }
-
-    setPercentageOfTimeElapsed(newPercentageOfTimeElapsed:number) {
-        this.percentageOfTimeElapsed = newPercentageOfTimeElapsed;
-    }
-
-    getPercentageAchieved():number {
-        return this.percentageAchieved;
-    }
-
     getDataInJSON():any {
         return {
             id: this.id,
+            description: this.description,
             expression: this.expression.getDataInJSON(),
             threshold: this.thresholdRate,
-            startDate: this.startDate,
-            dateOfCreation: this.dateOfCreation,
-            endDate: this.endDate,
-            percentageAchieved: this.percentageAchieved,
-            percentageOfTimeElapsed: this.percentageOfTimeElapsed,
             filter: this.filter.getDataInJSON()
         }
     }
 
-    evaluate(data:any):boolean {
+    /**
+     *
+     * @param data
+     *      [ { date : ..., value : ...} ]
+     * @param conditionDescription
+     *      {
+     *          symbolic_names: [..],
+     *          timeBox: {
+     *              start:...,
+     *              end:...
+     *           }
+     *      }
+     */
+    evaluate(data:any, conditionDescription:any):any {
         throw new Error('Can not call base class method ! Must be overridden and implemented.');
     }
 
     applyFilters(data:any):any {
         var remainingData = this.filter.apply(data);
-        /*
-         console.log("APPLICATION DU FILTRE SUR", JSON.stringify(data));
-         console.log("FILTER?", this.filter.getDataInJSON());
-
-
-         console.log("REMAINING DATA AFTER FITLER", JSON.stringify(remainingData));
-         */
         return remainingData;
     }
 }

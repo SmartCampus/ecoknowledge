@@ -12,16 +12,21 @@ describe('Test store user class', () => {
 
     var aName:string = 'aName';
     var anID:string = 'anID';
+    var mapSymbolicNameToSensor:any = {
+        'TMP_CLI':'AC_444'
+    };
+
     var currentChallenges:string[] = ['c1', 'c2'];
     var finishedBadgesMap:any = {
         'b1':2,
         'b2':4
     };
 
-    var user:User = new User(aName, anID, currentChallenges, finishedBadgesMap);
+    var user:User = new User(aName,mapSymbolicNameToSensor, currentChallenges, finishedBadgesMap, null, anID);
     var expected:any = {
         id:anID,
         name:aName,
+        mapSymbolicNameToSensor: mapSymbolicNameToSensor,
         currentChallenges:currentChallenges,
         finishedBadgesMap:finishedBadgesMap
     };
@@ -31,7 +36,7 @@ describe('Test store user class', () => {
     });
 
     describe('build with its own description', () => {
-        var userClone:User = new User(expected.name, expected.id, expected.currentChallenges, expected.finishedBadgesMap);
+        var userClone:User = new User(expected.name,expected.mapSymbolicNameToSensor,expected.currentChallenges, expected.finishedBadgesMap,null,  expected.id);
 
         it('should have the same name', () => {
             chai.expect(userClone.getName()).to.be.eq(aName);
@@ -42,11 +47,11 @@ describe('Test store user class', () => {
         });
 
         it('should have the same current challenges', () => {
-            chai.expect(userClone.getChallenges()).to.be.eq(currentChallenges);
+            chai.expect(userClone.getCurrentChallenges()).to.be.eq(currentChallenges);
         });
 
         it('should have the same finished badges map', () => {
-            chai.expect(userClone.getFinishedBadges()).to.be.eq(finishedBadgesMap);
+            chai.expect(userClone.getBadges()).to.be.eq(finishedBadgesMap);
         });
     });
 });

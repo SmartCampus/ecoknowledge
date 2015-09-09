@@ -1,7 +1,7 @@
 import uuid = require('node-uuid');
 
 import Goal = require('../goal/Goal');
-import Challenge = require('../challenge/Challenge');
+import Challenge = require('../challenge/UserChallenge');
 import Badge = require('../badge/Badge');
 import BadgeIDsToNumberOfTimesEarnedMap = require('./BadgeIDsToNumberOfTimesEarnedMap');
 
@@ -11,44 +11,50 @@ class Entity {
 
     private id;
     private name:string;
-    private currentChallenges:string[] = [];
-    private finishedBadgesMap:BadgeIDsToNumberOfTimesEarnedMap = {};
+    protected currentChallenges:string[] = [];
+    private badgesMap:BadgeIDsToNumberOfTimesEarnedMap = {};
 
-    constructor(name:string, id = null, currentChallenges:string[] = [], finishedBadgesMap:BadgeIDsToNumberOfTimesEarnedMap = {}) {
+    constructor(id:string, name:string, currentChallenges:string[],
+                finishedBadgesMap:BadgeIDsToNumberOfTimesEarnedMap) {
 
-        this.id = (id) ? id : uuid.v4();
+        this.id = id;
 
         this.name = name;
         this.currentChallenges = currentChallenges;
-        this.finishedBadgesMap = finishedBadgesMap;
+        this.badgesMap = finishedBadgesMap;
     }
 
-    getCurrentChallenges():string []  {
-        return this.currentChallenges;
-    }
 
-    public getUUID() {
+    getUUID() {
         return this.id;
     }
 
-    public hasUUID(aUUID:string):boolean {
+    hasUUID(aUUID:string):boolean {
         return this.id === aUUID;
     }
 
-    public setUUID(aUUID:string):void {
+    setUUID(aUUID:string):void {
         this.id = aUUID;
     }
 
-    public getName():string {
+    getName():string {
         return this.name;
     }
 
-    public hasName(name:string):boolean {
+    hasName(name:string):boolean {
         return this.getName() === name;
     }
 
-    public setName(name:string):void {
+    setName(name:string):void {
         this.name = name;
+    }
+
+    getCurrentChallenges():string [] {
+        return this.currentChallenges;
+    }
+
+    addChallengeFromGoal(goal:Goal):Challenge {
+        return null;
     }
 
     public addChallenge(challengeID:string):void {
@@ -69,7 +75,7 @@ class Entity {
             this.currentChallenges.splice(challengeIndex, 1);
         }
 
-        console.log("Challenge deleted ! Current challenges:", this.currentChallenges);
+        console.log("UserChallenge deleted ! Current challenges:", this.currentChallenges);
     }
 
     public getChallenge(challengeID:string):number {
@@ -84,35 +90,31 @@ class Entity {
         return result;
     }
 
-    public getChallenges():string[] {
-        return this.currentChallenges;
-    }
-
     public setChallenges(challenges:string[]):void {
         this.currentChallenges = challenges;
     }
 
-    public getFinishedBadges():BadgeIDsToNumberOfTimesEarnedMap {
-        return this.finishedBadgesMap;
+    public getBadges():BadgeIDsToNumberOfTimesEarnedMap {
+        return this.badgesMap;
     }
 
-    public getFinishedBadgesID():string[] {
-        return Object.keys(this.finishedBadgesMap);
+    public getBadgesID():string[] {
+        return Object.keys(this.badgesMap);
     }
 
-    public setFinishedBadges(finishedBadges:BadgeIDsToNumberOfTimesEarnedMap) {
-        this.finishedBadgesMap = finishedBadges;
+    public setBadges(finishedBadges:BadgeIDsToNumberOfTimesEarnedMap) {
+        this.badgesMap = finishedBadges;
     }
 
-    public addFinishedBadge(badgeID:string) {
+    public addBadge(badgeID:string) {
         if (!badgeID) {
             throw new BadArgumentException('Can not add given badge to user' + this.getName() + '. Badge given is null');
         }
 
-        if (this.finishedBadgesMap.hasOwnProperty(badgeID)) {
-            this.finishedBadgesMap[badgeID]++;
+        if (this.badgesMap.hasOwnProperty(badgeID)) {
+            this.badgesMap[badgeID]++;
         } else {
-            this.finishedBadgesMap[badgeID] = 1;
+            this.badgesMap[badgeID] = 1;
         }
     }
 
@@ -121,7 +123,7 @@ class Entity {
             id: this.id,
             name: this.name,
             currentChallenges: this.currentChallenges,
-            finishedBadgesMap: this.finishedBadgesMap
+            finishedBadgesMap: this.badgesMap
         }
     }
 }

@@ -11,9 +11,14 @@ app.controller('LoginCtrl', ['ServiceLogin', '$rootScope', '$location', '$cookie
     ServiceLogin.login(self.username,
       function (data) {
         console.log('Login success: data received', data);
+
         $cookies.put('token', data.data.token);
+        $cookies.put('dashboardWanted', 'personal');
+
         console.log('Token stored : ', $cookies.get('token'));
+
         var pathToDashboard = '/dashboard/view/' + data.data.token;
+
         console.log('Redirection vers', pathToDashboard);
         $location.path(pathToDashboard);
       },

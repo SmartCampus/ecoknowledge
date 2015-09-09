@@ -28,9 +28,9 @@ class TeamRepository {
     getTeamsByMember(aUserID:string):Team[] {
         var teams:Team[] = [];
 
-        for(var currentTeamIndex in this.teams) {
+        for (var currentTeamIndex in this.teams) {
             var team = this.teams[currentTeamIndex];
-            if(team.hasMember(aUserID)) {
+            if (team.hasMember(aUserID)) {
                 teams.push(team);
             }
         }
@@ -38,10 +38,10 @@ class TeamRepository {
         return teams;
     }
 
-    hasMember(aUserID:string) :boolean {
-        for(var currentTeamIndex in this.teams) {
+    hasMember(aUserID:string):boolean {
+        for (var currentTeamIndex in this.teams) {
             var team = this.teams[currentTeamIndex];
-            if(team.hasMember(aUserID)) {
+            if (team.hasMember(aUserID)) {
                 return true;
             }
         }

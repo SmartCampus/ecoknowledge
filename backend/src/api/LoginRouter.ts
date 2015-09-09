@@ -2,13 +2,16 @@ import RouterItf = require('./RouterItf');
 
 import UserRepository = require('../user/UserRepository');
 import User = require('../user/User');
+import Context = require('../Context');
+import BadRequestException = require('../exceptions/BadRequestException');
+import BadArgumentException = require('../exceptions/BadArgumentException');
 
 class LoginRouter extends RouterItf {
     private userRepository:UserRepository;
 
-    constructor(userRepository:UserRepository) {
+    constructor(context:Context){
         super();
-        this.userRepository = userRepository;
+        this.userRepository = context.getUserRepository();
     }
 
     buildRouter() {
@@ -18,23 +21,43 @@ class LoginRouter extends RouterItf {
         });
 
         this.router.post('/', function (req, res) {
-            console.log('Data received ', req.body);
+            var userProfile:User = null;
 
-            console.log('Login :', req.body.username);
+            try {
+                userProfile = self.checkUserProfile(req.body);
+                res.send({success:'User profile was found', data:{token:userProfile.getUUID()}});
+            }
+            catch(e) {
+                if(e instanceof BadRequestException) {
+                    res.status(400).send({error:e.getMessage()});
 
-            if(!req.body.username) {
-                res.status(400).send({error:'Field username is missing in request'});
-                return;
+                }
+                else if(e instanceof BadArgumentException) {
+                    res.status(400).send({error:e.getMessage()});
+
+                }
+                else {
+                    res.status(500).send({error:e.getMessage()});
+                }
             }
 
-            var currentUser:User = self.userRepository.getUserByName(req.body.username);
-            if(currentUser == null) {
-                res.status(400).send({error:'Given username can not be found'});
-                return;
-            }
-
-            res.send({success:'User profile was found', data:{token:currentUser.getUUID()}});
         });
+    }
+
+    checkUserProfile(data):User {
+        console.log('Data received ', data);
+        console.log('Login :', data.username);
+
+        if(!data.username) {
+            throw new BadRequestException('Field username is missing in request');
+        }
+
+        var currentUser:User = this.userRepository.getUserByName(data.username);
+        if(currentUser == null) {
+            throw new BadArgumentException('Given username can not be found');
+        }
+
+        return currentUser;
     }
 }
 

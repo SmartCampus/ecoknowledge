@@ -410,6 +410,10 @@ module.exports = function (grunt) {
     grunt.task.run(['serve:' + target]);
   });
 
+  //  Because npm test (which was not triggered) trigger this task
+  grunt.registerTask('test', []);
+
+  /*
   grunt.registerTask('test', [
     'clean:server',
     'wiredep',
@@ -418,6 +422,7 @@ module.exports = function (grunt) {
     'connect:test',
     'karma'
   ]);
+*/
 
   grunt.registerTask('build', [
     'clean:dist',

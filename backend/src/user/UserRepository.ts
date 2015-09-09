@@ -62,7 +62,7 @@ class UserRepository {
 
         for (var currentUserIndex in this.users) {
             var currentUser = this.users[currentUserIndex];
-            console.log("#", currentUser.getUUID(), "\t |\tUser : '", currentUser.getName(), "'")
+            console.log("#", currentUser.getUUID(), "\n\tUser : '", currentUser.getName(), "'\n\t", currentUser.getMapSymbolicNameToSensor());
         }
     }
 }

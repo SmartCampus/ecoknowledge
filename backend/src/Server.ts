@@ -7,7 +7,6 @@
 var http:any = require("http");
 var express:any = require("express");
 var bodyParser:any = require("body-parser");
-var session = require('client-sessions');
 
 import UserRepository = require('./user/UserRepository');
 
@@ -42,7 +41,6 @@ class Server {
      */
     httpServer:any;
 
-    userRepository:UserRepository;
 
     /**
      * Constructor.
@@ -50,10 +48,9 @@ class Server {
      * @param {number} listeningPort - Listening port.
      * @param {Array<string>} arguments - Command line arguments.
      */
-    constructor(listeningPort:number, arguments:Array<string>, userRepository:UserRepository) {
+    constructor(listeningPort:number, arguments:Array<string>) {
         this.listeningPort = listeningPort;
         this._buildServer();
-        this.userRepository = userRepository;
     }
 
     /**

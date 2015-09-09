@@ -25,19 +25,18 @@ describe('Test store GoalCondition class', () => {
     var description = 'a desc';
 
     var goalExpression:GoalExpression = new GoalExpression(leftOperand, typeOfComparison,
-        rightOperand, description);
+        rightOperand);
 
     var expected:any = {
         valueLeft: {
             value: leftOperand.getStringDescription(),
-            sensor: leftOperand.hasToBeDefined()
+            symbolicName: leftOperand.hasToBeDefined()
         },
         valueRight: {
             value: rightOperand.getStringDescription(),
-            sensor: rightOperand.hasToBeDefined()
+            symbolicName: rightOperand.hasToBeDefined()
         },
-        comparison: typeOfComparison,
-        description: description
+        comparison: typeOfComparison
     };
 
     it('should return the proper json object', () => {
@@ -69,8 +68,5 @@ describe('Test store GoalCondition class', () => {
             chai.expect(goalConditionClone.getComparisonType()).to.be.eq(typeOfComparison);
         });
 
-        it('should have the same description', () => {
-            chai.expect(goalConditionClone.getDescription()).to.be.eq(description);
-        });
     });
 });

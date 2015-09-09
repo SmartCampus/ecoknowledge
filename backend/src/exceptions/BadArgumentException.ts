@@ -6,6 +6,10 @@ class BadArgumentException implements Error {
         this.name = "BadArgumentException";
         this.message = message;
     }
+
+    getMessage():string {
+        return this.message;
+    }
 }
 
 export = BadArgumentException;

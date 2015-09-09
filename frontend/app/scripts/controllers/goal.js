@@ -1,15 +1,15 @@
 'use strict';
 
 var app = angular.module('ecoknowledgeApp')
-    .controller('GoalCtrl', ['ServiceGoal','ServiceBadgeV2', function (ServiceGoal, ServiceBadgeV2) {
+    .controller('GoalCtrl', ['ServiceGoal','ServiceBadge', function (ServiceGoal, ServiceBadgeV2) {
 
     var self = this;
     self.goal = {};
     self.goal.conditions = [];
     self.goal.name = '';
-    self.goal.timeBox = {};
-    self.goal.timeBox.startDate = new Date().getTime();
-    self.goal.timeBox.endDate = new Date().getTime();
+    self.goal.validityPeriod = {};
+    self.goal.validityPeriod.start = new Date().getTime();
+    self.goal.validityPeriod.end = new Date().getTime();
     self.badges = [];
     self.selectedBadge = null;
 
@@ -34,7 +34,7 @@ var app = angular.module('ecoknowledgeApp')
     };
 
     this.changeType = function(iteration, type){
-        iteration.sensor = (type==='sensor');
+        iteration.symbolicName = (type==='sensor');
         iteration.value = null;
     };
 
@@ -91,13 +91,20 @@ var app = angular.module('ecoknowledgeApp')
                 type:'number',
                 valueLeft:{
                     value:null,
-                    sensor:true
+                  symbolicName:true
                 },
                 valueRight:{
                     value:null,
-                    sensor:false
-                },
-                description:null
+                  symbolicName:false
+                }
+            },
+          filter: {
+            dayOfWeekFilter: 'all',
+            periodOfDayFilter : ['all']
+          },
+            referencePeriod:{
+              numberOfUnitToSubtract:1,
+              unitToSubtract:null
             }
         };
     };
@@ -116,6 +123,10 @@ var app = angular.module('ecoknowledgeApp')
         }else if(iteration.threshold>100) {
             iteration.threshold = 100;
         }
+
+      if(iteration.type == 'comparison') {
+        iteration.expression.valueRight.value = iteration.threshold;
+      }
     };
 
     self.week = function(){
